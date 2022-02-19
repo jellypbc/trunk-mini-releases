@@ -1,7 +1,7 @@
 import type { ReadTransaction, WriteTransaction } from "replicache";
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { randInt } from "../util/rand";
+// import { randInt } from "../util/rand";
 
 export const applicationSchema = z.object({
   type: z.literal("application"),

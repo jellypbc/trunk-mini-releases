@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { Replicache } from 'replicache'
 import type { M } from "../datamodel/mutators";
 import { useApplicationByID } from '../datamodel/subscriptions'

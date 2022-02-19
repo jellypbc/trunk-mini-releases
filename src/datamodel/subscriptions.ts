@@ -2,7 +2,7 @@ import type { Replicache } from "replicache";
 import { useSubscribe } from "replicache-react";
 import { getClientState, clientStatePrefix } from "./client-state";
 import { getShape, shapePrefix } from "./shape";
-import { Item, itemPrefix } from "./item"
+import { itemPrefix } from "./item"
 import { applicationPrefix, getApplication, Application } from './application'
 import type { mutators } from "./mutators";
 

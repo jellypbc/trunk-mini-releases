@@ -6,7 +6,6 @@ import { Nav } from "../../frontend/nav";
 import { M, mutators } from "../../datamodel/mutators";
 import { randUserInfo } from "../../datamodel/client-state";
 import { randomShape } from "../../datamodel/shape";
-import ApplicationList from '../../frontend/application-list'
 import ItemList from '../../frontend/item-list'
 
 export default function Home() {

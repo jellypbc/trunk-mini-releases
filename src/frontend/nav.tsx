@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import styles from "./nav.module.css";
 import { randomShape } from "../datamodel/shape";
-import { randomItem } from "../datamodel/item";
+// import { randomItem } from "../datamodel/item";
 import { useUserInfo, getItems, getApplications } from "../datamodel/subscriptions";
 import type { M } from "../datamodel/mutators";
 
