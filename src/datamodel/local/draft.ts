@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { string, z } from 'zod'
+import { z } from 'zod'
 
 const LOCAL_STORAGE_KEY = 'trunk-mini.item-drafts'
 
