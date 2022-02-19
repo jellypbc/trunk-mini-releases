@@ -69,6 +69,12 @@
   padding: 1rem 0;
   font-size: .8rem;
   color: hsl(0, 0%, 70%);
-
-
+  display: flex;
+  justify-content: flex-end;
 }
+
+.action {
+  margin: 0 0 0 1rem;
+}
+
+

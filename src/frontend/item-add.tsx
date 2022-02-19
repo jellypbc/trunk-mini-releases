@@ -1,30 +1,49 @@
 import React, { useRef } from 'react'
 import { randomItem } from '../datamodel/item'
 import { useUserInfo } from '../datamodel/subscriptions'
-import type { Replicache } from 'replicache'
+import type { Replicache} from 'replicache'
 import type { M } from '../datamodel/mutators'
 import styles from './item-add.module.css'
-import { HotKeys } from "react-hotkeys";
+import { HotKeys } from "react-hotkeys"
+import { randomDraft } from '../datamodel/local/draft'
 
-export default function ItemCreate({rep}:{rep: Replicache<M>}) {
+type Props = {
+  rep: Replicache<M>
+  drafts: any[],
+  handleSetDrafts: (drafts: any[]) => void
+}
+
+export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
   const userInfo = useUserInfo(rep)
   const contentRef = useRef<HTMLTextAreaElement>(null)
   const placeholderText = `What's on your mind?`
 
-  function handleNewItem(){
+  const handlers = {
+    addItem: () => handleItemPublish(),
+    saveDraftItem: () => {
+      event?.preventDefault();
+      handleItemDraftAdd()
+    }
+  };
+
+  function handleItemPublish(){
     const r = randomItem()
     r.item.title = contentRef.current?.value || 'Untitled'
     r.item.created_by = userInfo ? userInfo.avatar : 'unknown'
-    console.log('randomItem()', randomItem())
-
     rep.mutate.createItem(r)
     // set contentRef.current.value to '' or null
   }
 
+  function handleItemDraftAdd(){
+    const r = randomDraft()
+    r.title = contentRef.current?.value || 'Untitled'
+    r.created_by = userInfo ? userInfo.avatar : 'unknown'
+    handleSetDrafts([...drafts, r])
+  }
 
-  const handlers = {
-    addComment: () => handleNewItem()
-  };
+  function dateInWords(date: Date) {
+    return date.toLocaleString('default', { month: 'short'}) + " " + date.toLocaleString('default', {day: 'numeric'})
+  }
 
   return (
     <HotKeys
@@ -41,8 +60,8 @@ export default function ItemCreate({rep}:{rep: Replicache<M>}) {
             <div className={styles.avatar}></div>
           </div>
           <div className={styles.metaData}>
-            <div>🦊</div>
-            <div>Feb 18</div>
+            <div>{userInfo ? userInfo.avatar : `👻` }</div>
+            <div>{dateInWords(new Date)}</div>
           </div>
         </div>
         <div className={styles.right}>
@@ -56,7 +75,8 @@ export default function ItemCreate({rep}:{rep: Replicache<M>}) {
         </div>
       </div>
         <div className={styles.actionContainer}>
-          ⌘+Enter to Publish
+          <div className={styles.action}>⌘+S to Save Draft</div>
+          <div className={styles.action}>⌘+Enter to Publish</div>
         </div>
       </div>
     </HotKeys>
@@ -65,5 +85,6 @@ export default function ItemCreate({rep}:{rep: Replicache<M>}) {
 
 
 const keyMap = {
-  addComment: ['command+enter']
+  addItem: ['command+enter'],
+  saveDraftItem: ['command+s']
 }

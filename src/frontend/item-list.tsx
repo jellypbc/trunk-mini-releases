@@ -7,23 +7,25 @@ import styles from './item-list.module.css'
 import ItemAdd from './item-add'
 
 type Props = {
-  rep: Replicache<M>;
+  rep: Replicache<M>
+  drafts: any[],
+  handleSetDrafts: (drafts: any[]) => void
 }
 
-export default function ItemList({ rep }: Props) {
+export default function ItemList({ rep, drafts, handleSetDrafts }: Props) {
   const items = getItems(rep) as unknown as any
   const userInfo = useUserInfo(rep);
 
 
   return (
-
     <div className={styles.container}>
-      <ItemAdd rep={rep}/>
+      <ItemAdd rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
       {
         userInfo && items && items.map((item : any) => {
+          console.log('item', item)
           return (
             <Item
-              key={`item-${item.id}`}
+              key={`item-${item[0]}`}
               item={item}
             />
           )
