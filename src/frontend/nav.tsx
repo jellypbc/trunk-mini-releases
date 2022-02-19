@@ -82,6 +82,9 @@ export function Nav({ rep }: { rep: Replicache<M> }) {
             ></path>
           </svg>
         </div>*/}
+        <div className={styles.button}>
+          Mini Trunk
+        </div>
         <div className={`${styles.button}`} onClick={() => showShare(true)}>
           Share
         </div>
