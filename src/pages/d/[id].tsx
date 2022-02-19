@@ -6,6 +6,8 @@ import { Nav } from "../../frontend/nav";
 import { M, mutators } from "../../datamodel/mutators";
 import { randUserInfo } from "../../datamodel/client-state";
 import { randomShape } from "../../datamodel/shape";
+import ApplicationList from '../../frontend/application-list'
+import ItemList from '../../frontend/item-list'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null);
@@ -33,7 +35,7 @@ export default function Home() {
 
       const workerHost =
         process.env.NEXT_PUBLIC_WORKER_HOST ??
-        "wss://reps.replicache.workers.dev";
+        "wss://reps.trunk.workers.dev";
       const workerURL = `${workerHost}/connect`;
       console.info(`Connecting to worker at ${workerURL}`);
       new Client(r, roomID, workerURL);
@@ -58,6 +60,7 @@ export default function Home() {
     return null;
   }
 
+
   return (
     <div
       style={{
@@ -72,6 +75,8 @@ export default function Home() {
       }}
     >
       <Nav rep={rep} />
+      {/* <ApplicationList rep={rep}/> */}
+      <ItemList rep={rep} />
       <Designer {...{ rep }} />
     </div>
   );
