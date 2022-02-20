@@ -3,34 +3,7 @@ import { useSubscribe } from "replicache-react";
 import { getClientState, clientStatePrefix } from "./client-state";
 import { getShape, shapePrefix } from "./shape";
 import { itemPrefix } from "./item"
-import { applicationPrefix, getApplication, Application } from './application'
 import type { mutators } from "./mutators";
-
-export function useApplicationByID(rep: Replicache<typeof mutators>, id: string) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      return await getApplication(tx, id)
-    },
-    null
-  )
-}
-
-export function getApplications(rep: Replicache<typeof mutators>) {
-  return useSubscribe(
-    rep,
-    async(tx) => {
-      const applications = await tx.scan({ prefix: applicationPrefix }).entries().toArray();
-      let applicationList : Application[] = []
-      applications.map(([k, v]: [string, any]) => {
-        Object.assign(v, { id: k.substring(4)})
-        applicationList.push(v)
-      })
-      return applicationList
-    },
-    []
-  )
-}
 
 export function getItems(rep: Replicache<typeof mutators>) {
   return useSubscribe(

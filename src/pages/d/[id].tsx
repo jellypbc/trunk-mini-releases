@@ -7,9 +7,26 @@ import { M, mutators } from "../../datamodel/mutators";
 import { randUserInfo } from "../../datamodel/client-state";
 import { randomShape } from "../../datamodel/shape";
 import ItemList from '../../frontend/item-list'
+import ItemDraftList from '../../frontend/item-draft-list'
+import { useDrafts } from "../../datamodel/local/subscriptions";
+import { updateDrafts } from "../../datamodel/local/draft";
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null);
+  const [drafts, setDrafts] = useState([])
+
+  useEffect(() => {
+    const draftJSON = useDrafts()
+    if (draftJSON != null) setDrafts(JSON.parse(draftJSON))
+  }, [])
+
+  useEffect(() => {
+    updateDrafts(drafts)
+  }, [drafts])
+
+  function handleSetDrafts(drafts: any) {
+    setDrafts(drafts)
+  }
 
   // TODO: Replicache + SSR could be cool!
   useEffect(() => {
@@ -55,6 +72,7 @@ export default function Home() {
     })();
   }, []);
 
+
   if (!rep) {
     return null;
   }
@@ -74,8 +92,16 @@ export default function Home() {
       }}
     >
       <Nav rep={rep} />
-      {/* <ApplicationList rep={rep}/> */}
-      <ItemList rep={rep} />
+      <div
+        style={{
+          display: "flex",
+          maxHeight: "70vh",
+        }}
+      >
+        <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
+        <ItemDraftList drafts={drafts} />
+      </div>
+
       <Designer {...{ rep }} />
     </div>
   );

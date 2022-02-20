@@ -1,8 +1,8 @@
 import React from 'react'
-import styles from './item.module.css'
+import styles from './item-draft.module.css'
 
-export default function Item({ item } :{ item: any}) {
-  const i = item[1]
+export default function ItemDraft({ item }:{ item: any}) {
+  const i = item
 
   const date = new Date(i.created_at)
 
