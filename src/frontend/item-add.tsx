@@ -4,6 +4,7 @@ import { useUserInfo } from '../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import styles from './item-add.module.css'
+import EditorContainer from './editor/editorcontainer'
 
 export default function ItemCreate({rep}:{rep: Replicache<M>}) {
   const userInfo = useUserInfo(rep)
@@ -25,6 +26,14 @@ export default function ItemCreate({rep}:{rep: Replicache<M>}) {
       <textarea
         ref={contentRef}
       />
+
+      <EditorContainer
+        // ref={viewRef}
+        // state={noteState}
+        // dispatchTransaction={wrappedDispatch}
+      />
+
+
       <button
         onClick={() => handleNewItem()}
       >Create Item</button>
