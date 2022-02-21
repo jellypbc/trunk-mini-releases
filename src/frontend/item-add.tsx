@@ -90,8 +90,17 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
         </div>
       </div>
         <div className={styles.actionContainer}>
-          <div className={styles.action}>⌘+S to Save Draft</div>
-          <div className={styles.action}>⌘+Enter to Publish</div>
+          <div
+            className={styles.action}
+            onClick={() => {
+              event?.preventDefault()
+              handleItemDraftAdd()
+            }}
+          >⌘+S to Save Draft</div>
+          <div
+            className={styles.action}
+            onClick={() => handleItemPublish()}
+          >⌘+Enter to Publish</div>
         </div>
 
 

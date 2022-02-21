@@ -13,7 +13,6 @@ type Props = {
 }
 
 export default function ItemList({ rep, drafts, handleSetDrafts }: Props) {
-  const items = getItems(rep) as unknown as any
   const sortedItems = getSortedItems(rep) as unknown as any
   const userInfo = useUserInfo(rep);
 
