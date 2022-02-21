@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0-rc.5",
+    "@types/prosemirror-model": "^1.16.1",
     "@types/prosemirror-schema-basic": "^1.0.2",
     "@types/prosemirror-schema-list": "^1.0.3",
     "@types/prosemirror-state": "^1.2.8",

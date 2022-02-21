@@ -1,7 +1,7 @@
 import { DOMParser, DOMSerializer } from 'prosemirror-model'
-import { Replicache, MutatorDefs } from 'replicache'
-import { EditorState } from 'prosemirror-state'
-import { Schema } from 'prosemirror-model'
+import type { Replicache, MutatorDefs } from 'replicache'
+import type { EditorState } from 'prosemirror-state'
+// import { Schema } from 'prosemirror-model'
 import { sendableSteps } from "./collab"
 import { commentPlugin } from "../plugins/comments"
 
@@ -54,4 +54,5 @@ export function sendable(editState: EditorState) {
   let steps = sendableSteps(editState)
   let comments = commentPlugin.getState(editState).unsentEvents()
   if (steps || comments.length) return {steps, comments}
+  return null
 }
