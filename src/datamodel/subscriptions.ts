@@ -21,8 +21,7 @@ export function getSortedItems(rep: Replicache<typeof mutators>) {
   let parsedItems: any[] = []
   items.map(([k, v]: [string, any]) => {
     const changes = {
-      created_at:  new Date(v.created_at),
-      published_at: new Date(v.published_at)
+      created_at:  new Date(v.created_at)
     }
     let value = { ...v, ...changes }
     Object.assign(value, { id: k })

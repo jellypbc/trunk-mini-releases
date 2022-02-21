@@ -2,9 +2,10 @@ import React from 'react'
 import styles from './item.module.css'
 
 export default function Item({ item } :{ item: any}) {
-  const i = item[1]
+  const i = item
+  console.log('i', i)
 
-  const date = new Date(i.created_at)
+  const date = i.created_at
 
   function dateInWords(date: Date) {
     return date.toLocaleString('default', { month: 'short'}) + " " + date.toLocaleString('default', {day: 'numeric'})
