@@ -3,5 +3,10 @@
   background-color: hsl(0, 0%, 94%);
   padding: 2rem;
   overflow: auto;
+}
 
+.warning {
+  text-align: right;
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
 }

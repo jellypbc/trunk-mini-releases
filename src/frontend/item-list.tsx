@@ -19,6 +19,9 @@ export default function ItemList({ rep, drafts, handleSetDrafts }: Props) {
 
   return (
     <div className={styles.container}>
+      <div className={styles.warning}>
+        Anyone with the URL {location.href} can view these items.
+      </div>
       <ItemAdd rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
       {
         userInfo && sortedItems && sortedItems.map((item : any) => {
