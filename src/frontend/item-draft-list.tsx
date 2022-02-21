@@ -11,7 +11,7 @@ export default function ItemDraftList({ drafts }: Props) {
   return (
     <div className={styles.container}>
       <div className={styles.warning}>
-        Warning: Drafts are stored in localStorage. Bad things can happen.
+        Only you can view these items. Warning: Draft items are stored locally. Bad things can happen.
       </div>
       {
         d.length > 0
