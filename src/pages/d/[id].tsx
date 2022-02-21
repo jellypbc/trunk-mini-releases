@@ -13,11 +13,20 @@ import { updateDrafts } from "../../datamodel/local/draft";
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null);
-  const [drafts, setDrafts] = useState([])
+  const [drafts, setDrafts] = useState<any[]>([])
 
   useEffect(() => {
     const draftJSON = useDrafts()
-    if (draftJSON != null) setDrafts(JSON.parse(draftJSON))
+    const parsedDrafts = draftJSON && JSON.parse(draftJSON) || []
+    const draftList: any[] = []
+    parsedDrafts.map((d: any) => {
+      const changes = {
+        created_at: new Date(d.created_at)
+      }
+      let changedDraft = { ...d, ...changes }
+      draftList.push(changedDraft)
+    })
+    if (draftJSON != null) setDrafts(draftList)
   }, [])
 
   useEffect(() => {

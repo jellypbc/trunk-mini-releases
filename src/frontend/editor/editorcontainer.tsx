@@ -1,21 +1,34 @@
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 
 import React, { useEffect, useRef, useState } from "react"
-import { EditorView } from "prosemirror-view"
+// import type { EditorView } from "prosemirror-view"
 import { EditorState, Transaction } from "prosemirror-state"
-import { Schema, DOMParser, DOMSerializer } from "prosemirror-model"
-import { Step } from "prosemirror-transform"
+import type { Schema } from "prosemirror-model"
+// import type { Step } from "prosemirror-transform"
 
 import Editor from "./editor"
 import { exampleSetup } from "./plugins/index"
 import { schema } from "./config/schema"
-import { collab, sendableSteps, getVersion, receiveTransaction } from "./config/collab"
-import { createParser, createSerializer, getClient, compare, sendable, dispatchAction } from "./config/utils"
-import { logger } from "./../lib/logger"
+import {
+  collab,
+  // sendableSteps,
+  getVersion,
+  // receiveTransaction
+} from "./config/collab"
+import {
+  createParser,
+  createSerializer,
+  // getClient,
+  // compare,
+  sendable,
+  // dispatchAction
+} from "./config/utils"
+// import { logger } from "./../lib/logger"
 import { commentPlugin, commentUI } from "./plugins/comments"
+import type { Replicache, MutatorDefs } from 'replicache'
 
 interface EditorContainerProps {
-  note: INote,
+  note: any,
   rep: Replicache<MutatorDefs>,
   client: string
 }

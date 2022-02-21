@@ -5,7 +5,7 @@ import React, {
   forwardRef,
   CSSProperties,
 } from 'react'
-import { EditorState, Transaction } from 'prosemirror-state'
+import type { EditorState, Transaction } from 'prosemirror-state'
 import { EditorView, EditorProps, DirectEditorProps, } from 'prosemirror-view'
 
 export interface Handle {
@@ -82,7 +82,7 @@ export default forwardRef<Handle, Props>(function Editor(
       dispatchTransaction: transaction => {
         // `dispatchTransaction` takes precedence.
         if (props.dispatchTransaction) {
-          props.dispatchTransaction({type: "transaction", transaction: transaction})
+          props.dispatchTransaction(transaction)
         } else if (props.onChange) {
           props.onChange(
             viewRef.current.state.apply(transaction),

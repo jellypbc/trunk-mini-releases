@@ -5,7 +5,7 @@ import type { Replicache} from 'replicache'
 import type { M } from '../datamodel/mutators'
 import styles from './item-add.module.css'
 
-import EditorContainer from './editor/editorcontainer'
+// import EditorContainer from './editor/editorcontainer'
 
 import { HotKeys } from "react-hotkeys"
 import { randomDraft } from '../datamodel/local/draft'
@@ -41,7 +41,11 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
     const r = randomDraft()
     r.title = contentRef.current?.value || 'Untitled'
     r.created_by = userInfo ? userInfo.avatar : 'unknown'
-    handleSetDrafts([...drafts, r])
+    const changes = {
+      created_at: new Date(r.created_at)
+    }
+    const draft = { ...r, ...changes}
+    handleSetDrafts([...drafts, draft])
   }
 
   function dateInWords(date: Date) {
@@ -57,23 +61,14 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
       }}
     >
     <div className={styles.container}>
-<<<<<<< HEAD
-      <textarea
-        ref={contentRef}
+      {/* <EditorContainer
+        ref={viewRef}
+        state={noteState}
+        dispatchTransaction={wrappedDispatch}
       />
-
-      <EditorContainer
-        // ref={viewRef}
-        // state={noteState}
-        // dispatchTransaction={wrappedDispatch}
-      />
-
-
       <button
         onClick={() => handleNewItem()}
-      >Create Item</button>
-    </div>
-=======
+      >Create Item</button> */}
       <div className={styles.contentContainer}>
         <div className={styles.left}>
           <div className={styles.avatarContainer}>
@@ -98,9 +93,11 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
           <div className={styles.action}>⌘+S to Save Draft</div>
           <div className={styles.action}>⌘+Enter to Publish</div>
         </div>
-      </div>
+
+
+    </div>
+
     </HotKeys>
->>>>>>> 18684b4eb7aa41be8b297c1acfa3baa5286b2bec
   )
 }
 

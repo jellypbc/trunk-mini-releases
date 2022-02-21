@@ -7,14 +7,15 @@ type Props = {
 }
 
 export default function ItemDraftList({ drafts }: Props) {
+  const d = drafts.sort((a, b) => b.created_at - a.created_at)
   return (
     <div className={styles.container}>
       <div className={styles.warning}>
         Warning: Drafts are stored in localStorage. Bad things can happen.
       </div>
       {
-        drafts.length > 0
-        ? drafts.map((item: any) => {
+        d.length > 0
+        ? d.map((item: any) => {
           return (
             <ItemDraft
               key={`item-${item.id}`}
