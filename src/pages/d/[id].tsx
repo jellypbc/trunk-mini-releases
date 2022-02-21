@@ -108,7 +108,7 @@ export default function Home() {
         }}
       >
         <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
-        <ItemDraftList drafts={drafts} />
+        <ItemDraftList drafts={drafts} handleSetDrafts={handleSetDrafts}/>
       </div>
 
       <Designer {...{ rep }} />

@@ -4,9 +4,10 @@ import ItemDraft from './item-draft'
 
 type Props = {
   drafts: any[];
+  handleSetDrafts: (drafts: any[]) => void;
 }
 
-export default function ItemDraftList({ drafts }: Props) {
+export default function ItemDraftList({ drafts, handleSetDrafts }: Props) {
   const d = drafts.sort((a, b) => b.created_at - a.created_at)
   return (
     <div className={styles.container}>
@@ -20,6 +21,8 @@ export default function ItemDraftList({ drafts }: Props) {
             <ItemDraft
               key={`item-${item.id}`}
               item={item}
+              drafts={drafts}
+              handleSetDrafts={handleSetDrafts}
             />
           )
         })
