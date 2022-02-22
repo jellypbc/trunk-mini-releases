@@ -6,7 +6,6 @@ import type { EditorView } from 'prosemirror-view'
 import type { Schema } from 'prosemirror-model'
 import { exampleSetup } from './editor/plugins/index'
 import Editor from './editor'
-import styles from './item-draft-title-editor'
 
 type Props = {
   content: any
