@@ -14,6 +14,8 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
   const [showOptions, setShowOptions] = useState<boolean>(false)
   const [titleValue, setTitleValue] = useState<string>(i.title)
   const [contentValue, setContentValue] = useState<string>(i.content)
+  const [showContent, setShowContent] = useState<boolean>(false)
+  const [showCaret, setShowCaret] = useState<boolean>(false)
 
   const date = new Date(i.created_at)
 
@@ -87,15 +89,38 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
           </div>
 
         }
+
         <div
           className={styles.titleContainer}
-          onMouseOver={() => setShowOptions(true)}
+          onMouseOver={() => {
+            setShowOptions(true)
+            setShowCaret(true)
+          }}
+          onMouseLeave={()=>{setShowCaret(false)}}
+          onClick={() => setShowContent(!showContent)}
         >
+           <div className={styles.caretContainer}>
+            {showCaret &&
+              <div className={showContent ?
+                styles.caretOpened
+                :
+                styles.caretClosed
+              }></div>
+            }
+            </div>
           <div className={styles.bullet}>
+            {showCaret
+            ?
+            <div className={styles.bulletBorderEmphasized}>
+              <div className={styles.bulletCenterEmphasized}>
+              </div>
+            </div>
+            :
             <div className={styles.bulletBorder}>
               <div className={styles.bulletCenter}>
               </div>
             </div>
+            }
           </div>
           <div className={styles.title}>
             <ItemDraftTitleEditor
@@ -106,14 +131,17 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
             />
           </div>
         </div>
-        <div className={styles.content}>
-          <ItemDraftTitleEditor
-            content={contentValue}
-            setValue={setContentValue}
-            editable={true}
-            type={'content'}
-          />
-        </div>
+        { showContent &&
+          <div className={styles.content}>
+            <ItemDraftTitleEditor
+              content={contentValue}
+              setValue={setContentValue}
+              editable={true}
+              type={'content'}
+            />
+          </div>
+        }
+
       </div>
     </div>
   )

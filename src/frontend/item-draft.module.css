@@ -46,13 +46,25 @@
 }
 
 .bulletBorder {
-  padding: 3px;
-  background-color: hsl(0, 0%, 90%);
+  padding: 4px;
+  background-color: hsl(0, 0%, 82%);
   border-radius: 4rem;
 }
 
 .bulletCenter {
   padding: 3px;
+  background-color: #009B2B;
+  border-radius: 4rem;
+}
+
+.bulletBorderEmphasized {
+  padding: 3px;
+  background-color: hsl(0, 0%, 82%);
+  border-radius: 4rem;
+}
+
+.bulletCenterEmphasized {
+  padding: 4px;
   background-color: #009B2B;
   border-radius: 4rem;
 }
@@ -87,4 +99,25 @@
 
 .option:hover {
   background-color: hsl(0, 0%, 88%);
+}
+
+.caretContainer {
+  margin: 1rem;
+  display: absolute;
+  margin-left: -13px;
+}
+
+.caretOpened {
+  content:'';
+  position: absolute;
+  border: .4rem solid transparent;
+  border-top-color: hsl(0, 0%, 60%);
+  margin-top: 2px;
+}
+
+.caretClosed {
+  content:'';
+  position: absolute;
+  border: .4rem solid transparent;
+  border-left-color: hsl(0, 0%, 60%);
 }
