@@ -7,3 +7,13 @@
   width: 100%;
   font-size: 1.2rem;
 }
+
+.titleContainer * {
+  border: none;
+  overflow: auto;
+  resize: none;
+  background-color: inherit;
+  outline: none;
+  width: 100%;
+  font-size: 1.6rem;
+}

@@ -18,6 +18,7 @@ interface PropsBase extends EditorProps {
   state: EditorState
   style?: CSSProperties
   className?: string
+  type?: string
 }
 
 interface PropsWithOnChange {
@@ -41,7 +42,7 @@ export default forwardRef<Handle, Props>(function Editor(
   const root = useRef<HTMLDivElement>(null!)
   const initialProps = useRef(props)
   const viewRef = useRef<EditorView<any>>(null!)
-  const {state, ...restProps} = props
+  const {state, type, ...restProps} = props
 
   viewRef.current?.updateState(state)
   viewRef.current?.setProps(buildProps(restProps))
@@ -69,7 +70,7 @@ export default forwardRef<Handle, Props>(function Editor(
     <div
       ref={root}
       style={props.style}
-      className={styles.container}
+      className={type ? styles.titleContainer : styles.container}
       spellCheck={false}
     />
   )
