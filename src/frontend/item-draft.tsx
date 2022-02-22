@@ -13,6 +13,7 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
   const i = item
   const [showOptions, setShowOptions] = useState<boolean>(false)
   const [titleValue, setTitleValue] = useState<string>(i.title)
+  const [contentValue, setContentValue] = useState<string>(i.content)
 
   const date = new Date(i.created_at)
 
@@ -20,9 +21,23 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
     handleDraftTitleChange()
   }, [titleValue])
 
+  useEffect(() => {
+    handleDraftContentChange()
+  }, [contentValue])
+
   function handleDraftTitleChange(){
     const changedDraft = i
     changedDraft.title = titleValue
+
+    const newDrafts = [...drafts]
+    const index = newDrafts.findIndex((d: any) => d.id === i.id)
+    newDrafts[index] = changedDraft
+    handleSetDrafts(newDrafts)
+  }
+
+  function handleDraftContentChange(){
+    const changedDraft = i
+    changedDraft.content = contentValue
 
     const newDrafts = [...drafts]
     const index = newDrafts.findIndex((d: any) => d.id === i.id)
@@ -82,13 +97,23 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
               </div>
             </div>
           </div>
+          <div className={styles.title}>
             <ItemDraftTitleEditor
               content={titleValue}
               setValue={setTitleValue}
               editable={true}
+              type={'title'}
             />
+          </div>
         </div>
-        <div className={styles.content}>i am item</div>
+        <div className={styles.content}>
+          <ItemDraftTitleEditor
+            content={contentValue}
+            setValue={setContentValue}
+            editable={true}
+            type={'content'}
+          />
+        </div>
       </div>
     </div>
   )

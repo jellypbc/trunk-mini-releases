@@ -11,9 +11,10 @@ type Props = {
   content: any
   setValue: (value: string) => void
   editable: boolean
+  type: string
 }
 
-function ItemDraftTitleEditor({ content: doc, setValue, editable } : Props) {
+function ItemDraftTitleEditor({ content: doc, setValue, editable, type } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
@@ -47,7 +48,7 @@ function ItemDraftTitleEditor({ content: doc, setValue, editable } : Props) {
     <>
       {state &&
         <Editor
-          type={'title'}
+          type={type}
           ref={viewRef}
           state={state}
           dispatchTransaction={dispatchTransaction}

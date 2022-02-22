@@ -24,7 +24,7 @@ export function randomDraft() {
     id: nanoid(),
     created_at: new Date().toISOString(),
     created_by: '',
-    title: 'Untitled',
-    content: '',
+    title: '<p>Untitled</p>',
+    content: '<p></p>',
   } as Draft;
 }
