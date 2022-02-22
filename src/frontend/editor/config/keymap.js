@@ -78,9 +78,7 @@ export function buildKeymap(schema, mapKeys) {
       dispatch(state.tr.replaceSelectionWith(br.create()).scrollIntoView())
       return true
     })
-    bind("Mod-Enter", cmd)
     bind("Shift-Enter", cmd)
-    if (mac) bind("Ctrl-Enter", cmd)
   }
   if (type = schema.nodes.list_item) {
     bind("Enter", splitListItem(type))
