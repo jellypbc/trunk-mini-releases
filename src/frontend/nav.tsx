@@ -26,9 +26,6 @@ export function Nav({ rep }: { rep: Replicache<M> }) {
 
   const items = getItems(rep);
 
-  const onGetItems = () => {
-    console.log('items', items)
-  }
 
   return (
     <>

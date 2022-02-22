@@ -3,7 +3,6 @@ import styles from './item.module.css'
 
 export default function Item({ item } :{ item: any}) {
   const i = item
-  console.log('i', i)
 
   const date = i.created_at
 

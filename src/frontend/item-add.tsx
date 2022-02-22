@@ -1,11 +1,10 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { randomItem } from '../datamodel/item'
 import { useUserInfo } from '../datamodel/subscriptions'
 import type { Replicache} from 'replicache'
 import type { M } from '../datamodel/mutators'
 import styles from './item-add.module.css'
-
-// import EditorContainer from './editor/editorcontainer'
+import EditorContainer from './editor-container'
 
 import { HotKeys } from "react-hotkeys"
 import { randomDraft } from '../datamodel/local/draft'
@@ -16,10 +15,16 @@ type Props = {
   handleSetDrafts: (drafts: any[]) => void
 }
 
+const initialValue = '<p></p>'
+
 export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
   const userInfo = useUserInfo(rep)
   const contentRef = useRef<HTMLTextAreaElement>(null)
   const placeholderText = `What's on your mind?`
+
+  const [value, setValue] = useState<string>(initialValue)
+  const [showEditor, setShowEditor] = useState<boolean>(false)
+
 
   const handlers = {
     addItem: () => handleItemPublish(),
@@ -30,8 +35,8 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
   };
 
   function handleItemPublish(){
-    const r = randomItem()
-    r.item.title = contentRef.current?.value || 'Untitled'
+    const r : any = randomItem()
+    r.item.title = value
     r.item.created_by = userInfo ? userInfo.avatar : 'unknown'
     rep.mutate.createItem(r)
     // set contentRef.current.value to '' or null
@@ -39,7 +44,7 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
 
   function handleItemDraftAdd(){
     const r = randomDraft()
-    r.title = contentRef.current?.value || 'Untitled'
+    r.title = value
     r.created_by = userInfo ? userInfo.avatar : 'unknown'
     const changes = {
       created_at: new Date(r.created_at)
@@ -61,14 +66,6 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
       }}
     >
     <div className={styles.container}>
-      {/* <EditorContainer
-        ref={viewRef}
-        state={noteState}
-        dispatchTransaction={wrappedDispatch}
-      />
-      <button
-        onClick={() => handleNewItem()}
-      >Create Item</button> */}
       <div className={styles.contentContainer}>
         <div className={styles.left}>
           <div className={styles.avatarContainer}>
@@ -81,11 +78,21 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
         </div>
         <div className={styles.right}>
           <div className={styles.inputContainer}>
-            <textarea
-              ref={contentRef}
-              placeholder={placeholderText}
-              className={styles.contentTextArea}
-            />
+            {!showEditor ?
+              <textarea
+                ref={contentRef}
+                placeholder={placeholderText}
+                className={styles.contentTextArea}
+                onClick={() => setShowEditor(true)}
+              />
+              :
+              <EditorContainer
+                rep={rep}
+                content={value}
+                clientInfo={userInfo}
+                setValue={setValue}
+              />
+            }
           </div>
         </div>
       </div>

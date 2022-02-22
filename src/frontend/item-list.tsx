@@ -24,7 +24,6 @@ export default function ItemList({ rep, drafts, handleSetDrafts }: Props) {
       <ItemAdd rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
       {
         userInfo && sortedItems && sortedItems.map((item : any) => {
-          console.log('item', item)
           return (
             <Item
               key={item.id}

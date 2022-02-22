@@ -54,6 +54,10 @@
   padding: 1rem;
 }
 
+.inputContainer {
+  height: 4rem;
+}
+
 .contentTextArea {
   border: none;
   overflow: auto;
