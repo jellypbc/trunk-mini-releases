@@ -12,7 +12,6 @@ type Props = {
 export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
   const i = item
   const [showOptions, setShowOptions] = useState<boolean>(false)
-  const [titleEditable, setTitleEditable] = useState<boolean>(false)
   const [titleValue, setTitleValue] = useState<string>(i.title)
 
   const date = new Date(i.created_at)
