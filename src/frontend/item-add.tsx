@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import { randomItem } from '../datamodel/item'
 import { useUserInfo } from '../datamodel/subscriptions'
 import type { Replicache} from 'replicache'

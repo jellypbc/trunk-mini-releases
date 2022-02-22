@@ -21,7 +21,7 @@ function EditorContainer({ rep, content : doc, clientInfo, setValue } : Props) {
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
   const [state, setState] = useState<EditorState | undefined>()
-  const [view, setView] = useState<EditorView>()
+  const [, setView] = useState<EditorView>()
 
   useEffect(() => {
     const state = createStateFromProps(
