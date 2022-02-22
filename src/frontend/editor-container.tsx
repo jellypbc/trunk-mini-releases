@@ -35,6 +35,20 @@ function EditorContainer({ rep, content : doc, clientInfo, setValue } : Props) {
     setView(viewRef && viewRef.current && viewRef.current.view)
   }, [])
 
+  useEffect(() => {
+    if (doc === '<p></p>'){
+      const state = createStateFromProps(
+        doc,
+        schema,
+        parser,
+        viewRef && viewRef.current && viewRef.current.view,
+        rep
+      )
+      setState(state)
+      setView(viewRef && viewRef.current && viewRef.current.view)
+    }
+  }, [doc])
+
   const dispatchTransaction = (tx: Transaction) => {
     const view = viewRef.current.view
     setView(view)

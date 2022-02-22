@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { randomItem } from '../datamodel/item'
 import { useUserInfo } from '../datamodel/subscriptions'
 import type { Replicache} from 'replicache'
@@ -25,7 +25,6 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
   const [value, setValue] = useState<string>(initialValue)
   const [showEditor, setShowEditor] = useState<boolean>(false)
 
-
   const handlers = {
     addItem: () => handleItemPublish(),
     saveDraftItem: () => {
@@ -39,7 +38,7 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
     r.item.title = value
     r.item.created_by = userInfo ? userInfo.avatar : 'unknown'
     rep.mutate.createItem(r)
-    // set contentRef.current.value to '' or null
+    setValue(initialValue)
   }
 
   function handleItemDraftAdd(){
@@ -51,6 +50,7 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
     }
     const draft = { ...r, ...changes}
     handleSetDrafts([...drafts, draft])
+    setValue(initialValue)
   }
 
   function dateInWords(date: Date) {
@@ -96,21 +96,19 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
           </div>
         </div>
       </div>
-        <div className={styles.actionContainer}>
-          <div
-            className={styles.action}
-            onClick={() => {
-              event?.preventDefault()
-              handleItemDraftAdd()
-            }}
-          >⌘+S to Save Draft</div>
-          <div
-            className={styles.action}
-            onClick={() => handleItemPublish()}
-          >⌘+Enter to Publish</div>
-        </div>
-
-
+      <div className={styles.actionContainer}>
+        <div
+          className={styles.action}
+          onClick={() => {
+            event?.preventDefault()
+            handleItemDraftAdd()
+          }}
+        >⌘+S to Save Draft</div>
+        <div
+          className={styles.action}
+          onClick={() => handleItemPublish()}
+        >⌘+Enter to Publish</div>
+      </div>
     </div>
 
     </HotKeys>
