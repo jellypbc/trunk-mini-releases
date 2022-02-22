@@ -83,24 +83,13 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
               </div>
             </div>
           </div>
-          { titleEditable
-            ?
             <ItemDraftTitleEditor
               content={titleValue}
               setValue={setTitleValue}
+              editable={true}
             />
-            :
-            <div
-              className={styles.title}
-              onClick={() => setTitleEditable(true)}
-            >
-              {i.title}
-            </div>
-          }
         </div>
-
         <div className={styles.content}>i am item</div>
-
       </div>
     </div>
   )

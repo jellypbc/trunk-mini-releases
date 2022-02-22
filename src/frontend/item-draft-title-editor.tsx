@@ -10,9 +10,10 @@ import Editor from './editor'
 type Props = {
   content: any
   setValue: (value: string) => void
+  editable: boolean
 }
 
-function ItemDraftTitleEditor({ content: doc, setValue } : Props) {
+function ItemDraftTitleEditor({ content: doc, setValue, editable } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
@@ -50,13 +51,12 @@ function ItemDraftTitleEditor({ content: doc, setValue } : Props) {
           ref={viewRef}
           state={state}
           dispatchTransaction={dispatchTransaction}
+          editable={editable}
         />
       }
     </>
   )
 }
-
-
 
 const createStateFromProps = (
   doc: string,
