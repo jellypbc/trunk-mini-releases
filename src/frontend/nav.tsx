@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import styles from "./nav.module.css";
 import { randomShape } from "../datamodel/shape";
-import { useUserInfo, getItems } from "../datamodel/subscriptions";
+import { useUserInfo } from "../datamodel/subscriptions";
 import type { M } from "../datamodel/mutators";
 
 export function Nav({ rep }: { rep: Replicache<M> }) {
@@ -24,17 +24,10 @@ export function Nav({ rep }: { rep: Replicache<M> }) {
     rep.mutate.createShape(randomShape());
   };
 
-  const items = getItems(rep);
-
 
   return (
     <>
       <div className={styles.nav} style={{}}>
-        <div
-          onClick={() => onGetItems()}
-        >
-          get items
-        </div>
         <div
           onClick={() => onRectangle()}
           className={styles.button}
