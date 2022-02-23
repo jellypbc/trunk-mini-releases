@@ -8,9 +8,10 @@ type Props = {
   item: any
   drafts: any[]
   handleSetDrafts: (drafts: any[]) => void
+  setSelectedDraftID: (ID: string) => void
 }
 
-export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
+export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDraftID }:Props) {
   const i = item
   const [showOptions, setShowOptions] = useState<boolean>(false)
   const [titleValue, setTitleValue] = useState<string>(i.title)
@@ -98,7 +99,10 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
             <div className={styles.option}>
               💬
             </div>
-            <div className={styles.option}>
+            <div
+              className={styles.option}
+              onClick={() => setSelectedDraftID(i.id)}
+            >
               📂
             </div>
             <div className={styles.option}

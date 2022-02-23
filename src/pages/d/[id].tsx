@@ -10,10 +10,12 @@ import ItemList from '../../frontend/item-list'
 import ItemDraftList from '../../frontend/item-draft-list'
 import { useDrafts } from "../../datamodel/local/subscriptions";
 import { updateDrafts } from "../../datamodel/local/draft";
+import ItemDraftExpandedContainer from '../../frontend/item-draft-expanded-container'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null);
   const [drafts, setDrafts] = useState<any[]>([])
+  const [selectedDraftID, setSelectedDraftID] = useState<string>('')
 
   useEffect(() => {
     const draftJSON = useDrafts()
@@ -101,16 +103,24 @@ export default function Home() {
       }}
     >
       <Nav rep={rep} />
-      <div
-        style={{
-          display: "flex",
-          maxHeight: "70vh",
-        }}
-      >
-        <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
-        <ItemDraftList drafts={drafts} handleSetDrafts={handleSetDrafts}/>
+      <div>
+        {selectedDraftID
+          ?
+          <ItemDraftExpandedContainer
+            selectedDraftID={selectedDraftID}
+            drafts={drafts}
+            handleSetDrafts={handleSetDrafts}
+            setSelectedDraftID={setSelectedDraftID}
+          />
+          :
+          <div
+            style={{display: "flex", maxHeight: "70vh"}}
+          >
+            <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
+            <ItemDraftList drafts={drafts} handleSetDrafts={handleSetDrafts} setSelectedDraftID={setSelectedDraftID}/>
+          </div>
+        }
       </div>
-
       <Designer {...{ rep }} />
     </div>
   );
