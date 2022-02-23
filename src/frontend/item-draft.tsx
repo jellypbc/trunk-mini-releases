@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from './item-draft.module.css'
 import ItemDraftTitleEditor from './item-draft-title-editor'
+import { HotKeys } from 'react-hotkeys'
 
 
 type Props = {
@@ -55,7 +56,23 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
     handleSetDrafts(drafts.filter((draft: any) => draft.id !== i.id))
   }
 
+  const handlers = {
+    manualSaveDraftItem: () => {
+      event?.preventDefault();
+      // code to save draft item
+      // we don't actually need to add this because we are already saving on every keystroke
+      alert(`Draft saved!`)
+    }
+  };
+
   return (
+    <HotKeys
+      {...{
+        style: { outline: "none", display: "flex", flex: 1 },
+        keyMap,
+        handlers,
+      }}
+    >
     <div
       className={styles.container}
       onMouseLeave={() => setShowOptions(false)}
@@ -144,8 +161,13 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
             />
           </div>
         }
-
       </div>
     </div>
+    </HotKeys>
   )
 }
+
+const keyMap = {
+  manualSaveDraftItem: ['command+s']
+}
+
