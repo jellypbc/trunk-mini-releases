@@ -22,7 +22,6 @@ const avatars = [
   ["🦊", "Fox"],
   ["🐻", "Bear"],
   ["🐼", "Panda"],
-  ["🐻‍❄️", "Polar Bear"],
   ["🐨", "Koala"],
   ["🐯", "Tiger"],
   ["🦁", "Lion"],

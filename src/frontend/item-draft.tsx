@@ -79,7 +79,10 @@ export default function ItemDraft({ item, drafts, handleSetDrafts }:Props) {
               😄
             </div>
             <div className={styles.option}>
-             💬
+              💬
+            </div>
+            <div className={styles.option}>
+              📂
             </div>
             <div className={styles.option}
               onClick={handleDraftDelete}
