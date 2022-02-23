@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styles from './item-draft-expanded.module.css'
-import ItemDraftTitleEditor from './item-draft-title-editor'
+import ItemDraftEditorContainer from './item-draft-editor-container'
 import { HotKeys } from 'react-hotkeys'
+import type { Replicache } from 'replicache'
+import type { M } from '../datamodel/mutators'
 
 
 type Props = {
@@ -9,9 +11,10 @@ type Props = {
   drafts: any[]
   handleSetDrafts: (drafts: any[]) => void
   setSelectedDraftID: (ID: string) => void
+  rep: Replicache<M>
 }
 
-export default function ItemDraftExpanded({ item, drafts, handleSetDrafts, setSelectedDraftID }:Props) {
+export default function ItemDraftExpanded({ item, drafts, handleSetDrafts, setSelectedDraftID, rep }:Props) {
   const i = item
   const [titleValue, setTitleValue] = useState<string>(i.title)
   const [contentValue, setContentValue] = useState<string>(i.content)
@@ -82,20 +85,26 @@ export default function ItemDraftExpanded({ item, drafts, handleSetDrafts, setSe
             </div>
           </div>
           <div className={styles.title}>
-            <ItemDraftTitleEditor
+            <ItemDraftEditorContainer
               content={titleValue}
               setValue={setTitleValue}
               editable={true}
               type={'title'}
+              rep={rep}
+              handleSetDrafts={handleSetDrafts}
+              drafts={drafts}
             />
           </div>
         </div>
         <div className={styles.content}>
-          <ItemDraftTitleEditor
+          <ItemDraftEditorContainer
             content={contentValue}
             setValue={setContentValue}
             editable={true}
             type={'content'}
+            rep={rep}
+            handleSetDrafts={handleSetDrafts}
+            drafts={drafts}
           />
         </div>
       </div>

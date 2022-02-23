@@ -36,7 +36,10 @@ export default function Home() {
   }, [drafts])
 
   function handleSetDrafts(drafts: any) {
-    setDrafts(drafts)
+    console.log('drafts', drafts)
+    const sortedDrafts = drafts.sort((a: any, b: any) => b.created_at - a.created_at)
+    console.log('sortedDrafts', sortedDrafts)
+    setDrafts(sortedDrafts)
   }
 
   // TODO: Replicache + SSR could be cool!
@@ -111,13 +114,19 @@ export default function Home() {
             drafts={drafts}
             handleSetDrafts={handleSetDrafts}
             setSelectedDraftID={setSelectedDraftID}
+            rep={rep}
           />
           :
           <div
             style={{display: "flex", maxHeight: "70vh"}}
           >
             <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
-            <ItemDraftList drafts={drafts} handleSetDrafts={handleSetDrafts} setSelectedDraftID={setSelectedDraftID}/>
+            <ItemDraftList
+              drafts={drafts}
+              handleSetDrafts={handleSetDrafts}
+              setSelectedDraftID={setSelectedDraftID}
+              rep={rep}
+            />
           </div>
         }
       </div>

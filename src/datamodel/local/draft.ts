@@ -9,7 +9,8 @@ export const draftSchema = z.object({
   created_at: z.string(),
   created_by: z.string(),
   title: z.string(),
-  content: z.string()
+  content: z.string(),
+  highlight: z.string()
 });
 
 export type Draft = z.infer<typeof draftSchema>;
@@ -26,5 +27,6 @@ export function randomDraft() {
     created_by: '',
     title: '<p>Untitled</p>',
     content: '<p></p>',
+    highlight: '<p></p>'
   } as Draft;
 }

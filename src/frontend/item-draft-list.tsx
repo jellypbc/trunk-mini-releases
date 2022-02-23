@@ -1,14 +1,17 @@
 import React from 'react';
 import styles from './item-draft-list.module.css'
 import ItemDraft from './item-draft'
+import type { Replicache } from 'replicache'
+import type { M } from '../datamodel/mutators'
 
 type Props = {
-  drafts: any[];
-  handleSetDrafts: (drafts: any[]) => void;
-  setSelectedDraftID: (ID: string) => void;
+  drafts: any[]
+  handleSetDrafts: (drafts: any[]) => void
+  setSelectedDraftID: (ID: string) => void
+  rep: Replicache<M>
 }
 
-export default function ItemDraftList({ drafts, handleSetDrafts, setSelectedDraftID }: Props) {
+export default function ItemDraftList({ drafts, handleSetDrafts, setSelectedDraftID, rep}: Props) {
   const d = drafts.sort((a, b) => b.created_at - a.created_at)
   return (
     <div className={styles.container}>
@@ -25,6 +28,7 @@ export default function ItemDraftList({ drafts, handleSetDrafts, setSelectedDraf
               drafts={drafts}
               handleSetDrafts={handleSetDrafts}
               setSelectedDraftID={setSelectedDraftID}
+              rep={rep}
             />
           )
         })

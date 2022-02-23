@@ -8,7 +8,7 @@ import React, {
   CSSProperties
 } from 'react'
 import type { EditorState, Transaction } from 'prosemirror-state'
-import { EditorView, EditorProps, DirectEditorProps, } from 'prosemirror-view'
+import { EditorView, EditorProps, DirectEditorProps } from 'prosemirror-view'
 
 export interface Handle {
   view: EditorView

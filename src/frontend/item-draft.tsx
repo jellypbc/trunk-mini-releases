@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styles from './item-draft.module.css'
-import ItemDraftTitleEditor from './item-draft-title-editor'
+import ItemDraftEditorContainer from './item-draft-editor-container'
 import { HotKeys } from 'react-hotkeys'
+import type { Replicache } from 'replicache'
+import EditorContainer from './editor-container'
+import type { M } from '../datamodel/mutators'
 
 
 type Props = {
@@ -9,9 +12,10 @@ type Props = {
   drafts: any[]
   handleSetDrafts: (drafts: any[]) => void
   setSelectedDraftID: (ID: string) => void
+  rep: Replicache<M>
 }
 
-export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDraftID }:Props) {
+export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDraftID, rep }:Props) {
   const i = item
   const [showOptions, setShowOptions] = useState<boolean>(false)
   const [titleValue, setTitleValue] = useState<string>(i.title)
@@ -87,7 +91,18 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
           <div>{dateInWords(date)}</div>
         </div>
       </div>
+
       <div className={styles.right}>
+        {i.highlight &&
+          <div className={styles.highlight}>
+            <EditorContainer
+              rep={rep}
+              content={i.highlight}
+              clientInfo={null}
+              setValue={()=>{ return null}}
+            />
+          </div>
+        }
         { showOptions &&
           <div
             className={styles.optionsContainer}
@@ -147,21 +162,27 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
             }
           </div>
           <div className={styles.title}>
-            <ItemDraftTitleEditor
+            <ItemDraftEditorContainer
               content={titleValue}
               setValue={setTitleValue}
               editable={true}
               type={'title'}
+              rep={rep}
+              handleSetDrafts={handleSetDrafts}
+              drafts={drafts}
             />
           </div>
         </div>
         { showContent &&
           <div className={styles.content}>
-            <ItemDraftTitleEditor
+            <ItemDraftEditorContainer
               content={contentValue}
               setValue={setContentValue}
               editable={true}
               type={'content'}
+              rep={rep}
+              handleSetDrafts={handleSetDrafts}
+              drafts={drafts}
             />
           </div>
         }
