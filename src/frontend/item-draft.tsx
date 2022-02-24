@@ -120,7 +120,7 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
             </div>
           </div>
         }
-        {i.highlight &&
+        {i.highlight && i.highlight !== '<p></p>' &&
           <div className={styles.highlight}>
             <EditorContainer
               rep={rep}

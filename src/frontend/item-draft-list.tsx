@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
 import styles from './item-draft-list.module.css'
 import ItemDraft from './item-draft'
 import type { Replicache } from 'replicache'
@@ -12,7 +12,13 @@ type Props = {
 }
 
 export default function ItemDraftList({ drafts, handleSetDrafts, setSelectedDraftID, rep}: Props) {
-  const d = drafts.sort((a, b) => b.created_at - a.created_at)
+  const [d, setD] = useState<any[]>(drafts)
+
+  useEffect(() => {
+    const d = drafts.sort((a, b) => b.created_at - a.created_at)
+    setD(d)
+  }, [drafts])
+
   return (
     <div className={styles.container}>
       <div className={styles.warning}>

@@ -36,10 +36,7 @@ export default function Home() {
   }, [drafts])
 
   function handleSetDrafts(drafts: any) {
-    console.log('drafts', drafts)
-    const sortedDrafts = drafts.sort((a: any, b: any) => b.created_at - a.created_at)
-    console.log('sortedDrafts', sortedDrafts)
-    setDrafts(sortedDrafts)
+    setDrafts(drafts)
   }
 
   // TODO: Replicache + SSR could be cool!
