@@ -10,14 +10,6 @@
   display: flex;
 }
 
-.right {
-  padding: 1rem 2rem;
-  width: 30vw;
-  border: 1px solid #ccc;
-  background-color: hsl(0, 0%, 90%);
-  border-radius: .4rem;
-}
-
 .avatarContainer {
   display: absolute;
   padding: 0 1rem;
@@ -79,15 +71,22 @@
   padding: 1rem;
 }
 
+.right {
+  padding: 1rem 2rem;
+  width: 30vw;
+  border: 1px solid #ccc;
+  background-color: hsl(0, 0%, 90%);
+  border-radius: .4rem;
+  position: relative;
+}
+
 .optionsContainer{
   position: absolute;
-  right: 6rem;
-  width: auto;
+  right: 1rem;
+  top: -1rem;
   display: flex;
-  /* justify-content: space-around; */
   border: 1px solid hsl(0, 0%, 82%);
   background: hsl(0, 0%, 92%);
-  margin-top: -2rem;
   border-radius: 6px;
   box-shadow: 0 4px 20px hsla(0, 0%, 77%), 0 4px 20px hsla(0, 0%, 77%);
 }

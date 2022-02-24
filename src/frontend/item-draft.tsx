@@ -92,17 +92,10 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
         </div>
       </div>
 
-      <div className={styles.right}>
-        {i.highlight &&
-          <div className={styles.highlight}>
-            <EditorContainer
-              rep={rep}
-              content={i.highlight}
-              clientInfo={null}
-              setValue={()=>{ return null}}
-            />
-          </div>
-        }
+      <div
+        className={styles.right}
+        onMouseOver={() => setShowOptions(true)}
+      >
         { showOptions &&
           <div
             className={styles.optionsContainer}
@@ -126,13 +119,22 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
               🗑
             </div>
           </div>
-
         }
+        {i.highlight &&
+          <div className={styles.highlight}>
+            <EditorContainer
+              rep={rep}
+              content={i.highlight}
+              clientInfo={null}
+              setValue={()=>{ return null}}
+            />
+          </div>
+        }
+
 
         <div
           className={styles.titleContainer}
           onMouseOver={() => {
-            setShowOptions(true)
             setShowCaret(true)
           }}
           onMouseLeave={()=>{setShowCaret(false)}}
