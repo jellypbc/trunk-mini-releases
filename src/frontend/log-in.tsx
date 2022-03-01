@@ -1,16 +1,14 @@
-import React, { useState, useEffect} from 'react'
+import React from 'react'
 import styles from './log-in.module.css'
 import Head from 'next/head'
 import Link from 'next/link'
 import { supabase } from '../lib/supabase-client'
 
 export default function LogIn() {
-  const [loading, setLoading] = useState<boolean>(false)
 
   async function signInWithGoogle() {
     try {
-      setLoading(true)
-      const { user, session, error } : {user: any, session: any, error: any} = await supabase.auth.signIn({
+      const { error } : { error: any} = await supabase.auth.signIn({
         provider: 'google',
       }, {
         redirectTo: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : null || undefined
@@ -20,7 +18,6 @@ export default function LogIn() {
       console.log('Error thrown:', error.message)
       alert(error.error_description || error.message)
     } finally {
-      setLoading(false)
     }
   }
 
