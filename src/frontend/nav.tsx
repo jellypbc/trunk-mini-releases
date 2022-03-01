@@ -7,12 +7,16 @@ import styles from "./nav.module.css";
 import { randomShape } from "../datamodel/shape";
 import { useUserInfo } from "../datamodel/subscriptions";
 import type { M } from "../datamodel/mutators";
+import type { AuthSession } from '@supabase/supabase-js'
+import { supabase } from "src/lib/supabase-client";
 
-export function Nav({ rep }: { rep: Replicache<M> }) {
+export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession}) {
   const [aboutVisible, showAbout] = useState(false);
   const [shareVisible, showShare] = useState(false);
   const urlBox = useRef<HTMLInputElement>(null);
   const userInfo = useUserInfo(rep);
+
+  const { user } = session
 
   useEffect(() => {
     if (shareVisible) {
@@ -23,6 +27,14 @@ export function Nav({ rep }: { rep: Replicache<M> }) {
   const onRectangle = () => {
     rep.mutate.createShape(randomShape());
   };
+
+  async function logOut() {
+    const { error } = await supabase.auth.signOut()
+    error ?
+      console.log('Error logging out:', error.message)
+      :
+      alert('You have been signed out')
+  }
 
 
   return (
@@ -87,8 +99,9 @@ export function Nav({ rep }: { rep: Replicache<M> }) {
             style={{
               backgroundColor: userInfo.color,
             }}
+            onClick={logOut}
           >
-            {userInfo.avatar} {userInfo.name}
+            {user && user.email ? user.email : userInfo.avatar}
           </div>
         )}
       </div>

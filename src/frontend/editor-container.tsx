@@ -16,7 +16,6 @@ type Props = {
   setValue: (value: string) => void
 }
 function EditorContainer({ rep, content : doc, clientInfo, setValue } : Props) {
-  console.log({ rep, doc, clientInfo})
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()

@@ -11,13 +11,24 @@ import ItemDraftList from '../../frontend/item-draft-list'
 import { useDrafts } from "../../datamodel/local/subscriptions";
 import { updateDrafts } from "../../datamodel/local/draft";
 import ItemDraftExpandedContainer from '../../frontend/item-draft-expanded-container'
+import type { AuthSession } from '@supabase/supabase-js'
+import LogIn from '../../frontend/log-in'
+import { supabase } from "src/lib/supabase-client";
+import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null);
   const [drafts, setDrafts] = useState<any[]>([])
   const [selectedDraftID, setSelectedDraftID] = useState<string>('')
+  const [session, setSession] = useState<AuthSession | null>(null)
 
   useEffect(() => {
+    supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
+      setSession(session)
+    })
+    const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
+    session && setSession(JSON.parse(session).currentSession)
+
     const draftJSON = useDrafts()
     const parsedDrafts = draftJSON && JSON.parse(draftJSON) || []
     const draftList: any[] = []
@@ -38,6 +49,10 @@ export default function Home() {
   function handleSetDrafts(drafts: any) {
     setDrafts(drafts)
   }
+
+  useEffect(() => {
+    console.log('session', session)
+  }, [session])
 
   // TODO: Replicache + SSR could be cool!
   useEffect(() => {
@@ -102,31 +117,40 @@ export default function Home() {
         background: "rgb(229,229,229)",
       }}
     >
-      <Nav rep={rep} />
-      <div>
-        {selectedDraftID
-          ?
-          <ItemDraftExpandedContainer
-            selectedDraftID={selectedDraftID}
-            drafts={drafts}
-            handleSetDrafts={handleSetDrafts}
-            setSelectedDraftID={setSelectedDraftID}
+
+      {session ?
+
+        <div>
+          <Nav
             rep={rep}
+            session={session}
           />
-          :
-          <div
-            style={{display: "flex", maxHeight: "70vh"}}
-          >
-            <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
-            <ItemDraftList
+          {selectedDraftID
+            ?
+            <ItemDraftExpandedContainer
+              selectedDraftID={selectedDraftID}
               drafts={drafts}
               handleSetDrafts={handleSetDrafts}
               setSelectedDraftID={setSelectedDraftID}
               rep={rep}
             />
-          </div>
-        }
-      </div>
+            :
+            <div
+              style={{display: "flex", maxHeight: "70vh"}}
+            >
+              <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
+              <ItemDraftList
+                drafts={drafts}
+                handleSetDrafts={handleSetDrafts}
+                setSelectedDraftID={setSelectedDraftID}
+                rep={rep}
+              />
+            </div>
+          }
+        </div>
+      :
+        <LogIn/>
+      }
       <Designer {...{ rep }} />
     </div>
   );
