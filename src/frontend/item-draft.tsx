@@ -5,6 +5,7 @@ import { HotKeys } from 'react-hotkeys'
 import type { Replicache } from 'replicache'
 import EditorViewingContainer from './editor-viewing-container'
 import type { M } from '../datamodel/mutators'
+import EditorOptions from './editor-options'
 
 
 type Props = {
@@ -70,6 +71,10 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
     }
   };
 
+  function handleSetSelectedDraftID(){
+    setSelectedDraftID(i.id)
+  }
+
   return (
     <HotKeys
       {...{
@@ -97,28 +102,11 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
         onMouseOver={() => setShowOptions(true)}
       >
         { showOptions &&
-          <div
-            className={styles.optionsContainer}
-            onMouseLeave={() => setShowOptions(false)}
-          >
-            <div className={styles.option}>
-              😄
-            </div>
-            <div className={styles.option}>
-              💬
-            </div>
-            <div
-              className={styles.option}
-              onClick={() => setSelectedDraftID(i.id)}
-            >
-              📂
-            </div>
-            <div className={styles.option}
-              onClick={handleDraftDelete}
-            >
-              🗑
-            </div>
-          </div>
+          <EditorOptions
+            handleSetShowOptions={setShowOptions}
+            handleSetSelectedDraftID={handleSetSelectedDraftID}
+            handleDraftDelete={handleDraftDelete}
+          />
         }
         {i.highlight && i.highlight !== '<p></p>' &&
           <div className={styles.highlight}>
