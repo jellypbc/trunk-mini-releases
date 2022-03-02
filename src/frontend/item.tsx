@@ -41,9 +41,9 @@ export default function Item({ item, rep, drafts, handleSetDrafts } :{ item: any
     return date.toLocaleString('default', { month: 'short'}) + " " + date.toLocaleString('default', {day: 'numeric'})
   }
 
-  function handleItemDelete() {
-    rep.mutate.deleteItem(i.id)
-  }
+  // function handleItemDelete() {
+  //   rep.mutate.deleteItem(i.id)
+  // }
 
   return (
     <div
