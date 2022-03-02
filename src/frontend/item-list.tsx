@@ -29,6 +29,8 @@ export default function ItemList({ rep, drafts, handleSetDrafts }: Props) {
               key={item.id}
               item={item}
               rep={rep}
+              drafts={drafts}
+              handleSetDrafts={handleSetDrafts}
             />
           )
         })

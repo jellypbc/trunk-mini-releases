@@ -1,10 +1,39 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './item.module.css'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
+import ItemEditorContainer from './item-editor-container'
 
-export default function Item({ item, rep } :{ item: any, rep: Replicache<M> }) {
+export default function Item({ item, rep, drafts, handleSetDrafts } :{ item: any, rep: Replicache<M>, drafts: any, handleSetDrafts : any }) {
   const i = item
+  const [titleValue, setTitleValue] = useState<string>(i.title)
+  const [contentValue, setContentValue] = useState<string>(i.content)
+
+  useEffect(() => {
+    handleUpdateTitle()
+  }, [titleValue])
+
+  useEffect(() => {
+    handleUpdateContent()
+  }, [contentValue])
+
+  function handleUpdateTitle(){
+    const i = {
+      ...item,
+      title: titleValue,
+      createdAt: item.createdAt.toString()
+    }
+    rep.mutate.createItem({id: i.id, item: i})
+  }
+
+  function handleUpdateContent(){
+    const i = {
+      ...item,
+      content: contentValue,
+      createdAt: item.createdAt.toString()
+    }
+    rep.mutate.createItem({id: i.id, item: i})
+  }
 
   const date = i.createdAt
 
@@ -19,7 +48,7 @@ export default function Item({ item, rep } :{ item: any, rep: Replicache<M> }) {
   return (
     <div
       className={styles.container}
-      onClick={handleItemDelete}
+      // onClick={handleItemDelete}
     >
       <div className={styles.left}>
         <div className={styles.avatarContainer}>
@@ -38,10 +67,32 @@ export default function Item({ item, rep } :{ item: any, rep: Replicache<M> }) {
               </div>
             </div>
           </div>
-          <div className={styles.title}>{i.title}</div>
+          <div className={styles.title}>
+            {/* {i.title} */}
+            <ItemEditorContainer
+              content={titleValue}
+              setValue={setTitleValue}
+              editable={true}
+              type={'title'}
+              rep={rep}
+              handleSetDrafts={handleSetDrafts}
+              drafts={drafts}
+            />
+          </div>
         </div>
 
-        <div className={styles.content}>i am item</div>
+        <div className={styles.content}>
+          {/* {i.content} */}
+          <ItemEditorContainer
+            content={contentValue}
+            setValue={setContentValue}
+            editable={true}
+            type={'content'}
+            rep={rep}
+            handleSetDrafts={handleSetDrafts}
+            drafts={drafts}
+          />
+        </div>
 
       </div>
     </div>
