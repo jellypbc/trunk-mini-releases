@@ -3,11 +3,14 @@ import styles from './item.module.css'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import ItemEditorContainer from './item-editor-container'
+import EditorViewingContainer from './editor-viewing-container'
 
 export default function Item({ item, rep, drafts, handleSetDrafts } :{ item: any, rep: Replicache<M>, drafts: any, handleSetDrafts : any }) {
   const i = item
   const [titleValue, setTitleValue] = useState<string>(i.title)
   const [contentValue, setContentValue] = useState<string>(i.content)
+  const [showTitleEditor, setShowTitleEditor] = useState<boolean>(false)
+  const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
 
   useEffect(() => {
     handleUpdateTitle()
@@ -67,31 +70,55 @@ export default function Item({ item, rep, drafts, handleSetDrafts } :{ item: any
               </div>
             </div>
           </div>
-          <div className={styles.title}>
-            {/* {i.title} */}
+          <div
+            className={styles.title}
+            onClick={() => setShowTitleEditor(true)}
+          >
+            {showTitleEditor ?
+              <ItemEditorContainer
+                content={titleValue}
+                setValue={setTitleValue}
+                editable={true}
+                type={'title'}
+                rep={rep}
+                handleSetDrafts={handleSetDrafts}
+                drafts={drafts}
+              />
+              :
+              <EditorViewingContainer
+                type={'title'}
+                rep={rep}
+                content={i.title}
+                clientInfo={null}
+                setValue={()=>{ return null}}
+              />
+            }
+          </div>
+        </div>
+
+        <div
+          className={styles.content}
+          onClick={() => setShowContentEditor(true)}
+        >
+          { showContentEditor ?
             <ItemEditorContainer
-              content={titleValue}
-              setValue={setTitleValue}
+              content={contentValue}
+              setValue={setContentValue}
               editable={true}
-              type={'title'}
+              type={'content'}
               rep={rep}
               handleSetDrafts={handleSetDrafts}
               drafts={drafts}
             />
-          </div>
-        </div>
-
-        <div className={styles.content}>
-          {/* {i.content} */}
-          <ItemEditorContainer
-            content={contentValue}
-            setValue={setContentValue}
-            editable={true}
-            type={'content'}
-            rep={rep}
-            handleSetDrafts={handleSetDrafts}
-            drafts={drafts}
-          />
+            :
+            <EditorViewingContainer
+              type={'content'}
+              rep={rep}
+              content={i.content}
+              clientInfo={null}
+              setValue={()=>{ return null}}
+            />
+          }
         </div>
 
       </div>

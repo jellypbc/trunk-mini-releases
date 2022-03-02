@@ -7,7 +7,7 @@ import type { Schema } from 'prosemirror-model'
 import { exampleSetup } from './editor/plugins/index'
 import Editor from './editor'
 import styles from './item-draft-editor-container.module.css'
-import EditorContainer from './editor-container'
+import EditorDraftingContainer from './editor-drafting-container'
 import { useUserInfo } from '../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
@@ -130,7 +130,7 @@ function ItemDraftEditorContainer({ content: doc, setValue, editable, type, rep,
               </div>
               {showReplyForm &&
                 <>
-                  <EditorContainer
+                  <EditorDraftingContainer
                     rep={rep}
                     content={commentDraft}
                     clientInfo={userInfo}

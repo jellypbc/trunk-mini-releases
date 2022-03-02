@@ -3,7 +3,7 @@ import styles from './item-draft.module.css'
 import ItemDraftEditorContainer from './item-draft-editor-container'
 import { HotKeys } from 'react-hotkeys'
 import type { Replicache } from 'replicache'
-import EditorContainer from './editor-container'
+import EditorViewingContainer from './editor-viewing-container'
 import type { M } from '../datamodel/mutators'
 
 
@@ -122,7 +122,8 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
         }
         {i.highlight && i.highlight !== '<p></p>' &&
           <div className={styles.highlight}>
-            <EditorContainer
+            <EditorViewingContainer
+              type={'highlight'}
               rep={rep}
               content={i.highlight}
               clientInfo={null}

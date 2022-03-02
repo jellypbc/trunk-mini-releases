@@ -4,7 +4,7 @@ import { useUserInfo } from '../datamodel/subscriptions'
 import type { Replicache} from 'replicache'
 import type { M } from '../datamodel/mutators'
 import styles from './item-add.module.css'
-import EditorContainer from './editor-container'
+import EditorDraftingContainer from './editor-drafting-container'
 
 import { HotKeys } from "react-hotkeys"
 import { randomDraft } from '../datamodel/local/draft'
@@ -86,7 +86,7 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
                 onClick={() => setShowEditor(true)}
               />
               :
-              <EditorContainer
+              <EditorDraftingContainer
                 rep={rep}
                 content={value}
                 clientInfo={userInfo}

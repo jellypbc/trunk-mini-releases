@@ -16,4 +16,5 @@
   outline: none;
   width: 100%;
   font-size: 1.6rem;
+  overflow: auto;
 }

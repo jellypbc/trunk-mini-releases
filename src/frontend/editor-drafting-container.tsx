@@ -15,7 +15,7 @@ type Props = {
   clientInfo: any,
   setValue: (value: string) => void
 }
-function EditorContainer({ rep, content : doc, clientInfo, setValue } : Props) {
+function EditorDraftingContainer({ rep, content : doc, clientInfo, setValue } : Props) {
   console.log('clientInfo', clientInfo)
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
@@ -36,7 +36,7 @@ function EditorContainer({ rep, content : doc, clientInfo, setValue } : Props) {
   }, [])
 
   useEffect(() => {
-    if (doc === '<p></p>'){
+    if (doc === '<p></p>') {
       const state = createStateFromProps(
         doc,
         schema,
@@ -91,4 +91,4 @@ const createStateFromProps = (
   })
 }
 
-export default React.memo(EditorContainer)
+export default React.memo(EditorDraftingContainer)
