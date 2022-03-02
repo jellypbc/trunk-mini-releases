@@ -3,10 +3,13 @@ import styles from './log-in.module.css'
 import Head from 'next/head'
 import Link from 'next/link'
 import { supabase } from '../lib/supabase-client'
+import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../lib/constants'
 
 export default function LogIn() {
 
   async function signInWithGoogle() {
+    const redirectUrl = location.href
+    localStorage.setItem(LOCAL_STORAGE_REDIRECT_URL_KEY, redirectUrl)
     try {
       const { error } : { error: any} = await supabase.auth.signIn({
         provider: 'google',
