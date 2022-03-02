@@ -24,7 +24,7 @@ export function getSortedItems(rep: Replicache<typeof mutators>) {
       created_at:  new Date(v.created_at)
     }
     let value = { ...v, ...changes }
-    Object.assign(value, { id: k })
+    Object.assign(value, { id: k.substr(itemPrefix.length) })
     parsedItems.push(value)
   })
   const sortedItems = parsedItems.sort((a, b) => b.created_at - a.created_at)

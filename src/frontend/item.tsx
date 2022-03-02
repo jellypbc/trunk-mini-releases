@@ -1,7 +1,9 @@
 import React from 'react'
 import styles from './item.module.css'
+import type { Replicache } from 'replicache'
+import type { M } from '../datamodel/mutators'
 
-export default function Item({ item } :{ item: any}) {
+export default function Item({ item, rep } :{ item: any, rep: Replicache<M> }) {
   const i = item
 
   const date = i.created_at
@@ -10,8 +12,15 @@ export default function Item({ item } :{ item: any}) {
     return date.toLocaleString('default', { month: 'short'}) + " " + date.toLocaleString('default', {day: 'numeric'})
   }
 
+  function handleItemDelete() {
+    rep.mutate.deleteItem(i.id)
+  }
+
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onClick={handleItemDelete}
+    >
       <div className={styles.left}>
         <div className={styles.avatarContainer}>
           <div className={styles.avatar}></div>

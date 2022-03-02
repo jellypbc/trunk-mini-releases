@@ -14,7 +14,8 @@ import {
   initShapes,
 } from "./shape";
 import {
-  putItem
+  putItem,
+  deleteItem
 } from './item';
 
 export type M = typeof mutators;
@@ -31,5 +32,6 @@ export const mutators = {
   selectShape,
   initShapes,
   createItem: putItem,
+  deleteItem,
   nop: async (_: WriteTransaction) => {},
 };

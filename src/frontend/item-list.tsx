@@ -28,6 +28,7 @@ export default function ItemList({ rep, drafts, handleSetDrafts }: Props) {
             <Item
               key={item.id}
               item={item}
+              rep={rep}
             />
           )
         })

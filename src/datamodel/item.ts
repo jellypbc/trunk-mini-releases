@@ -32,6 +32,12 @@ export function putItem(
   return tx.put(key(id), item);
 }
 
+export async function deleteItem(
+  tx: WriteTransaction,
+  id: string
+): Promise<void> {
+  await tx.del(key(id));
+}
 
 function key(id: string): string {
   return `${itemPrefix}${id}`;
