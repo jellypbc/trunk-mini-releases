@@ -21,6 +21,7 @@ npm run dev-worker
 NEXT_PUBLIC_WORKER_HOST=ws://localhost:8787 npm run dev
 ```
 
+
 ## Publishing Worker to Cloudflare
 
 1. Get an account at Cloudflare: https://workers.cloudflare.com/.
