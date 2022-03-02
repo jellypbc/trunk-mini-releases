@@ -137,6 +137,7 @@ export default function Home() {
             :
             <div
               style={{display: "flex", maxHeight: "70vh"}}
+              className={"main"}
             >
               <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
               <ItemDraftList

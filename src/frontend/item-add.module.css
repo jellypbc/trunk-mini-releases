@@ -22,6 +22,15 @@
   border-radius: .4rem;
 }
 
+@media (max-width: 600px) {
+  .left {
+    display: none;
+  }
+  .right {
+    width: 80vw;
+  }
+}
+
 .avatarContainer {
   display: absolute;
   padding: 0 1rem;

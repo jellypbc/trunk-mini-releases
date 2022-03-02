@@ -10,6 +10,24 @@
   display: flex;
 }
 
+.right {
+  padding: 1rem 2rem;
+  width: 30vw;
+  border: 1px solid #ccc;
+  background-color: hsl(0, 0%, 90%);
+  border-radius: .4rem;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .left {
+    display: none;
+  }
+  .right {
+    width: 80vw;
+  }
+}
+
 .avatarContainer {
   display: absolute;
   padding: 0 1rem;
@@ -69,15 +87,6 @@
 
 .content {
   padding: 1rem;
-}
-
-.right {
-  padding: 1rem 2rem;
-  width: 30vw;
-  border: 1px solid #ccc;
-  background-color: hsl(0, 0%, 90%);
-  border-radius: .4rem;
-  position: relative;
 }
 
 .optionsContainer{
