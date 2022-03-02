@@ -80,9 +80,9 @@ function ItemDraftEditorContainer({ content: doc, setValue, editable, type, rep,
     const updatedDraft = {
       ...r,
       highlight: serializedSelection,
-      created_by: userInfo?.avatar,
+      createdBy: userInfo?.avatar,
       title: commentDraft,
-      created_at: new Date(r.created_at)
+      createdAt: new Date(r.createdAt)
     }
     handleSetDrafts([...drafts, updatedDraft])
   }

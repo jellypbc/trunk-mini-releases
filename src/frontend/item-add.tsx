@@ -36,7 +36,7 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
   function handleItemPublish(){
     const r : any = randomItem()
     r.item.title = value
-    r.item.created_by = userInfo ? userInfo.avatar : 'unknown'
+    r.item.createdBy = userInfo ? userInfo.avatar : 'unknown'
     rep.mutate.createItem(r)
     setValue(initialValue)
   }
@@ -44,9 +44,9 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
   function handleItemDraftAdd(){
     const r = randomDraft()
     r.title = value
-    r.created_by = userInfo ? userInfo.avatar : 'unknown'
+    r.createdBy = userInfo ? userInfo.avatar : 'unknown'
     const changes = {
-      created_at: new Date(r.created_at)
+      createdAt: new Date(r.createdAt)
     }
     const draft = { ...r, ...changes}
     handleSetDrafts([...drafts, draft])

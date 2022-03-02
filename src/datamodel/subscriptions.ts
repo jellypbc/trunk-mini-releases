@@ -21,14 +21,13 @@ export function getSortedItems(rep: Replicache<typeof mutators>) {
   let parsedItems: any[] = []
   items.map(([k, v]: [string, any]) => {
     const changes = {
-      created_at:  new Date(v.created_at)
+      createdAt:  new Date(v.createdAt)
     }
     let value = { ...v, ...changes }
     Object.assign(value, { id: k.substr(itemPrefix.length) })
     parsedItems.push(value)
   })
-  const sortedItems = parsedItems.sort((a, b) => b.created_at - a.created_at)
-  console.log('sortedItems', sortedItems)
+  const sortedItems = parsedItems.sort((a, b) => b.createdAt - a.createdAt)
   return sortedItems
 }
 

@@ -15,7 +15,7 @@ export default function ItemDraftList({ drafts, handleSetDrafts, setSelectedDraf
   const [d, setD] = useState<any[]>(drafts)
 
   useEffect(() => {
-    const d = drafts.sort((a, b) => b.created_at - a.created_at)
+    const d = drafts.sort((a, b) => b.createdAt - a.createdAt)
     setD(d)
   }, [drafts])
 

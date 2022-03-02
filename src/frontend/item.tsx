@@ -6,7 +6,7 @@ import type { M } from '../datamodel/mutators'
 export default function Item({ item, rep } :{ item: any, rep: Replicache<M> }) {
   const i = item
 
-  const date = i.created_at
+  const date = i.createdAt
 
   function dateInWords(date: Date) {
     return date.toLocaleString('default', { month: 'short'}) + " " + date.toLocaleString('default', {day: 'numeric'})
@@ -26,7 +26,7 @@ export default function Item({ item, rep } :{ item: any, rep: Replicache<M> }) {
           <div className={styles.avatar}></div>
         </div>
         <div className={styles.metaData}>
-          <div>{i.created_by}</div>
+          <div>{i.createdBy}</div>
           <div>{dateInWords(date)}</div>
         </div>
       </div>

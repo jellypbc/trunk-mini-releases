@@ -6,8 +6,8 @@ const LOCAL_STORAGE_KEY = 'trunk-mini.item-drafts'
 export const draftSchema = z.object({
   type: z.literal(`item`),
   id: z.string(),
-  created_at: z.string(),
-  created_by: z.string(),
+  createdAt: z.string(),
+  createdBy: z.string(),
   title: z.string(),
   content: z.string(),
   highlight: z.string()
@@ -23,8 +23,8 @@ export function randomDraft() {
   return {
     type: 'item',
     id: nanoid(),
-    created_at: new Date().toISOString(),
-    created_by: '',
+    createdAt: new Date().toISOString(),
+    createdBy: '',
     title: '<p>Untitled</p>',
     content: '<p></p>',
     highlight: '<p></p>'

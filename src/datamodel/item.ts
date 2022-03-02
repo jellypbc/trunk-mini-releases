@@ -4,8 +4,8 @@ import { z } from "zod";
 
 export const itemSchema = z.object({
   type: z.literal(`item`),
-  created_at: z.string(),
-  created_by: z.string(),
+  createdAt: z.string(),
+  createdBy: z.string(),
   title: z.string(),
   content: z.string()
 });
@@ -50,8 +50,8 @@ export function randomItem() {
     id: nanoid(),
     item: {
       type: 'item',
-      created_at: new Date().toISOString(),
-      created_by: '',
+      createdAt: new Date().toISOString(),
+      createdBy: '',
       title: 'Untitled',
       content: '',
     } as Item,

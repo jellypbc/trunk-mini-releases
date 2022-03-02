@@ -34,7 +34,7 @@ export default function Home() {
     const draftList: any[] = []
     parsedDrafts.map((d: any) => {
       const changes = {
-        created_at: new Date(d.created_at)
+        createdAt: new Date(d.createdAt)
       }
       let changedDraft = { ...d, ...changes }
       draftList.push(changedDraft)

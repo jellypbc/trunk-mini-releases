@@ -23,7 +23,7 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
   const [showContent, setShowContent] = useState<boolean>(false)
   const [showCaret, setShowCaret] = useState<boolean>(false)
 
-  const date = new Date(i.created_at)
+  const date = new Date(i.createdAt)
 
   useEffect(() => {
     handleDraftTitleChange()
@@ -87,7 +87,7 @@ export default function ItemDraft({ item, drafts, handleSetDrafts, setSelectedDr
           <div className={styles.avatar}></div>
         </div>
         <div className={styles.metaData}>
-          <div>{i.created_by}</div>
+          <div>{i.createdBy}</div>
           <div>{dateInWords(date)}</div>
         </div>
       </div>
