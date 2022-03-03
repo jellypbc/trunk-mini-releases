@@ -17,6 +17,9 @@ import {
   putItem,
   deleteItem
 } from './item';
+import {
+  putArrow
+} from './arrow'
 
 export type M = typeof mutators;
 
@@ -33,5 +36,6 @@ export const mutators = {
   initShapes,
   createItem: putItem,
   deleteItem,
+  createArrow: putArrow,
   nop: async (_: WriteTransaction) => {},
 };

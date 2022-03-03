@@ -4,6 +4,7 @@ import { HotKeys } from 'react-hotkeys'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import ItemEditorContainer from './item-editor-container'
+import { useArrowByID } from '../datamodel/subscriptions'
 
 
 type Props = {
@@ -13,7 +14,7 @@ type Props = {
   rep: Replicache<M>
 }
 
-export default function ItemExpanded({ itemID, item, setSelectedItemID, rep }:Props) {
+export default function ItemExpanded({ itemID, item, setSelectedItemID, rep }: Props) {
   const i = item
   const [titleValue, setTitleValue] = useState<string>(i.title)
   const [contentValue, setContentValue] = useState<string>(i.content)
@@ -70,6 +71,8 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep }:Pr
               editable={true}
               type={'title'}
               rep={rep}
+              item={item}
+              itemID={itemID}
             />
           </div>
         </div>
@@ -80,6 +83,8 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep }:Pr
               editable={true}
               type={'content'}
               rep={rep}
+              item={item}
+              itemID={itemID}
             />
         </div>
       </div>

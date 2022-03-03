@@ -3,9 +3,10 @@ import { useSubscribe } from "replicache-react";
 import { getClientState, clientStatePrefix } from "./client-state";
 import { getShape, shapePrefix } from "./shape";
 import { getItem, itemPrefix } from "./item"
-import type { mutators } from "./mutators";
+import { getArrow, arrowPrefix } from './arrow'
+import type { M } from "./mutators";
 
-export function getItems(rep: Replicache<typeof mutators>) {
+export function getItems(rep: Replicache<M>) {
   return useSubscribe(
     rep,
     async(tx) => {
@@ -16,7 +17,28 @@ export function getItems(rep: Replicache<typeof mutators>) {
   )
 }
 
-export function getSortedItems(rep: Replicache<typeof mutators>) {
+export function getArrows(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async(tx) => {
+      const arrows = await tx.scan({ prefix: arrowPrefix }).entries().toArray();
+      return arrows
+    },
+    []
+  )
+}
+
+export function getCommentArrowsByArrowIDArray(rep: Replicache<M>, arrowIDs: string[]) {
+  let arrows : any[] = []
+  arrowIDs && arrowIDs.map(id => {
+    const arrow = useArrowByID(rep, id)
+    arrows.push(arrow)
+  })
+  return arrows
+}
+
+
+export function getSortedItems(rep: Replicache<M>) {
   const items = getItems(rep)
   let parsedItems: any[] = []
   items.map(([k, v]: [string, any]) => {
@@ -31,7 +53,7 @@ export function getSortedItems(rep: Replicache<typeof mutators>) {
   return sortedItems
 }
 
-export function useItemByID(rep: Replicache<typeof mutators>, id: string) {
+export function useItemByID(rep: Replicache<M>, id: string) {
   return useSubscribe(
     rep,
     async (tx) => {
@@ -41,8 +63,36 @@ export function useItemByID(rep: Replicache<typeof mutators>, id: string) {
   );
 }
 
+export function useArrowByID(rep: Replicache<M>, id: string) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return await getArrow(tx, id);
+    },
+    null
+  );
+}
 
-export function useShapeIDs(rep: Replicache<typeof mutators>) {
+// export function useCommentIDsByItemID(rep: Replicache<M>, id: string) {
+//   return useSubscribe(
+//     rep,
+//     async (tx) => {
+//       const i = await getItem(tx, id)
+//       const { arrows } = i
+//       const parsedArrows = JSON.parse(arrows)
+
+//       // const itemArrows = JSON.parse(i.arrows)
+//       // let commentIDs = []
+//       // commentIDs = itemArrows.filter((a) => a.type === 'comment'))
+//       // return commentIDs
+
+//     },
+//     null
+//   )
+// }
+
+
+export function useShapeIDs(rep: Replicache<M>) {
   return useSubscribe(
     rep,
     async (tx) => {
@@ -53,7 +103,7 @@ export function useShapeIDs(rep: Replicache<typeof mutators>) {
   );
 }
 
-export function useShapeByID(rep: Replicache<typeof mutators>, id: string) {
+export function useShapeByID(rep: Replicache<M>, id: string) {
   return useSubscribe(
     rep,
     async (tx) => {
@@ -63,7 +113,7 @@ export function useShapeByID(rep: Replicache<typeof mutators>, id: string) {
   );
 }
 
-export function useUserInfo(rep: Replicache<typeof mutators>) {
+export function useUserInfo(rep: Replicache<M>) {
   return useSubscribe(
     rep,
     async (tx) => {
@@ -73,7 +123,7 @@ export function useUserInfo(rep: Replicache<typeof mutators>) {
   );
 }
 
-export function useOverShapeID(rep: Replicache<typeof mutators>) {
+export function useOverShapeID(rep: Replicache<M>) {
   return useSubscribe(
     rep,
     async (tx) => {
@@ -83,7 +133,7 @@ export function useOverShapeID(rep: Replicache<typeof mutators>) {
   );
 }
 
-export function useSelectedShapeID(rep: Replicache<typeof mutators>) {
+export function useSelectedShapeID(rep: Replicache<M>) {
   return useSubscribe(
     rep,
     async (tx) => {
@@ -93,7 +143,7 @@ export function useSelectedShapeID(rep: Replicache<typeof mutators>) {
   );
 }
 
-export function useCollaboratorIDs(rep: Replicache<typeof mutators>) {
+export function useCollaboratorIDs(rep: Replicache<M>) {
   return useSubscribe(
     rep,
     async (tx) => {
@@ -111,7 +161,7 @@ export function useCollaboratorIDs(rep: Replicache<typeof mutators>) {
 }
 
 export function useClientInfo(
-  rep: Replicache<typeof mutators>,
+  rep: Replicache<M>,
   clientID: string
 ) {
   return useSubscribe(

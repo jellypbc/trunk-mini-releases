@@ -7,12 +7,13 @@ import EditorViewingContainer from './editor-viewing-container'
 import EditorOptions from './editor-options'
 
 type Props = {
+  itemID: string
   item: any
   rep: Replicache<M>
   setSelectedDraftID: any
 }
 
-export default function Item({ item, rep, setSelectedDraftID } : Props) {
+export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) {
   const i = item
   const [titleValue, setTitleValue] = useState<string>(i.title)
   const [contentValue, setContentValue] = useState<string>(i.content)
@@ -103,6 +104,8 @@ export default function Item({ item, rep, setSelectedDraftID } : Props) {
                 editable={true}
                 type={'title'}
                 rep={rep}
+                item={item}
+                itemID={itemID}
               />
               :
               <EditorViewingContainer
@@ -127,6 +130,8 @@ export default function Item({ item, rep, setSelectedDraftID } : Props) {
               editable={true}
               type={'content'}
               rep={rep}
+              item={item}
+              itemID={itemID}
             />
             :
             <EditorViewingContainer

@@ -31,6 +31,7 @@ export default function ItemList({ rep, drafts, handleSetDrafts, setSelectedDraf
               item={item}
               rep={rep}
               setSelectedDraftID={setSelectedDraftID}
+              itemID={item.id}
             />
           )
         })

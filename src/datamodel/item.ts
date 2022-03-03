@@ -7,7 +7,9 @@ export const itemSchema = z.object({
   createdAt: z.string(),
   createdBy: z.string(),
   title: z.string(),
-  content: z.string()
+  content: z.string(),
+  arrows: z.string(),
+  highlight: z.string(),
 });
 
 export type Item = z.infer<typeof itemSchema>;
@@ -21,7 +23,6 @@ export async function getItem(
     console.log(`Specified item ${id} not found.`);
     return null;
   }
-  console.log('jv', jv)
   return itemSchema.parse(jv);
 }
 
@@ -54,6 +55,8 @@ export function randomItem() {
       createdBy: '',
       title: 'Untitled',
       content: '',
+      arrows: '[]',
+      highlight: '',
     } as Item,
   };
 }
