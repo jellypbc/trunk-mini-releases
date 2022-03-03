@@ -8,7 +8,7 @@ import { exampleSetup } from './editor/plugins/index'
 import Editor from './editor'
 import styles from './item-draft-editor-container.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
-import { useUserInfo, getArrows, getCommentArrowsByArrowIDArray } from '../datamodel/subscriptions'
+import { useUserInfo, getArrows } from '../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { randomArrow } from '../datamodel/arrow'
@@ -43,8 +43,8 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   const [commentDraft, setCommentDraft] = useState<string>(initialValue)
   // const [arrowArray, setArrowArray] = useState<any[]>([])
 
-  // const allArrows = getArrows(rep)
-  // console.log('allArrows', allArrows)
+  const allArrows = getArrows(rep)
+  console.log('allArrows', allArrows)
 
   // useEffect(() => {
 

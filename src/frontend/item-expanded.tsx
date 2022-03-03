@@ -4,8 +4,6 @@ import { HotKeys } from 'react-hotkeys'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import ItemEditorContainer from './item-editor-container'
-import { useArrowByID } from '../datamodel/subscriptions'
-
 
 type Props = {
   itemID: string

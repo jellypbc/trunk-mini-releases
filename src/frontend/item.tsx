@@ -5,6 +5,7 @@ import type { M } from '../datamodel/mutators'
 import ItemEditorContainer from './item-editor-container'
 import EditorViewingContainer from './editor-viewing-container'
 import EditorOptions from './editor-options'
+import Arrow from './arrow'
 
 type Props = {
   itemID: string
@@ -61,6 +62,8 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
     setSelectedDraftID(i.id)
   }
 
+  const arrowArray = JSON.parse(item.arrows)
+
   return (
     <div
       className={styles.container}
@@ -86,6 +89,18 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
             handleDraftDelete={handleItemDelete}
           />
         }
+        <div>
+          {arrowArray.map((a: any) => {
+            return(
+              <Arrow
+                key={a}
+                arrowID={a}
+                rep={rep}
+                itemID={itemID}
+              />
+            )
+          })}
+        </div>
         <div className={styles.titleContainer}>
           <div className={styles.bullet}>
             <div className={styles.bulletBorder}>
