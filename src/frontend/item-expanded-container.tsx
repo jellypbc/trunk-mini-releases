@@ -18,6 +18,7 @@ export default function ItemExpandedContainer({ selectedItemID, setSelectedItemI
     <div className={styles.container}>
       <ItemExpanded
         item={i}
+        itemID={selectedItemID}
         setSelectedItemID={setSelectedItemID}
         rep={rep}
       />

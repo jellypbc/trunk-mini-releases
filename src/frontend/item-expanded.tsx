@@ -7,44 +7,25 @@ import ItemEditorContainer from './item-editor-container'
 
 
 type Props = {
+  itemID: string
   item: any
   setSelectedItemID: (ID: string) => void
   rep: Replicache<M>
 }
 
-export default function ItemExpanded({ item, setSelectedItemID, rep }:Props) {
+export default function ItemExpanded({ itemID, item, setSelectedItemID, rep }:Props) {
   const i = item
   const [titleValue, setTitleValue] = useState<string>(i.title)
   const [contentValue, setContentValue] = useState<string>(i.content)
   const [showContent, setShowContent] = useState<boolean>(false)
 
   useEffect(() => {
-    // handleDraftTitleChange()
+    rep.mutate.createItem({id: itemID, item: {...i, title: titleValue}})
   }, [titleValue])
 
   useEffect(() => {
-    // handleDraftContentChange()
+    rep.mutate.createItem({id: itemID, item: {...i, content: contentValue}})
   }, [contentValue])
-
-  // function handleDraftTitleChange(){
-  //   const changedDraft = i
-  //   changedDraft.title = titleValue
-
-  //   const newDrafts = [...drafts]
-  //   const index = newDrafts.findIndex((d: any) => d.id === i.id)
-  //   newDrafts[index] = changedDraft
-  //   handleSetDrafts(newDrafts)
-  // }
-
-  // function handleDraftContentChange(){
-  //   const changedDraft = i
-  //   changedDraft.content = contentValue
-
-  //   const newDrafts = [...drafts]
-  //   const index = newDrafts.findIndex((d: any) => d.id === i.id)
-  //   newDrafts[index] = changedDraft
-  //   handleSetDrafts(newDrafts)
-  // }
 
   const handlers = {
     manualSaveDraftItem: () => {
