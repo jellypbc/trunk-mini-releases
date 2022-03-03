@@ -15,6 +15,7 @@ import type { AuthSession } from '@supabase/supabase-js'
 import LogIn from '../../frontend/log-in'
 import { supabase } from "src/lib/supabase-client";
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
+import ItemExpandedContainer from '../../frontend/item-expanded-container'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null);
@@ -127,19 +128,31 @@ export default function Home() {
           />
           {selectedDraftID
             ?
-            <ItemDraftExpandedContainer
-              selectedDraftID={selectedDraftID}
-              drafts={drafts}
-              handleSetDrafts={handleSetDrafts}
-              setSelectedDraftID={setSelectedDraftID}
-              rep={rep}
-            />
+            <>
+              <ItemDraftExpandedContainer
+                selectedDraftID={selectedDraftID}
+                drafts={drafts}
+                handleSetDrafts={handleSetDrafts}
+                setSelectedDraftID={setSelectedDraftID}
+                rep={rep}
+              />
+              <ItemExpandedContainer
+                selectedItemID={selectedDraftID}
+                setSelectedItemID={setSelectedDraftID}
+                rep={rep}
+              />
+            </>
             :
             <div
               style={{display: "flex", maxHeight: "70vh"}}
               className={"main"}
             >
-              <ItemList rep={rep} drafts={drafts} handleSetDrafts={handleSetDrafts}/>
+              <ItemList
+                drafts={drafts}
+                handleSetDrafts={handleSetDrafts}
+                setSelectedDraftID={setSelectedDraftID}
+                rep={rep}
+              />
               <ItemDraftList
                 drafts={drafts}
                 handleSetDrafts={handleSetDrafts}

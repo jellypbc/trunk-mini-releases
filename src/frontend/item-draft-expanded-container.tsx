@@ -12,8 +12,11 @@ type Props = {
   rep: Replicache<M>
 }
 
-export default function ItemExpanded({ selectedDraftID, drafts, handleSetDrafts, setSelectedDraftID, rep}: Props) {
+export default function ItemDraftExpandedContainer({ selectedDraftID, drafts, handleSetDrafts, setSelectedDraftID, rep}: Props) {
   const i = drafts.find((draft: any) => draft.id === selectedDraftID)
+
+  if (!i) return null
+
   return (
     <div className={styles.container}>
       <ItemDraftExpanded

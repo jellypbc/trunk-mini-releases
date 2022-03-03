@@ -16,6 +16,7 @@
   border: 1px solid #ccc;
   background-color: hsl(0, 0%, 96%);
   border-radius: .4rem;
+  position: relative;
 }
 
 @media (max-width: 600px) {

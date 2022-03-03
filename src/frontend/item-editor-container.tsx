@@ -11,7 +11,6 @@ import EditorDraftingContainer from './editor-drafting-container'
 import { useUserInfo } from '../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
-import { randomDraft } from '../datamodel/local/draft'
 
 
 
@@ -21,13 +20,11 @@ type Props = {
   editable: boolean
   type: string
   rep: Replicache<M>
-  handleSetDrafts: (drafts: any[]) => void
-  drafts: any[]
 }
 
 const initialValue = '<p></p>'
 
-function ItemEditorContainer({ content: doc, setValue, editable, type, rep, handleSetDrafts, drafts } : Props) {
+function ItemEditorContainer({ content: doc, setValue, editable, type, rep } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
@@ -76,15 +73,8 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, hand
   }
 
   function handleCommentAdd() {
-    const r = randomDraft()
-    const updatedDraft = {
-      ...r,
-      highlight: serializedSelection,
-      createdBy: userInfo?.avatar,
-      title: commentDraft,
-      createdAt: new Date(r.createdAt)
-    }
-    handleSetDrafts([...drafts, updatedDraft])
+    // write code to handle adding a comment to a public item
+    // this will create another public item with comment content
   }
 
   return (

@@ -10,9 +10,10 @@ type Props = {
   rep: Replicache<M>
   drafts: any[],
   handleSetDrafts: (drafts: any[]) => void
+  setSelectedDraftID: (ID: string) => void
 }
 
-export default function ItemList({ rep, drafts, handleSetDrafts }: Props) {
+export default function ItemList({ rep, drafts, handleSetDrafts, setSelectedDraftID }: Props) {
   const sortedItems = getSortedItems(rep) as unknown as any
   const userInfo = useUserInfo(rep);
 
@@ -29,8 +30,7 @@ export default function ItemList({ rep, drafts, handleSetDrafts }: Props) {
               key={item.id}
               item={item}
               rep={rep}
-              drafts={drafts}
-              handleSetDrafts={handleSetDrafts}
+              setSelectedDraftID={setSelectedDraftID}
             />
           )
         })

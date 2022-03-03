@@ -2,7 +2,7 @@ import type { Replicache } from "replicache";
 import { useSubscribe } from "replicache-react";
 import { getClientState, clientStatePrefix } from "./client-state";
 import { getShape, shapePrefix } from "./shape";
-import { itemPrefix } from "./item"
+import { getItem, itemPrefix } from "./item"
 import type { mutators } from "./mutators";
 
 export function getItems(rep: Replicache<typeof mutators>) {
@@ -29,6 +29,16 @@ export function getSortedItems(rep: Replicache<typeof mutators>) {
   })
   const sortedItems = parsedItems.sort((a, b) => b.createdAt - a.createdAt)
   return sortedItems
+}
+
+export function useItemByID(rep: Replicache<typeof mutators>, id: string) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return await getItem(tx, id);
+    },
+    null
+  );
 }
 
 
