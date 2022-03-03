@@ -63,7 +63,7 @@ export default function Item({ item, rep, setSelectedDraftID } : Props) {
   return (
     <div
       className={styles.container}
-      // onClick={handleItemDelete}
+      onMouseLeave={() => setShowOptions(false)}
     >
       <div className={styles.left}>
         <div className={styles.avatarContainer}>
