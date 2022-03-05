@@ -15,7 +15,8 @@ import {
 } from "./shape";
 import {
   putItem,
-  deleteItem
+  deleteItem,
+  updateItemSourceURL
 } from './item';
 import {
   putArrow
@@ -37,5 +38,6 @@ export const mutators = {
   createItem: putItem,
   deleteItem,
   createArrow: putArrow,
+  updateItemSourceURL,
   nop: async (_: WriteTransaction) => {},
 };
