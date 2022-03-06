@@ -12,7 +12,7 @@ export default function FileUploadButton(props : Props) {
     <div className={styles.container}>
       <label className={styles.label} htmlFor="single">
         {props.loading ? 'Uploading ...' :
-          props.sourceUrl ? '+ Replace source file' : '+ Add source file'
+          props.sourceUrl ? '⌘+R to Replace' : '⌘+U to Upload File'
         }
       </label>
       <input
