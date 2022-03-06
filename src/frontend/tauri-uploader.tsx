@@ -1,34 +1,20 @@
 // import { useEffect, useRef, useState } from "react";
 import React from "react";
 import dynamic, {DynamicOptions} from 'next/dynamic'
-
-// import { invoke } from '@tauri-apps/api/tauri'
-// import { appWindow } from '@tauri-apps/api/window'
 import { open as openDialog } from '@tauri-apps/api/dialog';
-// import type TauriWindow from '../typings/window'
+import type TauriWindow from '../typings/window'
+declare const window: TauriWindow;
 
-// const invoke = dynamic<any>(
-//   () => import('@tauri-apps/api/tauri').then(m=>m.invoke),
-//   { ssr: false }
-// )
-// const appWindow = dynamic<any>(
-//   () => import('@tauri-apps/api/window').then(m=>m.appWindow),
-//   { ssr: false }
-// )
 const invoke : any = dynamic<any>(
   import('@tauri-apps/api/tauri').then(m=>m.invoke) as DynamicOptions<{}>,
   { ssr: false }
 )
 
-// interface Thing extends React.Component {
-//   listen?: () => void
-// }
-
+// window.__TAURI_METADATA__ = "hi"
 const appWindow : any = dynamic<any>(
   import('@tauri-apps/api/window').then(m=>m.appWindow) as DynamicOptions<{}>,
   { ssr: false }
 )
-
 
 // interface ProgressPayload {
 //   id: number
@@ -101,6 +87,7 @@ interface UploaderProps {
   setPath: (path : string) => void,
   handleClick: () => void
 }
+
 
 export default function TauriUploader(props: UploaderProps) {
   const { setPath, handleClick } = props

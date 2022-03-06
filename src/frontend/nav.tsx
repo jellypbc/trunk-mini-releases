@@ -10,13 +10,21 @@ import type { M } from "../datamodel/mutators";
 import type { AuthSession } from '@supabase/supabase-js'
 import { supabase } from "src/lib/supabase-client";
 
-import type TauriWindow from '../typings/window'
+// import type TauriWindow from '../typings/window'
+// declare const window: TauriWindow;
 
-import TauriUploader from './tauri-uploader'
-
-declare const window: TauriWindow;
+import dynamic from 'next/dynamic'
 
 export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession}) {
+
+  if (window && '__TAURI__' in window) {
+    // @ts-ignore
+    const TauriUploader = dynamic(
+      import('./tauri-uploader'),
+      { ssr: false }
+    )
+  }
+
   const [filePath, setPath] = useState<string>("")
   const [fileFormVisible, showFileForm] = useState(false);
   const [tauri, setTauri] = useState(false)
@@ -25,8 +33,24 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
   const { user } = session
 
   useEffect(() => {
-    if (window && window.__TAURI__ !== undefined) { setTauri(true) }
-  });
+    // if (window && window.__TAURI__ !== undefined) { setTauri(true) }
+    if (window && '__TAURI__' in window) { setTauri(true) }
+
+    // (async () => {
+      // if ('__TAURI__' in window) {
+        // const {path} = await import('@tauri-apps/api')
+
+        // const TauriUploader = await import('./tauri-uploader') as any
+
+        // const TauriUploader = dynamic(
+        //   import('./tauri-uploader'),
+        //   { ssr: false }
+        // )
+
+      // }
+    // })()
+
+  }, [])
 
   const onRectangle = () => {
     rep.mutate.createShape(randomShape());
@@ -39,22 +63,16 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
 
   async function handleFileChange() {
     // e.preventDefault()
-
     // const path = await openDialog({ multiple: false, directory: false })
     // if (typeof path === 'string') {
     //   setPath(path)
-
     //   const url = "http://jsonplaceholder.typicode.com"
-
     //   if (typeof window !== 'undefined') {
-
-
     //     // upload(url, filePath, (progress, t) => {
     //     //   console.log(progress)
     //     // }).then( console.log("end")).catch(e => {
     //     //   console.error(e)
     //     // })
-
     //   }
     // }
   }
@@ -118,10 +136,14 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
           {tauri &&
             <>
               <p>Tauri:</p>
-              <TauriUploader
-                handleClick={handleFileChange}
-                setPath={setPath}
-              />
+              {
+                // eek!
+                // @ts-ignore
+                <TauriUploader
+                  handleClick={handleFileChange}
+                  setPath={setPath}
+                />
+              }
             </>
 
           }
