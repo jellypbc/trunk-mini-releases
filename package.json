@@ -22,7 +22,7 @@
     "esbuild": "^0.14.18",
     "miniflare": "^2.2.0",
     "nanoid": "^3.2.0",
-    "next": "^12.0.10",
+    "next": "^12.1.0",
     "prettier": "^2.5.1",
     "prosemirror-commands": "^1.2.1",
     "prosemirror-dropcursor": "^1.4.0",
@@ -45,7 +45,7 @@
     "reps-client": "file:reps-client-0.0.1.tgz",
     "reps-do": "file:reps-do-0.0.1.tgz",
     "styled-components": "^5.3.3",
-    "typescript": "^4.5.5",
+    "typescript": "^4.6.2",
     "zod": "^3.11.6"
   },
   "devDependencies": {

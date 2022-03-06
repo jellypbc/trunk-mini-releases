@@ -1,32 +1,63 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Replicache } from "replicache";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import styles from "./nav.module.css";
 import { randomShape } from "../datamodel/shape";
+import { randomItem } from "../datamodel/item";
 import { useUserInfo } from "../datamodel/subscriptions";
 import type { M } from "../datamodel/mutators";
 import type { AuthSession } from '@supabase/supabase-js'
 import { supabase } from "src/lib/supabase-client";
 
+import type TauriWindow from '../typings/window'
+
+import TauriUploader from './tauri-uploader'
+
+declare const window: TauriWindow;
+
 export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession}) {
-  const [aboutVisible, showAbout] = useState(false);
-  const [shareVisible, showShare] = useState(false);
-  const urlBox = useRef<HTMLInputElement>(null);
+  const [filePath, setPath] = useState<string>("")
+  const [fileFormVisible, showFileForm] = useState(false);
+  const [tauri, setTauri] = useState(false)
   const userInfo = useUserInfo(rep);
 
   const { user } = session
 
   useEffect(() => {
-    if (shareVisible) {
-      urlBox.current && urlBox.current.select();
-    }
+    if (window && window.__TAURI__ !== undefined) { setTauri(true) }
   });
 
   const onRectangle = () => {
     rep.mutate.createShape(randomShape());
   };
+
+  function handleSubmit() {
+    rep.mutate.createItem(randomItem())
+    showFileForm(false)
+  };
+
+  async function handleFileChange() {
+    // e.preventDefault()
+
+    // const path = await openDialog({ multiple: false, directory: false })
+    // if (typeof path === 'string') {
+    //   setPath(path)
+
+    //   const url = "http://jsonplaceholder.typicode.com"
+
+    //   if (typeof window !== 'undefined') {
+
+
+    //     // upload(url, filePath, (progress, t) => {
+    //     //   console.log(progress)
+    //     // }).then( console.log("end")).catch(e => {
+    //     //   console.error(e)
+    //     // })
+
+    //   }
+    // }
+  }
 
   async function logOut() {
     const { error } = await supabase.auth.signOut()
@@ -45,53 +76,17 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
           className={styles.button}
           title="Square"
         >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1 1h16v16H1V1zm1 1h14v14H2V2z"
-              fillRule="evenodd"
-              fill="white"
-            ></path>
-          </svg>
+          🩳 Mini Trunk
         </div>
-        {/*
-        <div
-          className={styles.button}
-          title="Clear All"
-          onClick={() => rep.mutate.deleteAllShapes()}
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="1 1 14 14"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{ transform: "rotate(45deg)" }}
-          >
-            <path
-              d="M15 8V7H9V1H8v6H2v1h6v6h1V8h6z"
-              fillRule="nonzero"
-              fillOpacity="1"
-              fill="white"
-              stroke="none"
-            ></path>
-          </svg>
-        </div>*/}
-        <div className={styles.button}>
-          Mini Trunk
+        <div className={`${styles.button}`} onClick={() => showFileForm(true)}>
+          Add File
         </div>
-        <div className={`${styles.button}`} onClick={() => showShare(true)}>
-          Share
+
+        <div className={`${styles.button}`}>
+          tauri: {tauri.toString()}
         </div>
-        <div
-          className={`${styles.button} ${styles.about}`}
-          onClick={() => showAbout(true)}
-        >
-          About this Demo
-        </div>
+
+
         <div className={styles.spacer}></div>
         {userInfo && (
           <div
@@ -104,66 +99,56 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
             {user && user.email ? user.email : userInfo.avatar}
           </div>
         )}
-      </div>
-      <Modal show={aboutVisible} onHide={() => showAbout(false)} centered>
+        </div>
+
+
+      <Modal
+        show={fileFormVisible}
+        onHide={() => {
+          setPath("")
+          showFileForm(false)
+        }}
+        centered
+      >
         <Modal.Header closeButton>
-          <Modal.Title>About Replidraw</Modal.Title>
+          <Modal.Title>Add a file</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+
+          {tauri &&
+            <>
+              <p>Tauri:</p>
+              <TauriUploader
+                handleClick={handleFileChange}
+                setPath={setPath}
+              />
+            </>
+
+          }
+
+          {!tauri  &&
+            <>
+              <p>web:</p>
+              <input
+                type="file"
+                id="single"
+                accept="image/*, application/pdf, application/JSON"
+              />
+            </>
+          }
+
           <p>
-            This is a demonstration of{" "}
-            <a href="https://replicache.dev" target="_blank">
-              <u>Replicache</u>
-            </a>{" "}
-            — a JavaScript library that enables realtime, collaborative web apps
-            for any backend stack.
+            {filePath}
           </p>
-          <p>
-            Try{" "}
-            <a href={location.href} target="_blank">
-              <u>opening this page</u>
-            </a>{" "}
-            in two browser windows and moving the boxes around.
-          </p>
+
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            href="https://github.com/rocicorp/replidraw-do"
-            target="_blank"
-          >
-            Demo Source
-          </Button>
-          <Button
-            variant="primary"
-            href="https://replicache.dev/"
-            target="_blank"
-          >
-            Replicache Homepage
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={shareVisible} onHide={() => showShare(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Share Drawing</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Text>Copy this URL and send to anyone:</Form.Text>
-            <Form.Control
-              ref={urlBox}
-              type="url"
-              value={location.href}
-              readOnly
-            />
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={() => showShare(false)}>
+          <Button variant="primary" onClick={handleSubmit}>
             OK
           </Button>
         </Modal.Footer>
       </Modal>
+
     </>
   );
 }

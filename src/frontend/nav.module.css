@@ -28,13 +28,6 @@
   flex: 1;
 }
 
-.about {
-  display: flex;
-  margin: auto 12px 0 auto;
-  width: auto;
-  align-items: center;
-}
-
 .user {
   color: white;
   display: flex;
