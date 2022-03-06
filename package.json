@@ -45,7 +45,7 @@
     "reps-client": "file:reps-client-0.0.1.tgz",
     "reps-do": "file:reps-do-0.0.1.tgz",
     "styled-components": "^5.3.3",
-    "typescript": "^4.5.5",
+    "typescript": "^4.6.2",
     "zod": "^3.11.6"
   },
   "devDependencies": {

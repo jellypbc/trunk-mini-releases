@@ -1,28 +1,43 @@
 // import { useEffect, useRef, useState } from "react";
-import dynamic from 'next/dynamic'
+import React from "react";
+import dynamic, {DynamicOptions} from 'next/dynamic'
 
 // import { invoke } from '@tauri-apps/api/tauri'
 // import { appWindow } from '@tauri-apps/api/window'
 import { open as openDialog } from '@tauri-apps/api/dialog';
 // import type TauriWindow from '../typings/window'
 
-const invoke : any = dynamic<{}>(
-  () => import('@tauri-apps/api/tauri').then(m=>m.invoke),
+// const invoke = dynamic<any>(
+//   () => import('@tauri-apps/api/tauri').then(m=>m.invoke),
+//   { ssr: false }
+// )
+// const appWindow = dynamic<any>(
+//   () => import('@tauri-apps/api/window').then(m=>m.appWindow),
+//   { ssr: false }
+// )
+const invoke : any = dynamic<any>(
+  import('@tauri-apps/api/tauri').then(m=>m.invoke) as DynamicOptions<{}>,
   { ssr: false }
 )
-const appWindow = dynamic<{}>(() => import('@tauri-apps/api/window').then(m=>m.appWindow), { ssr: false })
 
-interface ProgressPayload {
-  id: number
-  progress: number
-  total: number
-}
+// interface Thing extends React.Component {
+//   listen?: () => void
+// }
 
-// declare const window typeof TauriWindow;
+const appWindow : any = dynamic<any>(
+  import('@tauri-apps/api/window').then(m=>m.appWindow) as DynamicOptions<{}>,
+  { ssr: false }
+)
 
 
-type ProgressHandler = (progress: number, total: number) => void
-const handlers: Map<number, ProgressHandler> = new Map()
+// interface ProgressPayload {
+//   id: number
+//   progress: number
+//   total: number
+// }
+// type ProgressHandler = (progress: number, total: number) => void
+// const handlers: Map<number, ProgressHandler> = new Map()
+const handlers = new Map()
 let listening = false
 
 function listenToUploadEventIfNeeded(): Promise<void> {
@@ -32,7 +47,7 @@ function listenToUploadEventIfNeeded(): Promise<void> {
 
   if (window && typeof window !== 'undefined') {
 
-    return appWindow.listen<ProgressPayload>('upload://progress', ({ payload } : any) => {
+    return appWindow.listen('upload://progress', ({ payload } : any) => {
       const handler = handlers.get(payload.id)
       if (handler !== void 0) {
         handler(payload.progress, payload.total)
@@ -48,11 +63,10 @@ function listenToUploadEventIfNeeded(): Promise<void> {
 async function upload(
   url: string,
   filePath: string,
-  progressHandler?: ProgressHandler,
+  progressHandler?: any,
+  // progressHandler?: ProgressHandler,
   headers?: Map<string, string>
 ): Promise<void> {
-
-
     // if i have tauri
       // invokes tauri command locally
     // else if i am web
@@ -100,7 +114,7 @@ export default function TauriUploader(props: UploaderProps) {
 
       const url = "http://jsonplaceholder.typicode.com"
 
-      upload(url, path, (progress) => {
+      upload(url, path, (progress : any) => {
         console.log(progress)
       }).then().catch(e => {
         console.error(e)
