@@ -8,8 +8,8 @@ import EditorOptions from './editor-options'
 import Arrow from './arrow'
 import FileUploadButton from './file-upload-button'
 import { nanoid } from 'nanoid'
-import uploadFileToIDB from '../datamodel/local/file'
-import uploadFileToSupabase from '../datamodel/supabase/file'
+import { uploadFileToIDB, trashFileFromIDB }  from '../datamodel/local/file'
+import { uploadFileToSupabase, trashFileFromSupabase } from '../datamodel/supabase/file'
 import { idbOK } from "../lib/idbOK"
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../lib/constants'
 
@@ -77,6 +77,16 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
     }
   }
 
+  function handleDeleteSourceFile() {
+    console.log('trashing...')
+    //delete from IDB
+    trashFileFromIDB(i.sourceURL)
+    //delete from supabase
+    trashFileFromSupabase(i.sourceURL)
+    //remove sourceURL from item
+    rep.mutate.updateItemSourceURL({id: i.id, sourceURL: ''})
+  }
+
   function generateIDBSourceFileURL(sourceURL: string){
     if (!idbOK()) return
 
@@ -118,6 +128,8 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
     }
   }
 
+
+
   return (
     <div
       className={styles.container}
@@ -146,19 +158,29 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
           />
         }
         <div className={styles.upload}>
-          <div>
-            <a href={URL} target="_blank">
-              {i.sourceURL && `🗂`}
-            </a>
-          </div>
+          {i.sourceURL &&
+            <>
+              <div>
+                <a href={URL} target="_blank">
+                  {i.sourceURL && `🗂`}
+                </a>
+
+              </div>
+              <div
+                onClick={handleDeleteSourceFile}
+              >
+                ⌘+T to Trash
+              </div>
+            </>
+          }
+
           <div>
             <FileUploadButton
               onUpload={onUpload}
               loading={false}
-              sourceUrl={''}
+              sourceUrl={i.sourceURL}
             />
           </div>
-
         </div>
         <div>
           {arrowArray.map((a: any) => {
