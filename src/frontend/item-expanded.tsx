@@ -19,11 +19,11 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep }: P
   const [showContent, setShowContent] = useState<boolean>(false)
 
   useEffect(() => {
-    rep.mutate.createItem({id: itemID, item: {...i, title: titleValue}})
+    rep.mutate.updateItemTitle({ id: itemID, title: titleValue })
   }, [titleValue])
 
   useEffect(() => {
-    rep.mutate.createItem({id: itemID, item: {...i, content: contentValue}})
+    rep.mutate.updateItemContent({ id: itemID, content: contentValue })
   }, [contentValue])
 
   const handlers = {

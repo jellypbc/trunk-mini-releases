@@ -122,14 +122,8 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     // create commentItem
     let commentItem = randomItem()
     console.log('commentItem', commentItem)
-    //set comment item changes
 
-    // arrows: "[]"
-    // content: ""
-    // createdAt: "2022-03-03T05:03:31.302Z"
-    // createdBy: ""
-    // title: "Untitled"
-    // type: "item"
+    //set comment item changes
     const commentItemChanges = {
       content: commentDraft,
       createdBy: '😸',
@@ -142,21 +136,6 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
 
     // make an arrow
 
-    // id: nanoid(),
-    // arrow: {
-    //   type: "arrow",
-    //   createdAt: new Date().toISOString(),
-    //   createdBy: '',
-    //   frontItemID: '',
-    //   backItemID: '',
-    //   content: '<p></p>',
-    //   highlight: '<p></p>',
-    //   official: false,
-    //   to: 0,
-    //   from: 0,
-    //   parentItemID: '',
-    //   kind: '',
-    // } as Arrow,
     let commentArrow = randomArrow()
     console.log('commentArrow', commentArrow)
     const arrowChanges = {
@@ -183,14 +162,12 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     commentItem.item.arrows = JSON.stringify(arrows)
     console.log('commentItem with arrows', commentItem)
     console.log('JSON.parse(commentItem.item.arrows)', JSON.parse(commentItem.item.arrows))
-    // push arrow.id to item.arrows
 
+    // append arrowID to existing item.arrows array
     const itemArrows = []
     const existingItemArrows = JSON.parse(item.arrows)
     existingItemArrows && existingItemArrows.map((a: string) => itemArrows.push(a))
     itemArrows.push(commentArrow.id)
-    item.arrows = JSON.stringify(itemArrows)
-    console.log('item with new arrows', item)
 
     // save arrow
     console.log('commentArrow', commentArrow)
@@ -198,10 +175,8 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     // save commentItem
     console.log('commentItem', commentItem)
     rep.mutate.createItem({ id: commentItem.id, item: commentItem.item })
-    // save item
-    console.log('item', item)
-    rep.mutate.createItem({ id: itemID, item: item })
-
+    // update arrows on selectedItem
+    rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
   }
 
   return (

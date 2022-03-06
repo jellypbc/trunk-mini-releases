@@ -16,6 +16,9 @@ import {
 import {
   putItem,
   deleteItem,
+  updateItemTitle,
+  updateItemContent,
+  updateItemArrows,
   updateItemSourceURL
 } from './item';
 import {
@@ -37,7 +40,10 @@ export const mutators = {
   initShapes,
   createItem: putItem,
   deleteItem,
-  createArrow: putArrow,
+  updateItemTitle,
+  updateItemContent,
+  updateItemArrows,
   updateItemSourceURL,
+  createArrow: putArrow,
   nop: async (_: WriteTransaction) => {},
 };

@@ -41,6 +41,30 @@ export async function deleteItem(
   await tx.del(key(id));
 }
 
+export async function updateItemTitle(
+  tx: WriteTransaction,
+  { id, title }: { id: string; title: string }
+): Promise<void> {
+  const item = await getItem(tx, id)
+  return tx.put(key(id), {...item, title: title})
+}
+
+export async function updateItemContent(
+  tx: WriteTransaction,
+  { id, content }: { id: string; content: string }
+): Promise<void> {
+  const item = await getItem(tx, id)
+  return tx.put(key(id), {...item, content: content})
+}
+
+export async function updateItemArrows(
+  tx: WriteTransaction,
+  { id, arrows }: { id: string, arrows: string[] }
+): Promise<void> {
+  const item = await getItem(tx, id)
+  return tx.put(key(id), {...item, arrows: JSON.stringify(arrows)})
+}
+
 export async function updateItemSourceURL(
   tx: WriteTransaction,
   { id, sourceURL } : { id: string, sourceURL: string }

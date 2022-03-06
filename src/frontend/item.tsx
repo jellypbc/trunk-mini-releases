@@ -28,37 +28,19 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
   const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
   const [showOptions, setShowOptions] = useState<boolean>(false)
   const [URL, setURL] = useState<any>('')
+  console.log('i', i)
 
   useEffect(() => {
     generateIDBSourceFileURL(i.sourceURL)
-
   }, [i.sourceURL])
 
   useEffect(() => {
-    handleUpdateTitle()
+    titleValue !== i.title && rep.mutate.updateItemTitle({ id: i.id, title: titleValue })
   }, [titleValue])
 
   useEffect(() => {
-    handleUpdateContent()
+    contentValue !== i.content && rep.mutate.updateItemContent({ id: i.id, content: contentValue})
   }, [contentValue])
-
-  function handleUpdateTitle(){
-    const i = {
-      ...item,
-      title: titleValue,
-      createdAt: item.createdAt.toString()
-    }
-    rep.mutate.createItem({id: i.id, item: i})
-  }
-
-  function handleUpdateContent(){
-    const i = {
-      ...item,
-      content: contentValue,
-      createdAt: item.createdAt.toString()
-    }
-    rep.mutate.createItem({id: i.id, item: i})
-  }
 
   const date = i.createdAt
 
