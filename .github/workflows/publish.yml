@@ -28,8 +28,12 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y webkit2gtk-4.0
+    - name: install next
+      run: npm install -g next
+    - name: install typescript
+      run: npm install --save-dev typescript @types/react @types/node
     - name: install app dependencies and build it
-      run: npm run build
+      run: npm install && npm run build
     - uses: tauri-apps/tauri-action@v0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
