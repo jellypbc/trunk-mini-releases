@@ -5,9 +5,12 @@ import { supabase } from '../lib/supabase-client'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY, LOCAL_STORAGE_REDIRECT_URL_KEY } from '../lib/constants'
 import { useRouter } from 'next/router'
 import { nanoid } from 'nanoid'
+import RoomSelector from '../frontend/room-selector'
 
 export default function Page() {
   const [session, setSession] = useState<AuthSession | null>(null)
+  const [room, setRoom] = useState<string>('')
+  const [showRoomSelector, setShowRoomSelector] = useState<boolean>(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -21,15 +24,36 @@ export default function Page() {
   useEffect(() => {
     const redirectUrl = localStorage.getItem(LOCAL_STORAGE_REDIRECT_URL_KEY)
     let room = redirectUrl && redirectUrl.split('/')[4]
-    if (!room) {
-      room = nanoid(6)
+    room && setRoom(room)
+
+    if (session !== null) {
+      setShowRoomSelector(true)
     }
-    session && session.user && router.push(`/d/${room}`)
+    if (session === null) {
+      setShowRoomSelector(false)
+    }
   },[session])
+
+  function selectRoom(){
+    let selectedRoom = room
+    if (!selectedRoom) {
+      selectedRoom = nanoid(6)
+    }
+    session && session.user && router.push(`/d/${selectedRoom}`)
+    setRoom('')
+  }
 
   return (
     <>
-      <LogIn/>
+      {showRoomSelector ?
+        <RoomSelector
+          room={room}
+          setRoom={setRoom}
+          handleSelectRoom={selectRoom}
+        />
+        :
+        <LogIn/>
+      }
     </>
   )
 }
