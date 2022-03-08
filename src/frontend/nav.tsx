@@ -9,6 +9,7 @@ import { useUserInfo } from "../datamodel/subscriptions";
 import type { M } from "../datamodel/mutators";
 import type { AuthSession } from '@supabase/supabase-js'
 import { supabase } from "src/lib/supabase-client";
+import { useRouter } from 'next/router'
 
 // import type TauriWindow from '../typings/window'
 // declare const window: TauriWindow;
@@ -29,6 +30,7 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
   const [fileFormVisible, showFileForm] = useState(false);
   const [tauri, setTauri] = useState(false)
   const userInfo = useUserInfo(rep);
+  const router = useRouter()
 
   const { user } = session
 
@@ -96,12 +98,18 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
         >
           🩳 Mini Trunk
         </div>
-        <div className={`${styles.button}`} onClick={() => showFileForm(true)}>
+        <div className={styles.button} onClick={() => showFileForm(true)}>
           Add File
         </div>
 
-        <div className={`${styles.button}`}>
+        <div className={styles.button}>
           tauri: {tauri.toString()}
+        </div>
+        <div
+          className={styles.button}
+          onClick={() => router.push('/') }
+        >
+          Switch Trunk
         </div>
 
 
