@@ -59,7 +59,6 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
   const arrowArray = JSON.parse(item.arrows)
 
   function onUpload(e: ChangeEvent<HTMLInputElement>){
-    console.log('e', e)
     const file = e?.target.files?.[0]
     if (!file) {
       console.log(`No file found`)
@@ -179,6 +178,7 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
               onUpload={onUpload}
               loading={false}
               sourceUrl={i.sourceURL}
+              itemID={i.id}
             />
           </div>
         </div>

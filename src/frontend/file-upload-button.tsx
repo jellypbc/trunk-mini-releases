@@ -5,20 +5,24 @@ type Props = {
   onUpload: ChangeEventHandler
   loading: boolean
   sourceUrl: string
+  itemID: string
 }
 
-export default function FileUploadButton(props : Props) {
+export default function FileUploadButton(props: Props) {
   return (
     <div className={styles.container}>
-      <label className={styles.label} htmlFor="single">
+      <label
+        className={styles.label}
+        htmlFor={props.itemID}
+      >
         {props.loading ? 'Uploading ...' :
           props.sourceUrl ? '⌘+R to Replace' : '⌘+U to Upload File'
         }
       </label>
       <input
         className={styles.input}
+        id={props.itemID}
         type="file"
-        id="single"
         accept="image/*, application/pdf, application/JSON"
         onChange={props.onUpload}
         disabled={props.loading}
