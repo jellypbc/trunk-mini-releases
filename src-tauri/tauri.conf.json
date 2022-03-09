@@ -6,7 +6,7 @@
   "build": {
     "distDir": "../dist",
     "devPath": "http://localhost:3000",
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": ""
   },
   "tauri": {
@@ -62,7 +62,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
     }
   }
 }
