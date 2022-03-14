@@ -74,6 +74,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     setCommentDraft(initialValue)
     setSerializedSelection('')
     setShowReplyForm(false)
+    setShowCommentFloater(false)
   }, [arrows])
 
 
