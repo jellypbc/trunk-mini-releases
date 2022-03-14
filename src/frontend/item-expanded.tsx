@@ -4,6 +4,7 @@ import { HotKeys } from 'react-hotkeys'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import ItemEditorContainer from './item-editor-container'
+import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
 
 type Props = {
   itemID: string
@@ -12,7 +13,7 @@ type Props = {
   rep: Replicache<M>
 }
 
-export default function ItemExpanded({ itemID, item, setSelectedItemID, rep }: Props) {
+export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Props) {
   const i = item
   const [titleValue, setTitleValue] = useState<string>(i.title)
   const [contentValue, setContentValue] = useState<string>(i.content)
@@ -85,11 +86,69 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep }: P
               itemID={itemID}
             />
         </div>
+        <div className={styles.footnotes}>Footnotes</div>
+        {item.arrows && item.arrows.map((arrow : any) => {
+          return (
+            arrow.kind === 'footnote' &&
+            <div key={arrow.arrowID}>
+              <FootnoteEditorA
+                rep={rep}
+                arrowID={arrow.arrowID}
+              />
+            </div>
+          )
+        })}
       </div>
+
     </div>
     </HotKeys>
   )
 }
+
+function FootnoteEditorA({rep, arrowID}: any) {
+  const fullArrow = useArrowByID(rep, arrowID)
+
+  return (
+    fullArrow &&
+    <FootnoteEditorB
+      rep={rep}
+      fullArrow={fullArrow}
+    />
+  )
+}
+
+function FootnoteEditorB({rep, fullArrow}:any) {
+  console.log({fullArrow})
+
+  const item = useItemByID(rep, fullArrow.frontItemID)
+  return (
+    item &&
+    <FootnoteEditorC
+      rep={rep}
+      item={item}
+      itemID={fullArrow.frontItemID}
+    />
+  )
+}
+
+function FootnoteEditorC({rep, item, itemID}: any) {
+  const [footnoteValue, setFootnoteValue] = useState<string>(item.content)
+  useEffect(() => {
+    rep.mutate.updateItemContent({ id: itemID, content: footnoteValue })
+  }, [footnoteValue])
+  return (
+    <ItemEditorContainer
+      content={footnoteValue}
+      setValue={setFootnoteValue}
+      editable={true}
+      type={'footnote'}
+      rep={rep}
+      item={item}
+      itemID={itemID}
+    />
+  )
+}
+
 
 const keyMap = {
   manualSaveDraftItem: ['command+s'],

@@ -1,20 +1,16 @@
 import { Plugin, PluginKey } from 'prosemirror-state'
 import { Decoration, DecorationSet } from 'prosemirror-view'
+import ReactDOM from 'react-dom'
+import { useItemByID } from '../../../datamodel/subscriptions'
+import { useArrowsByIDs } from '../../../datamodel/subscriptions'
 
 class Arrow {
-  constructor(id, type, createdAt, createBy, frontItemID, backItemID, content, highlight, official, to, from, parentItemID, kind) {
-    this.id = id,
-    this.type = type,
-    this.createdAt = createdAt,
-    this.frontItemID = frontItemID,
-    this.backItemID = backItemID,
-    this.content = content,
-    this.highlight = highlight,
-    this.official = official,
+  constructor(arrowID, to, from, kind, backItemID) {
+    this.arrowID = arrowID,
     this.to = to,
     this.from = from,
-    this.parentItemID = parentItemID,
-    this.kind = kind
+    this.kind = kind,
+    this.backItemID = backItemID
   }
 }
 
@@ -61,11 +57,20 @@ class ArrowState {
   }
 
   static init(config) {
+    console.log('config', config)
     const existingArrows = config.arrows || []
+    const itemID = config.itemID
+    console.log('existingArrows', typeof existingArrows)
 
-    let decos = existingArrows.map((a) =>
-      deco(a.from, a.to, new Arrow(a.id, a.type, a.createdAt, a.createBy, a.frontItemID, a.backItemID, a.content, a.highlight, a.official, a.to, a.from, a.parentItemID, a.kind))
+    let filteredArrows = []
+
+    filteredArrows = existingArrows.filter(arrow => arrow.backItemID === itemID)
+
+    let decos = filteredArrows.map((a) =>
+      deco(a.from, a.to, a)
     )
+
+    console.log('decos', decos)
 
     return new ArrowState(
       config.version,
@@ -81,22 +86,89 @@ export const arrowPluginKey = new PluginKey('arrow')
 export const arrowPlugin = new Plugin({
   key: arrowPluginKey,
   state: {
-    init(_, {doc}) {
-      let speckles = []
-      for (let pos = 1; pos < doc.content.size; pos += 4)
-        speckles.push(Decoration.inline(pos - 1, pos, {style: "background: yellow"}))
-      return DecorationSet.create(doc, speckles)
+    init: ArrowState.init,
+    apply(tr, prev) {
+      ArrowState.init
+      return prev.apply(tr)
     },
-    apply(tr, set) { return set.map(tr.mapping, tr.doc) }
   },
-  // state: {
-  //   init: ArrowState.init,
-  //   apply(tr, prev) {
-  //     ArrowState.init
-  //     return prev.apply(tr)
-  //   },
-  // },
   props: {
-    decorations(state) { return arrowPlugin.getState(state) }
+    decorations(state){
+      return this.getState(state).decos
+    }
   }
 })
+
+export const arrowUI = function(tx, rep) {
+  return new Plugin({
+    props: {
+      decorations(state) {
+        return arrowToolTip(state, tx, rep)
+      }
+    }
+  })
+}
+
+function arrowToolTip(state, dispatch, rep) {
+  let sel = state.selection
+  if (!sel.empty) return null
+  if (sel.from === 1) return null
+  let arrows = arrowPlugin.getState(state).arrowsAt(sel.from)
+  if (!arrows.length) return null
+  return DecorationSet.create(state.doc, [
+    Decoration.widget(
+      sel.from,
+      renderArrows(arrows, dispatch, state, rep),
+      {
+        ignoreSelection: true
+      }
+    )
+  ])
+}
+
+function renderArrows(arrows, dispatch, state, rep) {
+  const node = document.createElement('div')
+  node.className = 'arrowTooltip'
+
+  ReactDOM.render(
+    <>
+      { arrows.map((a, i) => {
+        const isLast = i === arrows.length -1
+        return (
+          <div key={i}>
+            <EditorArrowThread
+              arrow={a.spec.arrow}
+              dispatch={dispatch}
+              state={state}
+              showActions={{ reply: isLast, delete: true}}
+              rep={rep}
+            />
+          </div>
+        )
+      })}
+    </>,
+    node
+  )
+  return node
+}
+
+import { useArrowByID } from '../../../datamodel/subscriptions'
+import EditorArrowThreadContainer from '../../editor-arrow-thread-container'
+
+function EditorArrowThread({ arrow, dispatch, state, showActions, rep}) {
+  const {
+    arrowID
+  } = arrow
+  const fullArrow = useArrowByID(rep, arrowID)
+
+  return (
+    <>
+      {fullArrow &&
+        <EditorArrowThreadContainer
+          rep={rep}
+          arrow={fullArrow}
+        />
+      }
+    </>
+  )
+}

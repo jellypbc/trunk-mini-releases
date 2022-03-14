@@ -1,0 +1,25 @@
+.container {
+  background-color: hsl(0, 0%, 96%) !important;
+}
+
+.highlight {
+  padding: 0 2rem;
+  margin: 2rem;
+  width: 80%;
+  color: #2E7B21;
+  background-color: hsl(0, 0%, 96%);
+  border-left: .5rem solid hsl(89.7, 69%, 72%, 50%) ! important;
+}
+
+.meta {
+  padding: 0 2rem;
+  display: flex;
+}
+
+.title {
+  padding: 0 2rem;
+}
+
+.content {
+  padding: 0 2rem;
+}

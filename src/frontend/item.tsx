@@ -56,7 +56,7 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
     setSelectedDraftID(i.id)
   }
 
-  const arrowArray = JSON.parse(item.arrows)
+  const arrowArray = item.arrows
 
   function onUpload(e: ChangeEvent<HTMLInputElement>){
     const file = e?.target.files?.[0]
@@ -126,8 +126,6 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
       console.dir(event)
     }
   }
-
-
 
   return (
     <div
@@ -231,7 +229,7 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
           className={styles.content}
           onClick={() => setShowContentEditor(true)}
         >
-          { showContentEditor ?
+          {showContentEditor ?
             <ItemEditorContainer
               content={contentValue}
               setValue={setContentValue}

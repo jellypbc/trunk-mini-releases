@@ -10,7 +10,7 @@ export const itemSchema = z.object({
   content: z.string(),
   arrows: z.string(),
   highlight: z.string(),
-  sourceURL: z.string(),
+  sourceURL: z.string()
 });
 
 export type Item = z.infer<typeof itemSchema>;
@@ -59,7 +59,7 @@ export async function updateItemContent(
 
 export async function updateItemArrows(
   tx: WriteTransaction,
-  { id, arrows }: { id: string, arrows: string[] }
+  { id, arrows }: { id: string, arrows: any[] }
 ): Promise<void> {
   const item = await getItem(tx, id)
   return tx.put(key(id), {...item, arrows: JSON.stringify(arrows)})
@@ -88,9 +88,9 @@ export function randomItem() {
       createdBy: '',
       title: 'Untitled',
       content: '',
-      arrows: '[]',
+      arrows: '[]', // {arrowID, to, from, kind, backItemID}
       highlight: '',
-      sourceURL: '',
+      sourceURL: ''
     } as Item,
   };
 }

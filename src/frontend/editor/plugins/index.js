@@ -10,7 +10,7 @@ import {buildMenuItems} from "../config/menu"
 import {buildKeymap} from "../config/keymap"
 import {buildInputRules} from "../config/inputrules"
 export {buildMenuItems, buildKeymap, buildInputRules}
-import { arrowPlugin } from '../config/arrow'
+import { arrowPlugin, arrowUI } from '../config/arrow'
 
 // !! This module exports helper functions for deriving a set of basic
 // menu items, input rules, or key bindings from a schema. These
@@ -49,7 +49,7 @@ import { arrowPlugin } from '../config/arrow'
 //     menuContent:: [[MenuItem]]
 //     Can be used to override the menu content.
 export function exampleSetup(options) {
-  console.log('options', options)
+  const { getView, rep } = options
   let plugins = [
     buildInputRules(options.schema),
     keymap(buildKeymap(options.schema, options.mapKeys)),
@@ -57,6 +57,10 @@ export function exampleSetup(options) {
     dropCursor(),
     gapCursor(),
     arrowPlugin,
+    arrowUI(
+      (tx) => {getView().dispatch(tx)},
+      rep
+    )
   ]
   // if (options.menuBar !== false)
   //   plugins.push(menuBar({floating: options.floatingMenu !== false,

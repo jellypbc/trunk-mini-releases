@@ -8,13 +8,11 @@ import { exampleSetup } from './editor/plugins/index'
 import Editor from './editor'
 import styles from './item-draft-editor-container.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
-import { useUserInfo, getArrows } from '../datamodel/subscriptions'
+import { useUserInfo } from '../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { randomArrow } from '../datamodel/arrow'
 import { randomItem } from '../datamodel/item'
-
-
 
 type Props = {
   content: any
@@ -35,29 +33,13 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   const userInfo = useUserInfo(rep)
 
   const [state, setState] = useState<EditorState | undefined>()
-  const [, setView] = useState<EditorView>()
+  const [view, setView] = useState<EditorView>(viewRef.current.view || null)
   const [showCommentFloater, setShowCommentFloater] = useState<boolean>(false)
   const [serializedSelection, setSerializedSelection] = useState<string>('')
   const [showOptions, setShowOptions] = useState<boolean>(false)
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   const [commentDraft, setCommentDraft] = useState<string>(initialValue)
-  // const [arrowArray, setArrowArray] = useState<any[]>([])
-
-  const allArrows = getArrows(rep)
-  console.log('allArrows', allArrows)
-
-  // useEffect(() => {
-
-  // }, [])
-
-  // let arrows
-  // if (item) {
-  //   arrows = JSON.parse(item.arrows)
-  //   const arrowArray = getCommentArrowsByArrowIDArray(rep, arrows)
-  //   if (arrowArray === []) {
-  //     setArrowArray(arrows)
-  //   }
-  // }
+  const [arrows, setArrows] = useState<any>(item.arrows)
 
 
 
@@ -66,32 +48,28 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
       doc,
       schema,
       parser,
-      viewRef && viewRef.current && viewRef.current.view
+      viewRef && viewRef.current && viewRef.current.view,
+      arrows,
+      rep,
+      itemID
+    )
+    setState(state)
+    setView(viewRef && viewRef.current && viewRef.current.view)
+  }, [arrows])
+
+  useEffect(() => {
+    const state = createStateFromProps(
+      doc,
+      schema,
+      parser,
+      viewRef && viewRef.current && viewRef.current.view,
+      arrows,
+      rep,
+      itemID
     )
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
   }, [])
-
-  // useEffect(() => {
-  //   let inlineComments : any = []
-  //   arrowArray && arrowArray.map(arrow => {
-  //     if (arrow.kind === 'comment') {
-  //       inlineComments.push(arrow)
-  //     }
-  //   })
-
-  //   const comments : any = inlineComments
-
-  //   const state = createStateFromProps(
-  //     doc,
-  //     schema,
-  //     parser,
-  //     viewRef && viewRef.current && viewRef.current.view
-  //   )
-  //   setState(state)
-  //   setView(viewRef && viewRef.current && viewRef.current.view)
-  // }, [arrows])
-
 
   const dispatchTransaction = (tx: Transaction | any) => {
     const selection : string = serializer(tx.curSelection.content())
@@ -116,14 +94,8 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     console.log('fakeDispatch', tx)
   }
 
-  function handleCommentAdd() {
-    let selection = state?.selection
-
-    // create commentItem
+  function createCommentItem(){
     let commentItem = randomItem()
-    console.log('commentItem', commentItem)
-
-    //set comment item changes
     const commentItemChanges = {
       content: commentDraft,
       createdBy: '😸',
@@ -132,51 +104,124 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     }
 
     commentItem.item = {...commentItem.item, ...commentItemChanges}
-    console.log('finished commentItem w/o arrows', commentItem)
 
-    // make an arrow
+    return commentItem
+  }
 
+  function createArrow(type: string, frontItemID: string) {
+    let selection = state?.selection
     let commentArrow = randomArrow()
-    console.log('commentArrow', commentArrow)
     const arrowChanges = {
       createdBy: '😸',
-      frontItemID: commentItem.id,
+      frontItemID: frontItemID,
       backItemID: itemID,
       content: commentDraft,
       highlight: serializedSelection,
       to: selection?.to || 0,
       from: selection?.from || 0,
       parentItemID: itemID,
-      kind: 'comment',
+      kind: type,
     }
-
     commentArrow.arrow = {...commentArrow.arrow, ...arrowChanges}
-    console.log('finished commentArrow', commentArrow)
+    return commentArrow
+  }
+
+  function handleCommentAdd() {
+    const commentItem = createCommentItem()
+
+    const commentArrow = createArrow('comment', commentItem.id)
+
+    // set newArrow
+    const newA = {
+      arrowID: commentArrow.id,
+      to: commentArrow.arrow.to,
+      from: commentArrow.arrow.from,
+      kind: commentArrow.arrow.kind,
+      backItemID: commentArrow.arrow.backItemID
+    }
 
     // push arrow.id to commentItem.arrows
     const arrows = []
     const existingArrows = JSON.parse(commentItem.item.arrows)
-    existingArrows && existingArrows.map((a: string) => arrows.push(a))
-    arrows.push(commentArrow.id)
-    console.log('arrowsIDs', arrows)
+    existingArrows && existingArrows.map((a:any) => arrows.push(a))
+    arrows.push(newA)
     commentItem.item.arrows = JSON.stringify(arrows)
-    console.log('commentItem with arrows', commentItem)
-    console.log('JSON.parse(commentItem.item.arrows)', JSON.parse(commentItem.item.arrows))
+    console.log('existingArrows', existingArrows)
 
     // append arrowID to existing item.arrows array
     const itemArrows = []
-    const existingItemArrows = JSON.parse(item.arrows)
-    existingItemArrows && existingItemArrows.map((a: string) => itemArrows.push(a))
-    itemArrows.push(commentArrow.id)
+    const existingItemArrows = item.arrows ? item.arrows : []
+    console.log('existingItemArrows', existingItemArrows)
+    existingItemArrows && existingItemArrows.map((a: any) => itemArrows.push(a))
+    itemArrows.push(newA)
 
     // save arrow
-    console.log('commentArrow', commentArrow)
     rep.mutate.createArrow({ id: commentArrow.id, arrow: commentArrow.arrow })
     // save commentItem
-    console.log('commentItem', commentItem)
     rep.mutate.createItem({ id: commentItem.id, item: commentItem.item })
     // update arrows on selectedItem
+    console.log('itemArrows', itemArrows)
     rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+    // set arrows in this component, so that the editor knows to draw the decoration
+    setArrows(itemArrows)
+  }
+
+
+  function createFootnoteItem(){
+    let footnoteItem = randomItem()
+    const footnoteItemChanges = {
+      content: commentDraft,
+      createdBy: '😸',
+      title: footnoteItem.id,
+      highlight: serializedSelection
+    }
+
+    footnoteItem.item = {...footnoteItem.item, ...footnoteItemChanges}
+
+    return footnoteItem
+  }
+
+  function handleFootnoteAdd() {
+    // create footnoteItem
+    let footnoteItem = createFootnoteItem()
+    console.log('footnoteItem', footnoteItem)
+
+    // create footnoteArrow
+    const footnoteArrow = createArrow('footnote', footnoteItem.id)
+    console.log('footnoteArrow', footnoteArrow)
+
+    const newA = {
+      arrowID: footnoteArrow.id,
+      to: footnoteArrow.arrow.to,
+      from: footnoteArrow.arrow.from,
+      kind: footnoteArrow.arrow.kind,
+      backItemID: footnoteArrow.arrow.backItemID
+    }
+
+    // push newA to footnoteItem.arrows
+    const arrows = []
+    arrows.push(newA)
+    footnoteItem.item.arrows = JSON.stringify(arrows)
+
+    // append newA to existing item.arrows array
+    const itemArrows = []
+    const existingItemArrows = item.arrows ? item.arrows : []
+    existingItemArrows && existingItemArrows.map((a: any) => itemArrows.push(a))
+    itemArrows.push(newA)
+
+    //save footnoteArrow
+
+    rep.mutate.createArrow({ id: footnoteArrow.id, arrow: footnoteArrow.arrow })
+
+    // save footnoteItem
+    rep.mutate.createItem({ id: footnoteItem.id, item: footnoteItem.item })
+
+    // update arrows on selectedItem
+    console.log('itemArrows', itemArrows)
+    rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+
+    setArrows(itemArrows)
+
   }
 
   return (
@@ -215,7 +260,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
                 <Editor
                   type={'highlight'}
                   ref={null}
-                  state={createStateFromProps(serializedSelection, schema, parser, viewRef && viewRef.current && viewRef.current.view)}
+                  state={createStateFromProps(serializedSelection, schema, parser, view, item.arrows, rep, itemID)}
                   dispatchTransaction={fakeDispatchTransaction}
                   editable={false}
                 />
@@ -228,9 +273,19 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
                     clientInfo={userInfo}
                     setValue={setCommentDraft}
                   />
-                  <button
-                    onClick={handleCommentAdd}
-                  >save</button>
+                  <div className={styles.buttonsContainer}>
+                    <button
+                      className={'btn btn-secondary'}
+                    >Connect</button>
+                    <button
+                      className={'btn btn-secondary'}
+                      onClick={handleCommentAdd}
+                    >Comment</button>
+                    <button
+                      className={'btn btn-secondary'}
+                      onClick={handleFootnoteAdd}
+                    >Footnote</button>
+                  </div>
                 </>
               }
             </div>
@@ -252,15 +307,25 @@ const createStateFromProps = (
   doc: string,
   schema: Schema,
   parser: any,
-  view: any
+  view: any,
+  arrows: any,
+  rep: Replicache<M>,
+  itemID: string
 ) : EditorState<typeof schema> => {
   return EditorState.create({
     doc: parser(doc),
     schema: schema,
     plugins: exampleSetup({
       schema: schema,
-      getView: () => { return (view)}
+      getView: () => { return (view)},
+      arrows: arrows,
+      rep: rep,
+      itemID: itemID
     }),
+    // @ts-ignore
+    arrows: arrows,
+    rep: rep,
+    itemID: itemID
   })
 }
 
