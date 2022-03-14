@@ -6,11 +6,11 @@ import {dropCursor} from "prosemirror-dropcursor"
 import {gapCursor} from "prosemirror-gapcursor"
 import {menuBar} from "prosemirror-menu"
 
-import {buildMenuItems} from "./../config/menu"
-import {buildKeymap} from "./../config/keymap"
-import {buildInputRules} from "./../config/inputrules"
-
+import {buildMenuItems} from "../config/menu"
+import {buildKeymap} from "../config/keymap"
+import {buildInputRules} from "../config/inputrules"
 export {buildMenuItems, buildKeymap, buildInputRules}
+import { arrowPlugin, arrowUI } from '../config/arrow'
 
 // !! This module exports helper functions for deriving a set of basic
 // menu items, input rules, or key bindings from a schema. These
@@ -49,12 +49,18 @@ export {buildMenuItems, buildKeymap, buildInputRules}
 //     menuContent:: [[MenuItem]]
 //     Can be used to override the menu content.
 export function exampleSetup(options) {
+  const { getView, rep } = options
   let plugins = [
     buildInputRules(options.schema),
     keymap(buildKeymap(options.schema, options.mapKeys)),
     keymap(baseKeymap),
     dropCursor(),
-    gapCursor()
+    gapCursor(),
+    arrowPlugin,
+    arrowUI(
+      (tx) => {getView().dispatch(tx)},
+      rep
+    )
   ]
   // if (options.menuBar !== false)
   //   plugins.push(menuBar({floating: options.floatingMenu !== false,

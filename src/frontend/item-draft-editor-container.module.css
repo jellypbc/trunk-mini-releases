@@ -37,3 +37,9 @@
 .option:hover {
   background-color: hsl(0, 0%, 90%);
 }
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-around;
+}
+

@@ -24,3 +24,12 @@ a {
     flex-direction: column;
   }
 }
+
+.arrowTooltip {
+ position: absolute;
+ left: -1;
+ right: 0;
+ top: 10%;
+ max-width: 400px;
+ padding: 1rem;
+}

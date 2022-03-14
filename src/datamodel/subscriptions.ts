@@ -43,7 +43,8 @@ export function getSortedItems(rep: Replicache<M>) {
   let parsedItems: any[] = []
   items.map(([k, v]: [string, any]) => {
     const changes = {
-      createdAt:  new Date(v.createdAt)
+      createdAt:  new Date(v.createdAt),
+      arrows: JSON.parse(v.arrows)
     }
     let value = { ...v, ...changes }
     Object.assign(value, { id: k.substr(itemPrefix.length) })
@@ -57,7 +58,11 @@ export function useItemByID(rep: Replicache<M>, id: string) {
   return useSubscribe(
     rep,
     async (tx) => {
-      return await getItem(tx, id);
+      const i = await getItem(tx, id);
+      if (i) {
+        i.arrows = JSON.parse(i.arrows)
+      }
+      return i
     },
     null
   );
@@ -67,30 +72,22 @@ export function useArrowByID(rep: Replicache<M>, id: string) {
   return useSubscribe(
     rep,
     async (tx) => {
-      return await getArrow(tx, id);
+      const a = await getArrow(tx, id);
+      return a
     },
     null
   );
 }
 
-// export function useCommentIDsByItemID(rep: Replicache<M>, id: string) {
-//   return useSubscribe(
-//     rep,
-//     async (tx) => {
-//       const i = await getItem(tx, id)
-//       const { arrows } = i
-//       const parsedArrows = JSON.parse(arrows)
-
-//       // const itemArrows = JSON.parse(i.arrows)
-//       // let commentIDs = []
-//       // commentIDs = itemArrows.filter((a) => a.type === 'comment'))
-//       // return commentIDs
-
-//     },
-//     null
-//   )
-// }
-
+export function getArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
+  let arrows : any[] = []
+  arrowIDs && arrowIDs.map((a: any) => {
+    const arrow = useSubscribe(rep, async (tx) => { return await getArrow(tx, a.arrowID)}, null)
+    arrow && Object.assign(arrow, {id: a.arrowID})
+    arrow && arrows.push(arrow)
+  })
+  return arrows
+}
 
 export function useShapeIDs(rep: Replicache<M>) {
   return useSubscribe(
