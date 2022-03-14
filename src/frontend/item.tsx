@@ -192,6 +192,12 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
             )
           })}
         </div>
+        {i.highlight &&
+          <HighlightEditor
+            rep={rep}
+            content={i.highlight}
+          />
+        }
         <div className={styles.titleContainer}>
           <div className={styles.bullet}>
             <div className={styles.bulletBorder}>
@@ -225,6 +231,7 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
           </div>
         </div>
 
+
         <div
           className={styles.content}
           onClick={() => setShowContentEditor(true)}
@@ -251,6 +258,20 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
         </div>
 
       </div>
+    </div>
+  )
+}
+
+function HighlightEditor({rep, content}: any){
+  return(
+    <div className={styles.highlight}>
+      <EditorViewingContainer
+        type={'highlight'}
+        rep={rep}
+        content={content}
+        clientInfo={null}
+        setValue={()=>{ return null}}
+      />
     </div>
   )
 }

@@ -41,22 +41,6 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   const [commentDraft, setCommentDraft] = useState<string>(initialValue)
   const [arrows, setArrows] = useState<any>(item.arrows)
 
-
-
-  useEffect(() => {
-    const state = createStateFromProps(
-      doc,
-      schema,
-      parser,
-      viewRef && viewRef.current && viewRef.current.view,
-      arrows,
-      rep,
-      itemID
-    )
-    setState(state)
-    setView(viewRef && viewRef.current && viewRef.current.view)
-  }, [arrows])
-
   useEffect(() => {
     const state = createStateFromProps(
       doc,
@@ -70,6 +54,28 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
   }, [])
+
+  useEffect(() => {
+    !showCommentFloater && setShowReplyForm(false)
+  }, [showCommentFloater])
+
+  useEffect(() => {
+    const state = createStateFromProps(
+      doc,
+      schema,
+      parser,
+      viewRef && viewRef.current && viewRef.current.view,
+      arrows,
+      rep,
+      itemID
+    )
+    setState(state)
+    setView(viewRef && viewRef.current && viewRef.current.view)
+    setCommentDraft(initialValue)
+    setSerializedSelection('')
+    setShowReplyForm(false)
+  }, [arrows])
+
 
   const dispatchTransaction = (tx: Transaction | any) => {
     const selection : string = serializer(tx.curSelection.content())
@@ -99,7 +105,6 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     const commentItemChanges = {
       content: commentDraft,
       createdBy: '😸',
-      title: commentItem.id,
       highlight: serializedSelection,
     }
 
