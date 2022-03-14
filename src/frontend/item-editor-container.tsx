@@ -33,7 +33,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   const userInfo = useUserInfo(rep)
 
   const [state, setState] = useState<EditorState | undefined>()
-  const [view, setView] = useState<EditorView>(viewRef.current.view || null)
+  const [_, setView] = useState<EditorView>()
   const [showCommentFloater, setShowCommentFloater] = useState<boolean>(false)
   const [serializedSelection, setSerializedSelection] = useState<string>('')
   const [showOptions, setShowOptions] = useState<boolean>(false)
