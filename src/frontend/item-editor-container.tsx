@@ -230,6 +230,68 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
 
   }
 
+  function createReferenceItem(){
+    let referenceItem = randomItem()
+    const referenceItemChanges = {
+      title: commentDraft,
+      createdBy: '😸'
+    }
+
+    referenceItem.item = {...referenceItem.item, ...referenceItemChanges}
+
+    return referenceItem
+  }
+
+
+  function handleReferenceAdd(){
+    console.log("handling reference add")
+
+    // create new item
+
+    const referenceItem = createReferenceItem()
+
+    // create arrow
+
+    const referenceArrow = createArrow('reference', referenceItem.id)
+
+    // set newA
+
+
+    const newA = {
+      arrowID: referenceArrow.id,
+      to: referenceArrow.arrow.to,
+      from: referenceArrow.arrow.from,
+      kind: referenceArrow.arrow.kind,
+      backItemID: referenceArrow.arrow.backItemID
+    }
+
+    // push newA to referenceItem.arrows
+    const arrows = []
+    arrows.push(newA)
+    referenceItem.item.arrows = JSON.stringify(arrows)
+
+    //append newA to existing item.arrows array
+
+    const itemArrows = []
+    const existingItemArrows = item.arrows ? item.arrows : []
+    existingItemArrows && existingItemArrows.map((a: any) => itemArrows.push(a))
+    itemArrows.push(newA)
+
+    // save arrow
+
+    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+
+    // save new item
+
+    rep.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
+
+    // update arrows on existing item
+    rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+
+    // set local arrows
+    setArrows(itemArrows)
+  }
+
   return (
     <>
       {state &&
@@ -282,7 +344,8 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
                   <div className={styles.buttonsContainer}>
                     <button
                       className={'btn btn-secondary'}
-                    >Connect</button>
+                      onClick={handleReferenceAdd}
+                    >Reference</button>
                     <button
                       className={'btn btn-secondary'}
                       onClick={handleCommentAdd}
