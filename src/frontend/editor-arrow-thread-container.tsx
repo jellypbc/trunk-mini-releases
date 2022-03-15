@@ -5,6 +5,9 @@ import ArrowEditorContainer from './arrow-editor-container'
 export default function EditorArrowThreadContainer({rep,arrow}: {rep:any, arrow:any}) {
   return (
     <div className={styles.container}>
+      <div className={styles.itemID}>
+        {arrow.frontItemID}
+      </div>
       <div className={styles.highlight}>
         <ArrowEditorContainer
           rep={rep}
@@ -32,6 +35,7 @@ function FrontItemStuff({rep, itemID, arrow }:{rep: any, itemID: string, arrow: 
   return (
     item &&
     <>
+
       <div className={styles.meta}>
         <div>{item.createdBy}</div>
         <div>{dateInWords(new Date(item.createdAt))}</div>

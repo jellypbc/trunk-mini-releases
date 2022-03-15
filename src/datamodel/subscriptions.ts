@@ -17,6 +17,17 @@ export function getItems(rep: Replicache<M>) {
   )
 }
 
+export function getItemCount(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async(tx) => {
+      const items = await tx.scan({ prefix: itemPrefix }).keys().toArray()
+      return items.length.toString()
+    },
+    null
+  )
+}
+
 export function getArrows(rep: Replicache<M>) {
   return useSubscribe(
     rep,

@@ -23,3 +23,13 @@
 .content {
   padding: 0 2rem;
 }
+
+.itemID {
+  margin: 2rem;
+  color: transparent;
+  font-size: .8rem;
+}
+
+.itemID:hover {
+  color: hsl(0, 0%, 70%);
+}

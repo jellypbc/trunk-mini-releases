@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import styles from "./nav.module.css";
 import { randomShape } from "../datamodel/shape";
 import { randomItem } from "../datamodel/item";
-import { useUserInfo } from "../datamodel/subscriptions";
+import { useUserInfo, getItemCount } from "../datamodel/subscriptions";
 import type { M } from "../datamodel/mutators";
 import type { AuthSession } from '@supabase/supabase-js'
 import { supabase } from "src/lib/supabase-client";
@@ -31,6 +31,7 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
   const [tauri, setTauri] = useState(false)
   const userInfo = useUserInfo(rep);
   const router = useRouter()
+  const itemCount = getItemCount(rep) || 0
 
   const { user } = session
 
@@ -88,6 +89,8 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
   }
 
 
+
+
   return (
     <>
       <div className={styles.nav} style={{}}>
@@ -98,6 +101,7 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
         >
           🩳 Mini Trunk
         </div>
+        <div className={styles.button}>{itemCount} items</div>
         <div className={styles.button} onClick={() => showFileForm(true)}>
           Add File
         </div>
@@ -166,7 +170,6 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
               />
             </>
           }
-
           <p>
             {filePath}
           </p>
