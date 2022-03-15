@@ -139,31 +139,6 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
 import { useRouter } from 'next/router'
 
 
-function FootnoteEditorZ({rep, itemID}:any) {
-  const item = useItemByID(rep, itemID)
-  const router = useRouter()
-  const [, , roomID,] = location.pathname.split("/");
-
-  function handleRouteToItem(){
-    router.push({
-      pathname: `/d/[roomid]/[itemid]`,
-      query: { roomid: roomID, itemid: itemID }
-    })
-
-  }
-  return (
-    item &&
-    <div
-      onClick={handleRouteToItem}
-    >
-      {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
-    </div>
-  )
-}
-
-
-
-
 function FootnoteEditorX({rep, arrowID, direction, selectedItemID}: any) {
   const fullArrow = useArrowByID(rep, arrowID)
   return (
