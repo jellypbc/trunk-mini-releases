@@ -68,7 +68,7 @@ export function Designer({ rep }: { rep: Replicache<M> }) {
           {...{
             ref,
             style: {
-              position: "relative",
+              // position: "relative",
               display: "flex",
               flex: 1,
               overflow: "hidden",
