@@ -57,10 +57,8 @@ class ArrowState {
   }
 
   static init(config) {
-    console.log('config', config)
     const existingArrows = config.arrows || []
     const itemID = config.itemID
-    console.log('existingArrows', typeof existingArrows)
 
     let filteredArrows = []
 
@@ -69,8 +67,6 @@ class ArrowState {
     let decos = filteredArrows.map((a) =>
       deco(a.from, a.to, a)
     )
-
-    console.log('decos', decos)
 
     return new ArrowState(
       config.version,
