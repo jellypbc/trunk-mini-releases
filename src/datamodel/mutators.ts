@@ -19,7 +19,8 @@ import {
   updateItemTitle,
   updateItemContent,
   updateItemArrows,
-  updateItemSourceURL
+  updateItemSourceURL,
+  updateItemAddSingleArrow
 } from './item';
 import {
   putArrow
@@ -45,5 +46,6 @@ export const mutators = {
   updateItemArrows,
   updateItemSourceURL,
   createArrow: putArrow,
+  updateItemAddSingleArrow,
   nop: async (_: WriteTransaction) => {},
 };

@@ -133,7 +133,6 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
       onMouseLeave={() => setShowOptions(false)}
     >
 
-
       <div className={styles.left}>
         <div className={styles.avatarContainer}>
           <div className={styles.avatar}></div>
@@ -192,6 +191,7 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
             )
           })}
         </div>
+        {itemID}
         {i.highlight &&
           <HighlightEditor
             rep={rep}

@@ -65,6 +65,22 @@ export async function updateItemArrows(
   return tx.put(key(id), {...item, arrows: JSON.stringify(arrows)})
 }
 
+export async function updateItemAddSingleArrow(
+  tx: WriteTransaction,
+  { id, arrow } : { id: string, arrow: any }
+): Promise<void> {
+  const item = await getItem(tx, id)
+  let arrows = item ? JSON.parse(item.arrows) : []
+  arrows.push(arrow)
+  const stringifiedArrows = JSON.stringify(arrows)
+  const changes = {
+    arrows: stringifiedArrows
+  }
+
+  const changedItem = {...item, ...changes}
+  return tx.put(key(id), changedItem)
+}
+
 export async function updateItemSourceURL(
   tx: WriteTransaction,
   { id, sourceURL } : { id: string, sourceURL: string }

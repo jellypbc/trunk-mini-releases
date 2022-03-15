@@ -61,6 +61,7 @@ export function useItemByID(rep: Replicache<M>, id: string) {
       const i = await getItem(tx, id);
       if (i) {
         i.arrows = JSON.parse(i.arrows)
+        i.createdAt = new Date(i.createdAt) as unknown as any
       }
       return i
     },
@@ -95,6 +96,17 @@ export function useShapeIDs(rep: Replicache<M>) {
     async (tx) => {
       const shapes = await tx.scan({ prefix: shapePrefix }).keys().toArray();
       return shapes.map((k) => k.substr(shapePrefix.length));
+    },
+    []
+  );
+}
+
+export function useItemIDs(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      const items = await tx.scan({ prefix: itemPrefix }).keys().toArray();
+      return items.map((k) => k.substr(itemPrefix.length));
     },
     []
   );

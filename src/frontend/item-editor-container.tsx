@@ -8,7 +8,7 @@ import { exampleSetup } from './editor/plugins/index'
 import Editor from './editor'
 import styles from './item-draft-editor-container.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
-import { useUserInfo } from '../datamodel/subscriptions'
+import { useUserInfo, useItemIDs } from '../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { randomArrow } from '../datamodel/arrow'
@@ -31,6 +31,8 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
   const userInfo = useUserInfo(rep)
+
+  const itemIDs = useItemIDs(rep)
 
   const [state, setState] = useState<EditorState | undefined>()
   const [_, setView] = useState<EditorView>()
@@ -244,52 +246,90 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
 
 
   function handleReferenceAdd(){
-    console.log("handling reference add")
+    // find if the comment is a valid itemID
+    const cleanText = commentDraft.replace(/<\/?[^>]+(>|$)/g, "")
 
-    // create new item
+    // if the comment is a valid itemID, draw arrow to existing item
+    if (cleanText.length === 21 && itemIDs.includes(cleanText)) {
+      // create an arrow
+      const referenceArrow = createArrow('reference', cleanText)
 
-    const referenceItem = createReferenceItem()
+      // create newA
+      const newA = {
+        arrowID: referenceArrow.id,
+        to: referenceArrow.arrow.to,
+        from: referenceArrow.arrow.from,
+        kind: referenceArrow.arrow.kind,
+        backItemID: referenceArrow.arrow.backItemID
+      }
 
-    // create arrow
+      // update selectedItem.arrows
 
-    const referenceArrow = createArrow('reference', referenceItem.id)
+      const itemArrows = []
+      const existingItemArrows = item.arrows ? item.arrows : []
+      existingItemArrows && existingItemArrows.map((a: any) => itemArrows.push(a))
+      itemArrows.push(newA)
 
-    // set newA
+      // update arrows of the existing referenced item with cleanText
+      rep.mutate.updateItemAddSingleArrow({ id: cleanText, arrow: newA })
+
+      // save arrow
+      rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+      //update arrows on selected item
+      rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+      // update arrows
+
+      setArrows(itemArrows)
+
+    } else { // create a new item and draw and arrow
+
+      // create referenceItem
+      const referenceItem = createReferenceItem()
+
+      // create arrow
+
+      const referenceArrow = createArrow('reference', referenceItem.id)
+
+      // set newA
 
 
-    const newA = {
-      arrowID: referenceArrow.id,
-      to: referenceArrow.arrow.to,
-      from: referenceArrow.arrow.from,
-      kind: referenceArrow.arrow.kind,
-      backItemID: referenceArrow.arrow.backItemID
+      const newA = {
+        arrowID: referenceArrow.id,
+        to: referenceArrow.arrow.to,
+        from: referenceArrow.arrow.from,
+        kind: referenceArrow.arrow.kind,
+        backItemID: referenceArrow.arrow.backItemID
+      }
+
+      // push newA to referenceItem.arrows
+      const arrows = []
+      arrows.push(newA)
+      referenceItem.item.arrows = JSON.stringify(arrows)
+
+      //append newA to existing item.arrows array
+
+      const itemArrows = []
+      const existingItemArrows = item.arrows ? item.arrows : []
+      existingItemArrows && existingItemArrows.map((a: any) => itemArrows.push(a))
+      itemArrows.push(newA)
+
+      // save arrow
+
+      rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+
+      // save new item
+
+      rep.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
+
+      // update arrows on existing item
+      rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+
+      // set local arrows
+      setArrows(itemArrows)
     }
 
-    // push newA to referenceItem.arrows
-    const arrows = []
-    arrows.push(newA)
-    referenceItem.item.arrows = JSON.stringify(arrows)
 
-    //append newA to existing item.arrows array
 
-    const itemArrows = []
-    const existingItemArrows = item.arrows ? item.arrows : []
-    existingItemArrows && existingItemArrows.map((a: any) => itemArrows.push(a))
-    itemArrows.push(newA)
-
-    // save arrow
-
-    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
-
-    // save new item
-
-    rep.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
-
-    // update arrows on existing item
-    rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
-
-    // set local arrows
-    setArrows(itemArrows)
   }
 
   return (
