@@ -142,6 +142,7 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
           <div>{dateInWords(date)}</div>
         </div>
       </div>
+
       <div
         className={styles.right}
         onMouseOver={() => setShowOptions(true)}
@@ -179,6 +180,7 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
             />
           </div>
         </div>
+        <div className={styles.itemID}>{itemID}</div>
         <div>
           {arrowArray.map((a: any) => {
             return(
@@ -191,7 +193,7 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
             )
           })}
         </div>
-        {itemID}
+
         {i.highlight &&
           <HighlightEditor
             rep={rep}
