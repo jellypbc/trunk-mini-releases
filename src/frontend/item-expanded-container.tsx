@@ -13,6 +13,8 @@ type Props = {
 
 export default function ItemExpandedContainer({ selectedItemID, setSelectedItemID, rep}: Props) {
   const i = useItemByID(rep, selectedItemID)
+
+
   return (
     i &&
     <div className={styles.container}>

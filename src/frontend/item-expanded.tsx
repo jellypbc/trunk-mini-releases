@@ -98,10 +98,74 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
             </div>
           )
         })}
+        <div className={styles.footnotes}>→</div>
+        {item.arrows && item.arrows.map((arrow : any) => {
+          return (
+            arrow.kind === 'reference' &&
+            <div key={arrow.arrowID}>
+              <FootnoteEditorX
+                rep={rep}
+                arrowID={arrow.arrowID}
+                direction={'front'}
+                />
+
+            </div>
+          )
+        })}
+        <div className={styles.footnotes}>←</div>
+        {item.arrows && item.arrows.map((arrow : any) => {
+          return (
+            arrow.kind === 'reference' &&
+            <div key={arrow.arrowID}>
+              <FootnoteEditorX
+                rep={rep}
+                arrowID={arrow.arrowID}
+                direction={'back'}
+                />
+            </div>
+          )
+        })}
       </div>
 
     </div>
     </HotKeys>
+  )
+}
+
+function FootnoteEditorX({rep, arrowID, direction}: any) {
+  const fullArrow = useArrowByID(rep, arrowID)
+  return (
+    fullArrow &&
+    <FootnoteEditorY
+      rep={rep}
+      fullArrow={fullArrow}
+      direction={direction}
+    />
+  )
+}
+
+import { useRouter } from 'next/router'
+
+function FootnoteEditorY({rep, fullArrow, direction}:any) {
+  const itemID = direction === 'front' ? fullArrow.frontItemID : fullArrow.backItemID
+  const item = useItemByID(rep, itemID)
+  const router = useRouter()
+  const [, , roomID,] = location.pathname.split("/");
+
+  function handleRouteToItem(){
+    router.push({
+      pathname: `/d/[roomid]/[itemid]`,
+      query: { roomid: roomID, itemid: itemID }
+    })
+
+  }
+  return (
+    item &&
+    <div
+      onClick={handleRouteToItem}
+    >
+      {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
+    </div>
   )
 }
 
