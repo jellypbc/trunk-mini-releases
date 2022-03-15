@@ -39,6 +39,7 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
     }
   };
 
+
   return (
     <HotKeys
       {...{
@@ -107,6 +108,7 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
                 rep={rep}
                 arrowID={arrow.arrowID}
                 direction={'front'}
+                selectedItemID={itemID}
                 />
 
             </div>
@@ -121,6 +123,7 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
                 rep={rep}
                 arrowID={arrow.arrowID}
                 direction={'back'}
+                selectedItemID={itemID}
                 />
             </div>
           )
@@ -132,22 +135,11 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
   )
 }
 
-function FootnoteEditorX({rep, arrowID, direction}: any) {
-  const fullArrow = useArrowByID(rep, arrowID)
-  return (
-    fullArrow &&
-    <FootnoteEditorY
-      rep={rep}
-      fullArrow={fullArrow}
-      direction={direction}
-    />
-  )
-}
 
 import { useRouter } from 'next/router'
 
-function FootnoteEditorY({rep, fullArrow, direction}:any) {
-  const itemID = direction === 'front' ? fullArrow.frontItemID : fullArrow.backItemID
+
+function FootnoteEditorZ({rep, itemID}:any) {
   const item = useItemByID(rep, itemID)
   const router = useRouter()
   const [, , roomID,] = location.pathname.split("/");
@@ -166,6 +158,47 @@ function FootnoteEditorY({rep, fullArrow, direction}:any) {
     >
       {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
     </div>
+  )
+}
+
+
+
+
+function FootnoteEditorX({rep, arrowID, direction, selectedItemID}: any) {
+  const fullArrow = useArrowByID(rep, arrowID)
+  return (
+    fullArrow &&
+    <FootnoteEditorY
+      rep={rep}
+      fullArrow={fullArrow}
+      direction={direction}
+      selectedItemID={selectedItemID}
+    />
+  )
+}
+
+
+function FootnoteEditorY({rep, fullArrow, direction, selectedItemID}:any) {
+  const itemID = direction === 'front' ? fullArrow.frontItemID : fullArrow.backItemID
+  const item = useItemByID(rep, itemID)
+  const router = useRouter()
+  const [, , roomID,] = location.pathname.split("/");
+
+  function handleRouteToItem(){
+    router.push({
+      pathname: `/d/[roomid]/[itemid]`,
+      query: { roomid: roomID, itemid: itemID }
+    })
+
+  }
+  return (
+    item && itemID !== selectedItemID ?
+    <div
+      onClick={handleRouteToItem}
+    >
+      {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
+    </div>
+    : null
   )
 }
 

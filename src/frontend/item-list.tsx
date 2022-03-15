@@ -13,7 +13,7 @@ type Props = {
   setSelectedDraftID: (ID: string) => void
 }
 
-const pinnedItemID = 'CXjCT7Rd_YW5FgxhNkTF1'
+const pinnedItemID = 'MRLRN-jrmJce1u4aNkBTk'
 
 export default function ItemList({ rep, drafts, handleSetDrafts, setSelectedDraftID }: Props) {
   const sortedItems = getSortedItems(rep) as unknown as any
