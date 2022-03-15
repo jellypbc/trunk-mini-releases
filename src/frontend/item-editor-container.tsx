@@ -49,7 +49,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
       schema,
       parser,
       viewRef && viewRef.current && viewRef.current.view,
-      arrows,
+      type === 'title' ? [] : arrows,
       rep,
       itemID
     )
@@ -67,7 +67,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
       schema,
       parser,
       viewRef && viewRef.current && viewRef.current.view,
-      arrows,
+      type === 'title' ? [] : arrows,
       rep,
       itemID
     )
