@@ -16,12 +16,15 @@ import LogIn from '../../../frontend/log-in'
 import { supabase } from "src/lib/supabase-client";
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../../lib/constants'
 import ItemExpandedContainer from '../../../frontend/item-expanded-container'
+import CommandBar from '../../../frontend/command-bar'
+import { HotKeys } from 'react-hotkeys'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null);
   const [drafts, setDrafts] = useState<any[]>([])
   const [selectedDraftID, setSelectedDraftID] = useState<string>('')
   const [session, setSession] = useState<AuthSession | null>(null)
+  const [commandBar, setCommandBar] = useState<boolean>(false)
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -103,12 +106,26 @@ export default function Home() {
   }, []);
 
 
+  const handlers = {
+    changeCommandBar: () => {
+      setCommandBar(!commandBar)
+    }
+  }
+
+
   if (!rep) {
     return null;
   }
 
 
   return (
+    <HotKeys
+      {...{
+        style: { outline: "none", display: "flex", flex: 1 },
+        keyMap,
+        handlers,
+      }}
+    >
     <div
       style={{
         position: "absolute",
@@ -125,6 +142,11 @@ export default function Home() {
       {session ?
 
         <div>
+          {commandBar &&
+            <CommandBar
+              rep={rep}
+            />
+          }
           <Nav
             rep={rep}
             session={session}
@@ -170,5 +192,10 @@ export default function Home() {
       }
       <Designer {...{ rep }} />
     </div>
+    </HotKeys>
   );
+}
+
+const keyMap = {
+  changeCommandBar: ['command+k']
 }

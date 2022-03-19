@@ -164,7 +164,6 @@ function FootnoteEditorY({rep, fullArrow, direction, selectedItemID}:any) {
       pathname: `/d/[roomid]/[itemid]`,
       query: { roomid: roomID, itemid: itemID }
     })
-
   }
   return (
     item && itemID !== selectedItemID ?

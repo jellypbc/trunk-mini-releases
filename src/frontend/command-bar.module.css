@@ -1,0 +1,33 @@
+.container {
+  z-index: 1;
+  background: hsl(0, 0%, 96%);
+  position: absolute;
+  width: 400px;
+  max-height: 100%;
+  left: 0;
+  right: 0;
+  top: 10%;
+  margin: 10% auto 0;
+  padding: 1rem 2rem;
+  text-align: center;
+  border: 1px solid hsla(0, 0%, 77%);
+  box-shadow: 0 4px 20px hsla(0, 0%, 77%), 0 4px 20px hsla(0, 0%, 77%);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchResults {
+  max-height: 20vh;
+  overflow: auto;
+  padding: 1rem 0;
+}
+
+.searchResult {
+  text-align: left;
+}
+
+.searchResult:hover {
+  cursor: pointer;
+  background-color: hsl(0, 0%, 88%);
+}
