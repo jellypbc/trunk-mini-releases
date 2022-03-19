@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Replicache } from 'replicache'
 import type { M } from "../datamodel/mutators";
 import { useUserInfo, getSortedItems, useItemByID } from '../datamodel/subscriptions'
@@ -19,9 +19,14 @@ export default function ItemList({ rep, drafts, handleSetDrafts, setSelectedDraf
   const sortedItems = getSortedItems(rep) as unknown as any
   const userInfo = useUserInfo(rep);
   const pinnedItem = useItemByID(rep, pinnedItemID)
+  const [itemsShown, setItemsShown] = useState<number>(10)
 
   function setSelectedDraftIDToPinned(){
     setSelectedDraftID(pinnedItemID)
+  }
+
+  function addTenItems(){
+    setItemsShown(itemsShown + 10)
   }
   return (
     <div className={styles.container}>
@@ -39,7 +44,7 @@ export default function ItemList({ rep, drafts, handleSetDrafts, setSelectedDraf
         />
       }
       {
-        userInfo && sortedItems && sortedItems.map((item : any) => {
+        userInfo && sortedItems && sortedItems.slice(0,itemsShown).map((item : any) => {
           return (
             <Item
               key={item.id}
@@ -51,8 +56,15 @@ export default function ItemList({ rep, drafts, handleSetDrafts, setSelectedDraf
           )
         })
       }
+      <div className={styles.buttonContainer}>
+        <button
+          className={styles.button}
+          onClick={addTenItems}
+        >
+          Show more items
+        </button>
+      </div>
+
     </div>
   )
 }
-
-

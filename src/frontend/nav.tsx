@@ -88,9 +88,6 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
       alert('You have been signed out')
   }
 
-
-
-
   return (
     <>
       <div className={styles.nav} style={{}}>
@@ -115,7 +112,6 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
         >
           Switch Trunk
         </div>
-
 
         <div className={styles.spacer}></div>
         {userInfo && (

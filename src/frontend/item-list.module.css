@@ -10,3 +10,19 @@
   font-size: .8rem;
   color: hsl(0, 0%, 70%);
 }
+
+.buttonContainer{
+  text-align: center;
+}
+
+.button {
+  padding: .5rem 1rem;
+  margin: 0.5rem 0;
+  background-color: hsl(0, 0%, 60%);
+  color: white;
+  border: none;
+}
+
+.button:hover {
+  background-color: hsl(0, 0%, 55%);
+}
