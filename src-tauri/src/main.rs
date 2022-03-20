@@ -48,7 +48,7 @@ fn main() {
   tauri::Builder::default()
     .setup(|app| {
       let window = app.get_window("main").unwrap();
-      window.set_title("butts");
+      window.set_title("Trunk Mini");
       Ok(())
     })
     .menu(menu)
