@@ -1,6 +1,6 @@
 {
   "name": "trunk-mini",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": "https://github.com/jellypbc/trunk-mini.git",
   "author": "Denny Luan <dennyluan@gmail.com>",
   "license": "MIT",
@@ -17,7 +17,8 @@
     "format": "prettier --write './**/*.{js,jsx,json,ts,tsx,html,css,md}'",
     "check-types": "tsc -p tsconfig.json --noEmit && tsc -p worker/tsconfig.json --noEmit",
     "tauri": "tauri",
-    "make-da-app": "rm -rf dist && next build && next export -o ./dist && npm run build-worker && npm run tauri build --debug"
+    "f": "echo $APPLE_ID",
+    "make": "rm -rf dist && next build && next export -o ./dist && npm run build-worker && npm run tauri build --debug"
   },
   "dependencies": {
     "@cloudflare/workers-types": "^3.3.1",
@@ -60,6 +61,7 @@
     "@types/prosemirror-schema-list": "^1.0.3",
     "@types/prosemirror-state": "^1.2.8",
     "@types/react": "^17.0.39",
+    "dotenv": "^16.0.0",
     "miniflare": "^2.3.0",
     "reps-client": "file:reps-client-0.0.1.tgz",
     "reps-do": "file:reps-do-0.0.1.tgz"

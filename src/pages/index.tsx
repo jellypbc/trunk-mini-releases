@@ -7,6 +7,21 @@ import { useRouter } from 'next/router'
 import { nanoid } from 'nanoid'
 import RoomSelector from '../frontend/room-selector'
 
+// import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
+// import { relaunch } from "@tauri-apps/api/process";
+// try {
+//     const {shouldUpdate, manifest} = await checkUpdate();
+//     if (shouldUpdate) {
+//         // display dialog
+//         await installUpdate();
+//         // install complete, restart app
+//         await relaunch();
+//     }
+// } catch(error) {
+//     console.log(error);
+// }
+
+
 export default function Page() {
   const [session, setSession] = useState<AuthSession | null>(null)
   const [room, setRoom] = useState<string>('')
