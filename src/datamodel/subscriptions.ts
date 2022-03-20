@@ -52,9 +52,10 @@ export function getSortedItems(rep: Replicache<M>) {
   const items = getItems(rep)
   let parsedItems: any[] = []
   items.map(([k, v]: [string, any]) => {
+    // console.log('!v.arrows', !v.arrows && v, k)
     const changes = {
       createdAt:  new Date(v.createdAt),
-      arrows: JSON.parse(v.arrows)
+      arrows: v.arrows && JSON.parse(v.arrows) || [],
     }
     let value = { ...v, ...changes }
     Object.assign(value, { id: k.substr(itemPrefix.length) })

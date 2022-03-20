@@ -439,7 +439,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
                 <Editor
                   type={'highlight'}
                   ref={null}
-                  state={createStateFromProps(serializedSelection, schema, parser, viewRef && viewRef.current && viewRef.current.view, item.arrows, rep, itemID)}
+                  state={createStateFromProps(serializedSelection, schema, parser, viewRef && viewRef.current && viewRef.current.view, [], rep, itemID)}
                   dispatchTransaction={fakeDispatchTransaction}
                   editable={false}
                 />
