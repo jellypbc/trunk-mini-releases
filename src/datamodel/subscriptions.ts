@@ -48,7 +48,6 @@ export function getCommentArrowsByArrowIDArray(rep: Replicache<M>, arrowIDs: str
   return arrows
 }
 
-
 export function getSortedItems(rep: Replicache<M>) {
   const items = getItems(rep)
   let parsedItems: any[] = []

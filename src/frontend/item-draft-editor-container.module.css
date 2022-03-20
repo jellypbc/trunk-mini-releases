@@ -43,3 +43,17 @@
   justify-content: space-around;
 }
 
+.searchResults {
+  max-height: 20vh;
+  overflow: auto;
+  padding: 1rem 0;
+}
+
+.searchResult {
+  text-align: left;
+}
+
+.searchResult:hover {
+  cursor: pointer;
+  background-color: hsl(0, 0%, 88%);
+}

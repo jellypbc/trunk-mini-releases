@@ -8,11 +8,12 @@ import { exampleSetup } from './editor/plugins/index'
 import Editor from './editor'
 import styles from './item-draft-editor-container.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
-import { useUserInfo, useItemIDs } from '../datamodel/subscriptions'
+import { useUserInfo, useItemIDs, getSortedItems } from '../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { randomArrow } from '../datamodel/arrow'
 import { randomItem } from '../datamodel/item'
+import Fuse from 'fuse.js'
 
 type Props = {
   content: any
@@ -42,6 +43,33 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   const [commentDraft, setCommentDraft] = useState<string>(initialValue)
   const [arrows, setArrows] = useState<any>(item.arrows)
+  const [searchResults, setSearchResults] = useState<any>([])
+
+
+  const allItems = getSortedItems(rep)
+  const options = {
+    // isCaseSensitive: false,
+    // includeScore: false,
+    // shouldSort: true,
+    // includeMatches: false,
+    // findAllMatches: false,
+    // minMatchCharLength: 1,
+    // location: 0,
+    // threshold: 0.6,
+    // distance: 100,
+    // useExtendedSearch: false,
+    // ignoreLocation: false,
+    // ignoreFieldNorm: false,
+    // fieldNormWeight: 1,
+    keys: [
+      'id',
+      'content',
+      'highlight',
+      'title',
+      'createdBy'
+    ]
+  }
+  const fuse = new Fuse(allItems, options)
 
   useEffect(() => {
     const state = createStateFromProps(
@@ -56,6 +84,16 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
   }, [])
+
+  useEffect(() => {
+    console.log('commentDraft', commentDraft)
+    const searchTerm= commentDraft.replace(/<\/?[^>]+(>|$)/g, "")
+    console.log('searchTerm', searchTerm)
+    if (allItems) {
+      const results = fuse.search(searchTerm)
+      setSearchResults(results)
+    }
+  }, [commentDraft])
 
   useEffect(() => {
     !showCommentFloater && setShowReplyForm(false)
@@ -328,6 +366,39 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
       setArrows(itemArrows)
     }
 
+  }
+
+  function handleArrowAdd(id: string) {
+    //create arrow
+    const referenceArrow = createArrow('reference', id)
+    //make newA
+
+    const newA = {
+      arrowID: referenceArrow.id,
+      to: referenceArrow.arrow.to,
+      from: referenceArrow.arrow.from,
+      kind: referenceArrow.arrow.kind,
+      backItemID: referenceArrow.arrow.backItemID
+    }
+
+    // update arrows on existing item (local to this component)
+    const itemArrows = []
+    const existingItemArrows = item.arrows ? item.arrows : []
+    existingItemArrows && existingItemArrows.map((a: any) => itemArrows.push(a))
+    itemArrows.push(newA)
+    //set local arrows
+    setArrows(itemArrows)
+
+    // save arrow!
+    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+
+
+    // save arrow to the item of id passed in
+    rep.mutate.updateItemAddSingleArrow({ id: id, arrow: newA})
+
+    // add arrow to existing item
+    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
+
 
 
   }
@@ -373,7 +444,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
                   editable={false}
                 />
               </div>
-              {showReplyForm &&
+              {showReplyForm && allItems &&
                 <>
                   <EditorDraftingContainer
                     rep={rep}
@@ -395,6 +466,17 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
                       onClick={handleFootnoteAdd}
                     >Footnote</button>
                   </div>
+                  <div className={styles.searchResults}>
+                    {searchResults && searchResults.map((result: any) => {
+                      return (
+                        <SearchResult
+                          key={`srl-${result.item.id}`}
+                          result={result.item}
+                          handleArrowAdd={handleArrowAdd}
+                        />
+                      )
+                    })}
+                  </div>
                 </>
               }
             </div>
@@ -411,6 +493,18 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     </>
   )
 }
+
+function SearchResult({ result, handleArrowAdd } : any) {
+  return(
+    <div
+      className={styles.searchResult}
+      onClick={() => handleArrowAdd(result.id)}
+    >
+      {result.title.replace(/<\/?[^>]+(>|$)/g, "")}
+    </div>
+  )
+}
+
 
 const createStateFromProps = (
   doc: string,

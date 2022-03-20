@@ -13,8 +13,6 @@ import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { randomDraft } from '../datamodel/local/draft'
 
-
-
 type Props = {
   content: any
   setValue: (value: string) => void
