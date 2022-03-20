@@ -67,6 +67,7 @@ function EditorDraftingContainer({ rep, content : doc, clientInfo, setValue } : 
           ref={viewRef}
           state={state}
           dispatchTransaction={dispatchTransaction}
+          type={'commentDraft'}
         />
       }
     </>

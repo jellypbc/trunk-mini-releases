@@ -74,7 +74,7 @@ export default forwardRef<Handle, Props>(function Editor(
     <div
       ref={root}
       style={props.style}
-      className={type === 'title' ? styles.titleContainer : styles.container}
+      className={type === 'title' ? styles.titleContainer : type === 'commentDraft' ? styles.commentDraft : styles.container}
       spellCheck={false}
     />
   )
