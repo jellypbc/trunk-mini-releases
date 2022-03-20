@@ -1,12 +1,21 @@
 import React from 'react'
+import { useEffect, useState } from "react";
 import styles from './log-in.module.css'
 import Head from 'next/head'
 import Link from 'next/link'
 import { supabase } from '../lib/supabase-client'
 import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../lib/constants'
 
+import version from '../util/version'
+const url = `https://github.com/jellypbc/trunk-mini-releases/releases/download/${version}/MiniTrunk_${version}_x64.dmg`
+
 export default function LogIn() {
-  const web = false
+
+  const [isTauri, setTauri] = useState(false)
+
+  useEffect(() => {
+    if (window && '__TAURI__' in window) { setTauri(true) }
+  }, [])
 
   async function signInWithGoogle() {
     const redirectUrl = location.href
@@ -43,14 +52,13 @@ export default function LogIn() {
 
         <div className="btn-group">
           {
-            web &&
-            <button
+            !isTauri &&
+            <a
               className={`${styles.magicLinkBtn} btn btn-primary btn-lg mx-3`}
-              onClick={(e) => {
-              e.preventDefault()
-            }}>
+              href={url}
+            >
               Download for Mac
-            </button>
+            </a>
           }
 
           <button
