@@ -13,15 +13,6 @@ export default function RoomSelector({ handleSelectRoom, room, setRoom } : Props
     setRoom(room)
   }
 
-  async function logOut() {
-    const { error } = await supabase.auth.signOut()
-    error ?
-      console.log('Error logging out:', error.message)
-      :
-      alert('You have been signed out')
-  }
-
-
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -30,7 +21,6 @@ export default function RoomSelector({ handleSelectRoom, room, setRoom } : Props
         </div>
         <button
           className={styles.btnEscape}
-          onClick={logOut}
         >&times;</button>
       </div>
 
