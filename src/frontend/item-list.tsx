@@ -56,15 +56,16 @@ export default function ItemList({ rep, drafts, handleSetDrafts, setSelectedDraf
           )
         })
       }
-      <div className={styles.buttonContainer}>
-        <button
-          className={styles.button}
-          onClick={addTenItems}
-        >
-          Show more items
-        </button>
-      </div>
-
+      { sortedItems.length > 10 && itemsShown < sortedItems.length &&
+        <div className={styles.buttonContainer}>
+          <button
+            className={styles.button}
+            onClick={addTenItems}
+          >
+            Show more items
+          </button>
+        </div>
+      }
     </div>
   )
 }
