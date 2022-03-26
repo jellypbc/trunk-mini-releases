@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './room-selector.module.css'
-import { supabase } from "src/lib/supabase-client";
 
 type Props = {
   handleSelectRoom: () => void

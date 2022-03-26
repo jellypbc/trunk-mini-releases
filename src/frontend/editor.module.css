@@ -1,6 +1,5 @@
 .container * {
   border: none;
-  overflow: auto;
   resize: none;
   background-color: inherit;
   outline: none;
