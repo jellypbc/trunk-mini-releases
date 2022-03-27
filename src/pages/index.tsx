@@ -22,7 +22,6 @@ import AppNav from "./../frontend/nav/app-nav"
 //     console.log(error);
 // }
 
-
 export default function Page() {
   const [session, setSession] = useState<AuthSession | null>(null)
   const [room, setRoom] = useState<string>('')

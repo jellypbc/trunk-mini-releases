@@ -1,7 +1,4 @@
-// import type { appWindow } from "@tauri-apps/api/window";
 import { useEffect, useState } from "react";
-import dynamic from 'next/dynamic'
-
 
 export default function AppNav() {
   const [isTauri, setTauri] = useState(false)
@@ -13,25 +10,10 @@ export default function AppNav() {
       if (window && '__TAURI__' in window) {
         const {appWindow} = await import('@tauri-apps/api/window')
         setAppW(appWindow)
-        // appWindow.close().then()
-
-        // const appWindow = dynamic(
-        //   import('@tauri-apps/api/window').then(m=>m.appWindow),
-        //   { ssr: false }
-        // )
       }
-      // if (window && '__TAURI__' in window) {
-      //   const { appWindow } = await import('@tauri-apps/api/window')
-      // }
-
-      // console.log("appw", appWindow)
     })()
 
-
-    if (window && '__TAURI__' in window) {
-      console.log("DOG")
-      setTauri(true)
-    }
+    if (window && '__TAURI__' in window) { setTauri(true) }
   }, [])
 
   useEffect(() => {
@@ -39,35 +21,15 @@ export default function AppNav() {
     if (appW) {
 
       appW.listen('tauri://focus', () => {
-        console.log("FOCUSED!")
         setFocus(true)
-      }).then(()=>{
       })
 
       appW.listen('tauri://blur', () => {
-        console.log("blured!")
         setFocus(false)
-      }).then(()=>{
       })
     }
 
   }, [appW])
-
-
-      // appW.listen('tauri://focus', () => {
-      //   console.log("FOCUSED!")
-      // }).then(()=>{
-      //   setFocus(true)
-      // })
-
-      // appW.listen('tauri://blur', () => {
-      //   console.log("blured!")
-      // }).then(()=>{
-      //   setFocus(false)
-      // })
-
-
-  console.log("isTauri", isTauri)
 
   return (
     <>
