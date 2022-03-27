@@ -28,7 +28,7 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
 
   const [filePath, setPath] = useState<string>("")
   const [fileFormVisible, showFileForm] = useState(false);
-  const [tauri, setTauri] = useState(false)
+  const [isTauri, setTauri] = useState(false)
   const userInfo = useUserInfo(rep);
   const router = useRouter()
   const itemCount = getItemCount(rep) || 0
@@ -104,7 +104,7 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
         </div>
 
         <div className={styles.button}>
-          tauri: {tauri.toString()}
+          tauri: {isTauri.toString()}
         </div>
         <div
           className={styles.button}
@@ -141,7 +141,7 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
         </Modal.Header>
         <Modal.Body>
 
-          {tauri &&
+          {isTauri &&
             <>
               <p>Tauri:</p>
               {
@@ -156,7 +156,7 @@ export function Nav({ rep, session }: { rep: Replicache<M>, session: AuthSession
 
           }
 
-          {!tauri  &&
+          {!isTauri  &&
             <>
               <p>web:</p>
               <input

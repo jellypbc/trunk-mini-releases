@@ -1,0 +1,58 @@
+.titlebar {
+  height: 38px;
+  background: #eee;
+  user-select: none;
+  display: flex;
+  justify-content: flex-start;
+  position: fixed;
+  top: 0px;
+  left: 0;
+  right: 0;
+  padding-left: 10px;
+
+  border-radius: 15px 15px 0 0;
+  overflow: auto;
+}
+
+.titlebar-button {
+  height: 12px;
+  width: 12px;
+
+  background: #D8DADB;
+  border: 1px solid #BABBBD;
+
+  margin: 13px 4px 9px 4px;
+  border-radius: 50%;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.titlebar-button:hover {
+  background: #5bbec3;
+}
+
+.titlebar-close {
+  &.active {
+    background: #FC605B;
+    border: 1px solid #DE4240;
+  }
+  &:hover { background: darken(#FC605B, 20) }
+}
+
+.titlebar-expand {
+  &.active {
+    background: #33C648;
+    border: 1px solid #1CA52A;
+  }
+  &:hover { background: darken(#33C648, 20) }
+}
+
+.titlebar-minimize {
+  &.active {
+    background: #FCBB40;
+    border: 1px solid #DC9A2A;
+  }
+  &:hover { background: darken(#FCBB40, 20) }
+}

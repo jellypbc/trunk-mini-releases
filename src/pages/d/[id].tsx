@@ -18,6 +18,7 @@ import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
 import ItemExpandedContainer from '../../frontend/item-expanded-container'
 import CommandBar from '../../frontend/command-bar'
 import { HotKeys } from 'react-hotkeys'
+import AppNav from "../../frontend/nav/app-nav"
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null);
@@ -44,9 +45,6 @@ export default function Home() {
       draftList.push(changedDraft)
     })
     if (draftJSON != null) setDrafts(draftList)
-
-
-
 
   }, [])
 
@@ -127,70 +125,74 @@ export default function Home() {
         handlers,
       }}
     >
-    <div
-      style={{
-        position: "absolute",
-        display: "flex",
-        flexDirection: "column",
-        left: 0,
-        top: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgb(229,229,229)",
-      }}
-    >
-      {session ?
-        <div>
-          {commandBar &&
-            <CommandBar
+
+      <AppNav />
+
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          left: 0,
+          top: "38px",
+          width: "100%",
+          height: "100%",
+          background: "transparent",
+        }}
+      >
+
+        {session ?
+          <div>
+            {commandBar &&
+              <CommandBar
+                rep={rep}
+              />
+            }
+            <Nav
               rep={rep}
+              session={session}
             />
-          }
-          <Nav
-            rep={rep}
-            session={session}
-          />
-          {selectedDraftID
-            ?
-            <>
-              <ItemDraftExpandedContainer
-                selectedDraftID={selectedDraftID}
-                drafts={drafts}
-                handleSetDrafts={handleSetDrafts}
-                setSelectedDraftID={setSelectedDraftID}
-                rep={rep}
-              />
-              <ItemExpandedContainer
-                selectedItemID={selectedDraftID}
-                setSelectedItemID={setSelectedDraftID}
-                rep={rep}
-              />
-            </>
-            :
-            <div
-              style={{display: "flex", maxHeight: "70vh"}}
-              className={"main"}
-            >
-              <ItemList
-                drafts={drafts}
-                handleSetDrafts={handleSetDrafts}
-                setSelectedDraftID={setSelectedDraftID}
-                rep={rep}
-              />
-              <ItemDraftList
-                drafts={drafts}
-                handleSetDrafts={handleSetDrafts}
-                setSelectedDraftID={setSelectedDraftID}
-                rep={rep}
-              />
-            </div>
-          }
-        </div>
-      :
-        <LogIn/>
-      }
-      <Designer {...{ rep }} />
-    </div>
+            {selectedDraftID
+              ?
+              <>
+                <ItemDraftExpandedContainer
+                  selectedDraftID={selectedDraftID}
+                  drafts={drafts}
+                  handleSetDrafts={handleSetDrafts}
+                  setSelectedDraftID={setSelectedDraftID}
+                  rep={rep}
+                />
+                <ItemExpandedContainer
+                  selectedItemID={selectedDraftID}
+                  setSelectedItemID={setSelectedDraftID}
+                  rep={rep}
+                />
+              </>
+              :
+              <div
+                style={{display: "flex", maxHeight: "70vh"}}
+                className={"main"}
+              >
+                <ItemList
+                  drafts={drafts}
+                  handleSetDrafts={handleSetDrafts}
+                  setSelectedDraftID={setSelectedDraftID}
+                  rep={rep}
+                />
+                <ItemDraftList
+                  drafts={drafts}
+                  handleSetDrafts={handleSetDrafts}
+                  setSelectedDraftID={setSelectedDraftID}
+                  rep={rep}
+                />
+              </div>
+            }
+          </div>
+        :
+          <LogIn/>
+        }
+        <Designer {...{ rep }} />
+      </div>
     </HotKeys>
   );
 }

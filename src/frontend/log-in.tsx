@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { supabase } from '../lib/supabase-client'
 import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../lib/constants'
 
+// import type { redirect } from 'next/dist/server/api-utils';
 import version from '../util/version'
 const url = `https://github.com/jellypbc/trunk-mini-releases/releases/download/${version}/MiniTrunk_${version}_x64.dmg`
 
