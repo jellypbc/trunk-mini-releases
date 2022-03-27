@@ -10,7 +10,6 @@ const invoke : any = dynamic<any>(
   { ssr: false }
 )
 
-// window.__TAURI_METADATA__ = "hi"
 const appWindow : any = dynamic<any>(
   import('@tauri-apps/api/window').then(m=>m.appWindow) as DynamicOptions<{}>,
   { ssr: false }

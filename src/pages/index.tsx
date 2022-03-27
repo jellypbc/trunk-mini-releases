@@ -6,6 +6,7 @@ import { LOCAL_STORAGE_AUTH_TOKEN_KEY, LOCAL_STORAGE_REDIRECT_URL_KEY } from '..
 import { useRouter } from 'next/router'
 import { nanoid } from 'nanoid'
 import RoomSelector from '../frontend/room-selector'
+import AppNav from "./../frontend/nav/app-nav"
 
 // import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
 // import { relaunch } from "@tauri-apps/api/process";
@@ -33,6 +34,9 @@ export default function Page() {
       setSession(session)
     })
     const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
+    console.log("sessions", session)
+
+    // console.log("JSON.parse(session).currentSession", JSON.parse(session).currentSession)
     session && setSession(JSON.parse(session).currentSession)
   }, [])
 
@@ -60,11 +64,14 @@ export default function Page() {
 
   return (
     <>
+      <AppNav />
+
       {showRoomSelector ?
         <RoomSelector
           room={room}
           setRoom={setRoom}
           handleSelectRoom={selectRoom}
+          setShowRoomSelector={setShowRoomSelector}
         />
         :
         <LogIn/>

@@ -5,7 +5,8 @@
   background-color: inherit;
   outline: none;
   width: 100%;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.69em;
 }
 
 .titleContainer * {

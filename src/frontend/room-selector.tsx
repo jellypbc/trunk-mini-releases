@@ -1,14 +1,19 @@
 import React from 'react'
 import styles from './room-selector.module.css'
-import { supabase } from "src/lib/supabase-client";
 
 type Props = {
   handleSelectRoom: () => void
   room: string,
   setRoom: (room: string) => void,
+  setShowRoomSelector: (bool: boolean) => void,
 }
 
-export default function RoomSelector({ handleSelectRoom, room, setRoom } : Props) {
+export default function RoomSelector({
+  handleSelectRoom,
+  room,
+  setRoom,
+  setShowRoomSelector
+} : Props) {
   function handleChange(room: string) {
     setRoom(room)
   }
@@ -21,7 +26,10 @@ export default function RoomSelector({ handleSelectRoom, room, setRoom } : Props
         </div>
         <button
           className={styles.btnEscape}
-        >&times;</button>
+          onClick={ () => setShowRoomSelector(false) }
+        >
+          &times;
+        </button>
       </div>
 
       <input

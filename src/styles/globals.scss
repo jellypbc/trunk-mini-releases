@@ -1,5 +1,7 @@
 @import-normalize;
 
+@import 'navs.scss';
+
 html,
 body {
   padding: 0;
@@ -9,6 +11,9 @@ body {
   overflow: hidden;
   width: 100%;
   height: 100%;
+
+  border-radius: 16px;
+  background-color: white;
 }
 
 a {
@@ -28,14 +33,14 @@ a {
 }
 
 .arrowTooltip {
- position: absolute;
- left: -1;
- right: 0;
- top: 10%;
- max-width: 400px;
- padding: 1rem;
- max-height: 80%;
- z-index: 2;
+  position: absolute;
+  left: -1;
+  right: 0;
+  top: 10%;
+  max-width: 400px;
+  padding: 1rem;
+  max-height: 80%;
+  z-index: 2;
 }
 
 blockquote {

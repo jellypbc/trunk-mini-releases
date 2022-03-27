@@ -45,9 +45,6 @@ export default function Home() {
     })
     if (draftJSON != null) setDrafts(draftList)
 
-
-
-
   }, [])
 
   useEffect(() => {
