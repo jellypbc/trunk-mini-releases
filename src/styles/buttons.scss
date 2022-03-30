@@ -1,21 +1,30 @@
-.btn {
-  border-radius: 4px;
-  border:  2px solid;
-  box-shadow:  0 3px 0 black;
+.button {
+  background: hsl(0, 0%, 70%);
+  border: none;
+  color: white;
+  border-radius: .5rem;
+}
 
-  &:active {
-    background: #ccc;
-    box-shadow: none;
-    top: 3px;
-    position: relative;
-  }
-
-  &:hover {
-    background: #ddd;
-  }
+.button:hover, .button:active {
+  background: hsl(0, 0%, 60%);
 }
 
 .btn-sm {
   font-size: 12px;
   padding: 2px 4px;
+}
+
+.button-group {
+  display: flex;
+}
+
+@media (max-width: 600px) {
+  .button-group {
+    flex-direction: column;
+  }
+}
+
+.button-primary {
+  padding: 1rem 2rem;
+  margin: 1rem;
 }

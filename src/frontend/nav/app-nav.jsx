@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
 export default function AppNav() {
   const [isTauri, setTauri] = useState(false)
@@ -50,9 +50,7 @@ export default function AppNav() {
             onClick={()=> appW.toggleMaximize()}
           >
           </div>
-
         </div>
-
       }
     </>
   )

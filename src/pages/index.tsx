@@ -1,26 +1,15 @@
-import LogIn from '../frontend/log-in'
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import type { AuthSession } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase-client'
-import { LOCAL_STORAGE_AUTH_TOKEN_KEY, LOCAL_STORAGE_REDIRECT_URL_KEY } from '../lib/constants'
-import { useRouter } from 'next/router'
+import {
+  LOCAL_STORAGE_AUTH_TOKEN_KEY,
+  LOCAL_STORAGE_REDIRECT_URL_KEY
+} from '../lib/constants'
 import { nanoid } from 'nanoid'
 import RoomSelector from '../frontend/room-selector'
-import AppNav from "./../frontend/nav/app-nav"
-
-// import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
-// import { relaunch } from "@tauri-apps/api/process";
-// try {
-//     const {shouldUpdate, manifest} = await checkUpdate();
-//     if (shouldUpdate) {
-//         // display dialog
-//         await installUpdate();
-//         // install complete, restart app
-//         await relaunch();
-//     }
-// } catch(error) {
-//     console.log(error);
-// }
+import LogIn from '../frontend/log-in'
+import AppNav from './../frontend/nav/app-nav'
 
 export default function Page() {
   const [session, setSession] = useState<AuthSession | null>(null)
@@ -33,9 +22,6 @@ export default function Page() {
       setSession(session)
     })
     const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
-    console.log("sessions", session)
-
-    // console.log("JSON.parse(session).currentSession", JSON.parse(session).currentSession)
     session && setSession(JSON.parse(session).currentSession)
   }, [])
 
@@ -46,10 +32,10 @@ export default function Page() {
 
     if (session !== null) {
       setShowRoomSelector(true)
-    }
-    if (session === null) {
+    } else {
       setShowRoomSelector(false)
     }
+
   },[session])
 
   function selectRoom(){
@@ -64,7 +50,6 @@ export default function Page() {
   return (
     <>
       <AppNav />
-
       {showRoomSelector ?
         <RoomSelector
           room={room}

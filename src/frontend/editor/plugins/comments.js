@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom'
 import React, { useState } from 'react'
-import classnames from 'classnames'
 
 import { Plugin, PluginKey } from "prosemirror-state"
 import { Decoration, DecorationSet } from "prosemirror-view"
