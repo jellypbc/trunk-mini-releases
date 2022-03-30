@@ -3,6 +3,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  background-color: hsl(0, 0%, 94%);
 }
 
 .right {
@@ -12,7 +13,7 @@
 
 .titleContainer {
   display: flex;
-  padding-top: 1rem;
+  /* padding-top: .5rem; */
 }
 
 .bullet {
@@ -50,4 +51,24 @@
 
 .footnotes {
   padding: 1rem 0;
+  cursor: pointer;
 }
+
+.parent {
+  padding: 1rem;
+  font-size: .8rem;
+}
+
+.parentArrow {
+  color: #009B2B
+}
+
+.addSubItem {
+  padding: 1rem;
+}
+
+.subItem:hover {
+  background-color: hsl(0, 0%, 90%);
+  cursor: pointer;
+}
+

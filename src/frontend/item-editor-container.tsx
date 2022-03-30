@@ -399,8 +399,6 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     // add arrow to existing item
     rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
 
-
-
   }
 
   return (

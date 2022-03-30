@@ -5,6 +5,7 @@ import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import ItemEditorContainer from './item-editor-container'
 import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
+import AddSubItem from './add-sub-item'
 
 type Props = {
   itemID: string
@@ -18,6 +19,7 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
   const [titleValue, setTitleValue] = useState<string>(i.title)
   const [contentValue, setContentValue] = useState<string>(i.content)
   const [showContent, setShowContent] = useState<boolean>(false)
+  const [showSubItemAdd, setShowSubItemAdd] = useState<boolean>(false)
 
   useEffect(() => {
     rep.mutate.updateItemTitle({ id: itemID, title: titleValue })
@@ -54,6 +56,19 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
           className={styles.keyboardShortcut}
           onClick={() => setSelectedItemID('')}
         >ESC to Exit</div>
+        <div>
+          {item.arrows && item.arrows.map((arrow : any) => {
+            return (
+              arrow.kind === 'sub' && arrow.backItemID !== itemID &&
+              <div key={'subItem-' + arrow.arrowID}>
+                <ParentEditorA
+                  rep={rep}
+                  arrowID={arrow.arrowID}
+                />
+              </div>
+            )
+          })}
+        </div>
         <div
           className={styles.titleContainer}
           onClick={() => setShowContent(!showContent)}
@@ -99,6 +114,30 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
             </div>
           )
         })}
+        <div
+          className={styles.footnotes}
+          onClick={() => setShowSubItemAdd(true)}
+        >Sub-items<span className={styles.addSubItem}>+</span></div>
+        {showSubItemAdd &&
+          <AddSubItem
+            rep={rep}
+            backItem={item}
+            backItemID={itemID}
+            handleSubItemAdd={setShowSubItemAdd}
+          />
+        }
+        {item.arrows && item.arrows.map((arrow : any) => {
+          return (
+            arrow.kind === 'sub' &&
+            arrow.backItemID === itemID &&
+            <div key={'subItem-' + arrow.arrowID} className={styles.subItem}>
+              <SubItemEditorA
+                rep={rep}
+                arrowID={arrow.arrowID}
+              />
+            </div>
+          )
+        })}
         <div className={styles.footnotes}>→</div>
         {item.arrows && item.arrows.map((arrow : any) => {
           return (
@@ -109,8 +148,7 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
                 arrowID={arrow.arrowID}
                 direction={'front'}
                 selectedItemID={itemID}
-                />
-
+              />
             </div>
           )
         })}
@@ -129,7 +167,6 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
           )
         })}
       </div>
-
     </div>
     </HotKeys>
   )
@@ -137,6 +174,77 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
 
 
 import { useRouter } from 'next/router'
+
+function ParentEditorA({rep, arrowID}: any) {
+  const fullArrow = useArrowByID(rep, arrowID)
+  return (
+    fullArrow &&
+    <ParentEditorB
+      rep={rep}
+      fullArrow={fullArrow}
+    />
+  )
+}
+
+function ParentEditorB({rep, fullArrow}: any){
+const itemID = fullArrow.backItemID
+const item = useItemByID(rep, itemID)
+const router = useRouter()
+const [, , roomID,] = location.pathname.split("/");
+
+function handleRouteToItem(){
+  router.push({
+    pathname: `/d/[roomid]/[itemid]`,
+    query: { roomid: roomID, itemid: itemID }
+  })
+}
+
+
+return (
+  item &&
+  <div
+    onClick={handleRouteToItem}
+    className={styles.parent}
+  >
+    <span className={styles.parentArrow}>⮑</span> {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
+  </div>
+)
+
+}
+
+function SubItemEditorA({rep, arrowID}: any){
+  const fullArrow = useArrowByID(rep, arrowID)
+  return (
+    fullArrow &&
+    <SubItemEditorB
+      rep={rep}
+      fullArrow={fullArrow}
+    />
+  )
+}
+
+function SubItemEditorB({rep, fullArrow}: any) {
+  const itemID = fullArrow.frontItemID
+  const item = useItemByID(rep, itemID)
+  const router = useRouter()
+  const [, , roomID,] = location.pathname.split("/");
+
+  function handleRouteToItem(){
+    router.push({
+      pathname: `/d/[roomid]/[itemid]`,
+      query: { roomid: roomID, itemid: itemID }
+    })
+  }
+
+  return (
+    item &&
+    <div
+      onClick={handleRouteToItem}
+    >
+      {item.title}
+    </div>
+  )
+}
 
 
 function FootnoteEditorX({rep, arrowID, direction, selectedItemID}: any) {
