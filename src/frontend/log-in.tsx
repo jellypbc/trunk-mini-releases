@@ -51,7 +51,7 @@ export default function LogIn() {
           { !isTauri &&
             <Link href={url}>
               <button className={'button button-primary'} >
-                Download for macOS
+                Get Trunk for macOS
               </button>
             </Link>
           }
