@@ -2,6 +2,10 @@
   .container {
     padding: 2rem;
   }
+
+  .nav {
+    display: none;
+  }
 }
 
 .container {
@@ -11,6 +15,13 @@
   height: 100vh;
   cursor: default;
   background-color: hsl(0, 0%, 90%);
+}
+
+.nav {
+  text-align: right;
+  padding: 2rem;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .main {

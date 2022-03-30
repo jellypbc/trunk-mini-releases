@@ -40,6 +40,15 @@ export default function LogIn() {
         <meta name="description" content="Collaborative literature review tool" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div
+        className={styles.nav}
+        onClick={(e) => {
+          e.preventDefault()
+          signInWithGoogle()
+        }}
+      >
+        Login or Register
+      </div>
       <main className={styles.main}>
         <h1 className={styles.title}>
           <div>Trunk</div>
