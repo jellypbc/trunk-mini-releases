@@ -1,73 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './dashboard.module.css'
 import type { AuthSession } from '@supabase/supabase-js'
-import Onboarding from './onboarding'
-import { useWorkspace } from './workspace-provider'
-import { Replicache } from 'replicache'
-import { M, mutators } from '../datamodel/mutators'
-import { Client } from 'reps-client'
-import { randUserInfo } from '../datamodel/client-state'
-import { randomShape } from '../datamodel/shape'
+import type { Replicache } from 'replicache'
+import type { M } from '../datamodel/mutators'
 import { getSortedItems } from '../datamodel/subscriptions'
 
 type Props = {
   session: AuthSession
   roomID: string
+  rep: Replicache<M>
 }
 
-export default function Dashboard({ session, roomID} : Props ) {
+export default function Dashboard({ session, roomID, rep } : Props ) {
+  console.log('session', session)
+  console.log('rep', rep)
   const [showIndex, setShowIndex] = useState<boolean>(false)
-  const [rep, setRep] = useState<Replicache<M> | null>(null)
-
-  const {
-    selectedTrunkID,
-  } = useWorkspace()
-
-
-  useEffect(() => {
-    (async () => {
-      const r = new Replicache({
-        name: roomID,
-        mutators,
-
-        // TODO: Do we need these?
-        // TODO: figure out backoff?
-        pushDelay: 0,
-        requestOptions: {
-          maxDelayMs: 0,
-          minDelayMs: 0,
-        },
-
-        // We only use pull to get the base cookie.
-        pullInterval: null,
-      });
-
-      const workerHost =
-        process.env.NEXT_PUBLIC_WORKER_HOST ??
-        "wss://reps.trunk.workers.dev";
-      const workerURL = `${workerHost}/connect`;
-      console.info(`Connecting to worker at ${workerURL}`);
-      new Client(r, roomID, workerURL);
-
-      const defaultUserInfo = randUserInfo();
-      await r.mutate.initClientState({
-        id: await r.clientID,
-        defaultUserInfo,
-      })
-      r.onSync = (syncing: boolean) => {
-        if (!syncing) {
-          r.onSync = null;
-          r.mutate.initShapes(Array.from({ length: 5 }, () => randomShape()));
-        }
-      }
-      setRep(r)
-    })()
-  }, [])
-
 
   return (
     <div className={styles.container}>
-      {selectedTrunkID ?
+      {roomID &&
         <div className={styles.dashboard}>
           <div className={styles.trunks}>
             <Trunk />
@@ -100,11 +51,6 @@ export default function Dashboard({ session, roomID} : Props ) {
             </div>
           </div>
         </div>
-        :
-        <Onboarding
-          session={session}
-          roomID={roomID}
-        />
       }
     </div>
   )

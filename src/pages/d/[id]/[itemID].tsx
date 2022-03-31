@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react";
-import { Replicache } from "replicache";
-import { Client } from "reps-client";
-import { Designer } from "../../../frontend/designer";
-import { Nav } from "../../../frontend/nav";
-import { M, mutators } from "../../../datamodel/mutators";
-import { randUserInfo } from "../../../datamodel/client-state";
-import { randomShape } from "../../../datamodel/shape";
+import { useEffect, useState } from 'react'
+import { Client } from 'reps-client'
+import { Designer } from '../../../frontend/designer'
+import { Nav } from '../../../frontend/nav'
+import { M, mutators } from '../../../datamodel/mutators'
+import { randUserInfo } from '../../../datamodel/client-state'
+import { randomShape } from '../../../datamodel/shape'
 import ItemList from '../../../frontend/item-list'
 import ItemDraftList from '../../../frontend/item-draft-list'
-import { useDrafts } from "../../../datamodel/local/subscriptions";
-import { updateDrafts } from "../../../datamodel/local/draft";
+import { useDrafts } from '../../../datamodel/local/subscriptions'
+import { updateDrafts } from '../../../datamodel/local/draft'
 import ItemDraftExpandedContainer from '../../../frontend/item-draft-expanded-container'
 import type { AuthSession } from '@supabase/supabase-js'
 import LogIn from '../../../frontend/log-in'
-import { supabase } from "src/lib/supabase-client";
+import { supabase } from 'src/lib/supabase-client'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../../lib/constants'
 import ItemExpandedContainer from '../../../frontend/item-expanded-container'
 import CommandBar from '../../../frontend/command-bar'
 import { HotKeys } from 'react-hotkeys'
+import { Replicache } from 'replicache'
 
 export default function Home() {
-  const [rep, setRep] = useState<Replicache<M> | null>(null);
+  const [rep, setRep] = useState<Replicache<M> | null>(null)
   const [drafts, setDrafts] = useState<any[]>([])
   const [selectedDraftID, setSelectedDraftID] = useState<string>('')
   const [session, setSession] = useState<AuthSession | null>(null)

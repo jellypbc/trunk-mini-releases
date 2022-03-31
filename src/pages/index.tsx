@@ -4,13 +4,16 @@ import { supabase } from '../lib/supabase-client'
 import {
   LOCAL_STORAGE_AUTH_TOKEN_KEY,
 } from '../lib/constants'
-import Dashboard from '../frontend/dashboard'
+import Onboarding from '../frontend/onboarding'
 import LogIn from '../frontend/log-in'
 import AppNav from './../frontend/nav/app-nav'
+import { useRouter } from 'next/router'
+
 
 export default function Page() {
   const [session, setSession] = useState<AuthSession | null>(null)
   const [roomID, setRoomID] = useState<string>('')
+  const router = useRouter()
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -25,13 +28,21 @@ export default function Page() {
     newRoomID && setRoomID(newRoomID)
   }, [session])
 
+  function handleTrunkSelect(roomID: string) {
+    router.push({
+      pathname: `/t/[roomID]`,
+      query: { roomID: roomID }
+    })
+  }
+
   return (
     <>
       <AppNav />
       {session && roomID ?
-        <Dashboard
+        <Onboarding
           session={session}
           roomID={roomID}
+          handleTrunkSelect={handleTrunkSelect}
         />
         :
         <LogIn/>
