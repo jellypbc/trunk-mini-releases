@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './dashboard.module.css'
 import type { AuthSession } from '@supabase/supabase-js'
 import Onboarding from './onboarding'
@@ -9,6 +9,7 @@ type Props = {
 }
 
 export default function Dashboard({ session } : Props ) {
+  const [showIndex, setShowIndex] = useState<boolean>(false)
 
   const {
     selectedTrunkID,
@@ -34,28 +35,15 @@ export default function Dashboard({ session } : Props ) {
                 ≡
               </div>
             </div>
-            <div className={styles.feedContainer}>
-              <div className={styles.feedOptions}>
-                <div className={styles.emptyOptions}>
-                </div>
-                <div className={styles.optionActions}>
-                  <div>
-                    <button className={'button button-secondary'}>
-                      Add new item
-                    </button>
-                  </div>
-                  <div className={styles.viewAll}>
-                    View all items
-                  </div>
-                </div>
-
-              </div>
-              <div className={styles.feed}>
-                <FeedItem/>
-                <FeedItem/>
-                <FeedItem/>
-              </div>
-            </div>
+            {!showIndex ?
+              <ActivityFeed
+                setShowIndex={setShowIndex}
+              />
+            :
+              <IndexView
+                setShowIndex={setShowIndex}
+              />
+            }
           </div>
         </div>
         :
@@ -63,8 +51,78 @@ export default function Dashboard({ session } : Props ) {
           session={session}
         />
       }
-
     </div>
+  )
+}
+
+function IndexView({ setShowIndex } : any) {
+  return (
+    <div className={styles.indexContainer}>
+      <div className={styles.indexNav}>
+        <div
+          className={styles.activityView}
+          onClick={() => setShowIndex(false)}
+        >
+          Back
+        </div>
+        <div className={styles.indexTitle}>
+          All items
+        </div>
+        <div className={styles.indexSort}>
+          <div>Sort results by:</div>
+          <div>Title</div>
+          <div>Most recent</div>
+        </div>
+      </div>
+      <div className={styles.itemList}>
+        <IndexItem />
+        <IndexItem />
+      </div>
+    </div>
+  )
+}
+
+function IndexItem() {
+  return(
+    <div className={styles.indexItem}>
+      <div className={styles.indexItemTitle}>
+        Title
+      </div>
+      <div className={styles.indexItemAuthor}>
+        Author
+      </div>
+    </div>
+  )
+}
+
+function ActivityFeed({ setShowIndex } : any) {
+  return (
+    <div className={styles.feedContainer}>
+      <div className={styles.feedOptions}>
+        <div className={styles.emptyOptions}>
+        </div>
+        <div className={styles.optionActions}>
+          <div>
+            <button className={'button button-secondary'}>
+              Add new item
+            </button>
+          </div>
+          <div
+            className={styles.viewAll}
+            onClick={() => setShowIndex(true)}
+          >
+            View all items
+          </div>
+        </div>
+
+      </div>
+      <div className={styles.feed}>
+        <FeedItem/>
+        <FeedItem/>
+        <FeedItem/>
+      </div>
+    </div>
+
   )
 }
 
