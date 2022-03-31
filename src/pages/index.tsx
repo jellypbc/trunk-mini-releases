@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase-client'
 import {
   LOCAL_STORAGE_AUTH_TOKEN_KEY,
 } from '../lib/constants'
-import Onboarding from '../frontend/onboarding'
+import Dashboard from '../frontend/dashboard'
 import LogIn from '../frontend/log-in'
 import AppNav from './../frontend/nav/app-nav'
 
@@ -23,7 +23,7 @@ export default function Page() {
     <>
       <AppNav />
       {session ?
-        <Onboarding
+        <Dashboard
           session={session}
         />
         :

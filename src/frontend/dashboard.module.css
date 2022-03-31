@@ -1,0 +1,111 @@
+.container {
+  background-color: lightgreen;
+  height: 100vh;
+}
+
+.dashboard {
+  background-color: hsl(0, 0%, 96%);
+  display: flex;
+}
+
+.trunks {
+  height: 100vh;
+  width: 100px;
+  background-color: hsl(0, 0%, 90%);
+}
+
+.main {
+  background-color: hsl(0, 0% 92%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav {
+  width: 100%;
+  background-color: hsl(0, 0%, 92%);
+  display: flex;
+  justify-content: space-between;
+}
+
+.search {
+  margin: 1rem 2rem;
+  padding: .5rem 1rem;
+  background-color: hsl(0, 0%, 84%);
+  border-radius: .2rem;
+  border: none;
+  font-size: .8rem;
+  outline: none;
+}
+
+.options {
+  font-size: 2rem;
+  padding: .5rem 1rem;
+}
+
+.feedContainer {
+  height: 100%;
+  width: 650px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.feedOptions {
+  display: flex;
+}
+
+.emptyOptions {
+  width: 100px;
+}
+
+.optionActions {
+  margin: 2rem 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.viewAll {
+  padding-top: .5rem;
+}
+
+.itemContainer {
+  padding: 1rem 0;
+  display: flex;
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.avatarContainer {
+  width: 100px;
+}
+
+.avatar {
+  width: 50px;
+  background-color: hsl(0, 0%, 88%);
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
+.item {
+  height: 200px;
+  width: 100%;
+  background-color: hsl(0, 0%, 88%);
+  border-radius: .2rem;
+}
+
+
+.trunk {
+  margin: 0 auto;
+  margin-top: 1rem;
+  width: 50px;
+  height: 50px;
+  border-radius: .3rem;
+  background-color: hsl(0, 0%, 80%);
+}

@@ -4,13 +4,18 @@ import { HotKeys } from 'react-hotkeys'
 import { supabase } from 'src/lib/supabase-client'
 import InviteModal from './invite-modal'
 import { nanoid } from 'nanoid'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
+import { useWorkspace } from './workspace-provider'
 
 export default function Onboarding({ session } : any) {
   const [room, setRoom] = useState<string>('')
   const [showRoomSelector, setShowRoomSelector] = useState<boolean>(false)
 
-  const router = useRouter()
+  const {
+    handleTrunkSelect,
+  } = useWorkspace()
+
+  // const router = useRouter()
 
   const { user } = session
 
@@ -19,7 +24,8 @@ export default function Onboarding({ session } : any) {
     if (!selectedRoom) {
       selectedRoom = nanoid(6)
     }
-    session && session.user && router.push(`/d/${selectedRoom}`)
+    // session && session.user && router.push(`/d/${selectedRoom}`)
+    handleTrunkSelect(room)
     setRoom('')
   }
 
