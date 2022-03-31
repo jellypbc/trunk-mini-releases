@@ -7,12 +7,12 @@ import { nanoid } from 'nanoid'
 // import { useRouter } from 'next/router'
 import { useWorkspace } from './workspace-provider'
 
-export default function Onboarding({ session } : any) {
+export default function Onboarding({ session, roomID } : any) {
   const [room, setRoom] = useState<string>('')
   const [showRoomSelector, setShowRoomSelector] = useState<boolean>(false)
 
   const {
-    handleTrunkSelect,
+    handleTrunkSelect
   } = useWorkspace()
 
   // const router = useRouter()
@@ -71,16 +71,17 @@ export default function Onboarding({ session } : any) {
           </div>
         </div>
         <div className={styles.options}>
-          <div className={styles.personalTrunk}>
+          <div
+            className={styles.personalTrunk}
+            onClick={() => handleTrunkSelect(roomID)}
+          >
             <div className={styles.welcome}>
               <div className={styles.mainTitle}>
                 Welcome to your Trunk
               </div>
-              <div className={styles.personalTrunk}>
-                <div className={styles.avatar}>
-                </div>
+              <div className={styles.welcomeContents}>
                 <div className={styles.clientInfo}>
-                  dluan's trunk
+                  {roomID}'s trunk
                 </div>
               </div>
             </div>

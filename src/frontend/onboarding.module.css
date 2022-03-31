@@ -29,6 +29,7 @@
 
 .personalTrunk {
   text-align: center;
+  cursor: pointer;
 }
 
 .welcome {
@@ -43,11 +44,13 @@
 }
 
 .personalTrunk {
-
+  display: flex;
+  flex-direction: column;
 }
 
-.avatar {
-
+.welcomeContents {
+  display: flex;
+  flex-direction: column;
 }
 
 .clientInfo {

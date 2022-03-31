@@ -10,6 +10,7 @@ import AppNav from './../frontend/nav/app-nav'
 
 export default function Page() {
   const [session, setSession] = useState<AuthSession | null>(null)
+  const [roomID, setRoomID] = useState<string>('')
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -19,12 +20,18 @@ export default function Page() {
     session && setSession(JSON.parse(session).currentSession)
   }, [])
 
+  useEffect(() => {
+    const newRoomID = session && session.user?.email?.split('@')[0]
+    newRoomID && setRoomID(newRoomID)
+  }, [session])
+
   return (
     <>
       <AppNav />
-      {session ?
+      {session && roomID ?
         <Dashboard
           session={session}
+          roomID={roomID}
         />
         :
         <LogIn/>

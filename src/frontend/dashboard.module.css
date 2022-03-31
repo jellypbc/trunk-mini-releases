@@ -44,16 +44,18 @@
   padding: .5rem 1rem;
 }
 
-.feedContainer {
-  height: 100%;
-  width: 650px;
-  display: flex;
-  flex-direction: column;
+.activityContainer {
   overflow: auto;
+  max-height: 80vh;
+}
+
+.feedContainer {
+
 }
 
 .feedOptions {
   display: flex;
+  width: 650px;
 }
 
 .emptyOptions {
@@ -74,11 +76,13 @@
 .itemContainer {
   padding: 1rem 0;
   display: flex;
+  padding-right: 1rem;
+  width: 650px;
 }
 
 .feed {
-  display: flex;
-  flex-direction: column;
+
+
 }
 
 .avatarContainer {
@@ -138,7 +142,6 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  overflow: auto;
 }
 
 .indexItem {
