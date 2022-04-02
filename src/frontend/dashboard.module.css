@@ -194,3 +194,8 @@
   padding: 1rem;
   font-size: .8rem;
 }
+
+.buttonContainer{
+  display: flex;
+  justify-content: space-around;
+}

@@ -14,18 +14,18 @@ type Props = {
 
 export default function Dashboard({ session, roomID, rep } : Props ) {
   console.log('session', session)
-  console.log('rep', rep)
 
   const [showIndex, setShowIndex] = useState<boolean>(false)
+
   const { trunkIDs, addTrunkIDToWorkspace } = useWorkspace()
 
   useEffect(() => {
     trunkIDs.includes(roomID) === false && addTrunkIDToWorkspace(roomID)
   }, [])
 
-  console.log('trunkIDs', trunkIDs)
 
   return (
+
     <div className={styles.container}>
       {roomID &&
         <div className={styles.dashboard}>
@@ -129,7 +129,12 @@ function IndexItem({item}: any) {
 }
 
 function ActivityFeed({ setShowIndex, rep } : any) {
+  const [itemsShown, setItemsShown] = useState<number>(10)
   const items = getSortedItems(rep)
+
+  function addTenItems(){
+    setItemsShown(itemsShown + 10)
+  }
   return (
     <div className={styles.feedContainer}>
       <div className={styles.feedOptions}>
@@ -154,16 +159,25 @@ function ActivityFeed({ setShowIndex, rep } : any) {
           <Feed
             items={items}
             rep={rep}
+            itemsShown={itemsShown}
           />
         </div>
       }
+      <div className={styles.buttonContainer}>
+        <button
+          className={'button button-primary'}
+          onClick={addTenItems}
+        >
+            Show more items
+          </button>
+      </div>
     </div>
   )
 }
 
-function Feed({ items }:any){
+function Feed({ items, itemsShown }:any){
   return (
-    items.map((item: any) => {
+    items.slice(0, itemsShown).map((item: any) => {
       return (
         <div key={item.id}>
           <FeedItem
@@ -204,7 +218,6 @@ function Trunk({trunkID} : any){
           {trunkID}
         </div>
       }
-      {/* {trunkID} */}
     </div>
   )
 }
