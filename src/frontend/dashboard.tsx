@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './dashboard.module.css'
 import type { AuthSession } from '@supabase/supabase-js'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { getSortedItems } from '../datamodel/subscriptions'
+import { useWorkspace } from './workspace-provider'
 
 type Props = {
   session: AuthSession
@@ -14,16 +15,30 @@ type Props = {
 export default function Dashboard({ session, roomID, rep } : Props ) {
   console.log('session', session)
   console.log('rep', rep)
+
   const [showIndex, setShowIndex] = useState<boolean>(false)
+  const { trunkIDs, addTrunkIDToWorkspace } = useWorkspace()
+
+  useEffect(() => {
+    trunkIDs.includes(roomID) === false && addTrunkIDToWorkspace(roomID)
+  }, [])
+
+  console.log('trunkIDs', trunkIDs)
 
   return (
     <div className={styles.container}>
       {roomID &&
         <div className={styles.dashboard}>
           <div className={styles.trunks}>
-            <Trunk />
-            <Trunk />
-            <Trunk />
+            {trunkIDs && trunkIDs.map((trunkID: string) => {
+              return (
+                <Trunk
+                  key={`trunk-${trunkID}`}
+                  trunkID={trunkID}
+                />
+              )
+            })}
+            <AddTrunk />
           </div>
           <div className={styles.main}>
             <div className={styles.nav}>
@@ -174,10 +189,42 @@ function FeedItem({item}: any) {
   )
 }
 
-function Trunk(){
+function Trunk({trunkID} : any){
+  const [showTooltip, setShowTooltip] = useState<boolean>(false)
   return (
-    <div className={styles.trunk}>
+    <div
+      className={styles.trunk}
+      onMouseOver={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      { showTooltip &&
+        <div
+          className={styles.trunkTooltip}
+        >
+          {trunkID}
+        </div>
+      }
+      {/* {trunkID} */}
+    </div>
+  )
+}
 
+function AddTrunk(){
+  const [showTooltip, setShowTooltip] = useState<boolean>(false)
+  return (
+    <div
+      className={styles.addTrunk}
+      onMouseOver={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      { showTooltip &&
+        <div
+          className={styles.trunkTooltip}
+        >
+          Add a trunk
+        </div>
+      }
+      +
     </div>
   )
 }

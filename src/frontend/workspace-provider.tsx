@@ -8,12 +8,16 @@ import React, {
 type WorkspaceContextType = {
   selectedTrunkID: string
   handleTrunkSelect: (trunkID: string) => void
+  trunkIDs: string[]
+  addTrunkIDToWorkspace: (trunkID: string) => void
 
 }
 
 const defaultContextValue = {
   selectedTrunkID: '',
   handleTrunkSelect: (_trunkID: string) => {},
+  trunkIDs: [],
+  addTrunkIDToWorkspace: (_trunkID: string) => {}
 }
 
 export const WorkspaceContext = createContext<WorkspaceContextType>(defaultContextValue)
@@ -25,14 +29,21 @@ type WorkspaceProviderProps = {
 export const WorkspaceProvider = ({ children } : WorkspaceProviderProps) => {
 
   const [selectedTrunkID, setSelectedTrunkID] = useState<string>('')
+  const [trunkIDs, setTrunkIDs] = useState<string[]>([])
 
   function handleTrunkSelect(trunkID: string) {
     setSelectedTrunkID(trunkID)
   }
 
+  function addTrunkIDToWorkspace(trunkID: string) {
+    setTrunkIDs([...trunkIDs, trunkID])
+  }
+
   const workspaceContextValue = {
     selectedTrunkID,
-    handleTrunkSelect
+    handleTrunkSelect,
+    trunkIDs,
+    addTrunkIDToWorkspace
   }
 
   return (
