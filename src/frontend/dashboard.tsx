@@ -175,13 +175,14 @@ function ActivityFeed({ setShowIndex, rep } : any) {
   )
 }
 
-function Feed({ items, itemsShown }:any){
+function Feed({ items, rep, itemsShown }:any){
   return (
     items.slice(0, itemsShown).map((item: any) => {
       return (
         <div key={item.id}>
           <FeedItem
             item={item}
+            rep={rep}
           />
         </div>
       )
@@ -189,15 +190,66 @@ function Feed({ items, itemsShown }:any){
   )
 }
 
-function FeedItem({item}: any) {
+import EditorViewingContainer from './editor-viewing-container'
+
+function HighlightEditor({rep, content}: any){
+  return(
+    <div className={styles.highlight}>
+      <EditorViewingContainer
+        type={'highlight'}
+        rep={rep}
+        content={content}
+        clientInfo={null}
+        setValue={()=>{ return null}}
+      />
+    </div>
+  )
+}
+
+
+
+function FeedItem({item, rep}: any) {
+  console.log('item', item)
   return (
     <div className={styles.itemContainer}>
       <div className={styles.avatarContainer}>
         <div className={styles.avatar}></div>
-
       </div>
       <div className={styles.item}>
-        {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
+        {item.highlight &&
+          <HighlightEditor
+            rep={rep}
+            content={item.highlight}
+          />
+        }
+        <div className={styles.titleContainer}>
+          <div className={styles.bullet}>
+            <div className={styles.bulletBorder}>
+              <div className={styles.bulletCenter}>
+              </div>
+            </div>
+          </div>
+          <div className={styles.title}>
+            <EditorViewingContainer
+              type={'title'}
+              rep={rep}
+              content={item.title}
+              clientInfo={null}
+              setValue={()=>{ return null}}
+            />
+          </div>
+        </div>
+
+        <div className={styles.content}>
+          {/* fix this to be ItemEditorContainer */}
+          <EditorViewingContainer
+            type={'content'}
+            rep={rep}
+            content={item.content}
+            clientInfo={null}
+            setValue={()=>{ return null}}
+          />
+        </div>
       </div>
     </div>
   )
