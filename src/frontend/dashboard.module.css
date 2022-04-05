@@ -241,3 +241,15 @@
   background-color: #009B2B;
   border-radius: 4rem;
 }
+
+.highlightParentTitle {
+  font-size: .8rem;
+  padding: 1rem;
+  cursor: pointer;
+
+}
+
+.highlightParentArrow {
+  color: #009B2B;
+  padding-right: .5rem;
+}

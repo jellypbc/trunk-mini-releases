@@ -217,10 +217,17 @@ function FeedItem({item, rep}: any) {
       </div>
       <div className={styles.item}>
         {item.highlight &&
-          <HighlightEditor
-            rep={rep}
-            content={item.highlight}
-          />
+          <>
+            <HighlightParent
+              rep={rep}
+              itemID={item.id}
+              arrows={item.arrows}
+            />
+            <HighlightEditor
+              rep={rep}
+              content={item.highlight}
+            />
+          </>
         }
         <div className={styles.titleContainer}>
           <div className={styles.bullet}>
@@ -251,6 +258,56 @@ function FeedItem({item, rep}: any) {
           />
         </div>
       </div>
+    </div>
+  )
+}
+
+function HighlightParent({itemID, arrows, rep}: any) {
+  let a
+  arrows && arrows.map((arrow : any) => {
+    if (
+      arrow.kind === 'comment'
+      &&
+      arrow.backItemID !== itemID
+    ) {
+      a = arrow
+    }
+  })
+
+  if (!a) return null
+
+  const { arrowID } = a
+
+  return (
+    arrowID &&
+    <ParentTitle
+      rep={rep}
+      arrowID={arrowID}
+    />
+  )
+}
+
+import { useArrowByID, useItemByID } from '../datamodel/subscriptions'
+
+function ParentTitle({rep, arrowID}: any) {
+  const fullArrow = useArrowByID(rep, arrowID)
+  return (
+    fullArrow &&
+    <Title
+      rep={rep}
+      itemID={fullArrow.backItemID}
+
+    />
+  )
+}
+
+function Title({rep, itemID}: any) {
+  const item = useItemByID(rep, itemID)
+  return (
+    item &&
+    <div className={styles.highlightParentTitle}>
+      <span className={styles.highlightParentArrow}>⮑</span>
+      {item.title && item.title.replace(/<\/?[^>]+(>|$)/g, "")}
     </div>
   )
 }

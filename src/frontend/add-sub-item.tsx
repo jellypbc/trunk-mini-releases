@@ -206,7 +206,7 @@ function SearchResult({ result } : any) {
   return(
     <div onClick={() => handleSubItemConnect}
     >
-      {result.title.replace(/<\/?[^>]+(>|$)/g, "")}
+      {result.title && result.title.replace(/<\/?[^>]+(>|$)/g, "")}
     </div>
   )
 }
