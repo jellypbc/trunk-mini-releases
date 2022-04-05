@@ -1,0 +1,196 @@
+.container {
+  background: hsl(0, 0%, 86%);
+  height: 100vh;
+  color: hsl(0, 0%, 30%);
+}
+
+.settingsModalContainer {
+  z-index: 1;
+  background: hsl(0, 0%, 96%);
+  position: absolute;
+  width: 560px;
+  max-height: 100%;
+  left: 0;
+  right: 0;
+  margin: 10% auto 0;
+  padding: 1rem 2rem;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+}
+
+.headingContainer {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  padding-top: .5rem;
+  border-bottom: 2px solid hsl(0, 0%, 80%);
+  align-items: center;
+}
+
+.heading {
+  padding: 0 1rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.exit {
+  padding: 0 1rem;
+}
+
+.subHeading {
+  padding: 1rem 1rem .5rem 1rem;
+  font-weight: 600;
+}
+
+.members {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2rem;
+}
+
+.usernameContainer {
+  width: 100%;
+}
+
+.memberContainer {
+  padding: .5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.memberContainer:hover {
+  background-color: hsl(0, 0%, 90%);
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  padding: .5rem 0;
+}
+
+.avatarContainer {
+  margin-right: 1rem;
+}
+
+.avatar {
+  padding: 1rem;
+  margin: 0 auto;
+  background-color: hsl(0, 0%, 70%);
+  border-radius: 1rem;
+}
+
+.button {
+  padding: .5rem 1rem;
+  background-color: hsl(0, 0%, 80%);
+  border: none;
+  margin-left: 1rem;
+  border-radius: .2rem;
+}
+
+.button:hover {
+  background-color: hsl(0, 0%, 70%);
+}
+
+.inviteLink {
+  padding-bottom: 2rem;
+}
+
+.input {
+  margin: 1rem;
+  padding: .5rem 1rem;
+  width: 50%;
+  font-size: .8rem;
+  background-color: hsl(0, 0%, 86%);
+  border: none;
+  outline: none;
+  font-weight: 400;
+}
+
+.appearanceDescription {
+  padding: 0 1rem;
+  font-size: .8rem;
+  font-weight: 400;
+}
+
+.appearance {
+  padding-bottom: 2rem;
+}
+.appearanceUploadImageContainer {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+  align-items: center;
+  background-color: hsl(0, 0%, 90%);
+  margin: 1rem;
+  width: 50%;
+}
+
+.appearanceAvatarContainer {
+  margin-right: 1rem;
+}
+
+.appearanceAvatar {
+  padding: 1.5rem;
+  margin: 0 auto;
+  border-radius: 1.5rem;
+  background-color: hsl(0, 0%, 70%);
+}
+
+.uploadImageButton {
+  outline: none;
+  border: none;
+  padding: .5rem 1rem;
+  background-color: hsl(0, 0%, 70%);
+  border-radius: .2rem;
+  color: white;
+}
+
+.uploadImageButton:hover {
+  background-color: hsl(0, 0%, 60%);
+}
+
+.appearanceImageOptions {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.imageContainer {
+}
+
+.image {
+  padding: 1.5rem;
+  margin: 0 auto;
+  background-color: hsl(0, 0%, 80%);
+}
+
+.deleteTrunkDescription {
+  padding: 0 1rem;
+  font-size: .8rem;
+  font-weight: 400;
+}
+
+.deleteTrunkButtonContainer {
+  padding: 1rem;
+  padding-bottom: 2rem;
+}
+
+.deleteTrunkButton {
+  outline: none;
+  border: none;
+  padding: .5rem 1rem;
+  background-color: hsl(0, 0%, 70%);
+  border-radius: .2rem;
+  color: white;
+}
+
+.deleteTrunkButton:hover {
+  background-color: hsl(0, 0%, 60%);
+}
+
+
+
+
+

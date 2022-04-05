@@ -88,7 +88,7 @@ function SearchResult({ result } : any) {
       className={styles.searchResult}
       onClick={handleRouteToItem}
     >
-      {result.title.replace(/<\/?[^>]+(>|$)/g, "")}
+      {result.title && result.title.replace(/<\/?[^>]+(>|$)/g, "")}
     </div>
   )
 }

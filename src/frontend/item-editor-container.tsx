@@ -498,7 +498,7 @@ function SearchResult({ result, handleArrowAdd } : any) {
       className={styles.searchResult}
       onClick={() => handleArrowAdd(result.id)}
     >
-      {result.title.replace(/<\/?[^>]+(>|$)/g, "")}
+      {result.title && result.title.replace(/<\/?[^>]+(>|$)/g, "")}
     </div>
   )
 }
