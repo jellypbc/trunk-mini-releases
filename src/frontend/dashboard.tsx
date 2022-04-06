@@ -6,6 +6,8 @@ import type { M } from '../datamodel/mutators'
 import { getSortedItems } from '../datamodel/subscriptions'
 import { useWorkspace } from './workspace-provider'
 import { htmlToText } from '../util/htmlToText'
+import { supabase } from '../lib/supabase-client'
+import { useRouter } from 'next/router'
 
 type Props = {
   session: AuthSession
@@ -14,19 +16,26 @@ type Props = {
 }
 
 export default function Dashboard({ session, roomID, rep } : Props ) {
-  console.log('session', session)
+  const { user } = session
 
   const [showIndex, setShowIndex] = useState<boolean>(false)
-
   const { trunkIDs, addTrunkIDToWorkspace } = useWorkspace()
+  const router = useRouter()
+
 
   useEffect(() => {
     trunkIDs.includes(roomID) === false && addTrunkIDToWorkspace(roomID)
   }, [])
 
+  async function logOut() {
+    const { error } = await supabase.auth.signOut()
+    error ?
+      console.log('Error logging out:', error.message)
+      :
+      router.push('/')
+  }
 
   return (
-
     <div className={styles.container}>
       {roomID &&
         <div className={styles.dashboard}>
@@ -46,10 +55,12 @@ export default function Dashboard({ session, roomID, rep } : Props ) {
               <input
                 className={styles.search}
                 placeholder={'Search or type ⌘ + K'}
+              />
+              <div
+                className={styles.email}
+                onClick={() => logOut()}
               >
-              </input>
-              <div className={styles.options}>
-                ≡
+                {user && user.email}
               </div>
             </div>
             <div className={styles.activityContainer}>

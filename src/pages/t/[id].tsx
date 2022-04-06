@@ -15,7 +15,6 @@ export default function Home() {
   const [trunkID, setTrunkID] = useState<string>('')
   const [session, setSession] = useState<AuthSession | null>(null)
 
-
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
       setSession(session)

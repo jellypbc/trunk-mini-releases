@@ -27,6 +27,7 @@
   background-color: hsl(0, 0%, 92%);
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .search {
@@ -39,9 +40,12 @@
   outline: none;
 }
 
-.options {
-  font-size: 2rem;
+.email {
+  margin: 1rem;
+  font-size: .8rem;
   padding: .5rem 1rem;
+  border-radius: .3rem;
+  cursor: pointer;
 }
 
 .activityContainer {
