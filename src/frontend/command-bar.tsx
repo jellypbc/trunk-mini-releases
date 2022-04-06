@@ -5,6 +5,7 @@ import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { getSortedItems } from '../datamodel/subscriptions'
 import { useRouter } from 'next/router'
+import { htmlToText } from '../util/htmlToText'
 
 type Props = {
   rep: Replicache<M>
@@ -88,7 +89,7 @@ function SearchResult({ result } : any) {
       className={styles.searchResult}
       onClick={handleRouteToItem}
     >
-      {result.title && result.title.replace(/<\/?[^>]+(>|$)/g, "")}
+      {result.title && htmlToText(result.title)}
     </div>
   )
 }

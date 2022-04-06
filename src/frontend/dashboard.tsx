@@ -5,6 +5,7 @@ import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { getSortedItems } from '../datamodel/subscriptions'
 import { useWorkspace } from './workspace-provider'
+import { htmlToText } from '../util/htmlToText'
 
 type Props = {
   session: AuthSession
@@ -119,7 +120,7 @@ function IndexItem({item}: any) {
   return(
     <div className={styles.indexItem}>
       <div className={styles.indexItemTitle}>
-        {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
+        {item.title && htmlToText(item.title)}
       </div>
       <div className={styles.indexItemAuthor}>
         Author
@@ -192,22 +193,6 @@ function Feed({ items, rep, itemsShown }:any){
 
 import EditorViewingContainer from './editor-viewing-container'
 
-function HighlightEditor({rep, content}: any){
-  return(
-    <div className={styles.highlight}>
-      <EditorViewingContainer
-        type={'highlight'}
-        rep={rep}
-        content={content}
-        clientInfo={null}
-        setValue={()=>{ return null}}
-      />
-    </div>
-  )
-}
-
-
-
 function FeedItem({item, rep}: any) {
   console.log('item', item)
   return (
@@ -223,10 +208,9 @@ function FeedItem({item, rep}: any) {
               itemID={item.id}
               arrows={item.arrows}
             />
-            <HighlightEditor
-              rep={rep}
-              content={item.highlight}
-            />
+            <div className={styles.highlight}>
+              {htmlToText(item.highlight)}
+            </div>
           </>
         }
         <div className={styles.titleContainer}>
@@ -307,7 +291,7 @@ function Title({rep, itemID}: any) {
     item &&
     <div className={styles.highlightParentTitle}>
       <span className={styles.highlightParentArrow}>⮑</span>
-      {item.title && item.title.replace(/<\/?[^>]+(>|$)/g, "")}
+      {item.title && htmlToText(item.title)}
     </div>
   )
 }

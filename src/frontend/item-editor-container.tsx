@@ -14,6 +14,7 @@ import type { M } from '../datamodel/mutators'
 import { randomArrow } from '../datamodel/arrow'
 import { randomItem } from '../datamodel/item'
 import Fuse from 'fuse.js'
+import { htmlToText } from '../util/htmlToText'
 
 type Props = {
   content: any
@@ -87,7 +88,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
 
   useEffect(() => {
     console.log('commentDraft', commentDraft)
-    const searchTerm= commentDraft.replace(/<\/?[^>]+(>|$)/g, "")
+    const searchTerm = htmlToText(commentDraft)
     console.log('searchTerm', searchTerm)
     if (allItems) {
       const results = fuse.search(searchTerm)
@@ -285,7 +286,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
 
   function handleReferenceAdd(){
     // find if the comment is a valid itemID
-    const cleanText = commentDraft.replace(/<\/?[^>]+(>|$)/g, "")
+    const cleanText = htmlToText(commentDraft)
 
     // if the comment is a valid itemID, draw arrow to existing item
     if (cleanText.length === 21 && itemIDs.includes(cleanText)) {
@@ -498,7 +499,7 @@ function SearchResult({ result, handleArrowAdd } : any) {
       className={styles.searchResult}
       onClick={() => handleArrowAdd(result.id)}
     >
-      {result.title && result.title.replace(/<\/?[^>]+(>|$)/g, "")}
+      {result.title && htmlToText(result.title)}
     </div>
   )
 }

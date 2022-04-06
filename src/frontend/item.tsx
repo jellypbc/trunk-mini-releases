@@ -5,13 +5,13 @@ import type { M } from '../datamodel/mutators'
 import ItemEditorContainer from './item-editor-container'
 import EditorViewingContainer from './editor-viewing-container'
 import EditorOptions from './editor-options'
-import Arrow from './arrow'
 import FileUploadButton from './file-upload-button'
 import { nanoid } from 'nanoid'
 import { uploadFileToIDB, trashFileFromIDB }  from '../datamodel/local/file'
 import { uploadFileToSupabase, trashFileFromSupabase } from '../datamodel/supabase/file'
 import { idbOK } from "../lib/idbOK"
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../lib/constants'
+import { htmlToText } from '../util/htmlToText'
 
 type Props = {
   itemID: string
@@ -55,8 +55,6 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
   function handleSetSelectedDraftID() {
     setSelectedDraftID(i.id)
   }
-
-  const arrowArray = item.arrows
 
   function onUpload(e: ChangeEvent<HTMLInputElement>){
     const file = e?.target.files?.[0]
@@ -181,24 +179,11 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
           </div>
         </div>
         <div className={styles.itemID}>{itemID}</div>
-        <div>
-          {arrowArray.map((a: any) => {
-            return(
-              <Arrow
-                key={a}
-                arrowID={a}
-                rep={rep}
-                itemID={itemID}
-              />
-            )
-          })}
-        </div>
-
+        {/* TODO: highlight parent title */}
         {i.highlight &&
-          <HighlightEditor
-            rep={rep}
-            content={i.highlight}
-          />
+          <div className={styles.highlight}>
+            {htmlToText(i.highlight)}
+          </div>
         }
         <div className={styles.titleContainer}>
           <div className={styles.bullet}>
@@ -260,20 +245,6 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
         </div>
 
       </div>
-    </div>
-  )
-}
-
-function HighlightEditor({rep, content}: any){
-  return(
-    <div className={styles.highlight}>
-      <EditorViewingContainer
-        type={'highlight'}
-        rep={rep}
-        content={content}
-        clientInfo={null}
-        setValue={()=>{ return null}}
-      />
     </div>
   )
 }

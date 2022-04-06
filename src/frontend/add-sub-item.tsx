@@ -6,6 +6,7 @@ import Fuse from 'fuse.js'
 import { randomItem } from '../datamodel/item'
 import { randomArrow } from '../datamodel/arrow'
 import styles from './add-sub-item.module.css'
+import { htmlToText } from '../util/htmlToText'
 
 
 type Props = {
@@ -204,9 +205,8 @@ function SearchResult({ result } : any) {
   }
 
   return(
-    <div onClick={() => handleSubItemConnect}
-    >
-      {result.title && result.title.replace(/<\/?[^>]+(>|$)/g, "")}
+    <div onClick={() => handleSubItemConnect}>
+      {result.title && htmlToText(result.title)}
     </div>
   )
 }

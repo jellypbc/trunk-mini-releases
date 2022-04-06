@@ -6,6 +6,7 @@ import type { M } from '../datamodel/mutators'
 import ItemEditorContainer from './item-editor-container'
 import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
 import AddSubItem from './add-sub-item'
+import { htmlToText } from '../util/htmlToText'
 
 type Props = {
   itemID: string
@@ -206,7 +207,8 @@ return (
     onClick={handleRouteToItem}
     className={styles.parent}
   >
-    <span className={styles.parentArrow}>⮑</span> {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
+    <span className={styles.parentArrow}>⮑</span>
+    {item.title && htmlToText(item.title)}
   </div>
 )
 
@@ -278,7 +280,7 @@ function FootnoteEditorY({rep, fullArrow, direction, selectedItemID}:any) {
     <div
       onClick={handleRouteToItem}
     >
-      {item.title.replace(/<\/?[^>]+(>|$)/g, "")}
+      {item.title && htmlToText(item.title)}
     </div>
     : null
   )
