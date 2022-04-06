@@ -1,0 +1,170 @@
+.container {
+  overflow: auto;
+  max-height: 90vh;
+  width: 100%;
+  display: flex;
+}
+
+.view {
+  margin: 0 auto;
+}
+
+.feedContainer {
+
+}
+
+.feedOptions {
+  display: flex;
+  width: 650px;
+}
+
+.emptyOptions {
+  width: 100px;
+}
+
+.optionActions {
+  margin: 2rem 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.viewAll {
+  padding-top: .5rem;
+}
+
+.itemContainer {
+  padding: 1rem 0;
+  display: flex;
+  padding-right: 1rem;
+  width: 650px;
+}
+
+.feed {
+
+
+}
+
+.avatarContainer {
+  width: 100px;
+}
+
+.avatar {
+  width: 50px;
+  background-color: hsl(0, 0%, 88%);
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
+.item {
+  width: 100%;
+  border-radius: .2rem;
+  padding: 1rem 2rem;
+  border: 1px solid #ccc;
+  background-color: hsl(0, 0%, 96%);
+  border-radius: .4rem;
+  position: relative; /* this is for the tooltip later */
+}
+
+.indexContainer {
+  padding-top: 1rem;
+  width: 650px;
+}
+
+.indexNav {
+  display: flex;
+  flex-direction: column;
+}
+
+.indexTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.indexSort {
+  display: flex;
+  flex-direction: row;
+}
+
+.indexSort div {
+  padding: .5rem 1rem;
+}
+
+.itemList {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.indexItem {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 0;
+  justify-content: space-between;
+}
+
+.activityView {
+  padding: 1rem;
+  font-size: .8rem;
+}
+
+.buttonContainer{
+  display: flex;
+  justify-content: space-around;
+}
+
+.highlight {
+  padding: 0 1rem;
+  margin: 2rem;
+  color: #2E7B21;
+  border-left: .5rem solid hsl(89.7, 69%, 72%, 50%);
+  line-height: 1.6em;
+
+}
+
+.content {
+  padding: 1rem;
+}
+
+.title {
+  font-size: 1.6rem;
+  color: hsl(0,0%, 20%);
+  margin: .2rem .2rem .2rem 0;
+
+}
+
+.titleContainer {
+  display: flex;
+  padding-top: 1rem;
+}
+
+.bullet {
+  margin: 1rem;
+  display: absolute;
+}
+
+.bulletBorder {
+  padding: 3px;
+  background-color: hsl(0, 0%, 90%);
+  border-radius: 4rem;
+}
+
+.bulletCenter {
+  padding: 3px;
+  background-color: #009B2B;
+  border-radius: 4rem;
+}
+
+.highlightParentTitle {
+  font-size: .8rem;
+  padding: 1rem;
+  cursor: pointer;
+
+}
+
+.highlightParentArrow {
+  color: #009B2B;
+  padding-right: .5rem;
+}
