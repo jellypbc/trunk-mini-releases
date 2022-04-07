@@ -8,12 +8,14 @@ import type { AuthSession } from '@supabase/supabase-js'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
 import { Client } from 'reps-client'
+import TestEditorContainer from '../../frontend/test-editor-container'
 
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null)
   const [trunkID, setTrunkID] = useState<string>('')
   const [session, setSession] = useState<AuthSession | null>(null)
+  const [selectedItemID, setSelectedItemID] = useState<string>('')
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -67,12 +69,26 @@ export default function Home() {
     })()
   }, [])
 
+  if (selectedItemID) {
+    return (
+    rep &&
+    <div>
+      <TestEditorContainer
+        rep={rep}
+        itemID={selectedItemID}
+        handleSetSelectedItemID={setSelectedItemID}
+      />
+    </div>
+    )
+  }
+
   return (
     session && trunkID && rep &&
       <Dashboard
         session={session}
         roomID={trunkID}
         rep={rep}
+        handleSetSelectedItemID={setSelectedItemID}
       />
   )
 }

@@ -13,9 +13,10 @@ type Props = {
   session: AuthSession
   roomID: string
   rep: Replicache<M>
+  handleSetSelectedItemID: (itemID: string) => void
 }
 
-export default function Dashboard({ session, roomID, rep } : Props) {
+export default function Dashboard({ session, roomID, rep, handleSetSelectedItemID } : Props) {
   const items = getSortedItems(rep)
   const { user } = session
 
@@ -30,6 +31,7 @@ export default function Dashboard({ session, roomID, rep } : Props) {
               <DashboardBody
                 rep={rep}
                 items={items}
+                handleSetSelectedItemID={handleSetSelectedItemID}
               />
             }
           </div>

@@ -1,0 +1,55 @@
+.container {
+  padding: 1rem;
+  width: 500px;
+  margin: 0 auto;
+}
+
+.resetItemID {
+  padding: 1rem 2rem;
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
+  cursor: pointer;
+}
+
+.highlight {
+  padding: 0 1rem;
+  line-height: 1.6rem;
+  margin: 2rem;
+  color: #2E7B21;
+  border-left: .5rem solid hsl(89.7, 69%, 72%, 50%);
+}
+
+.titleContainer {
+  padding: 2rem;
+  display: flex;
+}
+
+.content {
+  padding: 2rem;
+}
+
+.itemID {
+  padding: 1rem 2rem;
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
+}
+
+.bullet {
+  margin: 1rem;
+  display: absolute;
+}
+
+.bulletBorder {
+  padding: 3px;
+  background-color: hsl(0, 0%, 90%);
+  border-radius: 4rem;
+}
+
+.bulletCenter {
+  padding: 3px;
+  background-color: #009B2B;
+  border-radius: 4rem;
+}
+
+.titleEditor {
+}

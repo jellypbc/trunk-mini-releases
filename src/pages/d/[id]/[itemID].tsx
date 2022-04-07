@@ -81,29 +81,26 @@ export default function Home() {
 
       const workerHost =
         process.env.NEXT_PUBLIC_WORKER_HOST ??
-        "wss://reps.trunk.workers.dev";
+        "wss://reps.trunk.workers.dev"
       const workerURL = `${workerHost}/connect`;
-      console.info(`Connecting to worker at ${workerURL}`);
-      new Client(r, roomID, workerURL);
+      console.info(`Connecting to worker at ${workerURL}`)
+      new Client(r, roomID, workerURL)
 
       const defaultUserInfo = randUserInfo();
       await r.mutate.initClientState({
         id: await r.clientID,
         defaultUserInfo,
-      });
+      })
       r.onSync = (syncing: boolean) => {
         if (!syncing) {
-          r.onSync = null;
-          r.mutate.initShapes(Array.from({ length: 5 }, () => randomShape()));
+          r.onSync = null
+          r.mutate.initShapes(Array.from({ length: 5 }, () => randomShape()))
         }
-      };
-
-      setRep(r);
-    })();
-
+      }
+      setRep(r)
+    })()
     setSelectedDraftID(itemID)
-
-  }, []);
+  }, [])
 
 
   const handlers = {
@@ -112,11 +109,9 @@ export default function Home() {
     }
   }
 
-
   if (!rep) {
-    return null;
+    return null
   }
-
 
   return (
     <HotKeys
@@ -140,7 +135,6 @@ export default function Home() {
     >
 
       {session ?
-
         <div>
           {commandBar &&
             <CommandBar

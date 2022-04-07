@@ -218,7 +218,6 @@ export default function Item({ itemID, item, rep, setSelectedDraftID } : Props) 
           </div>
         </div>
 
-
         <div
           className={styles.content}
           onClick={() => setShowContentEditor(true)}

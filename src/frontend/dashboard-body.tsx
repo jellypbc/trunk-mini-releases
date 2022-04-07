@@ -3,13 +3,16 @@ import styles from './dashboard-body.module.css'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { htmlToText } from '../util/htmlToText'
+import { useArrowByID, useItemByID } from '../datamodel/subscriptions'
+import TestEditor from './test-editor'
 
 type Props = {
   rep: Replicache<M>
   items: any[]
+  handleSetSelectedItemID: (itemID: string) => void
 }
 
-export default function DashboardBody({ rep, items } : Props) {
+export default function DashboardBody({ rep, items, handleSetSelectedItemID } : Props) {
   const [showIndex, setShowIndex] = useState<boolean>(false)
 
   return (
@@ -20,6 +23,7 @@ export default function DashboardBody({ rep, items } : Props) {
             setShowIndex={setShowIndex}
             items={items}
             rep={rep}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         :
           <IndexView
@@ -70,7 +74,7 @@ function IndexView({ setShowIndex, items } : any) {
 }
 
 
-function ActivityView({ setShowIndex, rep, items } : any) {
+function ActivityView({ setShowIndex, rep, items, handleSetSelectedItemID } : any) {
   const [itemsShown, setItemsShown] = useState<number>(10)
 
   function addTenItems(){
@@ -101,8 +105,9 @@ function ActivityView({ setShowIndex, rep, items } : any) {
             return (
               <div key={item.id}>
                 <ActivityItem
-                  item={item}
+                  itemID={item.id}
                   rep={rep}
+                  handleSetSelectedItemID={handleSetSelectedItemID}
                 />
               </div>
             )
@@ -120,21 +125,24 @@ function ActivityView({ setShowIndex, rep, items } : any) {
   )
 }
 
+function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
+  const item = useItemByID(rep, itemID)
+  const [showTitleEditor, setShowTitleEditor] = useState<boolean>(false)
+  const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
 
-import EditorViewingContainer from './editor-viewing-container'
-
-function ActivityItem({item, rep}: any) {
   return (
+    item &&
     <div className={styles.itemContainer}>
       <div className={styles.avatarContainer}>
         <div className={styles.avatar}></div>
       </div>
       <div className={styles.item}>
-        {item.highlight &&
+        <div className={styles.expandItem} onClick={() => handleSetSelectedItemID(itemID)}>Expand</div>
+        { item.highlight &&
           <>
             <HighlightParent
               rep={rep}
-              itemID={item.id}
+              itemID={itemID}
               arrows={item.arrows}
             />
             <div className={styles.highlight}>
@@ -150,25 +158,31 @@ function ActivityItem({item, rep}: any) {
             </div>
           </div>
           <div className={styles.title}>
-            <EditorViewingContainer
+            {!showTitleEditor
+            ?
+              <span onClick={() => setShowTitleEditor(true)}>{htmlToText(item.title)}</span>
+            :
+            <TestEditor
+              content={item.title}
               type={'title'}
               rep={rep}
-              content={item.title}
-              clientInfo={null}
-              setValue={()=>{ return null}}
+              itemID={itemID}
             />
+            }
           </div>
         </div>
-
         <div className={styles.content}>
-          {/* fix this to be ItemEditorContainer */}
-          <EditorViewingContainer
-            type={'content'}
-            rep={rep}
-            content={item.content}
-            clientInfo={null}
-            setValue={()=>{ return null}}
-          />
+          {!showContentEditor
+          ?
+            <span onClick={() => setShowContentEditor(true)}>{htmlToText(item.content)}</span>
+          :
+            <TestEditor
+              content={item.content}
+              type={'content'}
+              rep={rep}
+              itemID={itemID}
+            />
+          }
         </div>
       </div>
     </div>
@@ -199,8 +213,6 @@ function HighlightParent({itemID, arrows, rep}: any) {
     />
   )
 }
-
-import { useArrowByID, useItemByID } from '../datamodel/subscriptions'
 
 function ParentTitle({rep, arrowID}: any) {
   const fullArrow = useArrowByID(rep, arrowID)

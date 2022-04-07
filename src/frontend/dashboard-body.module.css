@@ -168,3 +168,10 @@
   color: #009B2B;
   padding-right: .5rem;
 }
+
+.expandItem {
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
+  text-align: right;
+  cursor: pointer;
+}
