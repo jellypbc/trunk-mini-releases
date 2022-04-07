@@ -27,54 +27,56 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
   const { content, title, highlight } = item
   return (
     <div className={styles.container}>
-      <div
-        className={styles.resetItemID}
-        onClick={() => handleSetSelectedItemID('')}
-      >
-        Dashboard
-      </div>
-      <div className={styles.itemID}>{itemID}</div>
-      {highlight ?
-        <div className={styles.highlight}>
-          {htmlToText(highlight)}
-        </div> :
-        <div className={styles.highlight}>
-          No highlight
+      <div className={styles.expandedEditorContainer}>
+        <div
+          className={styles.resetItemID}
+          onClick={() => handleSetSelectedItemID('')}
+        >
+          Dashboard
         </div>
-      }
-      <div className={styles.titleContainer}>
-        <div className={styles.bullet}>
-          <div className={styles.bulletBorder}>
-            <div className={styles.bulletCenter}>
+        <div className={styles.itemID}>{itemID}</div>
+        {highlight ?
+          <div className={styles.highlight}>
+            {htmlToText(highlight)}
+          </div> :
+          <div className={styles.highlight}>
+            No highlight
+          </div>
+        }
+        <div className={styles.titleContainer}>
+          <div className={styles.bullet}>
+            <div className={styles.bulletBorder}>
+              <div className={styles.bulletCenter}>
+              </div>
             </div>
           </div>
+          <div className={styles.titleEditor}>
+            <TestEditor
+              doc={title}
+              type={'title'}
+              rep={rep}
+              itemID={itemID}
+            />
+          </div>
         </div>
-        <div className={styles.titleEditor}>
+        <div className={styles.content}>
           <TestEditor
-            doc={title}
-            type={'title'}
+            doc={content}
+            type={'content'}
             rep={rep}
             itemID={itemID}
           />
         </div>
-      </div>
-      <div className={styles.content}>
-        <TestEditor
-          doc={content}
-          type={'content'}
-          rep={rep}
-          itemID={itemID}
-        />
-      </div>
-      <div className={styles.meta}>
-        <TestEditorFootnotes
-          rep={rep}
-          itemID={itemID}
-        />
-        <TestEditorSubItems />
-        <TestEditorForwardArrows />
-        <TestEditorBackArrows />
-        <TestEditorComments />
+        <div className={styles.meta}>
+          <TestEditorFootnotes
+            rep={rep}
+            itemID={itemID}
+          />
+          <TestEditorSubItems />
+          <TestEditorForwardArrows />
+          <TestEditorBackArrows />
+          <TestEditorComments />
+        </div>
       </div>
     </div>
   )

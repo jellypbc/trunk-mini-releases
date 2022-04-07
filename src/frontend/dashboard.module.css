@@ -1,6 +1,7 @@
 .container {
   background-color: hsl(0, 0%, 96%);
   height: 100vh;
+  overflow: auto;
 }
 
 .dashboard {

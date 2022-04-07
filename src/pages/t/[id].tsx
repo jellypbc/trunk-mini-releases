@@ -72,13 +72,11 @@ export default function Home() {
   if (selectedItemID) {
     return (
     rep &&
-    <div>
       <TestEditorContainer
         rep={rep}
         itemID={selectedItemID}
         handleSetSelectedItemID={setSelectedItemID}
       />
-    </div>
     )
   }
 

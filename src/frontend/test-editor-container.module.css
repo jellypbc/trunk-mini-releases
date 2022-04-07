@@ -1,4 +1,8 @@
-.container {
+.container{
+  overflow: auto;
+}
+
+.expandedEditorContainer {
   padding: 1rem;
   width: 500px;
   margin: 0 auto;
