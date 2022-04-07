@@ -23,3 +23,7 @@
   border-radius: .3rem;
   cursor: pointer;
 }
+
+.itemCount {
+  padding: 1rem;
+}

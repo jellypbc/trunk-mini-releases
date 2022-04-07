@@ -24,9 +24,9 @@ export default function Dashboard({ session, roomID, rep, handleSetSelectedItemI
     <div className={styles.container}>
       {roomID &&
         <div className={styles.dashboard}>
-          <DashboardNavLeft roomID={roomID}/>
+          <DashboardNavLeft roomID={roomID} />
           <div className={styles.main}>
-            <DashboardNavTop email={user && user.email || 'guest'} />
+            <DashboardNavTop email={user && user.email || 'guest'} itemCount={items.length}/>
             {items &&
               <DashboardBody
                 rep={rep}

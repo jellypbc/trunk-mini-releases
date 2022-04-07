@@ -2,6 +2,7 @@
   padding: 1rem;
   width: 500px;
   margin: 0 auto;
+  height: 100vh;
 }
 
 .resetItemID {
@@ -52,4 +53,8 @@
 }
 
 .titleEditor {
+}
+
+.meta {
+  padding: 2rem;
 }

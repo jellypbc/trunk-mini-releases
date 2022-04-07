@@ -163,7 +163,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
               <span onClick={() => setShowTitleEditor(true)}>{htmlToText(item.title)}</span>
             :
             <TestEditor
-              content={item.title}
+              doc={item.title}
               type={'title'}
               rep={rep}
               itemID={itemID}
@@ -177,7 +177,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
             <span onClick={() => setShowContentEditor(true)}>{htmlToText(item.content)}</span>
           :
             <TestEditor
-              content={item.content}
+              doc={item.content}
               type={'content'}
               rep={rep}
               itemID={itemID}

@@ -11,20 +11,19 @@ import type { M } from '../datamodel/mutators'
 
 
 type Props = {
-  content: string
+  doc: string
   type: string
   rep: Replicache<M>
   itemID: string
 }
 
-function TestEditor({ content: doc, type, rep, itemID } : Props) {
+function TestEditor({ doc, type, rep, itemID } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
 
   const [state, setState] = useState<EditorState | undefined>()
   const [_, setView] = useState<EditorView>()
-
 
   useEffect(() => {
     const state = createStateFromProps(
@@ -38,7 +37,6 @@ function TestEditor({ content: doc, type, rep, itemID } : Props) {
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
   }, [])
-
 
   const dispatchTransaction = (tx: Transaction | any) => {
     const view = viewRef.current.view
@@ -59,14 +57,12 @@ function TestEditor({ content: doc, type, rep, itemID } : Props) {
   return (
     <>
       {state &&
-        <>
-          <EditorEditor
-            type={type}
-            ref={viewRef}
-            state={state}
-            dispatchTransaction={dispatchTransaction}
-          />
-        </>
+        <EditorEditor
+          type={type}
+          ref={viewRef}
+          state={state}
+          dispatchTransaction={dispatchTransaction}
+        />
       }
     </>
   )
@@ -86,7 +82,6 @@ const createStateFromProps = (
     plugins: exampleSetup({
       schema: schema,
       getView: () => { return (view)},
-
       rep: rep,
       itemID: itemID
     }),

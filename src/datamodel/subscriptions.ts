@@ -88,7 +88,7 @@ export function useArrowByID(rep: Replicache<M>, id: string) {
       return a
     },
     null
-  );
+  )
 }
 
 export function getArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
@@ -100,6 +100,12 @@ export function getArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
   })
   return arrows
 }
+
+// export function useFootnoteIDsByID(rep: Replicache<M>, id: string) {
+//   const { arrows } = async useItemByID(rep, id )
+//   let footnotes: string[] = []
+// }
+
 
 export function useShapeIDs(rep: Replicache<M>) {
   return useSubscribe(
