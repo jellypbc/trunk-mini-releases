@@ -102,6 +102,10 @@
   justify-content: space-between;
 }
 
+.indexItem:hover {
+  background-color: hsl(0, 0%, 90%);
+}
+
 .activityView {
   padding: 1rem;
   font-size: .8rem;

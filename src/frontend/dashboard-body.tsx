@@ -29,6 +29,7 @@ export default function DashboardBody({ rep, items, handleSetSelectedItemID } : 
           <IndexView
             setShowIndex={setShowIndex}
             items={items}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         }
       </div>
@@ -36,7 +37,7 @@ export default function DashboardBody({ rep, items, handleSetSelectedItemID } : 
   )
 }
 
-function IndexView({ setShowIndex, items } : any) {
+function IndexView({ setShowIndex, items, handleSetSelectedItemID } : any) {
   return (
     <div className={styles.indexContainer}>
       <div className={styles.indexNav}>
@@ -58,7 +59,11 @@ function IndexView({ setShowIndex, items } : any) {
       <div className={styles.itemList}>
         {items.map((item : any) => {
           return (
-            <div className={styles.indexItem}>
+            <div
+              key={item.id}
+              className={styles.indexItem}
+              onClick={() => handleSetSelectedItemID(item.id)}
+            >
               <div className={styles.indexItemTitle}>
                 {item.title && htmlToText(item.title)}
               </div>

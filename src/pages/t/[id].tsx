@@ -9,6 +9,8 @@ import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
 import { Client } from 'reps-client'
 import TestEditorContainer from '../../frontend/test-editor-container'
+import DashboardCommandBar from '../../frontend/dashboard-command-bar'
+import { HotKeys } from 'react-hotkeys'
 
 
 export default function Home() {
@@ -16,6 +18,7 @@ export default function Home() {
   const [trunkID, setTrunkID] = useState<string>('')
   const [session, setSession] = useState<AuthSession | null>(null)
   const [selectedItemID, setSelectedItemID] = useState<string>('')
+  const [commandBar, setCommandBar] = useState<boolean>(false)
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -63,30 +66,70 @@ export default function Home() {
           r.mutate.initShapes(Array.from({ length: 5 }, () => randomShape()));
         }
       }
-
       setRep(r)
       setTrunkID(roomID)
     })()
   }, [])
 
+  const handlers = {
+    changeCommandBar: () => {
+      setCommandBar(!commandBar)
+    }
+  }
+
+  if (!rep) {
+    return null
+  }
+
   if (selectedItemID) {
     return (
-    rep &&
-      <TestEditorContainer
-        rep={rep}
-        itemID={selectedItemID}
-        handleSetSelectedItemID={setSelectedItemID}
-      />
+      rep &&
+        <TestEditorContainer
+          rep={rep}
+          itemID={selectedItemID}
+          handleSetSelectedItemID={setSelectedItemID}
+        />
     )
   }
 
   return (
     session && trunkID && rep &&
-      <Dashboard
-        session={session}
-        roomID={trunkID}
-        rep={rep}
-        handleSetSelectedItemID={setSelectedItemID}
-      />
+      <HotKeys
+        {...{
+          style: { outline: "none", display: "flex", flex: 1 },
+          keyMap,
+          handlers,
+        }}
+      >
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "transparent",
+        }}
+      >
+        {commandBar &&
+          <DashboardCommandBar
+            rep={rep}
+            handleSetSelectedItemID={setSelectedItemID}
+            handleSetCommandBar={setCommandBar}
+          />
+        }
+        <Dashboard
+          session={session}
+          roomID={trunkID}
+          rep={rep}
+          handleSetSelectedItemID={setSelectedItemID}
+        />
+        </div>
+      </HotKeys>
   )
+}
+
+const keyMap = {
+  changeCommandBar: ['command+k']
 }
