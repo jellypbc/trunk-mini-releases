@@ -8,6 +8,7 @@ import TestEditorSubItems from './test-editor-sub-items'
 import TestEditorForwardArrows from './test-editor-forward-arrows'
 import TestEditorBackArrows from './test-editor-back-arrows'
 import TestEditorComments from './test-editor-comments'
+import TestEditorParentItem from './test-editor-parent-item'
 
 
 export default function TestEditorContainer({rep, itemID, handleSetSelectedItemID} : any) {
@@ -72,10 +73,26 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
             rep={rep}
             itemID={itemID}
           />
-          <TestEditorSubItems />
-          <TestEditorForwardArrows />
-          <TestEditorBackArrows />
-          <TestEditorComments />
+          <TestEditorParentItem
+            rep={rep}
+            itemID={itemID}
+          />
+          <TestEditorSubItems
+            rep={rep}
+            itemID={itemID}
+          />
+          <TestEditorForwardArrows
+            rep={rep}
+            itemID={itemID}
+          />
+          <TestEditorBackArrows
+            rep={rep}
+            itemID={itemID}
+          />
+          <TestEditorComments
+            rep={rep}
+            itemID={itemID}
+          />
         </div>
       </div>
     </div>

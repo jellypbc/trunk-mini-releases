@@ -62,3 +62,15 @@
 .meta {
   padding: 2rem;
 }
+
+.section {
+  padding: 1rem 0;
+}
+
+.item {
+  padding: 0 1rem;
+}
+
+.item:hover {
+  background-color: hsl(0, 0%, 90%);
+}

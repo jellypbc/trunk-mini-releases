@@ -3,16 +3,16 @@ import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 
-export default function TestEditorBackrrows({ rep, itemID } : { rep: any, itemID: string }) {
+export default function TestEditorParentItem({ rep, itemID } : any) {
   const item = useItemByID(rep, itemID)
   return (
     item &&
     <div className={styles.section}>
-      ←
+      Parent item
       {item.arrows &&
-        <BackArrowContainer
-          rep={rep}
+        <ParentItemContainer
           arrows={item.arrows}
+          rep={rep}
           itemID={itemID}
         />
       }
@@ -20,12 +20,12 @@ export default function TestEditorBackrrows({ rep, itemID } : { rep: any, itemID
   )
 }
 
-function BackArrowContainer({ rep, arrows, itemID }: any ) {
-  const backArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID !== itemID) || []
+function ParentItemContainer({ arrows, rep, itemID } : any){
+  const parentItem = arrows.filter((a: any) => a.kind === 'sub' && a.backItemID !== itemID) || []
   return (
     <>
-      <div>{backArrows.length} back arrows</div>
-      {backArrows && backArrows.map((a: any) => {
+      <div>{parentItem.length} parent item</div>
+      {parentItem && parentItem.map((a: any) => {
         const arrow = useArrowByID(rep, a.arrowID)
         return (
           arrow &&
@@ -43,9 +43,8 @@ function BackArrowContainer({ rep, arrows, itemID }: any ) {
 function Arrow({rep, arrow}: any){
   const item = useItemByID(rep, arrow.backItemID)
   return (
-    <div>
+    <div className={styles.item}>
       {item && htmlToText(item.title) || 'nothing here'}
     </div>
   )
 }
-
