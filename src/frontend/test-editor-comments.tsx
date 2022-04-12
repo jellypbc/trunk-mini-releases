@@ -8,7 +8,6 @@ export default function TestEditorParentItem({ rep, itemID } : any) {
   return (
     item &&
     <div className={styles.section}>
-      Thoughts
       {item.arrows &&
         <CommentItemContainer
           arrows={item.arrows}
@@ -27,7 +26,12 @@ function CommentItemContainer({ arrows, rep, itemID } : any){
   ) || []
   return (
     <>
-      <div>{commentItem.length} thoughts</div>
+      <div className={styles.sectionHeader}>
+        Reactions and responses
+        <span className={styles.count}>
+          {commentItem.length}
+        </span>
+      </div>
       {commentItem && commentItem.map((a: any) => {
         const arrow = useArrowByID(rep, a.arrowID)
         return (
@@ -46,14 +50,13 @@ function CommentItemContainer({ arrows, rep, itemID } : any){
 function Arrow({rep, arrow}: any){
   const item = useItemByID(rep, arrow.frontItemID)
   return (
-    <div className={styles.item}>
+    <div className={styles.commentItem}>
       {item &&
-      <>
-      <div className={styles.highlight}>{htmlToText(item.highlight) || 'no highlight'}</div>
-      <div>{htmlToText(item.content) || 'nothing here'}</div>
-      </>
+        <>
+          <div className={styles.highlight}>{htmlToText(item.highlight) || 'no highlight'}</div>
+          <div>{htmlToText(item.content) || 'nothing here'}</div>
+        </>
       }
-
     </div>
   )
 }

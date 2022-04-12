@@ -8,7 +8,7 @@ export default function TestEditorBackrrows({ rep, itemID } : { rep: any, itemID
   return (
     item &&
     <div className={styles.section}>
-      ←
+
       {item.arrows &&
         <BackArrowContainer
           rep={rep}
@@ -24,7 +24,7 @@ function BackArrowContainer({ rep, arrows, itemID }: any ) {
   const backArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID !== itemID) || []
   return (
     <>
-      <div>{backArrows.length} back arrows</div>
+      <div className={styles.sectionHeader}>← <span className={styles.count}>{backArrows.length}</span></div>
       {backArrows && backArrows.map((a: any) => {
         const arrow = useArrowByID(rep, a.arrowID)
         return (

@@ -7,7 +7,6 @@ export default function TestEditorFootnotes({ rep, itemID } : { rep: any, itemID
   return (
     item &&
     <div className={styles.section}>
-      Footnotes
       {item.arrows &&
         <FootnoteContainer arrows={item.arrows} />
       }
@@ -19,7 +18,7 @@ function FootnoteContainer({ arrows } : any){
   const footnotes = arrows.filter((a: any) => a.kind === 'footnote') || []
   return (
     <>
-      <div>{footnotes.length} footnotes</div>
+      <div className={styles.sectionHeader}>Footnotes <span className={styles.count}>{footnotes.length}</span></div>
     </>
   )
 }

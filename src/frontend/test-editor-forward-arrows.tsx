@@ -8,7 +8,6 @@ export default function TestEditorForwardArrows({ rep, itemID } : { rep: any, it
   return (
     item &&
     <div className={styles.section}>
-      →
       {item.arrows &&
         <ForwardArrowContainer
           rep={rep}
@@ -31,7 +30,7 @@ function ForwardArrowContainer({ rep, arrows, itemID }: any ) {
   })
   return (
     <>
-      <div>{frontItemIDs.length} forward arrows</div>
+      <div className={styles.sectionHeader}>→ <span className={styles.count}>{frontItemIDs.length}</span> </div>
       {frontItemIDs && frontItemIDs.map((itemID: any) => {
         return (
           <Arrow

@@ -4,11 +4,9 @@ import TestEditor from './test-editor'
 import { htmlToText } from '../util/htmlToText'
 import styles from './test-editor-container.module.css'
 import TestEditorFootnotes from './test-editor-footnotes'
-import TestEditorSubItems from './test-editor-sub-items'
 import TestEditorForwardArrows from './test-editor-forward-arrows'
 import TestEditorBackArrows from './test-editor-back-arrows'
 import TestEditorComments from './test-editor-comments'
-import TestEditorParentItem from './test-editor-parent-item'
 import TestEditorParent from './test-editor-parent'
 import TestEditorMainSubItems from './test-editor-main-sub-items'
 
@@ -90,14 +88,6 @@ function Footer({rep, itemID} : any) {
   return (
     <div className={styles.meta}>
       <TestEditorFootnotes
-        rep={rep}
-        itemID={itemID}
-      />
-      <TestEditorParentItem
-        rep={rep}
-        itemID={itemID}
-      />
-      <TestEditorSubItems
         rep={rep}
         itemID={itemID}
       />

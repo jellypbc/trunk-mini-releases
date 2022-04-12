@@ -44,16 +44,7 @@ function Arrow({rep, arrow}: any){
   const item = useItemByID(rep, arrow.frontItemID)
   const [showContent, setShowContent] = useState<boolean>(false)
   return (
-    <div
-      className={styles.subItemTitleContainer}
-
-    >
-      {/* <div className={styles.bullet}>
-        <div className={styles.bulletBorder}>
-          <div className={styles.bulletCenter}>
-          </div>
-        </div>
-      </div> */}
+    <div className={styles.subItemTitleContainer}>
       <div
         className={styles.titleEditor}
         onClick={() => setShowContent(!showContent)}
