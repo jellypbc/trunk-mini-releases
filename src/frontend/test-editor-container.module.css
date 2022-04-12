@@ -25,17 +25,21 @@
 }
 
 .titleContainer {
-  padding: 2rem;
+  padding: .5rem 2rem 1rem 2rem;
   display: flex;
 }
 
 .content {
-  padding: 2rem;
+  padding: 0 2rem;
 }
 
 .itemID {
   padding: 1rem 2rem;
   font-size: .8rem;
+  color: transparent;
+}
+
+.itemID:hover {
   color: hsl(0, 0%, 70%);
 }
 
@@ -73,4 +77,41 @@
 
 .item:hover {
   background-color: hsl(0, 0%, 90%);
+}
+
+.parent {
+  padding: 0 3rem;
+}
+
+.parentTitle {
+  font-size: .8rem;
+  cursor: pointer;
+}
+
+.parentArrow {
+  color: #027B00;
+}
+
+.count {
+  padding: 0 .5rem;
+  color: hsl(0, 0%, 70%);
+}
+
+.mainSubItems {
+  padding: 1rem;
+}
+
+.titleSubItem {
+  font-size: 1.4rem;
+  align-items: center;
+}
+
+.subItemTitleContainer {
+  padding: .5rem 2rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.subItemContent {
+  padding: 1rem 0;
 }

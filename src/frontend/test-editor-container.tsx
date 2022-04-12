@@ -9,6 +9,8 @@ import TestEditorForwardArrows from './test-editor-forward-arrows'
 import TestEditorBackArrows from './test-editor-back-arrows'
 import TestEditorComments from './test-editor-comments'
 import TestEditorParentItem from './test-editor-parent-item'
+import TestEditorParent from './test-editor-parent'
+import TestEditorMainSubItems from './test-editor-main-sub-items'
 
 
 export default function TestEditorContainer({rep, itemID, handleSetSelectedItemID} : any) {
@@ -36,14 +38,15 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
           Dashboard
         </div>
         <div className={styles.itemID}>{itemID}</div>
-        {highlight ?
+        {highlight &&
           <div className={styles.highlight}>
             {htmlToText(highlight)}
-          </div> :
-          <div className={styles.highlight}>
-            No highlight
           </div>
         }
+        <TestEditorParent
+          rep={rep}
+          itemID={itemID}
+        />
         <div className={styles.titleContainer}>
           <div className={styles.bullet}>
             <div className={styles.bulletBorder}>
@@ -68,34 +71,49 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
             itemID={itemID}
           />
         </div>
-        <div className={styles.meta}>
-          <TestEditorFootnotes
-            rep={rep}
-            itemID={itemID}
-          />
-          <TestEditorParentItem
-            rep={rep}
-            itemID={itemID}
-          />
-          <TestEditorSubItems
-            rep={rep}
-            itemID={itemID}
-          />
-          <TestEditorForwardArrows
-            rep={rep}
-            itemID={itemID}
-          />
-          <TestEditorBackArrows
-            rep={rep}
-            itemID={itemID}
-          />
-          <TestEditorComments
+        <div className={styles.mainSubItems}>
+          <TestEditorMainSubItems
             rep={rep}
             itemID={itemID}
           />
         </div>
+        <Footer
+          rep={rep}
+          itemID={itemID}
+        />
       </div>
     </div>
   )
 }
 
+function Footer({rep, itemID} : any) {
+  return (
+    <div className={styles.meta}>
+      <TestEditorFootnotes
+        rep={rep}
+        itemID={itemID}
+      />
+      <TestEditorParentItem
+        rep={rep}
+        itemID={itemID}
+      />
+      <TestEditorSubItems
+        rep={rep}
+        itemID={itemID}
+      />
+      <TestEditorForwardArrows
+        rep={rep}
+        itemID={itemID}
+      />
+      <TestEditorBackArrows
+        rep={rep}
+        itemID={itemID}
+      />
+      <TestEditorComments
+        rep={rep}
+        itemID={itemID}
+      />
+    </div>
+  )
+
+}

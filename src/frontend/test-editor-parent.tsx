@@ -3,34 +3,27 @@ import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 
-export default function TestEditorSubItems({ rep, itemID } : any) {
+export default function TestEditorParent({ rep, itemID } : any) {
   const item = useItemByID(rep, itemID)
   return (
     item &&
-    <div className={styles.section}>
+    <div className={styles.parent}>
       {item.arrows &&
-        <SubItemContainer
+        <ParentItemContainer
           arrows={item.arrows}
           rep={rep}
           itemID={itemID}
-
         />
       }
     </div>
   )
 }
 
-function SubItemContainer({ arrows, rep, itemID } : any){
-  const subItems = arrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID) || []
+function ParentItemContainer({ arrows, rep, itemID } : any){
+  const parentItem = arrows.filter((a: any) => a.kind === 'sub' && a.backItemID !== itemID) || []
   return (
     <>
-      <div>
-        Sub-items
-        <span className={styles.count}>
-          {subItems.length}
-        </span>
-      </div>
-      {subItems && subItems.map((a: any) => {
+      {parentItem && parentItem.map((a: any) => {
         const arrow = useArrowByID(rep, a.arrowID)
         return (
           arrow &&
@@ -46,10 +39,10 @@ function SubItemContainer({ arrows, rep, itemID } : any){
 }
 
 function Arrow({rep, arrow}: any){
-  const item = useItemByID(rep, arrow.frontItemID)
+  const item = useItemByID(rep, arrow.backItemID)
   return (
-    <div className={styles.item}>
-      {item && htmlToText(item.title) || 'nothing here'}
+    <div className={styles.parentTitle}>
+       <span className={styles.parentArrow}>↱ </span>{item && htmlToText(item.title) || 'nothing here'}
     </div>
   )
 }
