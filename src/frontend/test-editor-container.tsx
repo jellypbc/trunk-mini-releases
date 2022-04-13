@@ -13,6 +13,7 @@ import TestEditorMainSubItems from './test-editor-main-sub-items'
 
 export default function TestEditorContainer({rep, itemID, handleSetSelectedItemID} : any) {
   const item = useItemByID(rep, itemID)
+
   return (
     item &&
     <Thingy
@@ -58,6 +59,7 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
               type={'title'}
               rep={rep}
               itemID={itemID}
+              arrows={[]}
             />
           </div>
         </div>
@@ -67,6 +69,7 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
             type={'content'}
             rep={rep}
             itemID={itemID}
+            arrows={item.arrows || []}
           />
         </div>
         <div className={styles.mainSubItems}>

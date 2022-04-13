@@ -14,7 +14,6 @@ export default function TestEditorMainSubItems({ rep, itemID } : any) {
           arrows={item.arrows}
           rep={rep}
           itemID={itemID}
-
         />
       }
     </div>
@@ -58,9 +57,9 @@ function Arrow({rep, arrow}: any){
             type={'content'}
             rep={rep}
             itemID={arrow.frontItemID}
+            arrows={[]}
           />
         </div>
-
       }
     </div>
   )

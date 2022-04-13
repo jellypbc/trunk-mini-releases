@@ -82,7 +82,6 @@ export default forwardRef<Handle, Props>(function EditorEditor(
  function buildProps(
     props: Partial<Props>,
   ): Partial<DirectEditorProps> {
-    console.log('props', props)
     return {
       ...props,
       dispatchTransaction: tx => {

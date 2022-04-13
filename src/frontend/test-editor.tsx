@@ -15,15 +15,18 @@ type Props = {
   type: string
   rep: Replicache<M>
   itemID: string
+  arrows: any[]
 }
 
-function TestEditor({ doc, type, rep, itemID } : Props) {
+function TestEditor({ doc, type, rep, itemID, arrows } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
 
   const [state, setState] = useState<EditorState | undefined>()
   const [_, setView] = useState<EditorView>()
+  const [showArrows, setShowArrows] = useState<boolean>(true)
+
 
   useEffect(() => {
     const state = createStateFromProps(
@@ -32,11 +35,40 @@ function TestEditor({ doc, type, rep, itemID } : Props) {
       parser,
       viewRef && viewRef.current && viewRef.current.view,
       rep,
-      itemID
+      itemID,
+      arrows,
     )
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
   }, [])
+
+  useEffect(() => {
+    if (showArrows) {
+      const state = createStateFromProps(
+        doc,
+        schema,
+        parser,
+        viewRef && viewRef.current && viewRef.current.view,
+        rep,
+        itemID,
+        arrows,
+      )
+      setState(state)
+      setView(viewRef && viewRef.current && viewRef.current.view)
+    } else {
+      const state = createStateFromProps(
+        doc,
+        schema,
+        parser,
+        viewRef && viewRef.current && viewRef.current.view,
+        rep,
+        itemID,
+        [],
+      )
+      setState(state)
+      setView(viewRef && viewRef.current && viewRef.current.view)
+    }
+  }, [showArrows])
 
   const dispatchTransaction = (tx: Transaction | any) => {
     const view = viewRef.current.view
@@ -56,6 +88,11 @@ function TestEditor({ doc, type, rep, itemID } : Props) {
 
   return (
     <>
+      {type === 'content' &&
+        <div style={{cursor: 'pointer', padding: '1rem 0'}} onClick={() => setShowArrows(!showArrows)}>
+          →
+        </div>
+      }
       {state &&
         <EditorEditor
           type={type}
@@ -74,7 +111,8 @@ const createStateFromProps = (
   parser: any,
   view: any,
   rep: Replicache<M>,
-  itemID: string
+  itemID: string,
+  arrows: any,
 ) : EditorState<typeof schema> => {
   return EditorState.create({
     doc: parser(doc),
@@ -83,11 +121,13 @@ const createStateFromProps = (
       schema: schema,
       getView: () => { return (view)},
       rep: rep,
-      itemID: itemID
+      itemID: itemID,
+      arrows: arrows,
     }),
     // @ts-ignore
     rep: rep,
-    itemID: itemID
+    itemID: itemID,
+    arrows: arrows
   })
 }
 

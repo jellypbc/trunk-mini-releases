@@ -172,6 +172,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
               type={'title'}
               rep={rep}
               itemID={itemID}
+              arrows={[]}
             />
             }
           </div>
@@ -186,6 +187,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
               type={'content'}
               rep={rep}
               itemID={itemID}
+              arrows={[]}
             />
           }
         </div>

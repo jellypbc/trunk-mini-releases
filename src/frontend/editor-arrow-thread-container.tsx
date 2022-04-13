@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState } from 'react'
 import styles from './editor-arrow-thread-container.module.css'
-import ArrowEditorContainer from './arrow-editor-container'
+import { htmlToText } from '../util/htmlToText'
+import TestEditor from './test-editor'
 
 export default function EditorArrowThreadContainer({rep,arrow}: {rep:any, arrow:any}) {
   return (
@@ -9,10 +10,7 @@ export default function EditorArrowThreadContainer({rep,arrow}: {rep:any, arrow:
         {arrow.frontItemID}
       </div>
       <div className={styles.highlight}>
-        <ArrowEditorContainer
-          rep={rep}
-          doc={arrow.highlight}
-        />
+        {htmlToText(arrow.highlight)}
       </div>
       <FrontItemStuff
         rep={rep}
@@ -25,12 +23,10 @@ export default function EditorArrowThreadContainer({rep,arrow}: {rep:any, arrow:
 
 import { useItemByID } from '../datamodel/subscriptions'
 import { dateInWords } from '../lib/dateInWords'
-import ItemEditorContainer from './item-editor-container'
 
 function FrontItemStuff({rep, itemID, arrow }:{rep: any, itemID: string, arrow: any}) {
   console.log({arrow})
   const item = useItemByID(rep, itemID)
-
 
   return (
     item &&
@@ -59,41 +55,37 @@ function FrontItemStuff({rep, itemID, arrow }:{rep: any, itemID: string, arrow: 
 }
 
 function FrontItemEditorA({itemID, item, rep}: any){
-
-  const [frontItemValue, setFrontItemValue] = useState<string>(item.content)
-  useEffect(() => {
-    rep.mutate.updateItemContent({ id: itemID, content: frontItemValue })
-  }, [frontItemValue])
-
+  const [showEditor, setShowEditor] = useState<boolean>(false)
   return (
-    <ItemEditorContainer
-    content={frontItemValue}
-    setValue={setFrontItemValue}
-    editable={true}
-    type={'footnote'}
-    rep={rep}
-    item={item}
-    itemID={itemID}
-  />
+    showEditor ? (
+      <TestEditor
+        doc={item.content}
+        type={'content'}
+        rep={rep}
+        itemID={itemID}
+        arrows={[]}
+      />
+    ) : (
+      <div onClick={() => setShowEditor(true)}>
+        {htmlToText(item.content ? item.content : 'empty')}
+      </div>
+    )
   )
 }
 
 function FrontItemEditorB({itemID, item, rep}: any){
-
-  const [frontItemTitleValue, setFrontItemTitleValue] = useState<string>(item.title)
-  useEffect(() => {
-    rep.mutate.updateItemTitle({ id: itemID, title: frontItemTitleValue })
-  }, [frontItemTitleValue])
-
+  const [showEditor, setShowEditor] = useState<boolean>(false)
   return (
-    <ItemEditorContainer
-    content={frontItemTitleValue}
-    setValue={setFrontItemTitleValue}
-    editable={true}
-    type={'footnote'}
-    rep={rep}
-    item={item}
-    itemID={itemID}
-  />
+    showEditor ? (
+      <TestEditor
+        doc={item.title}
+        type={'title'}
+        rep={rep}
+        itemID={itemID}
+        arrows={[]}
+      />
+    ): (
+      <div onClick={() => setShowEditor(true)}>{htmlToText(item.title ? item.title : 'empty')}</div>
+    )
   )
 }
