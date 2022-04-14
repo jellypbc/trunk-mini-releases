@@ -12,13 +12,13 @@ import TestEditorContainer from '../../frontend/test-editor-container'
 import DashboardCommandBar from '../../frontend/dashboard-command-bar'
 import { HotKeys } from 'react-hotkeys'
 
-
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null)
   const [trunkID, setTrunkID] = useState<string>('')
   const [session, setSession] = useState<AuthSession | null>(null)
   const [selectedItemID, setSelectedItemID] = useState<string>('')
   const [commandBar, setCommandBar] = useState<boolean>(false)
+  const [nextID, setNextID] = useState<string>('')
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -27,6 +27,13 @@ export default function Home() {
     const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
     session && setSession(JSON.parse(session).currentSession)
   }, [])
+
+  useEffect(() => {
+    if (selectedItemID === 'next') {
+      setSelectedItemID(nextID)
+      setNextID('')
+    }
+  }, [selectedItemID])
 
   useEffect(() => {
     const [, , roomID] = location.pathname.split("/");
@@ -77,18 +84,29 @@ export default function Home() {
     }
   }
 
+  function handleSetSelectedItemID(id: string) {
+    setSelectedItemID('next')
+    setNextID(id)
+  }
+
   if (!rep) {
     return null
   }
 
-  if (selectedItemID) {
+  if (selectedItemID && selectedItemID !== 'next') {
     return (
       rep &&
         <TestEditorContainer
           rep={rep}
           itemID={selectedItemID}
-          handleSetSelectedItemID={setSelectedItemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
+    )
+  } else if (selectedItemID === 'next') {
+    return (
+      <div>
+        loading
+      </div>
     )
   }
 

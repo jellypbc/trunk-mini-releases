@@ -3,7 +3,9 @@ import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 
-export default function TestEditorBackArrows({ rep, itemID, arrows } : { rep: any, itemID: string, arrows: any[] }) {
+
+
+export default function TestEditorBackArrows({ rep, itemID, arrows, handleSetSelectedItemID } : { rep: any, itemID: string, arrows: any[], handleSetSelectedItemID: any }) {
   const backArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID !== itemID) || []
   const backArrowIDs = backArrows.map((a: any) => a.arrowID)
   return (
@@ -13,12 +15,13 @@ export default function TestEditorBackArrows({ rep, itemID, arrows } : { rep: an
         rep={rep}
         arrowIDs={backArrowIDs}
         itemID={itemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
       />
     </div>
   )
 }
 
-function BackArrowContainer({ rep, arrowIDs }: any ) {
+function BackArrowContainer({ rep, arrowIDs, handleSetSelectedItemID }: any ) {
   const arrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <>
@@ -29,6 +32,7 @@ function BackArrowContainer({ rep, arrowIDs }: any ) {
             key={`backArrow-${a.id}`}
             arrow={a}
             rep={rep}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
       })}
@@ -36,10 +40,12 @@ function BackArrowContainer({ rep, arrowIDs }: any ) {
   )
 }
 
-function Arrow({rep, arrow}: any){
+function Arrow({rep, arrow, handleSetSelectedItemID }: any){
   const item = useItemByID(rep, arrow.backItemID)
   return (
-    <div>
+    <div
+      onClick={() => handleSetSelectedItemID(arrow.backItemID)}
+    >
       {item && htmlToText(item.title) || 'nothing here'}
     </div>
   )

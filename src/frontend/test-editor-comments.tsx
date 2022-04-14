@@ -3,7 +3,7 @@ import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 
-export default function TestEditorParentItem({ rep, itemID, arrows } : any) {
+export default function TestEditorParentItem({ rep, itemID, arrows, handleSetSelectedItemID } : any) {
   const comments = arrows.filter((a: any) => a.kind === 'comment'
   && a.backItemID === itemID) || []
   const commentArrowIDs = comments.map((a: any) => a.arrowID)
@@ -14,12 +14,13 @@ export default function TestEditorParentItem({ rep, itemID, arrows } : any) {
         arrowIDs={commentArrowIDs}
         rep={rep}
         itemID={itemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
       />
     </div>
   )
 }
 
-function CommentItemContainer({ arrowIDs, rep } : any){
+function CommentItemContainer({ arrowIDs, rep, handleSetSelectedItemID } : any){
   const arrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <>
@@ -35,6 +36,7 @@ function CommentItemContainer({ arrowIDs, rep } : any){
             key={`commment-${a.id}`}
             arrow={a}
             rep={rep}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
       })}
@@ -42,10 +44,13 @@ function CommentItemContainer({ arrowIDs, rep } : any){
   )
 }
 
-function Arrow({rep, arrow}: any){
+function Arrow({rep, arrow, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, arrow.frontItemID)
   return (
-    <div className={styles.commentItem}>
+    <div
+      className={styles.commentItem}
+      onClick={() => handleSetSelectedItemID(arrow.frontItemID)}
+    >
       {item &&
         <>
           <div className={styles.highlight}>{htmlToText(item.highlight) || 'no highlight'}</div>

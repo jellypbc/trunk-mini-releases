@@ -3,7 +3,8 @@ import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 
-export default function TestEditorForwardArrows({ rep, itemID, arrows} : { rep: any, itemID: string, arrows: any[] }) {
+
+export default function TestEditorForwardArrows({ rep, itemID, arrows, handleSetSelectedItemID} : { rep: any, itemID: string, arrows: any[], handleSetSelectedItemID: any }) {
   const forwardArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
   const forwardArrowIDs = forwardArrows.map((a: any) => a.arrowID)
   return (
@@ -13,12 +14,13 @@ export default function TestEditorForwardArrows({ rep, itemID, arrows} : { rep: 
           rep={rep}
           arrowIDs={forwardArrowIDs}
           itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       </div>
   )
 }
 
-function ForwardArrowContainer({ rep, arrowIDs }: any) {
+function ForwardArrowContainer({ rep, arrowIDs, handleSetSelectedItemID }: any) {
   const arrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <>
@@ -29,6 +31,7 @@ function ForwardArrowContainer({ rep, arrowIDs }: any) {
             key={`arrow-${arrow.id}`}
             arrow={arrow}
             rep={rep}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
       })}
@@ -36,10 +39,13 @@ function ForwardArrowContainer({ rep, arrowIDs }: any) {
   )
 }
 
-function Arrow({rep, arrow}: any){
+function Arrow({rep, arrow, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, arrow.frontItemID)
   return (
-    <div className={styles.item}>
+    <div
+      className={styles.item}
+      onClick={() => handleSetSelectedItemID(arrow.frontItemID)}
+    >
       {item && htmlToText(item.title) || 'nothing here'}
     </div>
   )

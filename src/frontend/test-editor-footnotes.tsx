@@ -3,7 +3,7 @@ import { getArrowsByIDs , useItemByID } from '../datamodel/subscriptions'
 import styles from './test-editor-container.module.css'
 import { htmlToText } from '../util/htmlToText'
 
-export default function TestEditorFootnotes({ rep, arrows, itemID } : { rep: any, arrows: any[], itemID: string }) {
+export default function TestEditorFootnotes({ rep, arrows, itemID, handleSetSelectedItemID } : { rep: any, arrows: any[], itemID: string, handleSetSelectedItemID: any }) {
   const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
   const footnoteArrowIDs = footnotes.map((a: any) => a.arrowID)
   return (
@@ -12,12 +12,13 @@ export default function TestEditorFootnotes({ rep, arrows, itemID } : { rep: any
       <FootnoteContainer
         arrowIDs={footnoteArrowIDs}
         rep={rep}
+        handleSetSelectedItemID={handleSetSelectedItemID}
       />
     </div>
   )
 }
 
-function FootnoteContainer({ rep, arrowIDs } : any){
+function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID } : any){
   const arrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <>
@@ -30,6 +31,7 @@ function FootnoteContainer({ rep, arrowIDs } : any){
             key={a.id}
             arrow={a}
             rep={rep}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
       })}
@@ -37,10 +39,13 @@ function FootnoteContainer({ rep, arrowIDs } : any){
   )
 }
 
-function Arrow({rep, arrow}: any){
+function Arrow({rep, arrow, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, arrow.frontItemID)
   return (
-    <div className={styles.commentItem}>
+    <div
+      className={styles.commentItem}
+      onClick={() => handleSetSelectedItemID(arrow.frontItemID)}
+    >
       {item &&
         <>
           <div>{htmlToText(item.content) || 'nothing here'}</div>
