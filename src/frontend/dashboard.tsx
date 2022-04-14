@@ -3,7 +3,7 @@ import styles from './dashboard.module.css'
 import type { AuthSession } from '@supabase/supabase-js'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
-import { getSortedItems } from '../datamodel/subscriptions'
+import { getSortedItems, getArrows } from '../datamodel/subscriptions'
 
 import DashboardNavLeft from './dashboard-nav-left'
 import DashboardNavTop from './dashboard-nav-top'
@@ -18,6 +18,7 @@ type Props = {
 
 export default function Dashboard({ session, roomID, rep, handleSetSelectedItemID } : Props) {
   const items = getSortedItems(rep)
+  const arrows = getArrows(rep)
   const { user } = session
 
   return (
@@ -26,7 +27,7 @@ export default function Dashboard({ session, roomID, rep, handleSetSelectedItemI
         <div className={styles.dashboard}>
           <DashboardNavLeft roomID={roomID} />
           <div className={styles.main}>
-            <DashboardNavTop email={user && user.email || 'guest'} itemCount={items.length}/>
+            <DashboardNavTop email={user && user.email || 'guest'} itemCount={items.length} arrowCount={arrows.length}/>
             {items &&
               <DashboardBody
                 rep={rep}

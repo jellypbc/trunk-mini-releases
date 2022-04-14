@@ -6,9 +6,10 @@ import { useRouter } from 'next/router'
 type Props = {
   email: string
   itemCount: number
+  arrowCount: number
 }
 
-export default function DashboardNavTop({ email, itemCount } : Props ) {
+export default function DashboardNavTop({ email, itemCount, arrowCount } : Props ) {
   const router = useRouter()
 
   async function logOut() {
@@ -30,6 +31,7 @@ export default function DashboardNavTop({ email, itemCount } : Props ) {
         onClick={() => logOut()}
       >
         <span className={styles.itemCount}>{itemCount} items</span>
+        <span className={styles.itemCount}>{arrowCount} arrows</span>
         {email}
       </div>
     </div>
