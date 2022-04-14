@@ -17,10 +17,10 @@ export default function TestEditorContainer({rep, itemID, handleSetSelectedItemI
   return (
     item &&
     <Thingy
-    item={item}
-    rep={rep}
-    itemID={itemID}
-    handleSetSelectedItemID={handleSetSelectedItemID}
+      item={item}
+      rep={rep}
+      itemID={itemID}
+      handleSetSelectedItemID={handleSetSelectedItemID}
     />
   )
 }
@@ -81,30 +81,36 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
         <Footer
           rep={rep}
           itemID={itemID}
+          arrows={item.arrows}
         />
       </div>
     </div>
   )
 }
 
-function Footer({rep, itemID} : any) {
+function Footer({rep, itemID, arrows} : any) {
+
   return (
     <div className={styles.meta}>
       <TestEditorFootnotes
         rep={rep}
         itemID={itemID}
+        arrows={arrows}
       />
       <TestEditorForwardArrows
         rep={rep}
         itemID={itemID}
+        arrows={arrows}
       />
       <TestEditorBackArrows
         rep={rep}
         itemID={itemID}
+        arrows={arrows}
       />
       <TestEditorComments
         rep={rep}
         itemID={itemID}
+        arrows={arrows}
       />
     </div>
   )

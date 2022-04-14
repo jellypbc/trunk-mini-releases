@@ -1,37 +1,33 @@
 import React from 'react'
-import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
+import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 
-export default function TestEditorBackrrows({ rep, itemID } : { rep: any, itemID: string }) {
-  const item = useItemByID(rep, itemID)
+export default function TestEditorBackArrows({ rep, itemID, arrows } : { rep: any, itemID: string, arrows: any[] }) {
+  const backArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID !== itemID) || []
+  const backArrowIDs = backArrows.map((a: any) => a.arrowID)
   return (
-    item &&
+    arrows &&
     <div className={styles.section}>
-
-      {item.arrows &&
-        <BackArrowContainer
-          rep={rep}
-          arrows={item.arrows}
-          itemID={itemID}
-        />
-      }
+      <BackArrowContainer
+        rep={rep}
+        arrowIDs={backArrowIDs}
+        itemID={itemID}
+      />
     </div>
   )
 }
 
-function BackArrowContainer({ rep, arrows, itemID }: any ) {
-  const backArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID !== itemID) || []
+function BackArrowContainer({ rep, arrowIDs }: any ) {
+  const arrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <>
-      <div className={styles.sectionHeader}>← <span className={styles.count}>{backArrows.length}</span></div>
-      {backArrows && backArrows.map((a: any) => {
-        const arrow = useArrowByID(rep, a.arrowID)
+      <div className={styles.sectionHeader}>← <span className={styles.count}>{arrowIDs.length}</span></div>
+      {arrows && arrows.map((a: any) => {
         return (
-          arrow &&
           <Arrow
-            key={a.arrowID}
-            arrow={arrow}
+            key={`backArrow-${a.id}`}
+            arrow={a}
             rep={rep}
           />
         )

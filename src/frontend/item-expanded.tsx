@@ -30,6 +30,8 @@ export default function ItemExpanded({ itemID, item, setSelectedItemID, rep}: Pr
     rep.mutate.updateItemContent({ id: itemID, content: contentValue })
   }, [contentValue])
 
+
+
   const handlers = {
     manualSaveDraftItem: () => {
       event?.preventDefault();

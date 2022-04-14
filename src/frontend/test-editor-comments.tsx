@@ -1,44 +1,39 @@
 import React from 'react'
-import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
+import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 
-export default function TestEditorParentItem({ rep, itemID } : any) {
-  const item = useItemByID(rep, itemID)
+export default function TestEditorParentItem({ rep, itemID, arrows } : any) {
+  const comments = arrows.filter((a: any) => a.kind === 'comment'
+  && a.backItemID === itemID) || []
+  const commentArrowIDs = comments.map((a: any) => a.arrowID)
   return (
-    item &&
+    commentArrowIDs &&
     <div className={styles.section}>
-      {item.arrows &&
-        <CommentItemContainer
-          arrows={item.arrows}
-          rep={rep}
-          itemID={itemID}
-
-        />
-      }
+      <CommentItemContainer
+        arrowIDs={commentArrowIDs}
+        rep={rep}
+        itemID={itemID}
+      />
     </div>
   )
 }
 
-function CommentItemContainer({ arrows, rep, itemID } : any){
-  const commentItem = arrows.filter((a: any) => a.kind === 'comment'
-  && a.backItemID === itemID
-  ) || []
+function CommentItemContainer({ arrowIDs, rep } : any){
+  const arrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <>
       <div className={styles.sectionHeader}>
         Reactions and responses
         <span className={styles.count}>
-          {commentItem.length}
+          {arrowIDs.length}
         </span>
       </div>
-      {commentItem && commentItem.map((a: any) => {
-        const arrow = useArrowByID(rep, a.arrowID)
+      {arrows && arrows.map((a: any) => {
         return (
-          arrow &&
           <Arrow
-            key={a.arrowID}
-            arrow={arrow}
+            key={`commment-${a.id}`}
+            arrow={a}
             rep={rep}
           />
         )

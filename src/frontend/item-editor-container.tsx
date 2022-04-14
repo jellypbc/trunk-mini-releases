@@ -6,15 +6,13 @@ import type { EditorView } from 'prosemirror-view'
 import type { Schema } from 'prosemirror-model'
 import { exampleSetup } from './editor/plugins/index'
 import Editor from './editor'
-import styles from './item-draft-editor-container.module.css'
-import EditorDraftingContainer from './editor-drafting-container'
-import { useUserInfo, useItemIDs, getSortedItems } from '../datamodel/subscriptions'
+import { useUserInfo, useItemIDs } from '../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { randomArrow } from '../datamodel/arrow'
 import { randomItem } from '../datamodel/item'
-import Fuse from 'fuse.js'
 import { htmlToText } from '../util/htmlToText'
+import ArrowFloater from './arrow-floater'
 
 type Props = {
   content: any
@@ -25,8 +23,6 @@ type Props = {
   item: any
   itemID: string
 }
-
-const initialValue = '<p></p>'
 
 function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item, itemID } : Props) {
   const parser = createParser(schema)
@@ -40,37 +36,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   const [_, setView] = useState<EditorView>()
   const [showCommentFloater, setShowCommentFloater] = useState<boolean>(false)
   const [serializedSelection, setSerializedSelection] = useState<string>('')
-  const [showOptions, setShowOptions] = useState<boolean>(false)
-  const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
-  const [commentDraft, setCommentDraft] = useState<string>(initialValue)
   const [arrows, setArrows] = useState<any>(item.arrows)
-  const [searchResults, setSearchResults] = useState<any>([])
-
-
-  const allItems = getSortedItems(rep)
-  const options = {
-    // isCaseSensitive: false,
-    // includeScore: false,
-    // shouldSort: true,
-    // includeMatches: false,
-    // findAllMatches: false,
-    // minMatchCharLength: 1,
-    // location: 0,
-    // threshold: 0.6,
-    // distance: 100,
-    // useExtendedSearch: false,
-    // ignoreLocation: false,
-    // ignoreFieldNorm: false,
-    // fieldNormWeight: 1,
-    keys: [
-      'id',
-      'content',
-      'highlight',
-      'title',
-      'createdBy'
-    ]
-  }
-  const fuse = new Fuse(allItems, options)
 
   useEffect(() => {
     const state = createStateFromProps(
@@ -87,20 +53,6 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   }, [])
 
   useEffect(() => {
-    console.log('commentDraft', commentDraft)
-    const searchTerm = htmlToText(commentDraft)
-    console.log('searchTerm', searchTerm)
-    if (allItems) {
-      const results = fuse.search(searchTerm)
-      setSearchResults(results)
-    }
-  }, [commentDraft])
-
-  useEffect(() => {
-    !showCommentFloater && setShowReplyForm(false)
-  }, [showCommentFloater])
-
-  useEffect(() => {
     const state = createStateFromProps(
       doc,
       schema,
@@ -112,9 +64,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     )
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
-    setCommentDraft(initialValue)
     setSerializedSelection('')
-    setShowReplyForm(false)
     setShowCommentFloater(false)
   }, [arrows])
 
@@ -138,11 +88,8 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     setValue(serializer(newState.doc))
   }
 
-  const fakeDispatchTransaction = (tx: Transaction) => {
-    console.log('fakeDispatch', tx)
-  }
 
-  function createCommentItem(){
+  function createCommentItem(commentDraft : string){
     let commentItem = randomItem()
     const commentItemChanges = {
       content: commentDraft,
@@ -155,7 +102,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     return commentItem
   }
 
-  function createArrow(type: string, frontItemID: string) {
+  function createArrow(type: string, frontItemID: string, commentDraft : string) {
     let selection = state?.selection
     let commentArrow = randomArrow()
     const arrowChanges = {
@@ -173,10 +120,10 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     return commentArrow
   }
 
-  function handleCommentAdd() {
-    const commentItem = createCommentItem()
+  function handleCommentAdd(commentDraft: string) {
+    const commentItem = createCommentItem(commentDraft)
 
-    const commentArrow = createArrow('comment', commentItem.id)
+    const commentArrow = createArrow('comment', commentItem.id, commentDraft)
 
     // set newArrow
     const newA = {
@@ -214,7 +161,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   }
 
 
-  function createFootnoteItem(){
+  function createFootnoteItem(commentDraft: string){
     let footnoteItem = randomItem()
     const footnoteItemChanges = {
       content: commentDraft,
@@ -228,13 +175,13 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     return footnoteItem
   }
 
-  function handleFootnoteAdd() {
+  function handleFootnoteAdd(commentDraft: string) {
     // create footnoteItem
-    let footnoteItem = createFootnoteItem()
+    let footnoteItem = createFootnoteItem(commentDraft)
     console.log('footnoteItem', footnoteItem)
 
     // create footnoteArrow
-    const footnoteArrow = createArrow('footnote', footnoteItem.id)
+    const footnoteArrow = createArrow('footnote', footnoteItem.id, commentDraft)
     console.log('footnoteArrow', footnoteArrow)
 
     const newA = {
@@ -271,7 +218,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
 
   }
 
-  function createReferenceItem(){
+  function createReferenceItem(commentDraft:string){
     let referenceItem = randomItem()
     const referenceItemChanges = {
       title: commentDraft,
@@ -284,14 +231,14 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
   }
 
 
-  function handleReferenceAdd(){
+  function handleReferenceAdd(commentDraft : string){
     // find if the comment is a valid itemID
     const cleanText = htmlToText(commentDraft)
 
     // if the comment is a valid itemID, draw arrow to existing item
     if (cleanText.length === 21 && itemIDs.includes(cleanText)) {
       // create an arrow
-      const referenceArrow = createArrow('reference', cleanText)
+      const referenceArrow = createArrow('reference', cleanText, commentDraft)
 
       // create newA
       const newA = {
@@ -323,11 +270,11 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     } else { // create a new item and draw and arrow
 
       // create referenceItem
-      const referenceItem = createReferenceItem()
+      const referenceItem = createReferenceItem(commentDraft)
 
       // create arrow
 
-      const referenceArrow = createArrow('reference', referenceItem.id)
+      const referenceArrow = createArrow('reference', referenceItem.id, commentDraft)
 
       // set newA
 
@@ -371,7 +318,7 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
 
   function handleArrowAdd(id: string) {
     //create arrow
-    const referenceArrow = createArrow('reference', id)
+    const referenceArrow = createArrow('reference', id, '')
     //make newA
 
     const newA = {
@@ -407,78 +354,15 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
       {state &&
         <>
           {showCommentFloater &&
-            <div className={styles.commentFloaterContainer}>
-              { showOptions &&
-                <div className={styles.optionsContainer}>
-                  <div
-                    className={styles.option}
-                    // dataTooltip={`Add Reaction · A`}
-                  >
-                    🙂
-                  </div>
-                  <div
-                    className={styles.option}
-                    // dataTooltip={`Reply · R`}
-                    onClick={() => setShowReplyForm(true)}
-                  >
-                    💬
-                  </div>
-                  <div
-                    className={styles.option}
-                    // dataTooltip={`Delete · D`}
-                  >
-                    ...
-                  </div>
-                </div>
-              }
-              <div
-                className={styles.selectedText}
-                onMouseOver={() => setShowOptions(true)}
-              >
-                <Editor
-                  type={'highlight'}
-                  ref={null}
-                  state={createStateFromProps(serializedSelection, schema, parser, viewRef && viewRef.current && viewRef.current.view, [], rep, itemID)}
-                  dispatchTransaction={fakeDispatchTransaction}
-                  editable={false}
-                />
-              </div>
-              {showReplyForm && allItems &&
-                <>
-                  <EditorDraftingContainer
-                    rep={rep}
-                    content={commentDraft}
-                    clientInfo={userInfo}
-                    setValue={setCommentDraft}
-                  />
-                  <div className={styles.buttonsContainer}>
-                    <button
-                      className={'btn btn-secondary'}
-                      onClick={handleReferenceAdd}
-                    >Reference</button>
-                    <button
-                      className={'btn btn-secondary'}
-                      onClick={handleCommentAdd}
-                    >Comment</button>
-                    <button
-                      className={'btn btn-secondary'}
-                      onClick={handleFootnoteAdd}
-                    >Footnote</button>
-                  </div>
-                  <div className={styles.searchResults}>
-                    {searchResults && searchResults.map((result: any) => {
-                      return (
-                        <SearchResult
-                          key={`srl-${result.item.id}`}
-                          result={result.item}
-                          handleArrowAdd={handleArrowAdd}
-                        />
-                      )
-                    })}
-                  </div>
-                </>
-              }
-            </div>
+            <ArrowFloater
+              serializedSelection={serializedSelection}
+              rep={rep}
+              userInfo={userInfo}
+              handleReferenceAdd={handleReferenceAdd}
+              handleCommentAdd={handleCommentAdd}
+              handleFootnoteAdd={handleFootnoteAdd}
+              handleArrowAdd={handleArrowAdd}
+            />
           }
           <Editor
             type={type}
@@ -492,18 +376,6 @@ function ItemEditorContainer({ content: doc, setValue, editable, type, rep, item
     </>
   )
 }
-
-function SearchResult({ result, handleArrowAdd } : any) {
-  return(
-    <div
-      className={styles.searchResult}
-      onClick={() => handleArrowAdd(result.id)}
-    >
-      {result.title && htmlToText(result.title)}
-    </div>
-  )
-}
-
 
 const createStateFromProps = (
   doc: string,

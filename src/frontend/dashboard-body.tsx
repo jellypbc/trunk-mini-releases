@@ -165,7 +165,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
           <div className={styles.title}>
             {!showTitleEditor
             ?
-              <span onClick={() => setShowTitleEditor(true)}>{htmlToText(item.title)}</span>
+              <span className={styles.readOnly} onClick={() => setShowTitleEditor(true)}>{htmlToText(item.title)}</span>
             :
             <TestEditor
               doc={item.title}
@@ -180,7 +180,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
         <div className={styles.content}>
           {!showContentEditor
           ?
-            <span onClick={() => setShowContentEditor(true)}>{htmlToText(item.content)}</span>
+            <span className={styles.readOnly} onClick={() => setShowContentEditor(true)}>{htmlToText(item.content)}</span>
           :
             <TestEditor
               doc={item.content}

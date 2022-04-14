@@ -1,24 +1,51 @@
 import React from 'react'
-import { useItemByID } from '../datamodel/subscriptions'
+import { getArrowsByIDs , useItemByID } from '../datamodel/subscriptions'
 import styles from './test-editor-container.module.css'
+import { htmlToText } from '../util/htmlToText'
 
-export default function TestEditorFootnotes({ rep, itemID } : { rep: any, itemID: string }) {
-  const item = useItemByID(rep, itemID)
+export default function TestEditorFootnotes({ rep, arrows, itemID } : { rep: any, arrows: any[], itemID: string }) {
+  const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
+  const footnoteArrowIDs = footnotes.map((a: any) => a.arrowID)
   return (
-    item &&
+    arrows &&
     <div className={styles.section}>
-      {item.arrows &&
-        <FootnoteContainer arrows={item.arrows} />
-      }
+      <FootnoteContainer
+        arrowIDs={footnoteArrowIDs}
+        rep={rep}
+      />
     </div>
   )
 }
 
-function FootnoteContainer({ arrows } : any){
-  const footnotes = arrows.filter((a: any) => a.kind === 'footnote') || []
+function FootnoteContainer({ rep, arrowIDs } : any){
+  const arrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <>
-      <div className={styles.sectionHeader}>Footnotes <span className={styles.count}>{footnotes.length}</span></div>
+      <div className={styles.sectionHeader}>
+        Footnotes <span className={styles.count}>{arrows.length}</span>
+      </div>
+      {arrows && arrows.map((a: any) => {
+        return (
+          <Arrow
+            key={a.id}
+            arrow={a}
+            rep={rep}
+          />
+        )
+      })}
     </>
+  )
+}
+
+function Arrow({rep, arrow}: any){
+  const item = useItemByID(rep, arrow.frontItemID)
+  return (
+    <div className={styles.commentItem}>
+      {item &&
+        <>
+          <div>{htmlToText(item.content) || 'nothing here'}</div>
+        </>
+      }
+    </div>
   )
 }

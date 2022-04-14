@@ -52,7 +52,6 @@ export function getSortedItems(rep: Replicache<M>) {
   const items = getItems(rep)
   let parsedItems: any[] = []
   items.map(([k, v]: [string, any]) => {
-    // console.log('!v.arrows', !v.arrows && v, k)
     const changes = {
       createdAt:  new Date(v.createdAt),
       arrows: v.arrows && JSON.parse(v.arrows) || [],
@@ -92,20 +91,19 @@ export function useArrowByID(rep: Replicache<M>, id: string) {
 }
 
 export function getArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
+  // this needs to be refactored bc allArrows can be a huge array
+  const allArrows = getArrows(rep)
   let arrows : any[] = []
-  arrowIDs && arrowIDs.map((a: any) => {
-    const arrow = useSubscribe(rep, async (tx) => { return await getArrow(tx, a.arrowID)}, null)
-    arrow && Object.assign(arrow, {id: a.arrowID})
-    arrow && arrows.push(arrow)
+  arrowIDs && arrowIDs.map((arrowID: any) => {
+    allArrows.find(([k, v]: [string, any]) => {
+      const id = k.substr(arrowPrefix.length)
+      if (id === arrowID) {
+        arrows.push(Object.assign(v, {id: id}))
+      }
+    })
   })
   return arrows
 }
-
-// export function useFootnoteIDsByID(rep: Replicache<M>, id: string) {
-//   const { arrows } = async useItemByID(rep, id )
-//   let footnotes: string[] = []
-// }
-
 
 export function useShapeIDs(rep: Replicache<M>) {
   return useSubscribe(

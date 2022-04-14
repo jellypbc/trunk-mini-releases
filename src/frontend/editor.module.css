@@ -3,9 +3,9 @@
   resize: none;
   background-color: inherit;
   outline: none;
-  width: 100%;
   font-size: 1rem;
   line-height: 1.6em;
+  overflow: auto;
 }
 
 .titleContainer * {
@@ -14,9 +14,7 @@
   resize: none;
   background-color: inherit;
   outline: none;
-  width: 100%;
   font-size: 1.6rem;
-  overflow: auto;
 }
 
 .commentDraft * {

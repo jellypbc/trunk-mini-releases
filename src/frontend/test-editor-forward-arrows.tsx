@@ -1,41 +1,33 @@
 import React from 'react'
-import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
+import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 
-export default function TestEditorForwardArrows({ rep, itemID } : { rep: any, itemID: string }) {
-  const item = useItemByID(rep, itemID)
+export default function TestEditorForwardArrows({ rep, itemID, arrows} : { rep: any, itemID: string, arrows: any[] }) {
+  const forwardArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
+  const forwardArrowIDs = forwardArrows.map((a: any) => a.arrowID)
   return (
-    item &&
-    <div className={styles.section}>
-      {item.arrows &&
+    forwardArrowIDs &&
+      <div className={styles.section}>
         <ForwardArrowContainer
           rep={rep}
-          arrows={item.arrows}
+          arrowIDs={forwardArrowIDs}
           itemID={itemID}
         />
-      }
-    </div>
+      </div>
   )
 }
 
-function ForwardArrowContainer({ rep, arrows, itemID }: any ) {
-  const forwardArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
-  const frontItemIDs : string[] = []
-  forwardArrows.map((a: any) => {
-    const arrow = useArrowByID(rep, a.arrowID)
-    if (arrow) {
-      frontItemIDs.includes(arrow.frontItemID) === false && frontItemIDs.push(arrow.frontItemID)
-    }
-  })
+function ForwardArrowContainer({ rep, arrowIDs }: any) {
+  const arrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <>
-      <div className={styles.sectionHeader}>→ <span className={styles.count}>{frontItemIDs.length}</span> </div>
-      {frontItemIDs && frontItemIDs.map((itemID: any) => {
+      <div className={styles.sectionHeader}>→ <span className={styles.count}>{arrowIDs.length}</span> </div>
+      {arrows && arrows.map((arrow: any) => {
         return (
           <Arrow
-            key={`arrow-${itemID}`}
-            itemID={itemID}
+            key={`arrow-${arrow.id}`}
+            arrow={arrow}
             rep={rep}
           />
         )
@@ -44,8 +36,8 @@ function ForwardArrowContainer({ rep, arrows, itemID }: any ) {
   )
 }
 
-function Arrow({rep, itemID}: any){
-  const item = useItemByID(rep, itemID)
+function Arrow({rep, arrow}: any){
+  const item = useItemByID(rep, arrow.frontItemID)
   return (
     <div className={styles.item}>
       {item && htmlToText(item.title) || 'nothing here'}

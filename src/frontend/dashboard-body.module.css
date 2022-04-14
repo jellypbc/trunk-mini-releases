@@ -39,7 +39,6 @@
 
 .feed {
 
-
 }
 
 .avatarContainer {
@@ -55,7 +54,7 @@
 }
 
 .item {
-  width: 100%;
+  width: 500px;
   border-radius: .2rem;
   padding: 1rem 2rem;
   border: 1px solid #ccc;
@@ -129,11 +128,14 @@
   padding: 1rem;
 }
 
+.readOnly {
+  word-wrap: break-word;
+}
+
 .title {
   font-size: 1.6rem;
   color: hsl(0,0%, 20%);
   margin: .2rem .2rem .2rem 0;
-
 }
 
 .titleContainer {
