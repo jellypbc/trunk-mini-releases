@@ -61,6 +61,13 @@
 }
 
 .titleEditor {
+
+}
+
+.expand {
+  color: hsl(0, 0%, 70%);
+  padding-left: 1rem;
+  cursor: pointer;
 }
 
 .meta {

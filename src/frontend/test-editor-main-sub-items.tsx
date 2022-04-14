@@ -4,7 +4,7 @@ import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 import TestEditor from './test-editor'
 
-export default function TestEditorMainSubItems({ rep, itemID } : any) {
+export default function TestEditorMainSubItems({ rep, itemID, handleSetSelectedItemID} : any) {
   const item = useItemByID(rep, itemID)
   return (
     item &&
@@ -14,13 +14,14 @@ export default function TestEditorMainSubItems({ rep, itemID } : any) {
           arrows={item.arrows}
           rep={rep}
           itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       }
     </div>
   )
 }
 
-function SubItemContainer({ arrows, rep, itemID } : any){
+function SubItemContainer({ arrows, rep, itemID, handleSetSelectedItemID } : any){
   const subItems = arrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID) || []
   return (
     <>
@@ -32,6 +33,7 @@ function SubItemContainer({ arrows, rep, itemID } : any){
             key={a.arrowID}
             arrow={arrow}
             rep={rep}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
       })}
@@ -39,7 +41,7 @@ function SubItemContainer({ arrows, rep, itemID } : any){
   )
 }
 
-function Arrow({rep, arrow}: any){
+function Arrow({rep, arrow, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, arrow.frontItemID)
   const [showContent, setShowContent] = useState<boolean>(false)
   return (
@@ -48,7 +50,8 @@ function Arrow({rep, arrow}: any){
         className={styles.titleEditor}
         onClick={() => setShowContent(!showContent)}
       >
-        <div className={styles.titleSubItem}>{item && htmlToText(item.title) || 'nothing here'}</div>
+        <span className={styles.titleSubItem}>{item && htmlToText(item.title) || 'nothing here'}</span>
+        <span className={styles.expand} onClick={() => handleSetSelectedItemID(arrow.frontItemID)}>↗</span>
       </div>
       { showContent && item &&
         <div className={styles.subItemContent}>

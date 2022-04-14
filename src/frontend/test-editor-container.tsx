@@ -43,6 +43,7 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
         <TestEditorParent
           rep={rep}
           itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
         <div className={styles.titleContainer}>
           <div className={styles.bullet}>
@@ -74,6 +75,7 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
           <TestEditorMainSubItems
             rep={rep}
             itemID={itemID}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         </div>
         <Footer
