@@ -40,11 +40,13 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
             {htmlToText(item.highlight)}
           </div>
         }
-        <TestEditorParent
-          rep={rep}
-          itemID={itemID}
-          handleSetSelectedItemID={handleSetSelectedItemID}
-        />
+        <div className={styles.parent}>
+          <TestEditorParent
+            rep={rep}
+            itemID={itemID}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+          />
+        </div>
         <div className={styles.titleContainer}>
           <div className={styles.bullet}>
             <div className={styles.bulletBorder}>

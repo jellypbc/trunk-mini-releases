@@ -7,7 +7,7 @@ export default function TestEditorParent({ rep, itemID, handleSetSelectedItemID 
   const item = useItemByID(rep, itemID)
   return (
     item &&
-    <div className={styles.parent}>
+    <>
       {item.arrows &&
         <ParentItemContainer
           arrows={item.arrows}
@@ -16,7 +16,7 @@ export default function TestEditorParent({ rep, itemID, handleSetSelectedItemID 
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
       }
-    </div>
+    </>
   )
 }
 

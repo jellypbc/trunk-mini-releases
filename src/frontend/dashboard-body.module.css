@@ -140,7 +140,7 @@
 
 .titleContainer {
   display: flex;
-  padding-top: 1rem;
+  padding-top: .5rem;
 }
 
 .bullet {
@@ -177,4 +177,8 @@
   color: hsl(0, 0%, 70%);
   text-align: right;
   cursor: pointer;
+}
+
+.parent {
+  padding: 0 1rem;
 }

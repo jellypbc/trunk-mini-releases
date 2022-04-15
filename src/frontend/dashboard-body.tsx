@@ -5,6 +5,7 @@ import type { M } from '../datamodel/mutators'
 import { htmlToText } from '../util/htmlToText'
 import { useArrowByID, useItemByID } from '../datamodel/subscriptions'
 import TestEditor from './test-editor'
+import TestEditorParent from './test-editor-parent'
 
 type Props = {
   rep: Replicache<M>
@@ -155,6 +156,13 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
             </div>
           </>
         }
+        <div className={styles.parent}>
+          <TestEditorParent
+            rep={rep}
+            itemID={itemID}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+          />
+        </div>
         <div className={styles.titleContainer}>
           <div className={styles.bullet}>
             <div className={styles.bulletBorder}>
