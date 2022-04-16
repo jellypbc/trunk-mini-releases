@@ -91,6 +91,7 @@ export default function ArrowFloater({ serializedSelection, rep, userInfo, handl
             content={commentDraft}
             clientInfo={userInfo}
             setValue={setCommentDraft}
+            type={''}
           />
           <div className={styles.buttonsContainer}>
             <button

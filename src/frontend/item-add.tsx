@@ -91,6 +91,7 @@ export default function ItemCreate({rep, drafts, handleSetDrafts }: Props) {
                 content={value}
                 clientInfo={userInfo}
                 setValue={setValue}
+                type={''}
               />
             }
           </div>

@@ -224,6 +224,7 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
           content={authorDraft}
           clientInfo={userInfo}
           setValue={setAuthorDraft}
+          type={''}
         />
       </div>
       <div className={styles.authorActions}>

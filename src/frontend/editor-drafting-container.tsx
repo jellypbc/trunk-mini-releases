@@ -14,8 +14,9 @@ type Props = {
   content: any,
   clientInfo: any,
   setValue: (value: string) => void
+  type: string
 }
-function EditorDraftingContainer({ rep, content : doc, clientInfo, setValue } : Props) {
+function EditorDraftingContainer({ rep, content : doc, clientInfo, setValue, type } : Props) {
   console.log('clientInfo', clientInfo)
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
@@ -67,7 +68,7 @@ function EditorDraftingContainer({ rep, content : doc, clientInfo, setValue } : 
           ref={viewRef}
           state={state}
           dispatchTransaction={dispatchTransaction}
-          type={'commentDraft'}
+          type={type}
         />
       }
     </>

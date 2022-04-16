@@ -133,6 +133,7 @@ function ItemDraftEditorContainer({ content: doc, setValue, editable, type, rep,
                     content={commentDraft}
                     clientInfo={userInfo}
                     setValue={setCommentDraft}
+                    type={''}
                   />
                   <button
                   onClick={handleCommentAdd}

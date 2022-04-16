@@ -27,7 +27,11 @@
 }
 
 .viewAll {
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
+  padding-right: 4rem;
   padding-top: .5rem;
+  cursor: pointer;
 }
 
 .itemContainer {
@@ -181,4 +185,66 @@
 
 .parent {
   padding: 0 1rem;
+}
+
+.titleTextArea {
+  border: none;
+  background: inherit;
+  resize: none;
+  outline: none;
+}
+
+.contentTextArea {
+  border: none;
+  background: inherit;
+  resize: none;
+  outline: none;
+}
+
+
+.itemDraftingContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  display: flex;
+  padding-right: 1rem;
+  width: 650px;
+  border-bottom: 1px solid hsl(0, 0%, 80%);
+}
+
+.thing {
+  display: flex;
+}
+
+.draftActions {
+  text-align: right;
+  padding: 1rem 2rem;
+  color: hsl(0, 0%, 70%);
+  cursor: pointer;
+  font-size: .8rem;
+}
+
+.itemDraft {
+  width: 500px;
+  border-radius: .2rem;
+  padding: 1rem 2rem;
+  border: 1px solid #ccc;
+  background-color: hsl(0, 0%, 96%);
+  border-radius: .4rem;
+  position: relative; /* this is for the tooltip later */
+}
+
+.titleDraftContainer {
+  display: flex;
+  padding-top: 2rem;
+
+}
+
+.titleDraft {
+  font-size: 1.6rem;
+  color: hsl(0,0%, 20%);
+}
+
+.titleDraft textarea {
+  height: 40px;
 }

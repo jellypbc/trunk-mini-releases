@@ -3,9 +3,10 @@ import styles from './dashboard-body.module.css'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { htmlToText } from '../util/htmlToText'
-import { useArrowByID, useItemByID } from '../datamodel/subscriptions'
 import TestEditor from './test-editor'
+import { useItemByID, useArrowByID} from '../datamodel/subscriptions'
 import TestEditorParent from './test-editor-parent'
+import { HotKeys } from 'react-hotkeys'
 
 type Props = {
   rep: Replicache<M>
@@ -16,27 +17,34 @@ type Props = {
 export default function DashboardBody({ rep, items, handleSetSelectedItemID } : Props) {
   const [showIndex, setShowIndex] = useState<boolean>(false)
 
+
   return (
-    <div className={styles.container}>
-      <div className={styles.view}>
-        {!showIndex ?
-          <ActivityView
-            setShowIndex={setShowIndex}
-            items={items}
-            rep={rep}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-          />
-        :
-          <IndexView
-            setShowIndex={setShowIndex}
-            items={items}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-          />
-        }
+      <div className={styles.container}>
+        <div className={styles.view}>
+          {!showIndex ?
+            <ActivityView
+              setShowIndex={setShowIndex}
+              items={items}
+              rep={rep}
+              handleSetSelectedItemID={handleSetSelectedItemID}
+            />
+          :
+            <IndexView
+              setShowIndex={setShowIndex}
+              items={items}
+              handleSetSelectedItemID={handleSetSelectedItemID}
+            />
+          }
+        </div>
       </div>
-    </div>
+
   )
 }
+
+const keyMap = {
+  createItem: ['command+enter']
+}
+
 
 function IndexView({ setShowIndex, items, handleSetSelectedItemID } : any) {
   return (
@@ -94,9 +102,9 @@ function ActivityView({ setShowIndex, rep, items, handleSetSelectedItemID } : an
         </div>
         <div className={styles.optionActions}>
           <div>
-            <button className={'button button-secondary'}>
+            {/* <button className={'button button-secondary'}>
               Add new item
-            </button>
+            </button> */}
           </div>
           <div
             className={styles.viewAll}
@@ -106,43 +114,173 @@ function ActivityView({ setShowIndex, rep, items, handleSetSelectedItemID } : an
           </div>
         </div>
       </div>
-        <div className={styles.feed}>
-          { items.slice(0, itemsShown).map((item: any) => {
-            return (
-              <div key={item.id}>
-                <ActivityItem
-                  itemID={item.id}
-                  rep={rep}
-                  handleSetSelectedItemID={handleSetSelectedItemID}
-                />
-              </div>
-            )
-          })}
-        </div>
+      <ItemDraft
+        rep={rep}
+      />
+      <div className={styles.feed}>
+        { items.slice(0, itemsShown).map((item: any) => {
+          return (
+            <div key={item.id}>
+              <ActivityItem
+                itemID={item.id}
+                rep={rep}
+                handleSetSelectedItemID={handleSetSelectedItemID}
+              />
+            </div>
+          )
+        })}
+      </div>
       <div className={styles.buttonContainer}>
         <button
           className={'button button-primary'}
           onClick={addTenItems}
         >
-            Show more items
-          </button>
+          Show more items
+        </button>
       </div>
     </div>
   )
 }
 
+import EditorDraftingContainer from './editor-drafting-container'
+import { randomItem } from '../datamodel/item'
+
+function ItemDraft({rep}  : any) {
+  const [titleDraft, setTitleDraft] = useState<string>('<p> </p>')
+  const [contentDraft, setContentDraft] = useState<string>('<p> </p>')
+
+  const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
+  const [showTitleEditor, setShowTitleEditor] = useState<boolean>(false)
+
+
+  function saveDraftAsItem(){
+    const item = randomItem()
+    const changes = {
+      title: titleDraft,
+      content: contentDraft,
+    }
+
+    const itemItem = {...item.item, ...changes}
+    rep.mutate.createItem({id: item.id, item: itemItem})
+
+  }
+
+  const handlers = {
+    createItem: () => {
+      saveDraftAsItem()
+      setTitleDraft('<p> </p>')
+      setContentDraft('<p> </p>')
+      setShowTitleEditor(false)
+      setShowContentEditor(false)
+    }
+  }
+  const placeholderText = `What's on your mind?`
+  return (
+    <HotKeys
+      {...{
+        style: { outline: "none", display: "flex", flex: 1 },
+        keyMap,
+        handlers,
+      }}
+    >
+    <div className={styles.itemDraftingContainer}>
+      <div className={styles.thing}>
+        <div className={styles.avatarContainer}>
+          <div className={styles.avatar}></div>
+        </div>
+        <div className={styles.itemDraft}>
+          <div className={styles.titleDraftContainer}>
+            <div className={styles.bullet}>
+              <div className={styles.bulletBorder}>
+                <div className={styles.bulletCenter}>
+                </div>
+              </div>
+            </div>
+            <div className={styles.titleDraft}>
+              {!showTitleEditor ?
+                <textarea
+                  placeholder={`Untitled`}
+                  className={styles.titleTextArea}
+                  onClick={() => setShowTitleEditor(true)}
+                />
+                :
+                <div>
+                  <EditorDraftingContainer
+                    rep={rep}
+                    content={titleDraft}
+                    clientInfo={null}
+                    setValue={setTitleDraft}
+                    type='title'
+                  />
+                </div>
+              }
+            </div>
+          </div>
+          <div className={styles.content}>
+            {!showContentEditor ?
+              <textarea
+                placeholder={placeholderText}
+                className={styles.contentTextArea}
+                onClick={() => setShowContentEditor(true)}
+              />
+            :
+            <EditorDraftingContainer
+              rep={rep}
+              content={contentDraft}
+              clientInfo={null}
+              setValue={setContentDraft}
+              type='content'
+            />
+            }
+          </div>
+        </div>
+      </div>
+      <div className={styles.draftActions}>
+        <div
+          onClick={() => saveDraftAsItem()
+        }>⌘+Enter to Publish</div>
+      </div>
+    </div>
+    </HotKeys>
+  )
+}
+
+import EditorOptions from './editor-options'
+
 function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
   const item = useItemByID(rep, itemID)
   const [showTitleEditor, setShowTitleEditor] = useState<boolean>(false)
   const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
+  const [showOptions, setShowOptions ] = useState<boolean>(false)
+
+  function handleExpandItem(){
+    handleSetSelectedItemID(itemID)
+  }
+
+  function handleItemDelete(){
+    rep.mutate.deleteItem(itemID)
+  }
 
   return (
     item &&
-    <div className={styles.itemContainer}>
+    <div
+      className={styles.itemContainer}
+      onMouseLeave={() => setShowOptions(false)}
+    >
       <div className={styles.avatarContainer}>
         <div className={styles.avatar}></div>
       </div>
-      <div className={styles.item}>
+      <div
+        className={styles.item}
+        onMouseOver={() => setShowOptions(true)}
+      >
+        { showOptions &&
+            <EditorOptions
+              handleSetShowOptions={setShowOptions}
+              handleSetSelectedDraftID={handleExpandItem}
+              handleDraftDelete={handleItemDelete}
+            />
+          }
         <div className={styles.expandItem} onClick={() => handleSetSelectedItemID(itemID)}>Expand</div>
         { item.highlight &&
           <>

@@ -217,6 +217,7 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
           content={subItemDraft}
           clientInfo={userInfo}
           setValue={setSubItemDraft}
+          type={''}
         />
       </div>
       <div className={styles.authorActions}>
