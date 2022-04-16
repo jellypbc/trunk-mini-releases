@@ -10,6 +10,7 @@ import TestEditorComments from './test-editor-comments'
 import TestEditorParent from './test-editor-parent'
 import TestEditorMainSubItems from './test-editor-main-sub-items'
 import TestEditorAuthors from './test-editor-authors'
+import TestEditorSubItems from './test-editor-sub-items'
 
 
 export default function TestEditorContainer({rep, itemID, handleSetSelectedItemID} : any) {
@@ -26,6 +27,8 @@ export default function TestEditorContainer({rep, itemID, handleSetSelectedItemI
 }
 
 function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
+  const arrowIDs = item.arrows.map((a: any) => a.arrowID)
+  const fullArrows = getArrowsByIDs(rep, arrowIDs)
   return (
     <div className={styles.container}>
       <div className={styles.expandedEditorContainer}>
@@ -75,26 +78,30 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
           />
         </div>
         <div className={styles.mainSubItems}>
-          <TestEditorMainSubItems
+          {fullArrows &&
+            <TestEditorMainSubItems
+              rep={rep}
+              itemID={itemID}
+              handleSetSelectedItemID={handleSetSelectedItemID}
+              fullArrows={fullArrows}
+            />
+          }
+        </div>
+        { fullArrows &&
+          <Footer
             rep={rep}
             itemID={itemID}
+            arrows={item.arrows}
+            fullArrows={fullArrows}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
-        </div>
-        <Footer
-          rep={rep}
-          itemID={itemID}
-          arrows={item.arrows}
-          handleSetSelectedItemID={handleSetSelectedItemID}
-        />
+        }
       </div>
     </div>
   )
 }
 
-function Footer({rep, itemID, arrows, handleSetSelectedItemID} : any) {
-  const arrowIDs = arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any) {
   return (
     fullArrows &&
     <div className={styles.meta}>
@@ -105,6 +112,12 @@ function Footer({rep, itemID, arrows, handleSetSelectedItemID} : any) {
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
       <TestEditorAuthors
+        rep={rep}
+        itemID={itemID}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+      <TestEditorSubItems
         rep={rep}
         itemID={itemID}
         fullArrows={fullArrows}
@@ -128,6 +141,7 @@ function Footer({rep, itemID, arrows, handleSetSelectedItemID} : any) {
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
+
     </div>
   )
 }

@@ -1,48 +1,32 @@
 import React, { useState } from 'react'
-import { useItemByID, useArrowByID } from '../datamodel/subscriptions'
+import { useItemByID } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './test-editor-container.module.css'
 import TestEditor from './test-editor'
 
-export default function TestEditorMainSubItems({ rep, itemID, handleSetSelectedItemID} : any) {
+export default function TestEditorMainSubItems({ rep, itemID, handleSetSelectedItemID, fullArrows} : any) {
+  const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
+  const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
+  return (
+    subItemItemIDs &&
+      <div className={styles.mainSubItems}>
+        {subItemItemIDs.map((itemID: any) => {
+          return (
+            <SubItemMain
+              rep={rep}
+              key={`subItemMain-${itemID}`}
+              itemID={itemID}
+              handleSetSelectedItemID={handleSetSelectedItemID}
+            />
+          )
+        })}
+      </div>
+  )
+}
+
+
+function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, itemID)
-  return (
-    item &&
-    <div className={styles.mainSubItems}>
-      {item.arrows &&
-        <SubItemContainer
-          arrows={item.arrows}
-          rep={rep}
-          itemID={itemID}
-          handleSetSelectedItemID={handleSetSelectedItemID}
-        />
-      }
-    </div>
-  )
-}
-
-function SubItemContainer({ arrows, rep, itemID, handleSetSelectedItemID } : any){
-  const subItems = arrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID) || []
-  return (
-    <>
-      {subItems && subItems.map((a: any) => {
-        const arrow = useArrowByID(rep, a.arrowID)
-        return (
-          arrow &&
-          <Arrow
-            key={a.arrowID}
-            arrow={arrow}
-            rep={rep}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-          />
-        )
-      })}
-    </>
-  )
-}
-
-function Arrow({rep, arrow, handleSetSelectedItemID}: any){
-  const item = useItemByID(rep, arrow.frontItemID)
   const [showContent, setShowContent] = useState<boolean>(false)
   return (
     <div className={styles.subItemTitleContainer}>
@@ -51,7 +35,7 @@ function Arrow({rep, arrow, handleSetSelectedItemID}: any){
         onClick={() => setShowContent(!showContent)}
       >
         <span className={styles.titleSubItem}>{item && htmlToText(item.title) || 'nothing here'}</span>
-        <span className={styles.expand} onClick={() => handleSetSelectedItemID(arrow.frontItemID)}>↗</span>
+        <span className={styles.expand} onClick={() => handleSetSelectedItemID(itemID)}>↗</span>
       </div>
       { showContent && item &&
         <div className={styles.subItemContent}>
@@ -59,7 +43,7 @@ function Arrow({rep, arrow, handleSetSelectedItemID}: any){
             doc={item.content}
             type={'content'}
             rep={rep}
-            itemID={arrow.frontItemID}
+            itemID={itemID}
             arrows={[]}
           />
         </div>
