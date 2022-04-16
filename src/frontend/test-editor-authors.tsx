@@ -7,6 +7,7 @@ import EditorDraftingContainer from './editor-drafting-container'
 import { getSortedItems, useItemByID } from '../datamodel/subscriptions'
 import Fuse from 'fuse.js'
 import { randomArrow } from '../datamodel/arrow'
+import { randomItem } from '../datamodel/item'
 
 type Props = {
   rep: Replicache<M>
@@ -169,6 +170,52 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
     handleSetShowAddAuthor(false)
   }
 
+  function createAuthorItem(authorDraft:string){
+    let referenceItem = randomItem()
+    const referenceItemChanges = {
+      title: authorDraft,
+      createdBy: '😸'
+    }
+
+    referenceItem.item = {...referenceItem.item, ...referenceItemChanges}
+
+    return referenceItem
+  }
+
+  function handleReferenceAdd(){
+    // create referenceItem
+    const referenceItem = createAuthorItem(authorDraft)
+
+    // create arrow
+    const referenceArrow = createArrow('author', referenceItem.id, authorDraft)
+
+    // set newA
+    const newA = {
+      arrowID: referenceArrow.id,
+      to: referenceArrow.arrow.to,
+      from: referenceArrow.arrow.from,
+      kind: referenceArrow.arrow.kind,
+      backItemID: referenceArrow.arrow.backItemID
+    }
+
+    // push newA to referenceItem.arrows
+    const arrows = []
+    arrows.push(newA)
+    referenceItem.item.arrows = JSON.stringify(arrows)
+
+    // save author arrow
+    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+
+    // save new item, with author arrow
+    rep.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
+
+    // add author arrow to existing item
+    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
+
+    setAuthorDraft('<p></p>')
+    handleSetShowAddAuthor(false)
+  }
+
   return (
     <div className={styles.addArrow}>
       <div className={styles.authorInput}>
@@ -180,7 +227,7 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
         />
       </div>
       <div className={styles.authorActions}>
-        <button>Add</button>
+        <button onClick={handleReferenceAdd}>Add</button>
         <div
           className={styles.addArrowExit}
           onClick={() => handleSetShowAddAuthor(false)}
