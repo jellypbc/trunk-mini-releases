@@ -189,6 +189,8 @@ function TestEditor({ doc, type, rep, itemID, arrows } : Props) {
     rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
     // set arrows in this component, so that the editor knows to draw the decoration
     // setArrows(itemArrows)
+    setShowArrowFloater(false)
+
   }
 
 
@@ -246,6 +248,8 @@ function TestEditor({ doc, type, rep, itemID, arrows } : Props) {
     rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
 
     // setArrows(itemArrows)
+    setShowArrowFloater(false)
+
 
   }
 
@@ -344,6 +348,7 @@ function TestEditor({ doc, type, rep, itemID, arrows } : Props) {
       // we don't need this anymore because we're subscribing to arrows in the component above this one... and it should autoupdate itself
       // // set local arrows
       // setArrows(itemArrows)
+      setShowArrowFloater(false)
     }
 
   }
@@ -378,6 +383,7 @@ function TestEditor({ doc, type, rep, itemID, arrows } : Props) {
 
     // add arrow to existing item
     rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
+    setShowArrowFloater(false)
 
   }
 

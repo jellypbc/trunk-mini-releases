@@ -92,7 +92,6 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
 }
 
 function Footer({rep, itemID, arrows, handleSetSelectedItemID} : any) {
-
   return (
     <div className={styles.meta}>
       <TestEditorFootnotes
