@@ -1,10 +1,10 @@
 import React from 'react'
-import { useItemByID } from '../datamodel/subscriptions'
+import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import TestEditor from './test-editor'
 import { htmlToText } from '../util/htmlToText'
 import styles from './test-editor-container.module.css'
 import TestEditorFootnotes from './test-editor-footnotes'
-import TestEditorForwardArrows from './test-editor-forward-arrows'
+import TestEditorFrontArrows from './test-editor-front-arrows'
 import TestEditorBackArrows from './test-editor-back-arrows'
 import TestEditorComments from './test-editor-comments'
 import TestEditorParent from './test-editor-parent'
@@ -92,7 +92,10 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
 }
 
 function Footer({rep, itemID, arrows, handleSetSelectedItemID} : any) {
+  const arrowIDs = arrows.map((a: any) => a.arrowID)
+  const fullArrows = getArrowsByIDs(rep, arrowIDs)
   return (
+    fullArrows &&
     <div className={styles.meta}>
       <TestEditorFootnotes
         rep={rep}
@@ -100,16 +103,16 @@ function Footer({rep, itemID, arrows, handleSetSelectedItemID} : any) {
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      <TestEditorForwardArrows
+      <TestEditorFrontArrows
         rep={rep}
         itemID={itemID}
-        arrows={arrows}
+        fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
       <TestEditorBackArrows
         rep={rep}
         itemID={itemID}
-        arrows={arrows}
+        fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
       <TestEditorComments

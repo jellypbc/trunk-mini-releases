@@ -12,22 +12,20 @@ type Props = {
   handleSetSelectedItemID: (item: string) => void
 }
 
-export default function TestEditorBackArrows({ rep, itemID, fullArrows, handleSetSelectedItemID } : Props ) {
-  const backArrows = fullArrows.filter((a: any) => a.kind === 'reference' && a.backItemID !== itemID) || []
-  const backItemIDs = backArrows.map((a: any) => a.backItemID)
-  const uniqueBackItemIDs = [...new Set(backItemIDs)]
+export default function TestEditorFrontArrows({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
+  const forwardArrows = fullArrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
+  const frontItemIDs = forwardArrows.map((a: any) => a.frontItemID)
+  const uniqueFrontItemIDs = [...new Set(frontItemIDs)]
   return (
-    uniqueBackItemIDs &&
-    <div className={styles.section}>
+    uniqueFrontItemIDs &&
+    <>
       <div className={styles.sectionHeader}>
-        <span>←</span>
-        <span className={styles.count}>
-          {backArrows.length}
-        </span>
+        <span>→</span>
+        <span className={styles.count}>{forwardArrows.length}</span>
       </div>
-      {uniqueBackItemIDs.map((itemID: any) => {
+      {uniqueFrontItemIDs.map((itemID: any) => {
         return (
-          <BackArrowItem
+          <FrontArrowItem
             key={`frontArrow-${itemID}`}
             itemID={itemID}
             rep={rep}
@@ -35,17 +33,17 @@ export default function TestEditorBackArrows({ rep, itemID, fullArrows, handleSe
           />
         )
       })}
-    </div>
+    </>
   )
 }
 
-type BackArrowItemProps = {
+type FrontArrowItemProps = {
   rep: Replicache<M>
   itemID: string
   handleSetSelectedItemID: (itemID: string) => void
 }
 
-function BackArrowItem({ rep, itemID, handleSetSelectedItemID }: BackArrowItemProps){
+function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
   const item = useItemByID(rep, itemID)
   return (
     <div
@@ -56,3 +54,4 @@ function BackArrowItem({ rep, itemID, handleSetSelectedItemID }: BackArrowItemPr
     </div>
   )
 }
+
