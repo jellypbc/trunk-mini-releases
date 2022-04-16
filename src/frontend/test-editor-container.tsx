@@ -9,6 +9,7 @@ import TestEditorBackArrows from './test-editor-back-arrows'
 import TestEditorComments from './test-editor-comments'
 import TestEditorParent from './test-editor-parent'
 import TestEditorMainSubItems from './test-editor-main-sub-items'
+import TestEditorAuthors from './test-editor-authors'
 
 
 export default function TestEditorContainer({rep, itemID, handleSetSelectedItemID} : any) {
@@ -103,6 +104,12 @@ function Footer({rep, itemID, arrows, handleSetSelectedItemID} : any) {
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
+      <TestEditorAuthors
+        rep={rep}
+        itemID={itemID}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
       <TestEditorFrontArrows
         rep={rep}
         itemID={itemID}
@@ -123,5 +130,4 @@ function Footer({rep, itemID, arrows, handleSetSelectedItemID} : any) {
       />
     </div>
   )
-
 }

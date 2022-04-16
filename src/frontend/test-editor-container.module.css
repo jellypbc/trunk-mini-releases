@@ -137,3 +137,37 @@
 .commentItem:hover {
   background-color: hsl(0, 0%, 90%);
 }
+
+.addArrow {
+  display: flex;
+  flex-direction: column;
+}
+
+.addArrowExit {
+  padding: 0 1rem;
+}
+
+.authorInput {
+  background-color: hsl(0, 0%, 90%);
+  margin: 1rem 0;
+  padding: 1rem 1rem 0 1rem
+}
+
+.authorActions {
+  display: flex;
+}
+
+.searchResults {
+  max-height: 20vh;
+  overflow: auto;
+  padding: 1rem 0;
+}
+
+.searchResult {
+  text-align: left;
+}
+
+.searchResult:hover {
+  cursor: pointer;
+  background-color: hsl(0, 0%, 88%);
+}
