@@ -7,9 +7,10 @@ type Props = {
   email: string
   itemCount: number
   arrowCount: number
+  handleSetCommandBar: (commandBar: boolean) => void
 }
 
-export default function DashboardNavTop({ email, itemCount, arrowCount } : Props ) {
+export default function DashboardNavTop({ email, itemCount, arrowCount, handleSetCommandBar } : Props ) {
   const router = useRouter()
 
   async function logOut() {
@@ -23,6 +24,7 @@ export default function DashboardNavTop({ email, itemCount, arrowCount } : Props
   return (
     <div className={styles.container}>
       <input
+        onClick={() => handleSetCommandBar(true)}
         className={styles.search}
         placeholder={'Search or type ⌘ + K'}
       />

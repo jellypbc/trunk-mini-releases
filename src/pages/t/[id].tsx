@@ -142,6 +142,7 @@ export default function Home() {
           roomID={trunkID}
           rep={rep}
           handleSetSelectedItemID={setSelectedItemID}
+          handleSetCommandBar={setCommandBar}
         />
         </div>
       </HotKeys>
