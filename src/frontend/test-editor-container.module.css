@@ -175,3 +175,7 @@
 .cancel {
   padding-left: 1rem;
 }
+
+.highlightParentContainer{
+  padding: 1rem 2rem;
+}

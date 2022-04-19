@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
+import { useItemByID, getArrowsByIDs, useArrowByID } from '../datamodel/subscriptions'
 import TestEditor from './test-editor'
 import { htmlToText } from '../util/htmlToText'
 import styles from './test-editor-container.module.css'
@@ -39,6 +39,12 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
           Dashboard
         </div>
         <div className={styles.itemID}>{itemID}</div>
+        <HighlightParent
+          itemID={itemID}
+          arrows={item.arrows}
+          rep={rep}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+        />
         {item.highlight &&
           <div className={styles.highlight}>
             {htmlToText(item.highlight)}
@@ -149,6 +155,62 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
     </div>
   )
 }
+
+function HighlightParent({itemID, arrows, rep, handleSetSelectedItemID}: any) {
+  let a
+  arrows && arrows.map((arrow : any) => {
+    if (
+      arrow.kind === 'comment'
+      &&
+      arrow.backItemID !== itemID
+    ) {
+      a = arrow
+    }
+  })
+
+  if (!a) return null
+
+  const { arrowID } = a
+
+  return (
+    arrowID &&
+    <ParentTitle
+      rep={rep}
+      arrowID={arrowID}
+      handleSetSelectedItemID={handleSetSelectedItemID}
+    />
+  )
+}
+
+function ParentTitle({rep, arrowID, handleSetSelectedItemID}: any) {
+  const fullArrow = useArrowByID(rep, arrowID)
+  return (
+    fullArrow &&
+    <Title
+      rep={rep}
+      itemID={fullArrow.backItemID}
+      handleSetSelectedItemID={handleSetSelectedItemID}
+    />
+  )
+}
+
+function Title({rep, itemID, handleSetSelectedItemID}: any) {
+  const item = useItemByID(rep, itemID)
+  return (
+    item &&
+    <div className={styles.highlightParentContainer}>
+    <div
+      className={styles.parentTitle}
+      onClick={() => handleSetSelectedItemID(itemID)}
+    >
+      <span className={styles.parentArrow}>⮑ </span>
+      {item.title && htmlToText(item.title)}
+    </div>
+    </div>
+  )
+}
+
+
 
 function TestEditorDeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
