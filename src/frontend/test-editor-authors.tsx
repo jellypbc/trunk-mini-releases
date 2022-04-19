@@ -24,7 +24,6 @@ export default function TestEditorAuthors({ rep, itemID, fullArrows, handleSetSe
   const authorArrows= fullArrows.filter((a: any) => a.kind === 'author' && a.backItemID === itemID ) || []
   const authorItemIDs = authorArrows.map((a: any) => a.frontItemID)
   const uniqueAuthorItemIDs = [...new Set(authorItemIDs)]
-  console.log('uniqueAuthorItemIDs', uniqueAuthorItemIDs)
   return (
     <div className={styles.section}>
       <div className={styles.sectionHeader}>

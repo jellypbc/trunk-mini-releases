@@ -105,6 +105,23 @@ export function getArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
   return arrows
 }
 
+export function useAuthorsByItemID(rep: Replicache<M>, itemID: string) {
+  const item = useItemByID(rep, itemID) as unknown as any
+  return (
+    item &&
+    item.arrows.filter((a: any) => {
+      return a.kind === 'author' && a.backItemID === itemID
+    }).map((a: any) => a.arrowID)
+  )
+}
+
+export function useAuthorItemsByArrowIDs(rep: Replicache<M>, arrowIDs: string[]){
+  const arrows = getArrowsByIDs(rep, arrowIDs)
+  return (
+    arrows.map((a: any) => a.frontItemID)
+  )
+}
+
 export function useShapeIDs(rep: Replicache<M>) {
   return useSubscribe(
     rep,

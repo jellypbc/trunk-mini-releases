@@ -4,7 +4,7 @@ import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { htmlToText } from '../util/htmlToText'
 import TestEditor from './test-editor'
-import { useItemByID, useArrowByID} from '../datamodel/subscriptions'
+import { useItemByID, useArrowByID, getArrowsByIDs, useAuthorsByItemID } from '../datamodel/subscriptions'
 import TestEditorParent from './test-editor-parent'
 import { HotKeys } from 'react-hotkeys'
 
@@ -33,6 +33,7 @@ export default function DashboardBody({ rep, items, handleSetSelectedItemID } : 
               setShowIndex={setShowIndex}
               items={items}
               handleSetSelectedItemID={handleSetSelectedItemID}
+              rep={rep}
             />
           }
         </div>
@@ -45,7 +46,12 @@ const keyMap = {
   createItem: ['command+enter']
 }
 
-function IndexView({ setShowIndex, items, handleSetSelectedItemID } : any) {
+function IndexView({ setShowIndex, items, handleSetSelectedItemID, rep } : any) {
+  const [itemsShown, setItemsShown] = useState<number>(10)
+
+  function addTenItems(){
+    setItemsShown(itemsShown + 10)
+  }
   return (
     <div className={styles.indexContainer}>
       <div className={styles.indexNav}>
@@ -65,7 +71,7 @@ function IndexView({ setShowIndex, items, handleSetSelectedItemID } : any) {
         </div>
       </div>
       <div className={styles.itemList}>
-        {items.map((item : any) => {
+        {items.slice(0, itemsShown).map((item : any) => {
           return (
             <div
               key={item.id}
@@ -75,17 +81,57 @@ function IndexView({ setShowIndex, items, handleSetSelectedItemID } : any) {
               <div className={styles.indexItemTitle}>
                 {item.title && htmlToText(item.title)}
               </div>
-              <div className={styles.indexItemAuthor}>
-                Author
-              </div>
+              {item.arrows.length > 0 &&
+                <AuthorInfo
+                  rep={rep}
+                  itemID={item.id}
+                />
+              }
             </div>
           )
         })}
+
       </div>
+      <button
+        className={'button button-primary'} onClick={() => addTenItems()}
+      > Show more items</button>
     </div>
   )
 }
 
+function AuthorInfo({rep, itemID}: any){
+  const authors = useAuthorsByItemID(rep, itemID)
+
+  return (
+    <Thing
+      rep={rep}
+      authorArrowIDs={authors}
+    />
+  )
+}
+
+function Thing({rep, authorArrowIDs} : any) {
+  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+
+  return (
+    fullArrows.length > 0 ?
+      <AuthorFull
+        rep={rep}
+        itemID={fullArrows[0].frontItemID}
+        authorLength={fullArrows.length}
+      />
+      :
+      null
+  )
+}
+
+function AuthorFull({rep, itemID, authorLength}: any) {
+  const item = useItemByID(rep, itemID)
+  return (
+    item &&
+    <div>{htmlToText(item.title).split('[')[0]}  {authorLength > 1 && `+ ${authorLength - 1}`} </div>
+  )
+}
 
 function ActivityView({ setShowIndex, rep, items, handleSetSelectedItemID } : any) {
   const [itemsShown, setItemsShown] = useState<number>(10)
