@@ -129,7 +129,7 @@ function AuthorFull({rep, itemID, authorLength}: any) {
   const item = useItemByID(rep, itemID)
   return (
     item &&
-    <div>{htmlToText(item.title).split('[')[0]}  {authorLength > 1 && `+ ${authorLength - 1}`} </div>
+    <div>By {htmlToText(item.title).split('[')[0]}  {authorLength > 1 && `+ ${authorLength - 1}`} </div>
   )
 }
 
@@ -360,6 +360,14 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
             />
             }
           </div>
+        </div>
+        <div className={styles.authors}>
+          { item.arrows.length > 0 &&
+            <AuthorInfo
+              rep={rep}
+              itemID={itemID}
+            />
+          }
         </div>
         <div className={styles.content}>
           {!showContentEditor

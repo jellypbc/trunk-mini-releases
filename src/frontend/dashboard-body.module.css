@@ -271,3 +271,14 @@
 .expandOption:hover {
   background-color: hsl(0, 0%, 88%);
 }
+
+.authors {
+  color: hsl(0, 0%, 70%);
+  font-size: .8rem;
+  display: flex;
+  padding: 0 1rem;
+}
+
+.by {
+  padding-right: .3rem;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useItemByID, getArrowsByIDs, useArrowByID } from '../datamodel/subscriptions'
+import { useItemByID, getArrowsByIDs, useArrowByID, useAuthorsByItemID } from '../datamodel/subscriptions'
 import TestEditor from './test-editor'
 import { htmlToText } from '../util/htmlToText'
 import styles from './test-editor-container.module.css'
@@ -73,6 +73,14 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
               arrows={[]}
             />
           </div>
+        </div>
+        <div className={styles.authorsContainer}>
+          {item.arrows.length > 0 &&
+            <AuthorInfo
+              rep={rep}
+              itemID={itemID}
+            />
+          }
         </div>
         <div className={styles.content}>
           <TestEditor
@@ -239,6 +247,50 @@ function TestEditorDeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
         >Cancel</span>
         </>
       }
+    </div>
+  )
+}
+
+function AuthorInfo({rep, itemID}: any){
+  const authors = useAuthorsByItemID(rep, itemID)
+
+  return (
+    authors &&
+      <Thing
+        rep={rep}
+        authorArrowIDs={authors}
+      />
+  )
+}
+
+function Thing({rep, authorArrowIDs} : any) {
+  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+
+  if (!fullArrows) return null
+
+  return (
+    <>
+    {fullArrows &&
+      fullArrows.map((a, i) => {
+        return (
+          <AuthorFull
+            rep={rep}
+            itemID={a.frontItemID}
+            isLast={i === fullArrows.length - 1 && true}
+          />
+        )
+    })}
+    </>
+  )
+}
+
+function AuthorFull({rep, itemID, isLast}: any) {
+  const item = useItemByID(rep, itemID)
+  return (
+    item &&
+    <div className={styles.authors}>
+      <span>{htmlToText(item.title).split('[')[0].trim()}</span>
+      {!isLast && <span>,&nbsp;</span>}
     </div>
   )
 }

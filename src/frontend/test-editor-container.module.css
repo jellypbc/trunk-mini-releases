@@ -179,3 +179,13 @@
 .highlightParentContainer{
   padding: 1rem 2rem;
 }
+
+.authorsContainer {
+  display: flex;
+  padding: 0 2rem;
+}
+
+.authors {
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
+}
