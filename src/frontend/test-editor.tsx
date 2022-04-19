@@ -190,7 +190,6 @@ function TestEditor({ doc, type, rep, itemID, arrows } : Props) {
     // set arrows in this component, so that the editor knows to draw the decoration
     // setArrows(itemArrows)
     setShowArrowFloater(false)
-
   }
 
 

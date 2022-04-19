@@ -163,6 +163,7 @@ function EditorArrowThread({ arrow, dispatch, state, showActions, rep}) {
         <EditorArrowThreadContainer
           rep={rep}
           arrow={fullArrow}
+          arrowID={arrowID}
         />
       }
     </>

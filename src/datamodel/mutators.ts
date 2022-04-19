@@ -20,10 +20,12 @@ import {
   updateItemContent,
   updateItemArrows,
   updateItemSourceURL,
-  updateItemAddSingleArrow
+  updateItemAddSingleArrow,
+  updateItemArrowsDeleteArrow
 } from './item';
 import {
-  putArrow
+  putArrow,
+  deleteArrow
 } from './arrow'
 
 export type M = typeof mutators;
@@ -47,5 +49,7 @@ export const mutators = {
   updateItemSourceURL,
   createArrow: putArrow,
   updateItemAddSingleArrow,
+  deleteArrow,
+  updateItemArrowsDeleteArrow,
   nop: async (_: WriteTransaction) => {},
 };

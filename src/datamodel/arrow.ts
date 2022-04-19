@@ -36,6 +36,13 @@ export function putArrow(
   return tx.put(key(id), arrow);
 }
 
+export async function deleteArrow(
+  tx: WriteTransaction,
+  id: string
+): Promise<void> {
+  await tx.del(key(id));
+}
+
 export type Arrow = z.infer<typeof arrowSchema>;
 
 function key(id: string): string {
