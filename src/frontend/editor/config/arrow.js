@@ -1,8 +1,7 @@
 import { Plugin, PluginKey } from 'prosemirror-state'
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import ReactDOM from 'react-dom'
-import { useItemByID } from '../../../datamodel/subscriptions'
-import { useArrowsByIDs } from '../../../datamodel/subscriptions'
+import { useItemByID, useArrowsByIDs, useArrowByID } from '../../../datamodel/subscriptions'
 
 class Arrow {
   constructor(arrowID, to, from, kind, backItemID) {
@@ -133,7 +132,7 @@ function renderArrows(arrows, dispatch, state, rep) {
         return (
           <div key={i}>
             <EditorArrowThread
-              arrow={a.spec.arrow}
+              arrowID={a.spec.arrow.arrowID}
               dispatch={dispatch}
               state={state}
               showActions={{ reply: isLast, delete: true}}
@@ -148,24 +147,17 @@ function renderArrows(arrows, dispatch, state, rep) {
   return node
 }
 
-import { useArrowByID } from '../../../datamodel/subscriptions'
 import EditorArrowThreadContainer from '../../editor-arrow-thread-container'
 
-function EditorArrowThread({ arrow, dispatch, state, showActions, rep}) {
-  const {
-    arrowID
-  } = arrow
+function EditorArrowThread({ arrowID, dispatch, state, showActions, rep }) {
   const fullArrow = useArrowByID(rep, arrowID)
 
   return (
-    <>
-      {fullArrow &&
-        <EditorArrowThreadContainer
-          rep={rep}
-          arrow={fullArrow}
-          arrowID={arrowID}
-        />
-      }
-    </>
+    fullArrow &&
+      <EditorArrowThreadContainer
+        rep={rep}
+        arrow={fullArrow}
+        arrowID={arrowID}
+      />
   )
 }
