@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import TestEditor from './test-editor'
 import { htmlToText } from '../util/htmlToText'
@@ -141,7 +141,42 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
+      <TestEditorDeleteItem
+        rep={rep}
+        itemID={itemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+    </div>
+  )
+}
 
+function TestEditorDeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
+  const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
+  const item = useItemByID(rep, itemID)
+
+  function deleteItemAndSetSelectedItemIDToEmpty() {
+    rep.mutate.deleteItem(itemID)
+    handleSetSelectedItemID('')
+  }
+  return (
+    <div
+      className={styles.section}
+    >
+      <div
+        className={styles.sectionHeader}
+        onClick={() => setDeleteConfirmation(true)}
+      >Delete</div>
+      {deleteConfirmation && item &&
+        <>
+        <button
+          onClick={() => deleteItemAndSetSelectedItemIDToEmpty()}
+        >Delete {htmlToText(item.title)}</button>
+        <span
+          className={styles.cancel}
+          onClick={() => setDeleteConfirmation(false)}
+        >Cancel</span>
+        </>
+      }
     </div>
   )
 }

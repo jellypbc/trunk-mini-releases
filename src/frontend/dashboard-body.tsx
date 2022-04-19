@@ -45,7 +45,6 @@ const keyMap = {
   createItem: ['command+enter']
 }
 
-
 function IndexView({ setShowIndex, items, handleSetSelectedItemID } : any) {
   return (
     <div className={styles.indexContainer}>
@@ -245,7 +244,6 @@ function ItemDraft({rep}  : any) {
   )
 }
 
-import EditorOptions from './editor-options'
 
 function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
   const item = useItemByID(rep, itemID)
@@ -255,10 +253,6 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
 
   function handleExpandItem(){
     handleSetSelectedItemID(itemID)
-  }
-
-  function handleItemDelete(){
-    rep.mutate.deleteItem(itemID)
   }
 
   return (
@@ -275,13 +269,11 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
         onMouseOver={() => setShowOptions(true)}
       >
         { showOptions &&
-            <EditorOptions
-              handleSetShowOptions={setShowOptions}
-              handleSetSelectedDraftID={handleExpandItem}
-              handleDraftDelete={handleItemDelete}
-            />
-          }
-        <div className={styles.expandItem} onClick={() => handleSetSelectedItemID(itemID)}>Expand</div>
+          <ActivityItemOptions
+            handleSetShowOptions={setShowOptions}
+            handleSetSelectedDraftID={handleExpandItem}
+          />
+        }
         { item.highlight &&
           <>
             <HighlightParent
@@ -341,6 +333,30 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
     </div>
   )
 }
+
+
+type ActivityItemOptionsProps = {
+  handleSetShowOptions: (showOptions: boolean) => void
+  handleSetSelectedDraftID: () => void
+}
+
+function ActivityItemOptions({ handleSetShowOptions, handleSetSelectedDraftID } : ActivityItemOptionsProps) {
+
+  return (
+    <div
+      className={styles.activityItemOptionsContainer}
+      onMouseLeave={() => handleSetShowOptions(false)}
+    >
+      <div
+        className={styles.expandOption}
+        onClick={() => handleSetSelectedDraftID()}
+      >
+        Expand · E
+      </div>
+    </div>
+  )
+}
+
 
 function HighlightParent({itemID, arrows, rep}: any) {
   let a

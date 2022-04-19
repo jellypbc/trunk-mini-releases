@@ -248,3 +248,26 @@
 .titleDraft textarea {
   height: 40px;
 }
+
+.activityItemOptionsContainer{
+  position: absolute;
+  right: 1rem;
+  top: -1rem;
+  display: flex;
+  border: 1px solid hsl(0, 0%, 82%);
+  background: hsl(0, 0%, 92%);
+  border-radius: 6px;
+  box-shadow: 0 4px 20px hsla(0, 0%, 77%), 0 4px 20px hsla(0, 0%, 77%);
+}
+
+.expandOption {
+  padding: .2rem .5rem;
+  cursor: pointer;
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
+  border-radius: 6px;
+}
+
+.expandOption:hover {
+  background-color: hsl(0, 0%, 88%);
+}
