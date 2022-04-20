@@ -1,7 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './trunk-settings.module.css'
+import { useRouter } from 'next/router'
 
 export default function TrunkSettings() {
+  const router = useRouter()
+  const [roomID, setRoomID] = useState<string>('')
+
+  useEffect(() => {
+    const [ , , roomID] = location.pathname.split("/")
+    setRoomID(roomID)
+  })
+
   return (
     <div className={styles.container}>
       <div className={styles.settingsModalContainer}>
@@ -9,7 +18,10 @@ export default function TrunkSettings() {
           <div className={styles.heading}>
             Settings
           </div>
-          <div className={styles.exit}>
+          <div
+            className={styles.exit}
+            onClick={() => router.push(`/t/${roomID}`)}
+          >
             &times;
           </div>
         </div>

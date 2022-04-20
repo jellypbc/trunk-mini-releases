@@ -1,15 +1,15 @@
 .container {
   background: hsl(0, 0%, 86%);
   height: 100vh;
+  overflow: auto;
   color: hsl(0, 0%, 30%);
+  padding-bottom: 4rem;
 }
 
 .settingsModalContainer {
   z-index: 1;
   background: hsl(0, 0%, 96%);
-  position: absolute;
   width: 560px;
-  max-height: 100%;
   left: 0;
   right: 0;
   margin: 10% auto 0;
@@ -36,6 +36,7 @@
 
 .exit {
   padding: 0 1rem;
+  cursor: pointer;
 }
 
 .subHeading {

@@ -33,6 +33,7 @@ export default function Dashboard({ session, roomID, rep, handleSetSelectedItemI
               itemCount={items.length}
               arrowCount={arrows.length}
               handleSetCommandBar={handleSetCommandBar}
+              roomID={roomID}
             />
             {items &&
               <DashboardBody

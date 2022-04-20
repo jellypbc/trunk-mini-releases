@@ -8,9 +8,10 @@ type Props = {
   itemCount: number
   arrowCount: number
   handleSetCommandBar: (commandBar: boolean) => void
+  roomID: string
 }
 
-export default function DashboardNavTop({ email, itemCount, arrowCount, handleSetCommandBar } : Props ) {
+export default function DashboardNavTop({ email, itemCount, arrowCount, handleSetCommandBar, roomID } : Props ) {
   const router = useRouter()
 
   async function logOut() {
@@ -21,6 +22,10 @@ export default function DashboardNavTop({ email, itemCount, arrowCount, handleSe
       router.push('/')
   }
 
+  function routeToSettings() {
+    router.push(`${roomID}/settings`)
+  }
+
   return (
     <div className={styles.container}>
       <input
@@ -28,13 +33,13 @@ export default function DashboardNavTop({ email, itemCount, arrowCount, handleSe
         className={styles.search}
         placeholder={'Search or type ⌘ + K'}
       />
-      <div
-        className={styles.email}
-        onClick={() => logOut()}
-      >
+      <div className={styles.email}>
+        <span className={styles.itemCount}
+          onClick={() => routeToSettings()}
+        >Settings</span>
         <span className={styles.itemCount}>{itemCount} items</span>
         <span className={styles.itemCount}>{arrowCount} arrows</span>
-        {email}
+        <span className={styles.itemCount} onClick={() => logOut()}>{email}</span>
       </div>
     </div>
   )

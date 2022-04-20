@@ -3,8 +3,6 @@ import TrunkSettings from '../../../frontend/trunk-settings'
 
 export default function Home() {
   return (
-    <>
-      <TrunkSettings/>
-    </>
+    <TrunkSettings/>
   )
 }
