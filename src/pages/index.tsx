@@ -6,7 +6,6 @@ import {
 } from '../lib/constants'
 import Onboarding from '../frontend/onboarding'
 import LogIn from '../frontend/log-in'
-import AppNav from './../frontend/nav/app-nav'
 import { useRouter } from 'next/router'
 
 
@@ -37,7 +36,6 @@ export default function Page() {
 
   return (
     <>
-      <AppNav />
       {session && roomID ?
         <Onboarding
           session={session}

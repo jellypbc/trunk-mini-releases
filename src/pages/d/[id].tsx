@@ -18,7 +18,6 @@ import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
 import ItemExpandedContainer from '../../frontend/item-expanded-container'
 import CommandBar from '../../frontend/command-bar'
 import { HotKeys } from 'react-hotkeys'
-import AppNav from '../../frontend/nav/app-nav'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null)
@@ -121,16 +120,12 @@ export default function Home() {
         handlers,
       }}
     >
-
-      <AppNav />
-
       <div
         style={{
           position: "relative",
           display: "flex",
           flexDirection: "column",
           left: 0,
-          top: "38px",
           width: "100%",
           height: "100%",
           background: "transparent",
