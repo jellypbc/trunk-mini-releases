@@ -12,20 +12,22 @@ type Props = {
   handleSetSelectedItemID: (item: string) => void
 }
 
-export default function ItemFrontArrows({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
-  const forwardArrows = fullArrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
-  const frontItemIDs = forwardArrows.map((a: any) => a.frontItemID)
-  const uniqueFrontItemIDs = [...new Set(frontItemIDs)]
+export default function ItemArrowsBack({ rep, itemID, fullArrows, handleSetSelectedItemID } : Props ) {
+  const backArrows = fullArrows.filter((a: any) => a.kind === 'reference' && a.backItemID !== itemID) || []
+  const backItemIDs = backArrows.map((a: any) => a.backItemID)
+  const uniqueBackItemIDs = [...new Set(backItemIDs)]
   return (
-    uniqueFrontItemIDs &&
-    <>
+    uniqueBackItemIDs &&
+    <div className={styles.section}>
       <div className={styles.sectionHeader}>
-        <span>→</span>
-        <span className={styles.count}>{forwardArrows.length}</span>
+        <span>←</span>
+        <span className={styles.count}>
+          {backArrows.length}
+        </span>
       </div>
-      {uniqueFrontItemIDs.map((itemID: any) => {
+      {uniqueBackItemIDs.map((itemID: any) => {
         return (
-          <FrontArrowItem
+          <BackArrowItem
             key={`frontArrow-${itemID}`}
             itemID={itemID}
             rep={rep}
@@ -33,17 +35,17 @@ export default function ItemFrontArrows({ rep, itemID, fullArrows, handleSetSele
           />
         )
       })}
-    </>
+    </div>
   )
 }
 
-type FrontArrowItemProps = {
+type BackArrowItemProps = {
   rep: Replicache<M>
   itemID: string
   handleSetSelectedItemID: (itemID: string) => void
 }
 
-function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
+function BackArrowItem({ rep, itemID, handleSetSelectedItemID }: BackArrowItemProps){
   const item = useItemByID(rep, itemID)
   return (
     <div
@@ -54,4 +56,3 @@ function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItem
     </div>
   )
 }
-

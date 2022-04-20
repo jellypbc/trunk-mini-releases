@@ -3,7 +3,7 @@ import { getArrowsByIDs , useItemByID } from '../datamodel/subscriptions'
 import styles from './item-container.module.css'
 import { htmlToText } from '../util/htmlToText'
 
-export default function ItemFootnotes({ rep, arrows, itemID, handleSetSelectedItemID } : { rep: any, arrows: any[], itemID: string, handleSetSelectedItemID: any }) {
+export default function ItemArrowsFootnote({ rep, arrows, itemID, handleSetSelectedItemID } : { rep: any, arrows: any[], itemID: string, handleSetSelectedItemID: any }) {
   const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
   const footnoteArrowIDs = footnotes.map((a: any) => a.arrowID)
   return (

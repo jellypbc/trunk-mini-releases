@@ -16,38 +16,38 @@ type Props = {
   handleSetSelectedItemID: (item: string) => void
 }
 
-export default function ItemAuthors({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
+export default function ItemArrowsSub({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
 
   const allItems = getSortedItems(rep)
 
-  const [showAddAuthor, setShowAddAuthor] = useState<boolean>(false)
-  const authorArrows= fullArrows.filter((a: any) => a.kind === 'author' && a.backItemID === itemID ) || []
-  const authorItemIDs = authorArrows.map((a: any) => a.frontItemID)
-  const uniqueAuthorItemIDs = [...new Set(authorItemIDs)]
+  const [showAddSubItem, setShowAddSubItem] = useState<boolean>(false)
+  const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
+  const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
+  const uniqueSubItemItemIDs = [...new Set(subItemItemIDs)]
   return (
     <div className={styles.section}>
       <div className={styles.sectionHeader}>
-        <span>Authors</span>
-        <span className={styles.count}>{uniqueAuthorItemIDs.length}</span>
+        <span>Sub-items</span>
+        <span className={styles.count}>{uniqueSubItemItemIDs.length}</span>
         <span
-          onClick={() => setShowAddAuthor(true)}
+          onClick={() => setShowAddSubItem(true)}
         >
-          Add author
+          Add sub-item
         </span>
       </div>
-      {showAddAuthor && allItems && (
-        <AddAuthorThing
+      {showAddSubItem && allItems && (
+        <AddSubItemContainer
           rep={rep}
           userInfo={null}
           allItems={allItems}
           itemID={itemID}
-          handleSetShowAddAuthor={setShowAddAuthor}
+          handleSetShowAddSubItem={setShowAddSubItem}
         />
       )}
-      {uniqueAuthorItemIDs.map((itemID: any) => {
+      {uniqueSubItemItemIDs.map((itemID: any) => {
         return (
-          <AuthorArrowItem
-            key={`frontArrow-${itemID}`}
+          <SubItemArrowItem
+            key={`subItemArrow-${itemID}`}
             itemID={itemID}
             rep={rep}
             handleSetSelectedItemID={handleSetSelectedItemID}
@@ -65,7 +65,7 @@ type FrontArrowItemProps = {
 }
 
 
-function AuthorArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
+function SubItemArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
   const item = useItemByID(rep, itemID)
   return (
     <div
@@ -78,8 +78,8 @@ function AuthorArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowIte
 }
 
 
-function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAuthor} : any) {
-  const [authorDraft, setAuthorDraft] = useState<string>('<p>hi</p>')
+function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAddSubItem} : any) {
+  const [subItemDraft, setSubItemDraft] = useState<string>('<p>replace with sub-item</p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
   const options = {
@@ -107,8 +107,8 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
   const fuse = new Fuse(allItems, options)
 
   useEffect(() => {
-    if (authorDraft) {
-      const searchTerm = htmlToText(authorDraft)
+    if (subItemDraft) {
+      const searchTerm = htmlToText(subItemDraft)
       if (allItems) {
         const results = fuse.search(searchTerm)
         setSearchResults(results)
@@ -116,13 +116,7 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
     } else {
       setSearchResults([])
     }
-  }, [authorDraft])
-
-  // function handleArrowAdd(){
-  //   console.log(
-  //     'add something', commentDraft
-  //   )
-  // }
+  }, [subItemDraft])
 
   function createArrow(type: string, frontItemID: string, commentDraft : string) {
     let commentArrow : any = randomArrow()
@@ -132,11 +126,11 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
       backItemID: itemID,
       kind: type,
       content: commentDraft, // we don't need this
+      parentItemID: itemID,
       // content: '',
       // highlight: '',
       // to: '',
       // from: '',
-      // parentItemID: '',
     }
     commentArrow.arrow = {...commentArrow.arrow, ...arrowChanges}
     return commentArrow
@@ -145,7 +139,7 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
   // create arrow to existing author
   function handleArrowAdd(id: string) {
     //create arrow
-    const referenceArrow = createArrow('author', id, '')
+    const referenceArrow = createArrow('sub', id, '')
     //make newA
 
     const newA = {
@@ -165,8 +159,8 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
 
     // add arrow to existing item
     rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
-    setAuthorDraft('<p></p>')
-    handleSetShowAddAuthor(false)
+    setSubItemDraft('<p>replace with sub-item</p>')
+    handleSetShowAddSubItem(false)
   }
 
   function createAuthorItem(authorDraft:string){
@@ -183,10 +177,10 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
 
   function handleReferenceAdd(){
     // create referenceItem
-    const referenceItem = createAuthorItem(authorDraft)
+    const referenceItem = createAuthorItem(subItemDraft)
 
     // create arrow
-    const referenceArrow = createArrow('author', referenceItem.id, authorDraft)
+    const referenceArrow = createArrow('sub', referenceItem.id, subItemDraft)
 
     // set newA
     const newA = {
@@ -211,8 +205,8 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
     // add author arrow to existing item
     rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
 
-    setAuthorDraft('<p></p>')
-    handleSetShowAddAuthor(false)
+    setSubItemDraft('<p>replace with sub-item</p>')
+    handleSetShowAddSubItem(false)
   }
 
   return (
@@ -220,9 +214,9 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
       <div className={styles.authorInput}>
         <EditorDraftingContainer
           rep={rep}
-          content={authorDraft}
+          content={subItemDraft}
           clientInfo={userInfo}
-          setValue={setAuthorDraft}
+          setValue={setSubItemDraft}
           type={''}
         />
       </div>
@@ -230,7 +224,7 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
         <button onClick={handleReferenceAdd}>Add</button>
         <div
           className={styles.addArrowExit}
-          onClick={() => handleSetShowAddAuthor(false)}
+          onClick={() => handleSetShowAddSubItem(false)}
         >&times;</div>
       </div>
       <div className={styles.searchResults}>

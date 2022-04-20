@@ -93,23 +93,6 @@ export default function Home() {
     return null
   }
 
-  if (selectedItemID && selectedItemID !== 'next') {
-    return (
-      rep &&
-        <ItemContainer
-          rep={rep}
-          itemID={selectedItemID}
-          handleSetSelectedItemID={handleSetSelectedItemID}
-        />
-    )
-  } else if (selectedItemID === 'next') {
-    return (
-      <div>
-        loading
-      </div>
-    )
-  }
-
   return (
     session && trunkID && rep &&
       <HotKeys
@@ -119,31 +102,42 @@ export default function Home() {
           handlers,
         }}
       >
-      <div
-        style={{
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
-          left: 0,
-          width: "100%",
-          height: "100%",
-          background: "transparent",
-        }}
-      >
-        {commandBar &&
-          <DashboardCommandBar
-            rep={rep}
-            handleSetSelectedItemID={setSelectedItemID}
-            handleSetCommandBar={setCommandBar}
-          />
-        }
-        <Dashboard
-          session={session}
-          roomID={trunkID}
-          rep={rep}
-          handleSetSelectedItemID={setSelectedItemID}
-          handleSetCommandBar={setCommandBar}
-        />
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "transparent",
+          }}
+        >
+          {commandBar &&
+            <DashboardCommandBar
+              rep={rep}
+              handleSetSelectedItemID={setSelectedItemID}
+              handleSetCommandBar={setCommandBar}
+            />
+          }
+          {selectedItemID ?
+            selectedItemID !== 'next' ?
+            <ItemContainer
+              rep={rep}
+              itemID={selectedItemID}
+              handleSetSelectedItemID={handleSetSelectedItemID}
+            />
+            :
+            <div>loading</div>
+          :
+            <Dashboard
+              session={session}
+              roomID={trunkID}
+              rep={rep}
+              handleSetSelectedItemID={setSelectedItemID}
+              handleSetCommandBar={setCommandBar}
+            />
+          }
         </div>
       </HotKeys>
   )

@@ -3,14 +3,14 @@ import { useItemByID, getArrowsByIDs, useArrowByID, useAuthorsByItemID } from '.
 import EditorContainer from './editor-container'
 import { htmlToText } from '../util/htmlToText'
 import styles from './item-container.module.css'
-import ItemFootnotes from './item-footnotes'
-import ItemFrontArrows from './item-front-arrows'
-import ItemBackArrows from './item-back-arrows'
-import ItemComments from './item-comments'
+import ItemArrowsFootnote from './item-arrows-footnote'
+import ItemArrowsFront from './item-arrows-front'
+import ItemArrowsBack from './item-arrows-back'
+import ItemArrowsComment from './item-arrows-comment'
+import ItemArrowsAuthor from './item-arrows-author'
+import ItemArrowsSub from './item-arrows-sub'
 import ItemParent from './item-parent'
 import ItemMainSubItems from './item-main-sub-items'
-import ItemAuthors from './item-authors'
-import ItemSubItems from './item-sub-items'
 import ItemFileUploadButton from './item-file-upload-button'
 import { nanoid } from 'nanoid'
 import { uploadFileToIDB, trashFileFromIDB }  from '../datamodel/local/file'
@@ -21,22 +21,9 @@ import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../lib/constants'
 
 export default function ItemContainer({rep, itemID, handleSetSelectedItemID} : any) {
   const item = useItemByID(rep, itemID)
+
   return (
     item &&
-    <Thingy
-      item={item}
-      rep={rep}
-      itemID={itemID}
-      handleSetSelectedItemID={handleSetSelectedItemID}
-    />
-  )
-}
-
-function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
-  const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs)
-
-  return (
     <div className={styles.container}>
       <div className={styles.expandedEditorContainer}>
         <div
@@ -100,30 +87,43 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
             type={'content'}
             rep={rep}
             itemID={itemID}
-            arrows={item.arrows || []}
+            arrows={item.arrows as any || []}
           />
         </div>
-        <div className={styles.mainSubItems}>
-          {fullArrows &&
-            <ItemMainSubItems
-              rep={rep}
-              itemID={itemID}
-              handleSetSelectedItemID={handleSetSelectedItemID}
-              fullArrows={fullArrows}
-            />
-          }
-        </div>
-        { fullArrows &&
-          <Footer
-            rep={rep}
-            itemID={itemID}
-            arrows={item.arrows}
-            fullArrows={fullArrows}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-          />
-        }
+        <ThingsWithArrows
+          rep={rep}
+          itemID={itemID}
+          arrows={item.arrows}
+          item={item}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+        />
       </div>
     </div>
+  )
+}
+
+function ThingsWithArrows({ rep, itemID, arrows, item, handleSetSelectedItemID}: any) {
+  const arrowIDs = item.arrows.map((a: any) => a.arrowID)
+  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+  return (
+    arrowIDs && fullArrows &&
+    <>
+      <div className={styles.mainSubItems}>
+        <ItemMainSubItems
+          rep={rep}
+          itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+          fullArrows={fullArrows}
+        />
+      </div>
+      <Footer
+        rep={rep}
+        itemID={itemID}
+        arrows={arrows}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+    </>
   )
 }
 
@@ -131,37 +131,37 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
   return (
     fullArrows &&
     <div className={styles.meta}>
-      <ItemFootnotes
+      <ItemArrowsFootnote
         rep={rep}
         itemID={itemID}
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      <ItemAuthors
+      <ItemArrowsAuthor
         rep={rep}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      <ItemSubItems
+      <ItemArrowsSub
         rep={rep}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      <ItemFrontArrows
+      <ItemArrowsFront
         rep={rep}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      <ItemBackArrows
+      <ItemArrowsBack
         rep={rep}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      <ItemComments
+      <ItemArrowsComment
         rep={rep}
         itemID={itemID}
         arrows={arrows}

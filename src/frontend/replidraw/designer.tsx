@@ -5,7 +5,7 @@ import { DraggableCore } from "react-draggable";
 import { Rect } from "./rect";
 import { Collaborator } from "./collaborator";
 import { RectController } from "./rect-controller";
-import { touchToMouse } from "../events";
+import { touchToMouse } from "./events";
 import { Selection } from "./selection";
 import {
   useShapeIDs,

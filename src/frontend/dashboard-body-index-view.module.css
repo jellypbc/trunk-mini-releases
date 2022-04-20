@@ -1,0 +1,51 @@
+.container {
+  padding-top: 1rem;
+  width: 650px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.navToActivityView {
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
+  padding-left: 1rem;
+}
+
+.header {
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.sortOptions {
+  display: flex;
+  flex-direction: row;
+}
+
+.sortOptions div {
+  padding: .5rem 1rem;
+}
+
+.itemIndex {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  padding: .5rem 0;
+  justify-content: space-between;
+}
+
+.item:hover {
+  background-color: hsl(0, 0%, 90%);
+}
+
+.itemTitle {
+
+}

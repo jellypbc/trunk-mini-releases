@@ -3,7 +3,7 @@ import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './item-container.module.css'
 
-export default function ItemComments({ rep, itemID, arrows, handleSetSelectedItemID } : any) {
+export default function ItemArrowsComment({ rep, itemID, arrows, handleSetSelectedItemID } : any) {
   const comments = arrows.filter((a: any) => a.kind === 'comment'
   && a.backItemID === itemID) || []
   const commentArrowIDs = comments.map((a: any) => a.arrowID)
