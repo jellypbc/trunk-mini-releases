@@ -188,6 +188,7 @@
 .authors {
   font-size: .8rem;
   color: hsl(0, 0%, 70%);
+  cursor: pointer;
 }
 
 .upload {

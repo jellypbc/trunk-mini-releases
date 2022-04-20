@@ -12,12 +12,12 @@ import ItemArrowsSub from './item-arrows-sub'
 import ItemParent from './item-parent'
 import ItemMainSubItems from './item-main-sub-items'
 import ItemFileUploadButton from './item-file-upload-button'
+import ItemArrowsAuthoredBy from './item-arrows-authored-by'
 import { nanoid } from 'nanoid'
 import { uploadFileToIDB, trashFileFromIDB }  from '../datamodel/local/file'
 import { uploadFileToSupabase, trashFileFromSupabase } from '../datamodel/supabase/file'
 import { idbOK } from "../lib/idbOK"
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../lib/constants'
-
 
 export default function ItemContainer({rep, itemID, handleSetSelectedItemID} : any) {
   const item = useItemByID(rep, itemID)
@@ -78,6 +78,7 @@ export default function ItemContainer({rep, itemID, handleSetSelectedItemID} : a
             <AuthorInfo
               rep={rep}
               itemID={itemID}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
           }
         </div>
@@ -90,21 +91,23 @@ export default function ItemContainer({rep, itemID, handleSetSelectedItemID} : a
             arrows={item.arrows as any || []}
           />
         </div>
-        <ThingsWithArrows
+        <ItemArrows
           rep={rep}
           itemID={itemID}
           arrows={item.arrows}
           item={item}
           handleSetSelectedItemID={handleSetSelectedItemID}
+          isPerson={item.title.includes('[person]')}
         />
       </div>
     </div>
   )
 }
 
-function ThingsWithArrows({ rep, itemID, arrows, item, handleSetSelectedItemID}: any) {
+function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
   const fullArrows = getArrowsByIDs(rep, arrowIDs)
+
   return (
     arrowIDs && fullArrows &&
     <>
@@ -116,6 +119,13 @@ function ThingsWithArrows({ rep, itemID, arrows, item, handleSetSelectedItemID}:
           fullArrows={fullArrows}
         />
       </div>
+      { isPerson &&
+        <PersonFooter
+          rep={rep}
+          fullArrows={fullArrows}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+        />
+      }
       <Footer
         rep={rep}
         itemID={itemID}
@@ -127,9 +137,20 @@ function ThingsWithArrows({ rep, itemID, arrows, item, handleSetSelectedItemID}:
   )
 }
 
+function PersonFooter({rep, fullArrows, handleSetSelectedItemID}: any) {
+  return (
+    <div className={styles.meta}>
+      <ItemArrowsAuthoredBy
+        rep={rep}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+    </div>
+  )
+}
+
 function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any) {
   return (
-    fullArrows &&
     <div className={styles.meta}>
       <ItemArrowsFootnote
         rep={rep}
@@ -371,19 +392,20 @@ function ItemDeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
   )
 }
 
-function AuthorInfo({rep, itemID}: any){
+function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
   const authors = useAuthorsByItemID(rep, itemID)
 
   return (
     authors &&
-      <Thing
+      <AuthorArrows
         rep={rep}
         authorArrowIDs={authors}
+        handleSetSelectedItemID={handleSetSelectedItemID}
       />
   )
 }
 
-function Thing({rep, authorArrowIDs} : any) {
+function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
   const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
 
   if (!fullArrows) return null
@@ -393,10 +415,12 @@ function Thing({rep, authorArrowIDs} : any) {
     {fullArrows &&
       fullArrows.map((a, i) => {
         return (
-          <AuthorFull
+          <AuthorItem
+            key={`author-${a.id}`}
             rep={rep}
             itemID={a.frontItemID}
             isLast={i === fullArrows.length - 1 && true}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
     })}
@@ -404,11 +428,14 @@ function Thing({rep, authorArrowIDs} : any) {
   )
 }
 
-function AuthorFull({rep, itemID, isLast}: any) {
+function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
   const item = useItemByID(rep, itemID)
   return (
     item &&
-    <div className={styles.authors}>
+    <div
+      className={styles.authors}
+      onClick={() => handleSetSelectedItemID(itemID)}
+    >
       <span>{htmlToText(item.title).split('[')[0].trim()}</span>
       {!isLast && <span>,&nbsp;</span>}
     </div>
