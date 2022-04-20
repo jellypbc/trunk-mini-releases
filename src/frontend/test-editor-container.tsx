@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import { useItemByID, getArrowsByIDs, useArrowByID, useAuthorsByItemID } from '../datamodel/subscriptions'
 import TestEditor from './test-editor'
 import { htmlToText } from '../util/htmlToText'
@@ -11,6 +11,12 @@ import TestEditorParent from './test-editor-parent'
 import TestEditorMainSubItems from './test-editor-main-sub-items'
 import TestEditorAuthors from './test-editor-authors'
 import TestEditorSubItems from './test-editor-sub-items'
+import FileUploadButton from './file-upload-button'
+import { nanoid } from 'nanoid'
+import { uploadFileToIDB, trashFileFromIDB }  from '../datamodel/local/file'
+import { uploadFileToSupabase, trashFileFromSupabase } from '../datamodel/supabase/file'
+import { idbOK } from "../lib/idbOK"
+import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../lib/constants'
 
 
 export default function TestEditorContainer({rep, itemID, handleSetSelectedItemID} : any) {
@@ -29,6 +35,7 @@ export default function TestEditorContainer({rep, itemID, handleSetSelectedItemI
 function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
   const fullArrows = getArrowsByIDs(rep, arrowIDs)
+
   return (
     <div className={styles.container}>
       <div className={styles.expandedEditorContainer}>
@@ -39,6 +46,11 @@ function Thingy({ item, rep, itemID, handleSetSelectedItemID}: any) {
           Dashboard
         </div>
         <div className={styles.itemID}>{itemID}</div>
+        <FileUploadContainer
+          itemID={itemID}
+          item={item}
+          rep={rep}
+        />
         <HighlightParent
           itemID={itemID}
           arrows={item.arrows}
@@ -163,6 +175,115 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
     </div>
   )
 }
+
+function FileUploadContainer({itemID, item, rep} : any) {
+  const [URL, setURL] = useState<any>('')
+
+  useEffect(() => {
+    generateIDBSourceFileURL(item.sourceURL)
+  }, [item.sourceURL])
+
+
+  function onUpload(e: ChangeEvent<HTMLInputElement>){
+    const file = e?.target.files?.[0]
+    if (!file) {
+      console.log(`No file found`)
+    } else {
+      // const itemID : string = itemID
+      const draftFileID = nanoid()
+      const fileType = file.type.split('/')[1]
+      const sourceURL = `${itemID}/${draftFileID}.${fileType}`
+
+      rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+      //upload file to indexedDB
+      uploadFileToIDB(file, sourceURL)
+      //upload file to supabase
+      uploadFileToSupabase(file, sourceURL)
+    }
+  }
+
+  function handleDeleteSourceFile() {
+    console.log('trashing...')
+    //delete from IDB
+    trashFileFromIDB(item.sourceURL)
+    //delete from supabase
+    trashFileFromSupabase(item.sourceURL)
+    //remove sourceURL from item
+    rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
+  }
+
+  function generateIDBSourceFileURL(sourceURL: string){
+    if (!idbOK()) return
+
+
+    let openRequest = indexedDB.open(DEFAULT_IDB_KEY, 1)
+
+    openRequest.onupgradeneeded = function(e: any){
+      let thisDB = e.target.result
+
+      if (!thisDB.objectStoreNames.contains(DEFAULT_SOURCE_FILES_BUCKET)) {
+        thisDB.createObjectStore(DEFAULT_SOURCE_FILES_BUCKET, { keyPath: 'id'})
+      }
+    }
+
+    openRequest.onsuccess = function(e : any) {
+      let db = e.target.result
+      let tx = db.transaction([DEFAULT_SOURCE_FILES_BUCKET], 'readwrite')
+      let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
+
+      let request = store.get(sourceURL)
+
+      request.onerror = function(e : any){
+        console.log('error', e.target.error.name)
+      }
+
+      request.onsuccess = function(e : any){
+        let result = e.target.result
+        console.log('result', result)
+        result && setURL(window.URL.createObjectURL(result.file))
+      }
+
+      request.onerror = function(event: any) {
+        console.dir(event)
+      }
+
+    }
+    openRequest.onerror = function(event: any) {
+      console.dir(event)
+    }
+  }
+
+
+  return (
+    <div className={styles.upload}>
+      {item.sourceURL &&
+        <>
+          <div className={styles.file}>
+            <a href={URL} target="_blank" className={styles.link}>
+              {item.sourceURL && `🗂`}
+            </a>
+
+          </div>
+          <div
+            onClick={handleDeleteSourceFile}
+            className={styles.hoverOnly}
+          >
+            ⌘+T to Trash
+          </div>
+        </>
+      }
+      <div className={styles.hoverOnly}>
+        <FileUploadButton
+          onUpload={onUpload}
+          loading={false}
+          sourceUrl={item.sourceURL}
+          itemID={itemID}
+        />
+      </div>
+    </div>
+  )
+}
+
 
 function HighlightParent({itemID, arrows, rep, handleSetSelectedItemID}: any) {
   let a

@@ -189,3 +189,32 @@
   font-size: .8rem;
   color: hsl(0, 0%, 70%);
 }
+
+.upload {
+  display: flex;
+  flex-direction: row;
+  font-size: .8rem;
+  color: hsl(0, 0%, 70%);
+  padding: 1rem;
+  padding-left: 3rem;
+}
+
+.upload > div {
+  padding-right: 1rem;
+}
+
+.hoverOnly {
+  color: transparent;
+}
+
+.hoverOnly:hover {
+  color: hsl(0, 0%, 70%);
+}
+
+a.link {
+  text-decoration: none;
+}
+
+a.link:hover {
+  font-size: 1.1rem;
+}
