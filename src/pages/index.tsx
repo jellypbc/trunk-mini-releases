@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase-client'
 import {
   LOCAL_STORAGE_AUTH_TOKEN_KEY,
 } from '../lib/constants'
-import Onboarding from '../frontend/onboarding'
-import LogIn from '../frontend/log-in'
+import UserOnboarding from '../frontend/user-onboarding'
+import UserLogIn from '../frontend/user-log-in'
 import { useRouter } from 'next/router'
 
 
@@ -37,13 +37,13 @@ export default function Page() {
   return (
     <>
       {session && roomID ?
-        <Onboarding
+        <UserOnboarding
           session={session}
           roomID={roomID}
           handleTrunkSelect={handleTrunkSelect}
         />
         :
-        <LogIn/>
+        <UserLogIn/>
       }
     </>
   )

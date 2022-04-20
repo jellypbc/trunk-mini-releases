@@ -3,11 +3,11 @@ import styles from './dashboard-body.module.css'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { htmlToText } from '../util/htmlToText'
-import TestEditor from './test-editor'
+import EditorContainer from './editor-container'
 import { useItemByID, useArrowByID, getArrowsByIDs, useAuthorsByItemID } from '../datamodel/subscriptions'
-import TestEditorParent from './test-editor-parent'
+import EditorParent from './item-parent'
 import { HotKeys } from 'react-hotkeys'
-import FileUploadButton from './file-upload-button'
+import ItemFileUploadButton from './item-file-upload-button'
 import { uploadFileToIDB, trashFileFromIDB }  from '../datamodel/local/file'
 import { uploadFileToSupabase, trashFileFromSupabase } from '../datamodel/supabase/file'
 import { nanoid } from 'nanoid'
@@ -347,7 +347,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
           </>
         }
         <div className={styles.parent}>
-          <TestEditorParent
+          <EditorParent
             rep={rep}
             itemID={itemID}
             handleSetSelectedItemID={handleSetSelectedItemID}
@@ -365,7 +365,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
             ?
               <span className={styles.readOnly} onClick={() => setShowTitleEditor(true)}>{htmlToText(item.title)}</span>
             :
-            <TestEditor
+            <EditorContainer
               doc={item.title}
               type={'title'}
               rep={rep}
@@ -388,7 +388,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: any) {
           ?
             <span className={styles.readOnly} onClick={() => setShowContentEditor(true)}>{htmlToText(item.content)}</span>
           :
-            <TestEditor
+            <EditorContainer
               doc={item.content}
               type={'content'}
               rep={rep}
@@ -499,7 +499,7 @@ function FileUploadContainer({itemID, item, rep} : any) {
         </>
       }
       <div className={styles.hoverOnly}>
-        <FileUploadButton
+        <ItemFileUploadButton
           onUpload={onUpload}
           loading={false}
           sourceUrl={item.sourceURL}

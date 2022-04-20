@@ -8,7 +8,7 @@ import type { AuthSession } from '@supabase/supabase-js'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
 import { Client } from 'reps-client'
-import TestEditorContainer from '../../frontend/test-editor-container'
+import ItemContainer from '../../frontend/item-container'
 import DashboardCommandBar from '../../frontend/dashboard-command-bar'
 import { HotKeys } from 'react-hotkeys'
 
@@ -96,7 +96,7 @@ export default function Home() {
   if (selectedItemID && selectedItemID !== 'next') {
     return (
       rep &&
-        <TestEditorContainer
+        <ItemContainer
           rep={rep}
           itemID={selectedItemID}
           handleSetSelectedItemID={handleSetSelectedItemID}

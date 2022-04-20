@@ -147,14 +147,14 @@ function renderArrows(arrows, dispatch, state, rep) {
   return node
 }
 
-import EditorArrowThreadContainer from '../../editor-arrow-thread-container'
+import EditorArrowDisplay from '../../editor-arrow-display'
 
 function EditorArrowThread({ arrowID, dispatch, state, showActions, rep }) {
   const fullArrow = useArrowByID(rep, arrowID)
 
   return (
     fullArrow &&
-      <EditorArrowThreadContainer
+      <EditorArrowDisplay
         rep={rep}
         arrow={fullArrow}
         arrowID={arrowID}

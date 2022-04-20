@@ -1,10 +1,10 @@
 import React from 'react'
-import Settings from '../../../frontend/settings'
+import TrunkSettings from '../../../frontend/trunk-settings'
 
 export default function Home() {
   return (
     <>
-      <Settings/>
+      <TrunkSettings/>
     </>
   )
 }
