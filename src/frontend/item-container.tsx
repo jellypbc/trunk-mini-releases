@@ -239,7 +239,6 @@ function FileUploadContainer({itemID, item, rep} : any) {
 
       request.onsuccess = function(e : any){
         let result = e.target.result
-        console.log('result', result)
         result && setURL(window.URL.createObjectURL(result.file))
       }
 

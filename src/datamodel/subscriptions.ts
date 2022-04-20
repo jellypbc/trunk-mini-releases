@@ -1,10 +1,102 @@
-import type { Replicache } from "replicache";
-import { useSubscribe } from "replicache-react";
-import { getClientState, clientStatePrefix } from "./client-state";
-import { getShape, shapePrefix } from "./shape";
-import { getItem, itemPrefix } from "./item"
+import type { Replicache } from 'replicache'
+
+import { useSubscribe } from 'replicache-react'
+import { getClientState, clientStatePrefix } from './client-state'
+import { getShape, shapePrefix } from './shape'
+import { getItem, itemPrefix } from './item'
 import { getArrow, arrowPrefix } from './arrow'
-import type { M } from "./mutators";
+import type { M } from './mutators'
+
+export function useItemIDs(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      const items = (await tx
+        .scan({ prefix: itemPrefix })
+        .keys()
+        .toArray()) as string[]
+      return items.map((k) => k.substring(itemPrefix.length))
+    },
+    []
+  )
+}
+
+export function useItemByID(rep: Replicache<M>, id: string) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      const item = await getItem(tx, id)
+      if (item) {
+        item.arrows = JSON.parse(item.arrows)
+        item.createdAt = new Date(item.createdAt) as unknown as any
+      }
+      return item
+    },
+    null
+  )
+}
+
+export function useArrowIDs(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      const arrows = (await tx
+        .scan({ prefix: arrowPrefix })
+        .keys()
+        .toArray()) as string[]
+      return arrows.map((k) => k.substring(arrowPrefix.length))
+    },
+    []
+  )
+}
+
+export function useArrowByID(rep: Replicache<M>, id: string) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      const arrow = await getArrow(tx, id)
+      if (arrow) {
+        arrow.createdAt = new Date(arrow.createdAt) as unknown as any
+      }
+      return arrow
+    },
+    null
+  )
+}
+
+export function useUserInfo(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return (await getClientState(tx, await rep.clientID)).userInfo
+    },
+    null
+  )
+}
+
+export function useSupabaseUserInfo(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo
+    },
+    null
+  )
+}
+
+export function useClientInfo(
+  rep: Replicache<M>,
+  clientID: string
+) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return await getClientState(tx, clientID);
+    },
+    null
+  )
+}
+
 
 export function getItems(rep: Replicache<M>) {
   return useSubscribe(
@@ -27,6 +119,7 @@ export function getItemCount(rep: Replicache<M>) {
     null
   )
 }
+
 
 export function getArrows(rep: Replicache<M>) {
   return useSubscribe(
@@ -64,31 +157,6 @@ export function getSortedItems(rep: Replicache<M>) {
   return sortedItems
 }
 
-export function useItemByID(rep: Replicache<M>, id: string) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      const i = await getItem(tx, id);
-      if (i) {
-        i.arrows = JSON.parse(i.arrows)
-        i.createdAt = new Date(i.createdAt) as unknown as any
-      }
-      return i
-    },
-    null
-  );
-}
-
-export function useArrowByID(rep: Replicache<M>, id: string) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      const a = await getArrow(tx, id);
-      return a
-    },
-    null
-  )
-}
 
 export function getArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
   // this needs to be refactored bc allArrows can be a huge array
@@ -126,23 +194,15 @@ export function useShapeIDs(rep: Replicache<M>) {
   return useSubscribe(
     rep,
     async (tx) => {
-      const shapes = await tx.scan({ prefix: shapePrefix }).keys().toArray();
-      return shapes.map((k) => k.substr(shapePrefix.length));
+      const shapes = await tx.scan({ prefix: shapePrefix }).keys().toArray()
+      return shapes.map((k) => k.substring(shapePrefix.length))
     },
     []
   );
 }
 
-export function useItemIDs(rep: Replicache<M>) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      const items = await tx.scan({ prefix: itemPrefix }).keys().toArray();
-      return items.map((k) => k.substr(itemPrefix.length));
-    },
-    []
-  );
-}
+
+
 
 export function useShapeByID(rep: Replicache<M>, id: string) {
   return useSubscribe(
@@ -151,18 +211,9 @@ export function useShapeByID(rep: Replicache<M>, id: string) {
       return await getShape(tx, id);
     },
     null
-  );
+  )
 }
 
-export function useUserInfo(rep: Replicache<M>) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).userInfo;
-    },
-    null
-  );
-}
 
 export function useOverShapeID(rep: Replicache<M>) {
   return useSubscribe(
@@ -201,15 +252,3 @@ export function useCollaboratorIDs(rep: Replicache<M>) {
   );
 }
 
-export function useClientInfo(
-  rep: Replicache<M>,
-  clientID: string
-) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      return await getClientState(tx, clientID);
-    },
-    null
-  );
-}

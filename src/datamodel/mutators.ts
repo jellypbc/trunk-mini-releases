@@ -21,7 +21,8 @@ import {
   updateItemArrows,
   updateItemSourceURL,
   updateItemAddSingleArrow,
-  updateItemArrowsDeleteArrow
+  updateItemArrowsDeleteArrow,
+  initItems,
 } from './item';
 import {
   putArrow,
@@ -51,5 +52,6 @@ export const mutators = {
   updateItemAddSingleArrow,
   deleteArrow,
   updateItemArrowsDeleteArrow,
+  initItems,
   nop: async (_: WriteTransaction) => {},
 };

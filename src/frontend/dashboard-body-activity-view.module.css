@@ -47,6 +47,10 @@
   border-radius: 50%;
 }
 
+.avatarImage {
+  border-radius: 50%;
+}
+
 .draftEditorContainer {
   width: 500px;
   border-radius: .2rem;

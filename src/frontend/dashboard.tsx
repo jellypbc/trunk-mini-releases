@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './dashboard.module.css'
-import type { AuthSession } from '@supabase/supabase-js'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import { getSortedItems, getArrows } from '../datamodel/subscriptions'
@@ -10,17 +9,15 @@ import DashboardNavTop from './dashboard-nav-top'
 import DashboardBody from './dashboard-body'
 
 type Props = {
-  session: AuthSession
   roomID: string
   rep: Replicache<M>
   handleSetSelectedItemID: (itemID: string) => void
   handleSetCommandBar: (commandBar: boolean) => void
 }
 
-export default function Dashboard({ session, roomID, rep, handleSetSelectedItemID, handleSetCommandBar } : Props) {
+export default function Dashboard({ roomID, rep, handleSetSelectedItemID, handleSetCommandBar } : Props) {
   const items = getSortedItems(rep)
   const arrows = getArrows(rep)
-  const { user } = session
 
   return (
     <div className={styles.container}>
@@ -29,7 +26,6 @@ export default function Dashboard({ session, roomID, rep, handleSetSelectedItemI
           <DashboardNavLeft roomID={roomID} />
           <div className={styles.main}>
             <DashboardNavTop
-              email={user && user.email || 'guest'}
               itemCount={items.length}
               arrowCount={arrows.length}
               handleSetCommandBar={handleSetCommandBar}

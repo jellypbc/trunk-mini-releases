@@ -2,16 +2,18 @@ import React from 'react'
 import styles from './dashboard-nav-top.module.css'
 import { supabase } from '../lib/supabase-client'
 import { useRouter } from 'next/router'
+import { supabaseUserInfo } from '../datamodel/client-state'
 
 type Props = {
-  email: string
   itemCount: number
   arrowCount: number
   handleSetCommandBar: (commandBar: boolean) => void
   roomID: string
 }
 
-export default function DashboardNavTop({ email, itemCount, arrowCount, handleSetCommandBar, roomID } : Props ) {
+export default function DashboardNavTop({ itemCount, arrowCount, handleSetCommandBar, roomID } : Props ) {
+
+  const defaultSupabaseUserInfo = supabaseUserInfo()
   const router = useRouter()
 
   async function logOut() {
@@ -39,7 +41,7 @@ export default function DashboardNavTop({ email, itemCount, arrowCount, handleSe
         >Settings</span>
         <span className={styles.itemCount}>{itemCount} items</span>
         <span className={styles.itemCount}>{arrowCount} arrows</span>
-        <span className={styles.itemCount} onClick={() => logOut()}>{email}</span>
+        <span className={styles.itemCount} onClick={() => logOut()}>{defaultSupabaseUserInfo.email}</span>
       </div>
     </div>
   )

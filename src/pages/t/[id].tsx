@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Dashboard from '../../frontend/dashboard'
 import { Replicache } from 'replicache'
 import { M, mutators } from '../../datamodel/mutators'
-import { randUserInfo } from '../../datamodel/client-state'
-import { randomShape } from '../../datamodel/shape'
+import { supabaseUserInfo, randUserInfo } from '../../datamodel/client-state'
 import type { AuthSession } from '@supabase/supabase-js'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
@@ -11,6 +10,7 @@ import { Client } from 'reps-client'
 import ItemContainer from '../../frontend/item-container'
 import DashboardCommandBar from '../../frontend/dashboard-command-bar'
 import { HotKeys } from 'react-hotkeys'
+import { useRouter } from 'next/router'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null)
@@ -19,6 +19,7 @@ export default function Home() {
   const [selectedItemID, setSelectedItemID] = useState<string>('')
   const [commandBar, setCommandBar] = useState<boolean>(false)
   const [nextID, setNextID] = useState<string>('')
+  const router = useRouter()
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -27,6 +28,7 @@ export default function Home() {
     const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
     session && setSession(JSON.parse(session).currentSession)
   }, [])
+
 
   useEffect(() => {
     if (selectedItemID === 'next') {
@@ -59,18 +61,19 @@ export default function Home() {
         process.env.NEXT_PUBLIC_WORKER_HOST ??
         "wss://reps.trunk.workers.dev"
       const workerURL = `${workerHost}/connect`
-      console.info(`Connecting to worker at ${workerURL}`);
-      new Client(r, roomID, workerURL);
+      console.info(`Connecting to worker at ${workerURL}`)
+      new Client(r, roomID, workerURL)
 
-      const defaultUserInfo = randUserInfo();
+      const defaultUserInfo = randUserInfo()
+      const defaultSupabaseUserInfo = supabaseUserInfo()
       await r.mutate.initClientState({
         id: await r.clientID,
         defaultUserInfo,
+        defaultSupabaseUserInfo
       })
       r.onSync = (syncing: boolean) => {
         if (!syncing) {
-          r.onSync = null;
-          r.mutate.initShapes(Array.from({ length: 5 }, () => randomShape()));
+          r.onSync = null
         }
       }
       setRep(r)
@@ -91,6 +94,10 @@ export default function Home() {
 
   if (!rep) {
     return null
+  }
+
+  if (!session) {
+    router.push(`/`)
   }
 
   return (
@@ -131,7 +138,6 @@ export default function Home() {
             <div>loading</div>
           :
             <Dashboard
-              session={session}
               roomID={trunkID}
               rep={rep}
               handleSetSelectedItemID={setSelectedItemID}

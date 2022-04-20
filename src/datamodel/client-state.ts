@@ -1,5 +1,5 @@
-import type { ReadTransaction, WriteTransaction } from "replicache";
-import { randInt } from "../util/rand";
+import type { ReadTransaction, WriteTransaction } from 'replicache'
+import { randInt } from '../util/rand'
 
 const colors = [
   "#f94144",
@@ -12,7 +12,8 @@ const colors = [
   "#4d908e",
   "#577590",
   "#277da1",
-];
+]
+
 const avatars = [
   ["🐶", "Puppy"],
   ["🐱", "Kitty"],
@@ -29,15 +30,20 @@ const avatars = [
   ["🐷", "Piggy"],
   ["🐵", "Monkey"],
   ["🐣", "Chick"],
-];
+]
 
-import { z } from "zod";
+import { z } from 'zod'
 
 export const userInfoSchema = z.object({
   avatar: z.string(),
   name: z.string(),
   color: z.string(),
-});
+})
+
+export const supabaseUserInfoSchema = z.object({
+  email: z.string(),
+  avatarURL: z.string(),
+})
 
 // TODO: It would be good to merge this with the first-class concept of `client`
 // that Replicache itself manages if possible.
@@ -49,14 +55,17 @@ export const clientStateSchema = z.object({
   overID: z.string(),
   selectedID: z.string(),
   userInfo: userInfoSchema,
-});
+  selectedItemID: z.string(),
+  supabaseUserInfo: supabaseUserInfoSchema,
+})
 
-export type UserInfo = z.infer<typeof userInfoSchema>;
-export type ClientState = z.infer<typeof clientStateSchema>;
+export type UserInfo = z.infer<typeof userInfoSchema>
+export type ClientState = z.infer<typeof clientStateSchema>
+export type SupabaseUserInfo = z.infer<typeof supabaseUserInfoSchema>
 
 export async function initClientState(
   tx: WriteTransaction,
-  { id, defaultUserInfo }: { id: string; defaultUserInfo: UserInfo }
+  { id, defaultUserInfo, defaultSupabaseUserInfo }: { id: string; defaultUserInfo: UserInfo; defaultSupabaseUserInfo: SupabaseUserInfo }
 ): Promise<void> {
   if (await tx.has(key(id))) {
     return;
@@ -71,6 +80,8 @@ export async function initClientState(
       overID: "",
       selectedID: "",
       userInfo: defaultUserInfo,
+      selectedItemID: "",
+      supabaseUserInfo: defaultSupabaseUserInfo,
     },
   });
 }
@@ -83,7 +94,12 @@ export async function getClientState(
   if (!jv) {
     throw new Error("Expected clientState to be initialized already: " + id);
   }
-  return clientStateSchema.parse(jv);
+  const changes = {
+    selectedItemID: "",
+  }
+  let value = jv as any
+  const thing = {...value, ...changes}
+  return clientStateSchema.parse(thing);
 }
 
 export function putClientState(
@@ -121,6 +137,15 @@ export async function selectShape(
   await putClientState(tx, { id: clientID, clientState: client });
 }
 
+export async function selectItem(
+  tx: WriteTransaction,
+  { clientID, itemID } : { clientID: string; itemID: string }
+): Promise<void> {
+  const client = await getClientState(tx, clientID);
+  client.selectedItemID = itemID;
+  await putClientState(tx, { id: clientID, clientState: client });
+}
+
 export function randUserInfo(): UserInfo {
   const [avatar, name] = avatars[randInt(0, avatars.length - 1)];
   return {
@@ -129,6 +154,21 @@ export function randUserInfo(): UserInfo {
     color: colors[randInt(0, colors.length - 1)],
   };
 }
+
+import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../lib/constants'
+
+export function supabaseUserInfo() : SupabaseUserInfo {
+  const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY) as any
+  console.log('session', JSON.parse(session).currentSession)
+  const email = session && JSON.parse(session).currentSession.user.email || 'guest'
+  const avatarURL = session && JSON.parse(session).currentSession.user.user_metadata.avatar_url || ''
+  const info = {
+    email: email,
+    avatarURL: avatarURL
+  }
+  return info
+}
+
 
 function key(id: string): string {
   return `${clientStatePrefix}${id}`;

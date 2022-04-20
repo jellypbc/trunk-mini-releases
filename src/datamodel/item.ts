@@ -1,6 +1,6 @@
-import type { ReadTransaction, WriteTransaction } from "replicache";
-import { nanoid } from "nanoid";
-import { z } from "zod";
+import type { ReadTransaction, WriteTransaction } from 'replicache'
+import { nanoid } from 'nanoid'
+import { z } from 'zod'
 
 export const itemSchema = z.object({
   type: z.literal(`item`),
@@ -11,20 +11,20 @@ export const itemSchema = z.object({
   arrows: z.string(),
   highlight: z.string(),
   sourceURL: z.string()
-});
+})
 
-export type Item = z.infer<typeof itemSchema>;
+export type Item = z.infer<typeof itemSchema>
 
 export async function getItem(
   tx: ReadTransaction,
   id: string
 ): Promise<Item | null> {
-  const jv = await tx.get(key(id));
+  const jv = await tx.get(key(id))
   if (!jv) {
-    console.log(`Specified item ${id} not found.`);
-    return null;
+    console.log(`Specified item ${id} not found.`)
+    return null
   }
-  return itemSchema.parse(jv);
+  return itemSchema.parse(jv)
 }
 
 export function putItem(
@@ -38,7 +38,7 @@ export async function deleteItem(
   tx: WriteTransaction,
   id: string
 ): Promise<void> {
-  await tx.del(key(id));
+  await tx.del(key(id))
 }
 
 export async function updateItemTitle(
@@ -48,6 +48,21 @@ export async function updateItemTitle(
   const item = await getItem(tx, id)
   return tx.put(key(id), {...item, title: title})
 }
+
+
+export async function initItems(
+  tx: WriteTransaction,
+  items: { id: string; item: Item }[]
+) {
+  if (await tx.has("initialized")) {
+    return
+  }
+  await Promise.all([
+    tx.put("initialized", true),
+    ...items.map((i) => putItem(tx, i)),
+  ]);
+}
+
 
 export async function updateItemContent(
   tx: WriteTransaction,

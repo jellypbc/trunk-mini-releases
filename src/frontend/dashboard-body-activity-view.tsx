@@ -18,6 +18,8 @@ import {
 import { nanoid } from 'nanoid'
 import { idbOK } from '../lib/idbOK'
 import ItemFileUploadButton from './item-file-upload-button'
+import { supabaseUserInfo } from '../datamodel/client-state'
+import Image from 'next/image'
 
 const keyMap = {
   createItem: ['command+enter']
@@ -32,6 +34,7 @@ type ActivityViewProps = {
 
 export default function ActivityView({ setShowIndex, rep, items, handleSetSelectedItemID } : ActivityViewProps) {
   const [itemsShown, setItemsShown] = useState<number>(10)
+  const defaultSupabaseUserInfo = supabaseUserInfo()
 
   function addTenItems(){
     setItemsShown(itemsShown + 10)
@@ -54,6 +57,7 @@ export default function ActivityView({ setShowIndex, rep, items, handleSetSelect
       </div>
       <ItemDraft
         rep={rep}
+        supabaseUserInfo={defaultSupabaseUserInfo}
       />
       <div className={styles.activityFeed}>
         { items.slice(0, itemsShown).map((item: any) => {
@@ -82,14 +86,20 @@ export default function ActivityView({ setShowIndex, rep, items, handleSetSelect
 
 type ItemDraftProps = {
   rep: Replicache<M>
+  supabaseUserInfo: {
+    email: string
+    avatarURL: string
+  }
 }
 
-function ItemDraft({rep}  : ItemDraftProps) {
+function ItemDraft({rep, supabaseUserInfo}  : ItemDraftProps) {
   const [titleDraft, setTitleDraft] = useState<string>('<p> </p>')
   const [contentDraft, setContentDraft] = useState<string>('<p> </p>')
 
   const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
   const [showTitleEditor, setShowTitleEditor] = useState<boolean>(false)
+
+  const { avatarURL } = supabaseUserInfo
 
 
   function saveDraftAsItem(){
@@ -125,7 +135,17 @@ function ItemDraft({rep}  : ItemDraftProps) {
     <div className={styles.draftContainer}>
       <div className={styles.draft}>
         <div className={styles.avatarContainer}>
-          <div className={styles.avatar}></div>
+          <div className={styles.avatar}>
+            {avatarURL &&
+              <Image
+                alt="Next.js logo"
+                src={avatarURL}
+                width={200}
+                height={200}
+                className={styles.avatarImage}
+              />
+            }
+          </div>
         </div>
         <div className={styles.draftEditorContainer}>
           <div className={styles.titleDraftContainer}>
@@ -279,7 +299,7 @@ function ActivityItem({itemID, rep, handleSetSelectedItemID}: ActivityItemProps)
         <div className={styles.content}>
           {!showContentEditor
           ?
-            <span className={styles.readOnly} onClick={() => setShowContentEditor(true)}>{htmlToText(item.content)}</span>
+            <span className={styles.readOnly} onClick={() => setShowContentEditor(true)}>{htmlToText(item.content).substring(0, 300)}</span>
           :
             <EditorContainer
               doc={item.content}
@@ -365,7 +385,6 @@ function FileUploadContainer({itemID, item, rep} : FileUploadContainerProps) {
 
       request.onsuccess = function(e : any){
         let result = e.target.result
-        console.log('result', result)
         result && setURL(window.URL.createObjectURL(result.file))
       }
 

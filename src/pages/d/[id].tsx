@@ -4,7 +4,7 @@ import { Client } from 'reps-client'
 import { Designer } from '../../frontend/replidraw/designer'
 import { Nav } from '../../frontend/replidraw/nav'
 import { M, mutators } from '../../datamodel/mutators'
-import { randUserInfo } from '../../datamodel/client-state'
+import { randUserInfo, supabaseUserInfo } from '../../datamodel/client-state'
 import { randomShape } from '../../datamodel/shape'
 
 export default function Home() {
@@ -39,9 +39,11 @@ export default function Home() {
       new Client(r, roomID, workerURL)
 
       const defaultUserInfo = randUserInfo();
+      const defaultSupabaseUserInfo = supabaseUserInfo()
       await r.mutate.initClientState({
         id: await r.clientID,
         defaultUserInfo,
+        defaultSupabaseUserInfo,
       })
       r.onSync = (syncing: boolean) => {
         if (!syncing) {
@@ -70,7 +72,7 @@ export default function Home() {
           background: "transparent",
         }}
       >
-        <Nav {...{ rep }} />
+        <Nav rep={rep} />
         <Designer {...{ rep }} />
       </div>
   )
