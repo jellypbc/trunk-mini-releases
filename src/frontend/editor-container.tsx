@@ -13,6 +13,8 @@ import { useUserInfo, useItemByID, useItemIDs } from '../datamodel/subscriptions
 import { randomItem } from '../datamodel/item'
 import { randomArrow } from '../datamodel/arrow'
 import { htmlToText } from '../util/htmlToText'
+import { supabaseUserInfo } from '../datamodel/client-state'
+
 
 
 type Props = {
@@ -33,6 +35,8 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
   const [showArrows, setShowArrows] = useState<boolean>(true)
   const [serializedSelection, setSerializedSelection] = useState<string>()
   const [showArrowFloater, setShowArrowFloater] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>('')
+
 
 
   const userInfo = useUserInfo(rep)
@@ -40,6 +44,8 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
   const itemIDs = useItemIDs(rep)
 
   useEffect(() => {
+    const defaultSupabaseUserInfo = supabaseUserInfo()
+    setEmail(defaultSupabaseUserInfo.email)
     const state = createStateFromProps(
       doc,
       schema,
@@ -126,7 +132,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     let commentItem : any = randomItem()
     const commentItemChanges = {
       content: commentDraft,
-      createdBy: '😸',
+      createdBy: email,
       highlight: serializedSelection,
     }
 
@@ -139,7 +145,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     let selection = state?.selection
     let commentArrow : any = randomArrow()
     const arrowChanges = {
-      createdBy: '😸',
+      createdBy: email,
       frontItemID: frontItemID,
       backItemID: itemID,
       content: commentDraft,
@@ -197,7 +203,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     let footnoteItem : any = randomItem()
     const footnoteItemChanges = {
       content: commentDraft,
-      createdBy: '😸',
+      createdBy: email,
       title: footnoteItem.id,
       highlight: serializedSelection
     }
@@ -256,7 +262,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     let referenceItem = randomItem()
     const referenceItemChanges = {
       title: commentDraft,
-      createdBy: '😸'
+      createdBy: email,
     }
 
     referenceItem.item = {...referenceItem.item, ...referenceItemChanges}

@@ -8,6 +8,7 @@ import { getSortedItems, useItemByID } from '../datamodel/subscriptions'
 import Fuse from 'fuse.js'
 import { randomArrow } from '../datamodel/arrow'
 import { randomItem } from '../datamodel/item'
+import { supabaseUserInfo } from '../datamodel/client-state'
 
 type Props = {
   rep: Replicache<M>
@@ -17,6 +18,12 @@ type Props = {
 }
 
 export default function ItemArrowsSub({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
+  const [email, setEmail] = useState<string>('')
+
+  useEffect(() => {
+    const defaultSupabaseUserInfo = supabaseUserInfo()
+    setEmail(defaultSupabaseUserInfo.email)
+  }, [])
 
   const allItems = getSortedItems(rep)
 
@@ -42,6 +49,7 @@ export default function ItemArrowsSub({ rep, itemID, fullArrows, handleSetSelect
           allItems={allItems}
           itemID={itemID}
           handleSetShowAddSubItem={setShowAddSubItem}
+          email={email}
         />
       )}
       {uniqueSubItemItemIDs.map((itemID: any) => {
@@ -78,7 +86,7 @@ function SubItemArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowIt
 }
 
 
-function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAddSubItem} : any) {
+function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAddSubItem, email} : any) {
   const [subItemDraft, setSubItemDraft] = useState<string>('<p>replace with sub-item</p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
@@ -121,7 +129,7 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
   function createArrow(type: string, frontItemID: string, commentDraft : string) {
     let commentArrow : any = randomArrow()
     const arrowChanges = {
-      createdBy: '😸',
+      createdBy: email,
       frontItemID: frontItemID,
       backItemID: itemID,
       kind: type,
@@ -167,7 +175,7 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
     let referenceItem = randomItem()
     const referenceItemChanges = {
       title: authorDraft,
-      createdBy: '😸'
+      createdBy: email
     }
 
     referenceItem.item = {...referenceItem.item, ...referenceItemChanges}

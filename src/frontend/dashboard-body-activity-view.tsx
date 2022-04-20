@@ -99,7 +99,7 @@ function ItemDraft({rep, supabaseUserInfo}  : ItemDraftProps) {
   const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
   const [showTitleEditor, setShowTitleEditor] = useState<boolean>(false)
 
-  const { avatarURL } = supabaseUserInfo
+  const { avatarURL, email } = supabaseUserInfo
 
 
   function saveDraftAsItem(){
@@ -107,11 +107,11 @@ function ItemDraft({rep, supabaseUserInfo}  : ItemDraftProps) {
     const changes = {
       title: titleDraft,
       content: contentDraft,
+      createdBy: email,
     }
 
     const itemItem = {...item.item, ...changes}
     rep.mutate.createItem({id: item.id, item: itemItem})
-
   }
 
   const handlers = {
