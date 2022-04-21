@@ -84,6 +84,36 @@ export function useSupabaseUserInfo(rep: Replicache<M>) {
   )
 }
 
+export function useClientEmail(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.email
+    },
+    null
+  )
+}
+
+export function useClientUsername(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.username
+    },
+    null
+  )
+}
+
+export function useClientAvatarURL(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.avatarURL
+    },
+    null
+  )
+}
+
 export function useClientInfo(
   rep: Replicache<M>,
   clientID: string
@@ -108,6 +138,19 @@ export function getItems(rep: Replicache<M>) {
     []
   )
 }
+
+export function getClientStates(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async(tx) => {
+      const clientStates = await tx.scan({ prefix: clientStatePrefix }).entries().toArray();
+      const things = clientStates && clientStates.filter((clientState :any) => clientState[1].hasOwnProperty("supabaseUserInfo") )
+      return things
+    },
+    []
+  )
+}
+
 
 export function getItemCount(rep: Replicache<M>) {
   return useSubscribe(

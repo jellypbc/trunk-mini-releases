@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Dashboard from '../../frontend/dashboard'
 import { Replicache } from 'replicache'
 import { M, mutators } from '../../datamodel/mutators'
-import { supabaseUserInfo, randUserInfo } from '../../datamodel/client-state'
+import {
+  randUserInfo } from '../../datamodel/client-state'
 import type { AuthSession } from '@supabase/supabase-js'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
@@ -65,11 +66,65 @@ export default function Home() {
       new Client(r, roomID, workerURL)
 
       const defaultUserInfo = randUserInfo()
-      const defaultSupabaseUserInfo = supabaseUserInfo()
+
+      const defaultSupabaseUserInfo = {
+        email: 'default',
+        username: 'default',
+        avatarURL: 'default'
+      }
+
+      const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
+      const email = session && JSON.parse(session).currentSession.user.email || 'guest'
+
+      defaultSupabaseUserInfo.email = email
+
+      let url
+
+      await getProfile()
+      await downloadImage(url)
+
+      async function getProfile() {
+        try {
+          const user = supabase.auth.user()
+
+          let { data, error, status } = await supabase
+            .from('profiles')
+            .select(`username, avatar_url`)
+            .eq('id', user?.id)
+            .single()
+
+          if (error && status !== 406) {
+            throw error
+          }
+
+          if (data) {
+            defaultSupabaseUserInfo.username = data.username
+            url = data.avatar_url
+          }
+        } catch (error :any) {
+          alert(error.message)
+        } finally {
+
+        }
+      }
+
+      async function downloadImage(path : any) {
+        try {
+          const { data, error } : any = await supabase.storage.from('avatars').download(path)
+          if (error) {
+            throw error
+          }
+          const url = URL.createObjectURL(data)
+          defaultSupabaseUserInfo.avatarURL = url
+
+        } catch (error :any) {
+          console.log('Error downloading image: ', error.message)
+        }
+      }
       await r.mutate.initClientState({
         id: await r.clientID,
         defaultUserInfo,
-        defaultSupabaseUserInfo
+        defaultSupabaseUserInfo: defaultSupabaseUserInfo,
       })
       r.onSync = (syncing: boolean) => {
         if (!syncing) {
@@ -142,6 +197,7 @@ export default function Home() {
               rep={rep}
               handleSetSelectedItemID={setSelectedItemID}
               handleSetCommandBar={setCommandBar}
+              session={session}
             />
           }
         </div>

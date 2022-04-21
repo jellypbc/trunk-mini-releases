@@ -4,11 +4,10 @@ import styles from './item-container.module.css'
 import type { M } from '../datamodel/mutators'
 import type { Replicache } from 'replicache'
 import EditorDraftingContainer from './editor-drafting-container'
-import { getSortedItems, useItemByID } from '../datamodel/subscriptions'
+import { getSortedItems, useItemByID, useClientEmail } from '../datamodel/subscriptions'
 import Fuse from 'fuse.js'
 import { randomArrow } from '../datamodel/arrow'
 import { randomItem } from '../datamodel/item'
-import { supabaseUserInfo } from '../datamodel/client-state'
 
 type Props = {
   rep: Replicache<M>
@@ -18,12 +17,7 @@ type Props = {
 }
 
 export default function ItemArrowsAuthor({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
-  const [email, setEmail] = useState<string>('')
-
-  useEffect(() => {
-    const defaultSupabaseUserInfo = supabaseUserInfo()
-    setEmail(defaultSupabaseUserInfo.email)
-  }, [])
+  const email = useClientEmail(rep)
 
   const allItems = getSortedItems(rep)
 
@@ -42,7 +36,7 @@ export default function ItemArrowsAuthor({ rep, itemID, fullArrows, handleSetSel
           Add author
         </span>
       </div>
-      {showAddAuthor && allItems && (
+      {showAddAuthor && allItems && email &&(
         <AddAuthorThing
           rep={rep}
           userInfo={null}

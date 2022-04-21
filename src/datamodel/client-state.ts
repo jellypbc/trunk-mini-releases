@@ -42,8 +42,10 @@ export const userInfoSchema = z.object({
 
 export const supabaseUserInfoSchema = z.object({
   email: z.string(),
+  username: z.string(),
   avatarURL: z.string(),
 })
+
 
 // TODO: It would be good to merge this with the first-class concept of `client`
 // that Replicache itself manages if possible.
@@ -65,7 +67,7 @@ export type SupabaseUserInfo = z.infer<typeof supabaseUserInfoSchema>
 
 export async function initClientState(
   tx: WriteTransaction,
-  { id, defaultUserInfo, defaultSupabaseUserInfo }: { id: string; defaultUserInfo: UserInfo; defaultSupabaseUserInfo: SupabaseUserInfo }
+  { id, defaultUserInfo, defaultSupabaseUserInfo }: { id: string; defaultUserInfo: UserInfo, defaultSupabaseUserInfo: SupabaseUserInfo}
 ): Promise<void> {
   if (await tx.has(key(id))) {
     return;
@@ -94,12 +96,8 @@ export async function getClientState(
   if (!jv) {
     throw new Error("Expected clientState to be initialized already: " + id);
   }
-  const changes = {
-    selectedItemID: "",
-  }
-  let value = jv as any
-  const thing = {...value, ...changes}
-  return clientStateSchema.parse(thing);
+  console.log('jv', jv)
+  return clientStateSchema.parse(jv);
 }
 
 export function putClientState(
@@ -107,6 +105,24 @@ export function putClientState(
   { id, clientState }: { id: string; clientState: ClientState }
 ): Promise<void> {
   return tx.put(key(id), clientState);
+}
+
+export async function setUsername(
+  tx: WriteTransaction,
+  { id, username } : { id: string, username: string }
+): Promise<void> {
+  const clientState = await getClientState(tx, id)
+  clientState.supabaseUserInfo.username = username
+  await putClientState(tx, { id, clientState})
+}
+
+export async function setAvatarURL(
+  tx: WriteTransaction,
+  {id, avatarURL } : { id: string, avatarURL: string }
+): Promise<void> {
+  const clientState = await getClientState(tx, id)
+  clientState.supabaseUserInfo.avatarURL = avatarURL
+  await putClientState(tx, { id, clientState})
 }
 
 export async function setCursor(
@@ -153,20 +169,6 @@ export function randUserInfo(): UserInfo {
     name,
     color: colors[randInt(0, colors.length - 1)],
   };
-}
-
-import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../lib/constants'
-
-export function supabaseUserInfo() : SupabaseUserInfo {
-  const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY) as any
-  console.log('session', JSON.parse(session).currentSession)
-  const email = session && JSON.parse(session).currentSession.user.email || 'guest'
-  const avatarURL = session && JSON.parse(session).currentSession.user.user_metadata.avatar_url || ''
-  const info = {
-    email: email,
-    avatarURL: avatarURL
-  }
-  return info
 }
 
 

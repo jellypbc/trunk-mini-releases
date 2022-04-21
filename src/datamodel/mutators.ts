@@ -4,6 +4,8 @@ import {
   setCursor,
   overShape,
   selectShape,
+  setUsername,
+  setAvatarURL,
 } from "./client-state";
 import {
   putShape,
@@ -21,8 +23,7 @@ import {
   updateItemArrows,
   updateItemSourceURL,
   updateItemAddSingleArrow,
-  updateItemArrowsDeleteArrow,
-  initItems,
+  updateItemArrowsDeleteArrow
 } from './item';
 import {
   putArrow,
@@ -52,6 +53,7 @@ export const mutators = {
   updateItemAddSingleArrow,
   deleteArrow,
   updateItemArrowsDeleteArrow,
-  initItems,
+  setUsername,
+  setAvatarURL,
   nop: async (_: WriteTransaction) => {},
 };

@@ -27,3 +27,62 @@
 .itemCount {
   padding: 1rem;
 }
+
+.profileEdit{
+  z-index: 1;
+  background: hsl(0, 0%, 96%);
+  position: absolute;
+  width: 440px;
+  max-height: 100%;
+  left: 0;
+  right: 0;
+  top: 10%;
+  margin: 10% auto 0;
+  padding: 1rem 2rem;
+  text-align: center;
+  border: 1px solid hsla(0, 0%, 77%);
+  box-shadow: 0 4px 20px hsla(0, 0%, 77%), 0 4px 20px hsla(0, 0%, 77%);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+}
+
+.formWidget {
+  padding: 1rem;
+}
+
+.userField {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.userField label {
+  /* padding: 1rem; */
+
+}
+
+.userField input {
+  /* margin: 1rem; */
+  padding: .5rem 1rem;
+  outline: none;
+  border: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.header {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.uploadAvatar {
+}
+
+.avatarThing {
+  text-align: center;
+}

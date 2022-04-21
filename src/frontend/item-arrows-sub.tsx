@@ -4,11 +4,10 @@ import styles from './item-container.module.css'
 import type { M } from '../datamodel/mutators'
 import type { Replicache } from 'replicache'
 import EditorDraftingContainer from './editor-drafting-container'
-import { getSortedItems, useItemByID } from '../datamodel/subscriptions'
+import { getSortedItems, useItemByID, useClientEmail } from '../datamodel/subscriptions'
 import Fuse from 'fuse.js'
 import { randomArrow } from '../datamodel/arrow'
 import { randomItem } from '../datamodel/item'
-import { supabaseUserInfo } from '../datamodel/client-state'
 
 type Props = {
   rep: Replicache<M>
@@ -18,13 +17,7 @@ type Props = {
 }
 
 export default function ItemArrowsSub({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
-  const [email, setEmail] = useState<string>('')
-
-  useEffect(() => {
-    const defaultSupabaseUserInfo = supabaseUserInfo()
-    setEmail(defaultSupabaseUserInfo.email)
-  }, [])
-
+  const email = useClientEmail(rep)
   const allItems = getSortedItems(rep)
 
   const [showAddSubItem, setShowAddSubItem] = useState<boolean>(false)
@@ -42,7 +35,7 @@ export default function ItemArrowsSub({ rep, itemID, fullArrows, handleSetSelect
           Add sub-item
         </span>
       </div>
-      {showAddSubItem && allItems && (
+      {showAddSubItem && allItems && email &&
         <AddSubItemContainer
           rep={rep}
           userInfo={null}
@@ -51,7 +44,7 @@ export default function ItemArrowsSub({ rep, itemID, fullArrows, handleSetSelect
           handleSetShowAddSubItem={setShowAddSubItem}
           email={email}
         />
-      )}
+      }
       {uniqueSubItemItemIDs.map((itemID: any) => {
         return (
           <SubItemArrowItem
@@ -129,7 +122,7 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
   function createArrow(type: string, frontItemID: string, commentDraft : string) {
     let commentArrow : any = randomArrow()
     const arrowChanges = {
-      createdBy: email,
+      createdBy: email && email,
       frontItemID: frontItemID,
       backItemID: itemID,
       kind: type,
@@ -175,7 +168,7 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
     let referenceItem = randomItem()
     const referenceItemChanges = {
       title: authorDraft,
-      createdBy: email
+      createdBy: email && email
     }
 
     referenceItem.item = {...referenceItem.item, ...referenceItemChanges}

@@ -5,7 +5,7 @@ import styles from './dashboard-body-activity-view.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
 import { randomItem } from '../datamodel/item'
 import { HotKeys } from 'react-hotkeys'
-import { useItemByID, useArrowByID, getArrowsByIDs, useAuthorsByItemID } from '../datamodel/subscriptions'
+import { useItemByID, useArrowByID, getArrowsByIDs, useAuthorsByItemID, useClientEmail, useClientUsername, useClientAvatarURL } from '../datamodel/subscriptions'
 import { htmlToText } from '../util/htmlToText'
 import ItemParent from './item-parent'
 import EditorContainer from './editor-container'
@@ -18,7 +18,6 @@ import {
 import { nanoid } from 'nanoid'
 import { idbOK } from '../lib/idbOK'
 import ItemFileUploadButton from './item-file-upload-button'
-import { supabaseUserInfo } from '../datamodel/client-state'
 import Image from 'next/image'
 
 const keyMap = {
@@ -34,7 +33,10 @@ type ActivityViewProps = {
 
 export default function ActivityView({ setShowIndex, rep, items, handleSetSelectedItemID } : ActivityViewProps) {
   const [itemsShown, setItemsShown] = useState<number>(10)
-  const defaultSupabaseUserInfo = supabaseUserInfo()
+
+  const email = useClientEmail(rep)
+  const username = useClientUsername(rep)
+  const avatarURL = useClientAvatarURL(rep)
 
   function addTenItems(){
     setItemsShown(itemsShown + 10)
@@ -55,10 +57,14 @@ export default function ActivityView({ setShowIndex, rep, items, handleSetSelect
           </div>
         </div>
       </div>
-      <ItemDraft
-        rep={rep}
-        supabaseUserInfo={defaultSupabaseUserInfo}
-      />
+      { email && username && avatarURL &&
+        <ItemDraft
+          rep={rep}
+          email={email}
+          username={username}
+          avatarURL={avatarURL}
+        />
+      }
       <div className={styles.activityFeed}>
         { items.slice(0, itemsShown).map((item: any) => {
           return (
@@ -86,20 +92,19 @@ export default function ActivityView({ setShowIndex, rep, items, handleSetSelect
 
 type ItemDraftProps = {
   rep: Replicache<M>
-  supabaseUserInfo: {
-    email: string
-    avatarURL: string
-  }
+  email: string
+  username: string
+  avatarURL: string
 }
 
-function ItemDraft({rep, supabaseUserInfo}  : ItemDraftProps) {
+function ItemDraft({rep, email, username, avatarURL}  : ItemDraftProps) {
+  console.log('ItemDraft username', username)
   const [titleDraft, setTitleDraft] = useState<string>('<p> </p>')
   const [contentDraft, setContentDraft] = useState<string>('<p> </p>')
 
   const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
   const [showTitleEditor, setShowTitleEditor] = useState<boolean>(false)
 
-  const { avatarURL, email } = supabaseUserInfo
 
 
   function saveDraftAsItem(){

@@ -13,9 +13,10 @@ type Props = {
   rep: Replicache<M>
   handleSetSelectedItemID: (itemID: string) => void
   handleSetCommandBar: (commandBar: boolean) => void
+  session: any
 }
 
-export default function Dashboard({ roomID, rep, handleSetSelectedItemID, handleSetCommandBar } : Props) {
+export default function Dashboard({ roomID, rep, handleSetSelectedItemID, handleSetCommandBar, session } : Props) {
   const items = getSortedItems(rep)
   const arrows = getArrows(rep)
 
@@ -30,6 +31,8 @@ export default function Dashboard({ roomID, rep, handleSetSelectedItemID, handle
               arrowCount={arrows.length}
               handleSetCommandBar={handleSetCommandBar}
               roomID={roomID}
+              rep={rep}
+              session={session}
             />
             {items &&
               <DashboardBody

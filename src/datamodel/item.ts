@@ -31,6 +31,7 @@ export function putItem(
   tx: WriteTransaction,
   { id, item }: { id: string; item: Item }
 ): Promise<void> {
+  console.log('item', item)
   return tx.put(key(id), item);
 }
 
@@ -48,21 +49,6 @@ export async function updateItemTitle(
   const item = await getItem(tx, id)
   return tx.put(key(id), {...item, title: title})
 }
-
-
-export async function initItems(
-  tx: WriteTransaction,
-  items: { id: string; item: Item }[]
-) {
-  if (await tx.has("initialized")) {
-    return
-  }
-  await Promise.all([
-    tx.put("initialized", true),
-    ...items.map((i) => putItem(tx, i)),
-  ]);
-}
-
 
 export async function updateItemContent(
   tx: WriteTransaction,
