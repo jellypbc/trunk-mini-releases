@@ -44,6 +44,7 @@ export const supabaseUserInfoSchema = z.object({
   email: z.string(),
   username: z.string(),
   avatarURL: z.string(),
+  trunkIDs: z.string(),
 })
 
 
@@ -113,6 +114,15 @@ export async function setUsername(
 ): Promise<void> {
   const clientState = await getClientState(tx, id)
   clientState.supabaseUserInfo.username = username
+  await putClientState(tx, { id, clientState})
+}
+
+export async function setTrunkIDs(
+  tx: WriteTransaction,
+  { id, trunkIDs } : { id: string, trunkIDs: string }
+): Promise<void> {
+  const clientState = await getClientState(tx, id)
+  clientState.supabaseUserInfo.trunkIDs = trunkIDs
   await putClientState(tx, { id, clientState})
 }
 

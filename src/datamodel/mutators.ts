@@ -6,6 +6,7 @@ import {
   selectShape,
   setUsername,
   setAvatarURL,
+  setTrunkIDs,
 } from "./client-state";
 import {
   putShape,
@@ -55,5 +56,6 @@ export const mutators = {
   updateItemArrowsDeleteArrow,
   setUsername,
   setAvatarURL,
+  setTrunkIDs,
   nop: async (_: WriteTransaction) => {},
 };

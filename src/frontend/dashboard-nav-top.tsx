@@ -18,6 +18,7 @@ export default function DashboardNavTop({ itemCount, arrowCount, handleSetComman
 
   const email = useClientEmail(rep)
   const username = useClientUsername(rep)
+  // const trunkIDs = useClientTrunkIDs(rep)
 
   const [showProfile, setShowProfile] = useState<boolean>(false)
 
@@ -93,6 +94,7 @@ function Account({session, clientID, rep}: any){
   const [loading, setLoading] = useState(true)
   const [username, setUsername] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
+  const [trunkIDs, setTrunkIDs] = useState(null)
 
   useEffect(() => {
     getProfile()
@@ -105,7 +107,7 @@ function Account({session, clientID, rep}: any){
 
       let { data, error, status } = await supabase
         .from('profiles')
-        .select(`username, avatar_url`)
+        .select(`username, avatar_url, trunk_ids`)
         .eq('id', user?.id)
         .single()
 
@@ -116,6 +118,7 @@ function Account({session, clientID, rep}: any){
       if (data) {
         setUsername(data.username)
         setAvatarUrl(data.avatar_url)
+        setTrunkIDs(data.trunk_ids)
       }
     } catch (error:any) {
       alert(error.message)
@@ -124,7 +127,7 @@ function Account({session, clientID, rep}: any){
     }
   }
 
-  async function updateProfile({ username, avatar_url } :any) {
+  async function updateProfile({ username, avatar_url, trunkIDs } :any) {
     try {
       setLoading(true)
       const user = supabase.auth.user()
@@ -133,11 +136,13 @@ function Account({session, clientID, rep}: any){
         id: user?.id,
         username,
         avatar_url,
+        trunk_ids: trunkIDs,
         updated_at: new Date(),
       }
       console.log('updates', updates)
 
       updates && rep.mutate.setUsername({ id: clientID, username: updates.username})
+      updates && rep.mutate.setTrunkIDs({ id: clientID, trunkIDs: updates.trunk_ids})
 
       let { error } = await supabase.from('profiles').upsert(updates, {
         returning: 'minimal', // Don't return the value after inserting
@@ -179,15 +184,25 @@ function Account({session, clientID, rep}: any){
           onChange={(e: any) => setUsername(e.target.value)}
         />
       </div>
+      <div className={styles.userField}>
+        <label htmlFor="username">TrunkIDs</label>
+        <input
+          id="trunkIDs"
+          type="text"
+          value={trunkIDs || ''}
+          onChange={(e: any) => setTrunkIDs(e.target.value)}
+        />
+      </div>
       <div>
         <button
           className="button button-primary"
-          onClick={() => updateProfile({ username, avatar_url })}
+          onClick={() => updateProfile({ username, avatar_url, trunkIDs })}
           disabled={loading}
         >
           {loading ? 'Loading ...' : 'Update'}
         </button>
       </div>
+
 
       {/* <div>
         <button className="button block" onClick={() => supabase.auth.signOut()}>

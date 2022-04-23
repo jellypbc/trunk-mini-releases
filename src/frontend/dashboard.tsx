@@ -24,7 +24,10 @@ export default function Dashboard({ roomID, rep, handleSetSelectedItemID, handle
     <div className={styles.container}>
       {roomID &&
         <div className={styles.dashboard}>
-          <DashboardNavLeft roomID={roomID} />
+          <DashboardNavLeft
+            roomID={roomID}
+            rep={rep}
+          />
           <div className={styles.main}>
             <DashboardNavTop
               itemCount={items.length}

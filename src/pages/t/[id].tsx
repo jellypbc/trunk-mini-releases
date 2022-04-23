@@ -70,7 +70,8 @@ export default function Home() {
       const defaultSupabaseUserInfo = {
         email: 'default',
         username: 'default',
-        avatarURL: 'default'
+        avatarURL: 'default',
+        trunkIDs: '[]'
       }
 
       const session = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
@@ -89,7 +90,7 @@ export default function Home() {
 
           let { data, error, status } = await supabase
             .from('profiles')
-            .select(`username, avatar_url`)
+            .select(`username, avatar_url, trunk_ids`)
             .eq('id', user?.id)
             .single()
 
@@ -99,6 +100,7 @@ export default function Home() {
 
           if (data) {
             defaultSupabaseUserInfo.username = data.username
+            defaultSupabaseUserInfo.trunkIDs = data.trunk_ids
             url = data.avatar_url
           }
         } catch (error :any) {

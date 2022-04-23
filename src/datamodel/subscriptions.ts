@@ -104,6 +104,16 @@ export function useClientUsername(rep: Replicache<M>) {
   )
 }
 
+export function useClientTrunkIDs(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.trunkIDs
+    },
+    null
+  )
+}
+
 export function useClientAvatarURL(rep: Replicache<M>) {
   return useSubscribe(
     rep,

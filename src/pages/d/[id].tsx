@@ -46,7 +46,8 @@ export default function Home() {
       const defaultSupabaseUserInfo = {
         email: 'default',
         username: 'default',
-        avatarURL: 'default'
+        avatarURL: 'default',
+        trunkIDs: '[]',
       }
       await r.mutate.initClientState({
         id: await r.clientID,
