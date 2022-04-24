@@ -90,7 +90,7 @@ export function useClientEmail(rep: Replicache<M>) {
     async (tx) => {
       return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.email
     },
-    null
+    ""
   )
 }
 
@@ -111,6 +111,18 @@ export function useClientTrunkIDs(rep: Replicache<M>) {
       return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.trunkIDs
     },
     null
+  )
+}
+
+export function useClientTrunkIDsArray(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async (tx) => {
+      const trunkIDs = (await getClientState(tx, await rep.clientID)).supabaseUserInfo.trunkIDs
+      const trunkIDsArray = JSON.parse(trunkIDs)
+      return trunkIDsArray
+    },
+    []
   )
 }
 

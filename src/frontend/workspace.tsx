@@ -4,7 +4,17 @@ import type { M } from '../datamodel/mutators'
 import styles from './workspace.module.css'
 import { getSortedItems } from '../datamodel/subscriptions'
 
+import SidebarTrunkNav from './workspace-sidebar-trunk-nav'
+
 type WorkspaceProps = {
+  rep: Replicache<M>
+}
+
+type MainContainerProps = {
+  rep: Replicache<M>
+}
+
+type SidebarProps = {
   rep: Replicache<M>
 }
 
@@ -13,9 +23,10 @@ export default function Workspace({ rep }: WorkspaceProps) {
   return (
     items &&
     <div className={styles.container}>
-      {/* <div>{items.length}</div> */}
       <NavMainContainer />
-      <MainContainer />
+      <MainContainer
+        rep={rep}
+      />
     </div>
   )
 }
@@ -28,23 +39,28 @@ function NavMainContainer() {
   )
 }
 
-function MainContainer() {
+function MainContainer({ rep } : MainContainerProps) {
   return(
     <div className={styles.mainContainer}>
-      <Sidebar/>
+      <Sidebar
+        rep={rep}
+      />
       <Main/>
       <VariableGutter/>
     </div>
   )
 }
 
-function Sidebar(){
+function Sidebar({ rep } : SidebarProps ){
   return(
     <div className={styles.sidebar}>
-      Sidebar
+      <SidebarTrunkNav
+        rep={rep}
+      />
     </div>
   )
 }
+
 
 function Main(){
   return (

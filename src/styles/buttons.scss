@@ -32,3 +32,31 @@
 .button-secondary {
   padding: .5rem 1rem;
 }
+
+.btn {
+
+  font-size: .8rem;
+}
+
+.btn-1 {
+  padding: .1rem 1rem;
+  color: hsl(0, 0%, 50%);
+  border: 2px solid hsl(0, 0%, 90%);
+}
+
+.btn-1:hover {
+  background-color: hsl(0, 0%, 90%);
+  color: hsl(0, 0%, 50%);
+}
+
+.btn-2 {
+  color: hsl(0, 0%, 40%);
+}
+
+.btn-2:hover {
+
+}
+
+
+
+

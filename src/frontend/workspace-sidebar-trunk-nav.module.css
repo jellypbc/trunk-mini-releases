@@ -1,0 +1,53 @@
+.container {
+
+}
+
+.trunkContainer {
+  border: 2px solid hsl(0, 0%, 90%);
+  border-radius: .5rem;
+}
+
+.trunk {
+  padding: 1rem;
+  border-bottom: 2px solid hsl(0, 0%, 90%);
+  font-size: .8rem;
+}
+
+.trunk:hover {
+  background-color: hsl(0, 0%, 92%);
+  cursor: pointer;
+}
+
+.trunk:last-child {
+  border-bottom: none;
+}
+
+.trunkType {
+  text-transform: uppercase;
+  font-size: .7rem;
+  color: hsl(0, 0%, 70%);
+}
+
+.addTrunkContainer {
+  padding: 1rem .5rem;
+}
+
+.buttonContainer {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.addTrunkInputContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.addTrunkInput {
+  font-size: .8rem;
+  width: 100%;
+  border: none;
+  background-color: hsl(0, 0%, 92%);
+  padding: .5rem 1rem;
+  outline: none;
+}

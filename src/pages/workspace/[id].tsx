@@ -100,10 +100,17 @@ export default function Home() {
           }
 
           if (data) {
-            defaultSupabaseUserInfo.username = data.username
-            defaultSupabaseUserInfo.trunkIDs = data.trunk_ids
-            url = data.avatar_url
+            const { username, trunk_ids, avatar_url } = data
+
+            const trunkIDArray = JSON.parse(trunk_ids)
+            !trunkIDArray.includes(email) && trunkIDArray.push(email)
+            const stringifiedUpdatedTrunkIDs = JSON.stringify(trunkIDArray)
+
+            defaultSupabaseUserInfo.trunkIDs = stringifiedUpdatedTrunkIDs
+            defaultSupabaseUserInfo.username = username
+            url = avatar_url
           }
+
         } catch (error :any) {
           alert(error.message)
         } finally {

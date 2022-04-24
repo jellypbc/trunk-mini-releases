@@ -19,8 +19,6 @@
 .sidebar {
   width: 150px;
   margin-right: 15px;
-  background-color: hsl(0, 0%, 92%);
-  padding: 1rem;
 }
 
 .main {
