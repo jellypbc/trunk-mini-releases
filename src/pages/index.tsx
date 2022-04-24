@@ -4,7 +4,6 @@ import { supabase } from '../lib/supabase-client'
 import {
   LOCAL_STORAGE_AUTH_TOKEN_KEY,
 } from '../lib/constants'
-import UserOnboarding from '../frontend/user-onboarding'
 import UserLogIn from '../frontend/user-log-in'
 import { useRouter } from 'next/router'
 
@@ -23,29 +22,23 @@ export default function Page() {
   }, [])
 
   useEffect(() => {
-    const newRoomID = session && session.user?.email?.split('@')[0]
+    const newRoomID = session && session.user?.email
     newRoomID && setRoomID(newRoomID)
   }, [session])
 
-  function handleTrunkSelect(roomID: string) {
+  useEffect(() => {
+    roomID !== '' && handleTrunkSelect()
+  }, [roomID])
+
+  function handleTrunkSelect() {
     router.push({
-      pathname: `/t/[roomID]`,
-      query: { roomID: roomID }
+      pathname: `/workspace/[roomID]`,
+      query: { roomID: encodeURIComponent(roomID) }
     })
   }
 
   return (
-    <>
-      {session && roomID ?
-        <UserOnboarding
-          session={session}
-          roomID={roomID}
-          handleTrunkSelect={handleTrunkSelect}
-        />
-        :
-        <UserLogIn/>
-      }
-    </>
+    <UserLogIn/>
   )
 }
 

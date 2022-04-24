@@ -1,5 +1,6 @@
 import type { ReadTransaction, WriteTransaction } from 'replicache'
 import { randInt } from '../util/rand'
+import { supabase } from '../lib/supabase-client'
 
 const colors = [
   "#f94144",
@@ -70,9 +71,45 @@ export async function initClientState(
   tx: WriteTransaction,
   { id, defaultUserInfo, defaultSupabaseUserInfo }: { id: string; defaultUserInfo: UserInfo, defaultSupabaseUserInfo: SupabaseUserInfo}
 ): Promise<void> {
+  let supabaseProfileData : any
+  await getProfile()
+
+  async function getProfile() {
+    try {
+      const user = supabase.auth.user()
+
+      let { data, error, status } = await supabase
+        .from('profiles')
+        .select(`username, avatar_url, trunk_ids`)
+        .eq('id', user?.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        supabaseProfileData = data
+      }
+
+    } catch (error :any) {
+      alert(error.message)
+    } finally {
+
+    }
+  }
+
+  const changes = {
+    trunkIDs: supabaseProfileData.trunk_ids,
+    username: supabaseProfileData.username,
+  }
+
+  const supabaseUserInfo = {...defaultSupabaseUserInfo, ...changes}
+
   if (await tx.has(key(id))) {
     return;
   }
+
   await putClientState(tx, {
     id,
     clientState: {
@@ -84,7 +121,7 @@ export async function initClientState(
       selectedID: "",
       userInfo: defaultUserInfo,
       selectedItemID: "",
-      supabaseUserInfo: defaultSupabaseUserInfo,
+      supabaseUserInfo: supabaseUserInfo,
     },
   });
 }
@@ -97,7 +134,6 @@ export async function getClientState(
   if (!jv) {
     throw new Error("Expected clientState to be initialized already: " + id);
   }
-  console.log('jv', jv)
   return clientStateSchema.parse(jv);
 }
 

@@ -100,7 +100,7 @@ export function useClientUsername(rep: Replicache<M>) {
     async (tx) => {
       return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.username
     },
-    null
+    ""
   )
 }
 
@@ -265,9 +265,6 @@ export function useShapeIDs(rep: Replicache<M>) {
     []
   );
 }
-
-
-
 
 export function useShapeByID(rep: Replicache<M>, id: string) {
   return useSubscribe(

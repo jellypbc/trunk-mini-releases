@@ -80,57 +80,6 @@ export default function Home() {
 
       defaultSupabaseUserInfo.email = email
 
-      let url
-
-      await getProfile()
-      await downloadImage(url)
-
-      async function getProfile() {
-        try {
-          const user = supabase.auth.user()
-
-          let { data, error, status } = await supabase
-            .from('profiles')
-            .select(`username, avatar_url, trunk_ids`)
-            .eq('id', user?.id)
-            .single()
-
-          if (error && status !== 406) {
-            throw error
-          }
-
-          if (data) {
-            const { username, trunk_ids, avatar_url } = data
-
-            const trunkIDArray = JSON.parse(trunk_ids)
-            !trunkIDArray.includes(email) && trunkIDArray.push(email)
-            const stringifiedUpdatedTrunkIDs = JSON.stringify(trunkIDArray)
-
-            defaultSupabaseUserInfo.trunkIDs = stringifiedUpdatedTrunkIDs
-            defaultSupabaseUserInfo.username = username
-            url = avatar_url
-          }
-
-        } catch (error :any) {
-          alert(error.message)
-        } finally {
-
-        }
-      }
-
-      async function downloadImage(path : any) {
-        try {
-          const { data, error } : any = await supabase.storage.from('avatars').download(path)
-          if (error) {
-            throw error
-          }
-          const url = URL.createObjectURL(data)
-          defaultSupabaseUserInfo.avatarURL = url
-
-        } catch (error :any) {
-          console.log('Error downloading image: ', error.message)
-        }
-      }
       await r.mutate.initClientState({
         id: await r.clientID,
         defaultUserInfo,

@@ -4,6 +4,7 @@ import type { M } from '../datamodel/mutators'
 import styles from './workspace-sidebar-trunk-nav.module.css'
 import { useClientTrunkIDsArray, useClientEmail } from '../datamodel/subscriptions'
 import { supabase } from '../lib/supabase-client'
+import { useRouter } from 'next/router'
 
 type SidebarTrunkNavProps = {
  rep: Replicache<M>
@@ -23,6 +24,7 @@ type AddTrunkProps = {
 export default function SidebarTrunkNav({ rep } : SidebarTrunkNavProps) {
   const clientTrunkIDs : string[] = useClientTrunkIDsArray(rep)
   const clientEmail : any = useClientEmail(rep)
+
   const [clientID, setClientID] = useState<string>('')
 
   useEffect(() => {
@@ -54,8 +56,19 @@ export default function SidebarTrunkNav({ rep } : SidebarTrunkNavProps) {
 }
 
 function Trunk({ trunkID, clientEmail } : TrunkProps) {
+  const router = useRouter()
+
+  function routeToTrunk() {
+    router.push({
+      pathname: `/workspace/[roomID]`,
+      query: { roomID: encodeURIComponent(trunkID) }
+    })
+  }
   return(
-    <div className={styles.trunk}>
+    <div
+      className={styles.trunk}
+      onClick={() => routeToTrunk()}
+    >
       <div className={styles.trunkType}>
         {clientEmail === trunkID && `private` || `shared`}
       </div>

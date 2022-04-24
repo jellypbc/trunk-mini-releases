@@ -18,7 +18,7 @@ import {
 import { nanoid } from 'nanoid'
 import { idbOK } from '../lib/idbOK'
 import ItemFileUploadButton from './item-file-upload-button'
-import Image from 'next/image'
+// import Image from 'next/image'
 
 const keyMap = {
   createItem: ['command+enter']
@@ -98,7 +98,7 @@ type ItemDraftProps = {
 }
 
 function ItemDraft({rep, email, username, avatarURL}  : ItemDraftProps) {
-  console.log('ItemDraft username', username)
+  console.log('username', username, 'avatarURL', avatarURL)
   const [titleDraft, setTitleDraft] = useState<string>('<p> </p>')
   const [contentDraft, setContentDraft] = useState<string>('<p> </p>')
 
@@ -141,7 +141,7 @@ function ItemDraft({rep, email, username, avatarURL}  : ItemDraftProps) {
       <div className={styles.draft}>
         <div className={styles.avatarContainer}>
           <div className={styles.avatar}>
-            {avatarURL &&
+            {/* {avatarURL &&
               <Image
                 alt="Next.js logo"
                 src={avatarURL}
@@ -149,7 +149,7 @@ function ItemDraft({rep, email, username, avatarURL}  : ItemDraftProps) {
                 height={200}
                 className={styles.avatarImage}
               />
-            }
+            } */}
           </div>
         </div>
         <div className={styles.draftEditorContainer}>
