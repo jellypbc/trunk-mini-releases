@@ -64,7 +64,7 @@ function Trunk({ trunkID, clientEmail } : TrunkProps) {
       query: { roomID: encodeURIComponent(trunkID) }
     })
   }
-  return(
+  return (
     <div
       className={styles.trunk}
       onClick={() => routeToTrunk()}

@@ -100,7 +100,7 @@ export function useClientUsername(rep: Replicache<M>) {
     async (tx) => {
       return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.username
     },
-    ""
+    null
   )
 }
 

@@ -40,7 +40,11 @@ export default function Home() {
   }, [selectedItemID])
 
   useEffect(() => {
-    const [, , roomID] = location.pathname.split("/");
+    let [, , roomID] = location.pathname.split("/");
+
+    if (roomID.includes(`%2540`)) {
+      roomID = roomID.replace(`%2540`, `@`)
+    }
 
     (async () => {
       const r = new Replicache({
@@ -58,6 +62,7 @@ export default function Home() {
         // We only use pull to get the base cookie.
         pullInterval: null,
       });
+
 
       const workerHost =
         process.env.NEXT_PUBLIC_WORKER_HOST ??
@@ -80,16 +85,53 @@ export default function Home() {
 
       defaultSupabaseUserInfo.email = email
 
+      let supabaseProfileData : any = defaultSupabaseUserInfo
+      await getProfile()
+
+      async function getProfile() {
+        try {
+          const user = supabase.auth.user()
+
+          let { data, error, status } = await supabase
+            .from('profiles')
+            .select(`username, avatar_url, trunk_ids`)
+            .eq('id', user?.id)
+            .single()
+
+          if (error && status !== 406) {
+            throw error
+          }
+
+          if (data) {
+            supabaseProfileData = data
+          }
+
+        } catch (error :any) {
+          alert(error.message)
+        } finally {
+
+        }
+      }
+
+      const changes = {
+        trunkIDs: supabaseProfileData.trunk_ids || '[]',
+        username: supabaseProfileData.username || 'guest',
+      }
+
+      const supabaseUserInfo = {...defaultSupabaseUserInfo, ...changes}
+
       await r.mutate.initClientState({
         id: await r.clientID,
         defaultUserInfo,
-        defaultSupabaseUserInfo: defaultSupabaseUserInfo,
+        defaultSupabaseUserInfo: supabaseUserInfo,
       })
+
       r.onSync = (syncing: boolean) => {
         if (!syncing) {
           r.onSync = null
         }
       }
+
       setRep(r)
       setTrunkID(roomID)
     })()

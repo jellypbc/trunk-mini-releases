@@ -1,6 +1,5 @@
 import type { ReadTransaction, WriteTransaction } from 'replicache'
 import { randInt } from '../util/rand'
-import { supabase } from '../lib/supabase-client'
 
 const colors = [
   "#f94144",
@@ -71,43 +70,9 @@ export async function initClientState(
   tx: WriteTransaction,
   { id, defaultUserInfo, defaultSupabaseUserInfo }: { id: string; defaultUserInfo: UserInfo, defaultSupabaseUserInfo: SupabaseUserInfo}
 ): Promise<void> {
-  let supabaseProfileData : any
-  await getProfile()
-
-  async function getProfile() {
-    try {
-      const user = supabase.auth.user()
-
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`username, avatar_url, trunk_ids`)
-        .eq('id', user?.id)
-        .single()
-
-      if (error && status !== 406) {
-        throw error
-      }
-
-      if (data) {
-        supabaseProfileData = data
-      }
-
-    } catch (error :any) {
-      alert(error.message)
-    } finally {
-
-    }
-  }
-
-  const changes = {
-    trunkIDs: supabaseProfileData.trunk_ids ? supabaseProfileData.trunk_ids : `["cindydenny", "dennyluan@gmail.com"]`,
-    username: supabaseProfileData.username ? supabaseProfileData.username : defaultSupabaseUserInfo.email,
-  }
-
-  const supabaseUserInfo = {...defaultSupabaseUserInfo, ...changes}
 
   if (await tx.has(key(id))) {
-    return;
+    return
   }
 
   await putClientState(tx, {
@@ -121,9 +86,9 @@ export async function initClientState(
       selectedID: "",
       userInfo: defaultUserInfo,
       selectedItemID: "",
-      supabaseUserInfo: supabaseUserInfo,
+      supabaseUserInfo: defaultSupabaseUserInfo,
     },
-  });
+  })
 }
 
 export async function getClientState(
