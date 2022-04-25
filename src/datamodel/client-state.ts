@@ -100,8 +100,8 @@ export async function initClientState(
   }
 
   const changes = {
-    trunkIDs: supabaseProfileData.trunk_ids,
-    username: supabaseProfileData.username,
+    trunkIDs: supabaseProfileData.trunk_ids ? supabaseProfileData.trunk_ids : `["cindydenny", "dennyluan@gmail.com"]`,
+    username: supabaseProfileData.username ? supabaseProfileData.username : defaultSupabaseUserInfo.email,
   }
 
   const supabaseUserInfo = {...defaultSupabaseUserInfo, ...changes}
