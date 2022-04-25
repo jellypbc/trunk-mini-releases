@@ -7,6 +7,9 @@ import { supabase } from '../lib/supabase-client'
 import { useRouter } from 'next/router'
 
 import SidebarTrunkNav from './workspace-sidebar-trunk-nav'
+import MainActivityView from './workspace-main-activity-view'
+import MainNav from './workspace-main-nav'
+import MainItemDraft from './workspace-main-item-draft'
 
 type WorkspaceProps = {
   rep: Replicache<M>
@@ -99,9 +102,17 @@ function Sidebar({ rep } : SidebarProps ){
 
 
 function Main({ items } : any){
+  const itemCount = items.length
   return (
     <div className={styles.main}>
-      {`Item count: ${items.length}`}
+      <MainNav
+        itemCount={itemCount}
+      />
+      <MainItemDraft
+      />
+      <MainActivityView
+        items={items}
+      />
     </div>
   )
 }

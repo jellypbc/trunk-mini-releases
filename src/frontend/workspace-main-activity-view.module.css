@@ -1,0 +1,89 @@
+.container {
+}
+
+.activityItemContainer {
+  padding: 1rem;
+  margin: 1rem 0;
+  /* border: 1px solid black; */
+}
+
+.activityItemContainer:hover {
+  background-color: hsl(0, 0%, 96%);
+
+}
+
+.titleContainer {
+  padding: .5rem 0;
+  /* background-color: lightgoldenrodyellow; */
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.createdContainer {
+  display: flex;
+  align-items: center;
+}
+
+.createdBy {
+  display: flex;
+  align-items: center;
+  /* background-color: lightblue; */
+  padding-right: 1rem;
+}
+
+.createdAt {
+  font-size: .8rem;
+  display: flex;
+  color: hsl(0, 0%, 70%);
+  /* background-color: pink; */
+}
+
+.avatarContainer {
+  width: .6rem;
+}
+
+.createdByEmail {
+  margin-left: 1.4rem;
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.avatar {
+  padding: .6rem;
+  margin: 0 auto;
+  background-color: hsl(0, 0%, 70%);
+  border-radius: .6rem;
+}
+
+.authorContainer {
+  /* background-color: lightcyan; */
+}
+
+.by {
+  color: hsl(0, 0%, 70%);
+  padding-right: .3rem;
+}
+
+.authorName {
+
+}
+
+.arrowContainer {
+  padding: .5rem 0;
+  display: flex;
+  /* background-color: lightsalmon; */
+  font-size: .8rem;
+}
+
+.arrowCount {
+  padding-right: 1rem;
+}
+
+.addLink {
+  color: transparent;
+}
+
+.addLink:hover {
+  color: black;
+
+}
