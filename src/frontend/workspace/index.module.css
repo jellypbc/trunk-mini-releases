@@ -25,7 +25,19 @@
 }
 
 .variableGutter {
-  background-color: hsl(0, 0%, 92%);
   flex: 1;
+  padding: 1rem;
+}
+
+.navContainer {
+  width: 980px;
+  margin-top: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.searchBar {
+  background-color: hsl(0, 0%, 90%);
   padding: 1rem;
 }

@@ -3,8 +3,9 @@ import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import styles from './index.module.css'
 import { getSortedItems, useClientEmail, useClientUsername, useClientAvatarURL } from '../../datamodel/subscriptions'
+import { useRouter } from 'next/router'
+import { supabase } from '../../lib/supabase-client'
 
-import Nav from './nav'
 import SidebarTrunkNav from './sidebar-trunk-nav'
 import MainActivityView from './main-activity-view'
 import MainNav from './main-nav'
@@ -14,6 +15,11 @@ type WorkspaceProps = {
   rep: Replicache<M>
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
+  handleSetCommandBar: (state: boolean) => void
+}
+
+type NavProps = {
+  email: string
   handleSetCommandBar: (state: boolean) => void
 }
 
@@ -68,6 +74,34 @@ export default function Workspace({ rep, handleSetSelectedItemID, roomID, handle
           clientAvatarURL={clientAvatarURL}
         />
       }
+    </div>
+  )
+}
+
+
+function Nav({ email, handleSetCommandBar } : NavProps) {
+  const router = useRouter()
+
+  async function logOut() {
+    const { error } = await supabase.auth.signOut()
+    error ?
+      console.log('Error logging out:', error.message)
+      :
+      router.push('/')
+  }
+
+  return(
+    <div className={styles.navContainer}>
+      <div
+        className={styles.searchBar}
+        onClick={() => handleSetCommandBar(true)}>
+        Search or type ⌘ + K
+      </div>
+      <div
+        onClick={() => logOut()}
+      >
+          { email }
+      </div>
     </div>
   )
 }
@@ -134,7 +168,6 @@ function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, client
 function VariableGutter(){
   return(
     <div className={styles.variableGutter}>
-      Variable Gutter
     </div>
   )
 }

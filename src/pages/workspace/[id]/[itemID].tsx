@@ -196,6 +196,7 @@ export default function Home() {
               itemID={selectedItemID}
               handleSetSelectedItemID={setSelectedItemID}
               roomID={roomID}
+              handleSetCommandBar={setCommandBar}
             />
           }
         </div>
