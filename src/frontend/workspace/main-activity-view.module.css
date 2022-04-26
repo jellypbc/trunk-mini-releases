@@ -8,7 +8,7 @@
 }
 
 .activityItemContainer:hover {
-  background-color: hsl(0, 0%, 96%);
+  background-color: hsl(0, 0%, 97%);
 
 }
 
@@ -51,12 +51,14 @@
 .avatar {
   padding: .6rem;
   margin: 0 auto;
-  background-color: hsl(0, 0%, 70%);
+  /* background-color: hsl(0, 0%, 92%); */
+  background-color: lightskyblue;
   border-radius: .6rem;
 }
 
 .authorContainer {
   /* background-color: lightcyan; */
+  font-size: .8rem;
 }
 
 .by {
@@ -71,19 +73,32 @@
 .arrowContainer {
   padding: .5rem 0;
   display: flex;
-  /* background-color: lightsalmon; */
-  font-size: .8rem;
+  font-size: .7rem;
+}
+
+.arrowCountContainer {
+  padding-right: .5rem;
 }
 
 .arrowCount {
-  padding-right: 1rem;
+  background-color: hsl(0, 0%, 80%);
+  padding: .1rem .5rem .2rem .5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+}
+
+.arrowLabel {
+  padding: .1rem .5rem;
 }
 
 .addLink {
   color: transparent;
+  padding: .1rem .5rem .05rem .5rem;
+  font-size: .6rem;
 }
 
 .addLink:hover {
-  color: black;
-
+  color: white;
+  background-color: hsl(0, 0%, 60%);
+  border-radius: .2rem;
 }

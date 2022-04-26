@@ -3,20 +3,34 @@ import styles from './main-activity-view.module.css'
 import { htmlToText } from '../../util/htmlToText'
 import { dateInWords } from '../../lib/dateInWords'
 import { useRouter } from 'next/router'
+import {
+  useAuthorsByItemID,
+  useAuthorItemsByArrowIDs,
+  useItemByID
+} from '../../datamodel/subscriptions'
+import type { Replicache } from 'replicache'
+import type { M } from '../../datamodel/mutators'
 
 type MainActivityViewProps = {
   items: any[]
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
+  rep: Replicache<M>
 }
 
 type ActivityItemProps = {
   item: any
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
+  rep: Replicache<M>
 }
 
-export default function MainActivityView({ items, handleSetSelectedItemID, roomID } : MainActivityViewProps ) {
+type AuthorInfoProps = {
+  rep: Replicache<M>
+  authorArrows: any[]
+}
+
+export default function MainActivityView({ items, handleSetSelectedItemID, roomID, rep } : MainActivityViewProps ) {
   const [itemsShown, setItemsShown] = useState<number>(10)
 
   function showTenMoreItems(){
@@ -31,6 +45,7 @@ export default function MainActivityView({ items, handleSetSelectedItemID, roomI
           item={item}
           handleSetSelectedItemID={handleSetSelectedItemID}
           roomID={roomID}
+          rep={rep}
         />
       )}
       <div className={styles.buttonContainer}>
@@ -45,10 +60,11 @@ export default function MainActivityView({ items, handleSetSelectedItemID, roomI
   )
 }
 
-function ActivityItem({ item, handleSetSelectedItemID, roomID } : ActivityItemProps ){
+function ActivityItem({ item, handleSetSelectedItemID, roomID, rep } : ActivityItemProps ){
   const safeTitle = htmlToText(item.title)
   const safeCreatedAt = dateInWords(item.createdAt) || 'a while ago'
   const router = useRouter()
+  const authorArrows = useAuthorsByItemID(rep, item.id)
 
   function routeToItem(){
     router.push(`/workspace/${roomID}/${item.id}`)
@@ -72,15 +88,50 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID } : ActivityItemPr
       <div className={styles.titleContainer}>
         {safeTitle}
       </div>
-      <div className={styles.authorContainer}>
-        <span className={styles.by}>By</span>
-        <span className={styles.authorName}>Emma Dowling</span>
-      </div>
-      <div className={styles.arrowContainer}>
-        <div className={styles.arrowCount}>Backlinks</div>
-        <div className={styles.addLink}>Add Link</div>
+      {authorArrows && authorArrows.length > 0 &&
+        <AuthorInfo
+          rep={rep}
+          authorArrows={authorArrows}
+        />
+      }
 
+      <div className={styles.arrowContainer}>
+        <div className={styles.arrowCountContainer}>
+          <span className={styles.arrowCount}>{item.arrows.length}</span>
+          <span className={styles.arrowLabel}>Backlinks</span>
+        </div>
+        <div className={styles.addLink}>Add Link</div>
       </div>
     </div>
+  )
+}
+
+function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
+  console.log('authorArrows', authorArrows)
+  const authorItemIDs = useAuthorItemsByArrowIDs(rep, authorArrows)
+  return (
+    authorItemIDs &&
+    <div className={styles.authorContainer}>
+      <span className={styles.by}>By</span>
+      <span className={styles.authorName}>
+        {authorItemIDs.map((itemID: string) =>
+          <AuthorName
+            key={`author-${itemID}`}
+            rep={rep}
+            itemID={itemID}
+          />
+        )}
+      </span>
+    </div>
+  )
+}
+
+function AuthorName({ rep, itemID}: any){
+  const item = useItemByID(rep, itemID)
+  return (
+    item &&
+    <>
+      <span>{htmlToText(item.title)}</span>
+    </>
   )
 }

@@ -32,6 +32,7 @@ type MainProps = {
   items: any
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
+  rep: Replicache<M>
 }
 
 
@@ -68,6 +69,7 @@ function Body({ rep, items, handleSetSelectedItemID, roomID } : BodyProps) {
         items={items}
         handleSetSelectedItemID= {handleSetSelectedItemID}
         roomID={roomID}
+        rep={rep}
       />
       <VariableGutter/>
     </div>
@@ -85,7 +87,7 @@ function Sidebar({ rep } : SidebarProps ){
 }
 
 
-function Main({ items, handleSetSelectedItemID, roomID } : MainProps){
+function Main({ items, handleSetSelectedItemID, roomID, rep } : MainProps){
   const itemCount = items.length
   return (
     <div className={styles.main}>
@@ -95,6 +97,7 @@ function Main({ items, handleSetSelectedItemID, roomID } : MainProps){
       <MainItemDraft
       />
       <MainActivityView
+        rep={rep}
         items={items}
         handleSetSelectedItemID={handleSetSelectedItemID}
         roomID={roomID}
