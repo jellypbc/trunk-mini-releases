@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import styles from './index.module.css'
-import { getSortedItems, useClientEmail } from '../../datamodel/subscriptions'
+import { getSortedItems, useClientEmail, useClientUsername, useClientAvatarURL } from '../../datamodel/subscriptions'
 
 import Nav from './nav'
 import SidebarTrunkNav from './sidebar-trunk-nav'
@@ -22,6 +22,9 @@ type BodyProps = {
   items: any
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
+  clientEmail: string
+  clientUsername: string
+  clientAvatarURL: string
 }
 
 type SidebarProps = {
@@ -33,12 +36,17 @@ type MainProps = {
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
   rep: Replicache<M>
+  clientEmail: string
+  clientUsername: string
+  clientAvatarURL: string
 }
 
 
 export default function Workspace({ rep, handleSetSelectedItemID, roomID, handleSetCommandBar }: WorkspaceProps) {
   const items = getSortedItems(rep)
   const clientEmail = useClientEmail(rep)
+  const clientUsername = useClientUsername(rep)
+  const clientAvatarURL = useClientAvatarURL(rep)
 
   return (
     items &&
@@ -49,17 +57,22 @@ export default function Workspace({ rep, handleSetSelectedItemID, roomID, handle
           handleSetCommandBar={handleSetCommandBar}
         />
       }
-      <Body
-        rep={rep}
-        items={items}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-        roomID={roomID}
-      />
+      {clientEmail && clientUsername && clientAvatarURL &&
+        <Body
+          rep={rep}
+          items={items}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+          roomID={roomID}
+          clientEmail={clientEmail}
+          clientUsername={clientUsername}
+          clientAvatarURL={clientAvatarURL}
+        />
+      }
     </div>
   )
 }
 
-function Body({ rep, items, handleSetSelectedItemID, roomID } : BodyProps) {
+function Body({ rep, items, handleSetSelectedItemID, roomID, clientEmail, clientUsername, clientAvatarURL } : BodyProps) {
   return(
     <div className={styles.bodyContainer}>
       <Sidebar
@@ -70,6 +83,9 @@ function Body({ rep, items, handleSetSelectedItemID, roomID } : BodyProps) {
         handleSetSelectedItemID= {handleSetSelectedItemID}
         roomID={roomID}
         rep={rep}
+        clientEmail={clientEmail}
+        clientUsername={clientUsername}
+        clientAvatarURL={clientAvatarURL}
       />
       <VariableGutter/>
     </div>
@@ -86,16 +102,25 @@ function Sidebar({ rep } : SidebarProps ){
   )
 }
 
-
-function Main({ items, handleSetSelectedItemID, roomID, rep } : MainProps){
+function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, clientUsername, clientAvatarURL } : MainProps){
   const itemCount = items.length
+  const [showMainItemDraft, setShowMainItemDraft] = useState<boolean>(false)
+
   return (
     <div className={styles.main}>
       <MainNav
         itemCount={itemCount}
+        handleSetShowMainItemDraft={setShowMainItemDraft}
       />
-      <MainItemDraft
-      />
+      {showMainItemDraft &&
+        <MainItemDraft
+          rep={rep}
+          clientEmail={clientEmail}
+          clientUsername={clientUsername}
+          clientAvatarURL={clientAvatarURL}
+          handleSetShowMainItemDraft={setShowMainItemDraft}
+        />
+      }
       <MainActivityView
         rep={rep}
         items={items}

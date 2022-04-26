@@ -1,5 +1,6 @@
 .container {
   margin: 0 auto;
+  background-color: hsl(0, 0%, 98%);
 }
 
 .bodyContainer {

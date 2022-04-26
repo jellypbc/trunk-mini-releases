@@ -107,18 +107,18 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep } : ActivityI
 }
 
 function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
-  console.log('authorArrows', authorArrows)
   const authorItemIDs = useAuthorItemsByArrowIDs(rep, authorArrows)
   return (
     authorItemIDs &&
     <div className={styles.authorContainer}>
       <span className={styles.by}>By</span>
       <span className={styles.authorName}>
-        {authorItemIDs.map((itemID: string) =>
+        {authorItemIDs.slice(0,1).map((itemID: string) =>
           <AuthorName
             key={`author-${itemID}`}
             rep={rep}
             itemID={itemID}
+            authorCount={authorItemIDs.length}
           />
         )}
       </span>
@@ -126,12 +126,12 @@ function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
   )
 }
 
-function AuthorName({ rep, itemID}: any){
+function AuthorName({ rep, itemID, authorCount}: any){
   const item = useItemByID(rep, itemID)
   return (
     item &&
     <>
-      <span>{htmlToText(item.title)}</span>
+      <span>{htmlToText(item.title).split(`[`)[0]} {authorCount > 1 && `+ ${authorCount - 1}`}</span>
     </>
   )
 }
