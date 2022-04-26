@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './workspace-main-nav.module.css'
+import styles from './main-nav.module.css'
 
 type MainNavProps = {
   itemCount: number

@@ -1,10 +1,10 @@
 import React from 'react'
 import type { Replicache } from 'replicache'
-import type { M } from '../datamodel/mutators'
-import { useItemByID } from '../datamodel/subscriptions'
+import type { M } from '../../datamodel/mutators'
+import { useItemByID } from '../../datamodel/subscriptions'
 import { useRouter } from 'next/router'
-import { htmlToText } from '../util/htmlToText'
-import styles from './item-page.module.css'
+import { htmlToText } from '../../util/htmlToText'
+import styles from './index.module.css'
 
 type ItemPageProps = {
   itemID: string

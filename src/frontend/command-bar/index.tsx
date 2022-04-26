@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import styles from './dashboard-command-bar.module.css'
+import styles from './index.module.css'
 import Fuse from 'fuse.js'
 import type { Replicache } from 'replicache'
-import type { M } from '../datamodel/mutators'
-import { getSortedItems } from '../datamodel/subscriptions'
-import { htmlToText } from '../util/htmlToText'
+import type { M } from '../../datamodel/mutators'
+import { getSortedItems } from '../../datamodel/subscriptions'
+import { htmlToText } from '../../util/htmlToText'
 import { useRouter } from 'next/router'
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
   roomID: string
 }
 
-export default function WorkspaceCommandBar({ rep, handleSetSelectedItemID, handleSetCommandBar, roomID } : Props) {
+export default function CommandBar({ rep, handleSetSelectedItemID, handleSetCommandBar, roomID } : Props) {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<any[]>([])
 

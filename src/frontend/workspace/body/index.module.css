@@ -1,17 +1,4 @@
 .container {
-  margin: 0 auto;
-}
-
-.navMainContainer {
-  background-color: hsl(0, 0%, 92%);
-  width: 980px;
-  margin-top: 4rem;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-.mainContainer {
   width: 980px;
   display: flex;
   padding-top: 2rem;

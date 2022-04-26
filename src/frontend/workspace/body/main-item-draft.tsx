@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './workspace-main-item-draft.module.css'
+import styles from './main-item-draft.module.css'
 
 export default function MainItemDraft() {
 

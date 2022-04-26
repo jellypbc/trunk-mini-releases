@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import type { Replicache } from 'replicache'
-import type { M } from '../datamodel/mutators'
-import styles from './workspace-sidebar-trunk-nav.module.css'
-import { useClientTrunkIDsArray, useClientEmail } from '../datamodel/subscriptions'
-import { supabase } from '../lib/supabase-client'
+import type { M } from '../../../datamodel/mutators'
+import styles from './sidebar-trunk-nav.module.css'
+import { useClientTrunkIDsArray, useClientEmail } from '../../../datamodel/subscriptions'
+import { supabase } from '../../../lib/supabase-client'
 import { useRouter } from 'next/router'
 
 type SidebarTrunkNavProps = {

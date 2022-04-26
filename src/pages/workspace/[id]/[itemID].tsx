@@ -9,9 +9,9 @@ import { supabase } from 'src/lib/supabase-client'
 import { Client } from 'reps-client'
 import { HotKeys } from 'react-hotkeys'
 import { useRouter } from 'next/router'
-import Workspace from '../../../frontend/workspace'
-import ItemPage from '../../../frontend/item-page'
-import WorkspaceCommandBar from '../../../frontend/workspace-command-bar'
+import Workspace from '../../../frontend/workspace/index'
+import ItemPage from '../../../frontend/item-page/index'
+import CommandBar from '../../../frontend/command-bar/index'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null)
@@ -176,7 +176,7 @@ export default function Home() {
           }}
         >
           {commandBar &&
-            <WorkspaceCommandBar
+            <CommandBar
               rep={rep}
               handleSetSelectedItemID={setSelectedItemID}
               handleSetCommandBar={setCommandBar}
@@ -188,6 +188,7 @@ export default function Home() {
               rep={rep}
               handleSetSelectedItemID={setSelectedItemID}
               roomID={roomID}
+              handleSetCommandBar={setCommandBar}
             />
             :
             <ItemPage
