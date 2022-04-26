@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
-import { supabase } from '../../../lib/supabase-client'
-import styles from './index.module.css'
+import { supabase } from '../../lib/supabase-client'
+import styles from './nav.module.css'
 
 type NavProps = {
   email: string

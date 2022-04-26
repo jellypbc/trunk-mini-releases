@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styles from './main-activity-view.module.css'
-import { htmlToText } from '../../../util/htmlToText'
-import { dateInWords } from '../../../lib/dateInWords'
+import { htmlToText } from '../../util/htmlToText'
+import { dateInWords } from '../../lib/dateInWords'
 import { useRouter } from 'next/router'
 
 type MainActivityViewProps = {
