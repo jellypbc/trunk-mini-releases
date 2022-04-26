@@ -13,11 +13,15 @@ import MainItemDraft from './workspace-main-item-draft'
 
 type WorkspaceProps = {
   rep: Replicache<M>
+  handleSetSelectedItemID: (itemID: string) => void
+  roomID: string
 }
 
 type MainContainerProps = {
   rep: Replicache<M>
   items: any
+  handleSetSelectedItemID: (itemID: string) => void
+  roomID: string
 }
 
 type SidebarProps = {
@@ -29,7 +33,13 @@ type NavMainContainerProps = {
   items: any
 }
 
-export default function Workspace({ rep }: WorkspaceProps) {
+type MainProps = {
+  items: any
+  handleSetSelectedItemID: (itemID: string) => void
+  roomID: string
+}
+
+export default function Workspace({ rep, handleSetSelectedItemID, roomID }: WorkspaceProps) {
   const items = getSortedItems(rep)
   const clientEmail = useClientEmail(rep)
 
@@ -45,6 +55,8 @@ export default function Workspace({ rep }: WorkspaceProps) {
       <MainContainer
         rep={rep}
         items={items}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+        roomID={roomID}
       />
     </div>
   )
@@ -75,7 +87,7 @@ function NavMainContainer({ email } : NavMainContainerProps) {
   )
 }
 
-function MainContainer({ rep, items } : MainContainerProps) {
+function MainContainer({ rep, items, handleSetSelectedItemID, roomID } : MainContainerProps) {
 
   return(
     <div className={styles.mainContainer}>
@@ -84,6 +96,8 @@ function MainContainer({ rep, items } : MainContainerProps) {
       />
       <Main
         items={items}
+        handleSetSelectedItemID= {handleSetSelectedItemID}
+        roomID={roomID}
       />
       <VariableGutter/>
     </div>
@@ -101,7 +115,7 @@ function Sidebar({ rep } : SidebarProps ){
 }
 
 
-function Main({ items } : any){
+function Main({ items, handleSetSelectedItemID, roomID } : MainProps){
   const itemCount = items.length
   return (
     <div className={styles.main}>
@@ -112,6 +126,8 @@ function Main({ items } : any){
       />
       <MainActivityView
         items={items}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+        roomID={roomID}
       />
     </div>
   )

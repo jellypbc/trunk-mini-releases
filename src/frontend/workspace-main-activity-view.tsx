@@ -2,16 +2,21 @@ import React, { useState } from 'react'
 import styles from './workspace-main-activity-view.module.css'
 import { htmlToText } from '../util/htmlToText'
 import { dateInWords } from '../lib/dateInWords'
+import { useRouter } from 'next/router'
 
 type MainActivityViewProps = {
   items: any[]
+  handleSetSelectedItemID: (itemID: string) => void
+  roomID: string
 }
 
 type ActivityItemProps = {
   item: any
+  handleSetSelectedItemID: (itemID: string) => void
+  roomID: string
 }
 
-export default function MainActivityView({ items } : MainActivityViewProps ) {
+export default function MainActivityView({ items, handleSetSelectedItemID, roomID } : MainActivityViewProps ) {
   const [itemsShown, setItemsShown] = useState<number>(10)
 
   function showTenMoreItems(){
@@ -24,6 +29,8 @@ export default function MainActivityView({ items } : MainActivityViewProps ) {
         <ActivityItem
           key={`activity-item-${item.id}`}
           item={item}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+          roomID={roomID}
         />
       )}
       <div className={styles.buttonContainer}>
@@ -38,11 +45,20 @@ export default function MainActivityView({ items } : MainActivityViewProps ) {
   )
 }
 
-function ActivityItem({ item } : ActivityItemProps ){
+function ActivityItem({ item, handleSetSelectedItemID, roomID } : ActivityItemProps ){
   const safeTitle = htmlToText(item.title)
   const safeCreatedAt = dateInWords(item.createdAt) || 'a while ago'
+  const router = useRouter()
+
+  function routeToItem(){
+    router.push(`/workspace/${roomID}/${item.id}`)
+    handleSetSelectedItemID(item.id)
+  }
   return (
-    <div className={styles.activityItemContainer}>
+    <div
+      className={styles.activityItemContainer}
+      onClick={() => routeToItem()}
+    >
       <div className={styles.createdContainer}>
         <div className={styles.createdBy}>
           <div className={styles.avatarContainer}>
