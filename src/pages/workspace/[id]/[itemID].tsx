@@ -11,6 +11,7 @@ import { HotKeys } from 'react-hotkeys'
 import { useRouter } from 'next/router'
 import Workspace from '../../../frontend/workspace'
 import ItemPage from '../../../frontend/item-page'
+import WorkspaceCommandBar from '../../../frontend/workspace-command-bar'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null)
@@ -140,6 +141,7 @@ export default function Home() {
 
   const handlers = {
     changeCommandBar: () => {
+      console.log('hi')
       setCommandBar(!commandBar)
     }
   }
@@ -173,6 +175,14 @@ export default function Home() {
             height: "100%",
           }}
         >
+          {commandBar &&
+            <WorkspaceCommandBar
+              rep={rep}
+              handleSetSelectedItemID={setSelectedItemID}
+              handleSetCommandBar={setCommandBar}
+              roomID={roomID}
+            />
+          }
           {selectedItemID === "i" || '' ?
             <Workspace
               rep={rep}
