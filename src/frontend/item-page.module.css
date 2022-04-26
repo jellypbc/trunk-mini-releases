@@ -1,0 +1,17 @@
+.container {
+  margin: 0 auto;
+  width: 980px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+.input {
+  width: 500px;
+  font-size: .8rem;
+}

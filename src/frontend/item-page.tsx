@@ -4,6 +4,7 @@ import type { M } from '../datamodel/mutators'
 import { useItemByID } from '../datamodel/subscriptions'
 import { useRouter } from 'next/router'
 import { htmlToText } from '../util/htmlToText'
+import styles from './item-page.module.css'
 
 type ItemPageProps = {
   itemID: string
@@ -24,11 +25,17 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID 
   }
 
   return (
-    <>
+    <div className={styles.container}>
     {item ?
-      <div>
+      <div className={styles.main}>
         <div>{itemID}</div>
         <div>{htmlToText(item.title)}</div>
+        <div>
+          <input
+            className={styles.input}
+            value={location.href}
+          />
+        </div>
         <button onClick={() => routeToWorkspace()}>Back to workspace</button>
       </div>
       :
@@ -37,6 +44,6 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID 
         <button onClick={() => routeToWorkspace()}>go back to workspace</button>
       </div>
     }
-    </>
+    </div>
   )
 }
