@@ -25,6 +25,13 @@ type SidebarProps = {
   arrowsCount: number
 }
 
+type MainProps = {
+  itemID: string
+  title: string
+  content: string
+  routeToWorkspace: () => void
+}
+
 export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar } : ItemPageProps ) {
   const item = useItemByID(rep, itemID)
   const clientEmail = useClientEmail(rep)
@@ -36,17 +43,6 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
     handleSetSelectedItemID('i')
   }
 
-  function copyShareURLToClipboard(){
-    navigator.clipboard.writeText(location.href)
-      .then(() => {
-        alert(`Copied to clipboard: ${location.href}`)
-      })
-      .catch(() => {
-        alert(`Failed to copy to clipboard: ${location.href}`)
-      })
-  }
-
-  console.log('item', item)
 
 
   return (
@@ -62,23 +58,13 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
               createdBy={item.createdBy}
               arrowsCount={item.arrows.length}
             />
-            <div className={styles.mainContainer}>
-              <div>{itemID}</div>
-              <div>{htmlToText(item.title)}</div>
-              <div className={styles.inputContainer}>
-                <input
-                  onClick={() => copyShareURLToClipboard()}
-                  id={`shareURL`}
-                  className={styles.input}
-                  defaultValue={location.href}
-                  readOnly={true}
-                />
-                <button
-                  onClick={() => copyShareURLToClipboard()}
-                >Copy</button>
-              </div>
-              <button onClick={() => routeToWorkspace()}>Back to workspace</button>
-            </div>
+            <Main
+              itemID={itemID}
+              title={item.title}
+              content={item.content}
+              routeToWorkspace={routeToWorkspace}
+            />
+
           </div>
         </>
         :
@@ -88,6 +74,59 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
         </div>
       }
     </div>
+  )
+}
+
+function Main ({ itemID, title, content, routeToWorkspace} : MainProps){
+  console.log('itemID', itemID)
+  function copyShareURLToClipboard(){
+    navigator.clipboard.writeText(location.href)
+      .then(() => {
+        alert(`Copied to clipboard: ${location.href}`)
+      })
+      .catch(() => {
+        alert(`Failed to copy to clipboard: ${location.href}`)
+      })
+  }
+  return(
+    <div className={styles.mainContainer}>
+    {/* <div>{itemID}</div> */}
+    <div className={styles.title}>{htmlToText(title)}</div>
+    <div className={styles.authors}>
+      Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin
+    </div>
+    <div className={styles.content}>
+      {htmlToText(content)}
+    </div>
+    <div className={styles.arrows}>
+      <div className={styles.arrowsFront}>
+        Links
+      </div>
+      <div className={styles.arrowsBack}>
+        Backlinks
+      </div>
+      <div className={styles.arrowsFootnote}>
+        Footnotes
+      </div>
+      <div className={styles.arrowsComment}>
+        Comments
+      </div>
+    </div>
+    <div className={styles.inputContainer}>
+      <input
+        onClick={() => copyShareURLToClipboard()}
+        id={`shareURL`}
+        className={styles.input}
+        defaultValue={location.href}
+        readOnly={true}
+      />
+      <button
+        onClick={() => copyShareURLToClipboard()}
+      >Copy</button>
+    </div>
+    <button onClick={() => routeToWorkspace()}>Back to workspace</button>
+  </div>
+
   )
 }
 
@@ -131,8 +170,6 @@ function Sidebar({ createdBy, arrowsCount } : SidebarProps){
             Linked items
           </div>
         </div>
-      </div>
-      <div className={styles.bottom}>
         <div
           className={styles.outlineMinimapContainer}
           onClick={() => setShowOutline(!showOutline)}

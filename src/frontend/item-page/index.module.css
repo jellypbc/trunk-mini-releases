@@ -1,5 +1,8 @@
 .container {
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
   /* background-color: hsl(0, 0%, 98%); */
 }
 
@@ -10,6 +13,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-height: 100vh;
 }
 
 .navContainer:hover {
@@ -19,18 +23,20 @@
 .bodyContainer {
   width: 980px;
   display: flex;
-  padding-top: 2rem;
-  height: 100vh;
+  padding: 2rem 0;
+  flex: 1;
 }
 
 .sidebarContainer {
   width: 150px;
   margin-right: 15px;
-  /* background-color: lightblue; */
   font-size: .8rem;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
+}
+
+.top {
+  position: absolute;
 }
 
 .mainContainer {
@@ -38,8 +44,7 @@
   margin-right: 15px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow: auto;
+
 }
 
 .input {
@@ -133,4 +138,20 @@
 
 .outlineContainer, .minimapContainer {
   padding-top: 1rem;
+}
+
+.title {
+  font-size: 1.6rem;
+  padding-bottom: 1rem;
+}
+
+.authors {
+  color: hsl(0, 0%, 50%);
+  font-size: .8rem;
+  padding: 1rem 0;
+  padding-bottom: 4rem;
+}
+
+.arrows div {
+  padding: 1rem 0 ;
 }
