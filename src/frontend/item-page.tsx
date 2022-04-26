@@ -15,7 +15,6 @@ type ItemPageProps = {
 
 export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID } : ItemPageProps ) {
   const item = useItemByID(rep, itemID)
-  console.log('item', item)
 
   const router = useRouter()
 
@@ -24,17 +23,34 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID 
     handleSetSelectedItemID('i')
   }
 
+  function copyShareURLToClipboard(){
+    navigator.clipboard.writeText(location.href)
+      .then(() => {
+        alert(`Copied to clipboard: ${location.href}`)
+      })
+      .catch(() => {
+        alert(`Failed to copy to clipboard: ${location.href}`)
+      })
+  }
+
+
   return (
     <div className={styles.container}>
     {item ?
       <div className={styles.main}>
         <div>{itemID}</div>
         <div>{htmlToText(item.title)}</div>
-        <div>
+        <div className={styles.inputContainer}>
           <input
+            onClick={() => copyShareURLToClipboard()}
+            id={`shareURL`}
             className={styles.input}
-            value={location.href}
+            defaultValue={location.href}
+            readOnly={true}
           />
+          <button
+            onClick={() => copyShareURLToClipboard()}
+          >Copy</button>
         </div>
         <button onClick={() => routeToWorkspace()}>Back to workspace</button>
       </div>
