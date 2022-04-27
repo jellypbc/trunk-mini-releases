@@ -1,13 +1,16 @@
 .container {
   margin: 0 auto;
-  background-color: hsl(0, 0%, 98%);
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  /* background-color: hsl(0, 0%, 98%); */
 }
 
 .bodyContainer {
   width: 980px;
   display: flex;
-  padding-top: 2rem;
-  height: 100vh;
+  padding: 2rem 0;
+  flex: 1;
 }
 
 .sidebar {
@@ -21,7 +24,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: auto;
 }
 
 .variableGutter {

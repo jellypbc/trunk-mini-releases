@@ -21,6 +21,7 @@ import ArrowsFootnote from './arrows-footnote'
 import ArrowsFront from './arrows-front'
 import ArrowsSub from './arrows-sub'
 import { HotKeys } from 'react-hotkeys'
+import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../../lib/constants'
 
 
 type ItemPageProps = {
@@ -66,10 +67,40 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
     handleSetSelectedItemID('i')
   }
 
+
+  async function signInWithGoogle() {
+    const redirectUrl = location.href
+    localStorage.setItem
+    (LOCAL_STORAGE_REDIRECT_URL_KEY, redirectUrl)
+    try {
+      const { error } : { error: any } = await supabase.auth.signIn({
+        provider: 'google',
+      }, {
+        redirectTo: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : null || undefined
+      })
+      if (error) throw error
+    } catch (error : any) {
+      console.log('Error thrown:', error.message)
+      alert(error.error_description || error.message)
+    } finally {
+    }
+  }
+
   return (
     <div className={styles.container}>
       {item ?
         <>
+          {clientEmail == "guest" &&
+            <div
+              className={styles.banner}
+              onClick={(e) => {
+                e.preventDefault()
+                signInWithGoogle()
+              }}
+            >
+              You look familiar. Have we met? <span className={styles.bannerLogin}>Log in or register</span> to save your contributions. You look like someone named... <span className={styles.bannerAnon}>Anonymous Aardvark</span>. We'll call you that.
+            </div>
+          }
           <Nav
             email={clientEmail}
             handleSetCommandBar={handleSetCommandBar}

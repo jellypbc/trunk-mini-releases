@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   max-height: 100vh;
-  /* background-color: hsl(0, 0%, 98%); */
 }
 
 .navContainer {
@@ -368,4 +367,36 @@ a.link {
 
 a.link:hover {
   font-size: 1.1rem;
+}
+
+.banner {
+  /* border: 1px solid #009B2B; */
+  font-size: .8rem;
+  padding: 2rem;
+  margin: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: .15em solid black;
+  animation:
+    typing 2.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  /* 50% { border-color: orange; } */
+}
+
+.bannerLogin {
+  color: #009B2B;
+  cursor: pointer;
+}
+
+.bannerAnon {
+  color: #009B2B;
 }

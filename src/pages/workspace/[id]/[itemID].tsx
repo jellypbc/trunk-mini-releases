@@ -8,7 +8,6 @@ import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
 import { Client } from 'reps-client'
 import { HotKeys } from 'react-hotkeys'
-import { useRouter } from 'next/router'
 import Workspace from '../../../frontend/workspace/index'
 import ItemPage from '../../../frontend/item-page/index'
 import CommandBar from '../../../frontend/command-bar/index'
@@ -21,7 +20,6 @@ export default function Home() {
   const [commandBar, setCommandBar] = useState<boolean>(false)
   const [nextID, setNextID] = useState<string>('')
   const [roomID, setRoomID] = useState<string>('')
-  const router = useRouter()
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -141,23 +139,17 @@ export default function Home() {
 
   const handlers = {
     changeCommandBar: () => {
-      console.log('hi')
       setCommandBar(!commandBar)
     }
   }
-
-  // function handleSetSelectedItemID(id: string) {
-  //   setSelectedItemID('next')
-  //   setNextID(id)
-  // }
 
   if (!rep) {
     return null
   }
 
-  if (!session) {
-    router.push(`/`)
-  }
+  // if (!session) {
+  //   router.push(`/`)
+  // }
 
   function handleSetSelectedItemID(id: string) {
     setSelectedItemID('next')
@@ -165,39 +157,70 @@ export default function Home() {
   }
 
   return (
-    session && trunkID && rep && selectedItemID &&
-      <HotKeys
-        {...{
-          style: { outline: "none", display: "flex", flex: 1 },
-          keyMap,
-          handlers,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            height: "100%",
+    session ? (
+    <>
+      {trunkID && rep && selectedItemID &&
+        <HotKeys
+          {...{
+            style: { outline: "none", display: "flex", flex: 1 },
+            keyMap,
+            handlers,
           }}
         >
-          {commandBar &&
-            <CommandBar
-              rep={rep}
-              handleSetSelectedItemID={handleSetSelectedItemID}
-              handleSetCommandBar={setCommandBar}
-              roomID={roomID}
-            />
-          }
-          {selectedItemID === "i" || '' ?
-            <Workspace
-              rep={rep}
-              handleSetSelectedItemID={setSelectedItemID}
-              roomID={roomID}
-              handleSetCommandBar={setCommandBar}
-            />
-            : selectedItemID === "next" ?
-              <div>loading</div>
-              :
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {commandBar &&
+              <CommandBar
+                rep={rep}
+                handleSetSelectedItemID={handleSetSelectedItemID}
+                handleSetCommandBar={setCommandBar}
+                roomID={roomID}
+              />
+            }
+            {selectedItemID === "i" || '' ?
+              <Workspace
+                rep={rep}
+                handleSetSelectedItemID={setSelectedItemID}
+                roomID={roomID}
+                handleSetCommandBar={setCommandBar}
+              />
+              : selectedItemID === "next" ?
+                <div>loading</div>
+                :
+                <ItemPage
+                  rep={rep}
+                  itemID={selectedItemID}
+                  handleSetSelectedItemID={handleSetSelectedItemID}
+                  roomID={roomID}
+                  handleSetCommandBar={setCommandBar}
+                />
+            }
+          </div>
+        </HotKeys>
+      }
+    </>
+    ): (
+      <>
+        { rep && trunkID && selectedItemID &&
+          <HotKeys
+            {...{
+              style: { outline: "none", display: "flex", flex: 1 },
+              keyMap,
+              handlers,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                height: "100%",
+              }}
+            >
               <ItemPage
                 rep={rep}
                 itemID={selectedItemID}
@@ -205,9 +228,12 @@ export default function Home() {
                 roomID={roomID}
                 handleSetCommandBar={setCommandBar}
               />
-          }
-        </div>
-      </HotKeys>
+
+            </div>
+          </HotKeys>
+        }
+      </>
+    )
   )
 }
 
