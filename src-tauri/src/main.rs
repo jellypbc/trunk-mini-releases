@@ -6,6 +6,44 @@
 use tauri::{api, CustomMenuItem, Manager, Menu, MenuItem, Submenu, WindowBuilder, WindowUrl};
 use window_shadows::set_shadow;
 
+// mod transparent_window;
+use cocoa::appkit::{NSWindow, NSWindowStyleMask};
+use tauri::{Runtime, Window};
+
+pub trait WindowExt {
+    #[cfg(target_os = "macos")]
+    fn set_transparent_titlebar(&self, transparent: bool);
+}
+
+impl<R: Runtime> WindowExt for Window<R> {
+    #[cfg(target_os = "macos")]
+    fn set_transparent_titlebar(&self, transparent: bool) {
+        use cocoa::appkit::NSWindowTitleVisibility;
+
+        unsafe {
+            let id = self.ns_window().unwrap() as cocoa::base::id;
+
+            let mut style_mask = id.styleMask();
+            style_mask.set(
+                NSWindowStyleMask::NSFullSizeContentViewWindowMask,
+                transparent,
+            );
+            id.setStyleMask_(style_mask);
+
+            id.setTitleVisibility_(if transparent {
+                NSWindowTitleVisibility::NSWindowTitleHidden
+            } else {
+                NSWindowTitleVisibility::NSWindowTitleVisible
+            });
+            id.setTitlebarAppearsTransparent_(if transparent {
+                cocoa::base::YES
+            } else {
+                cocoa::base::NO
+            });
+        }
+    }
+}
+
 fn main() {
     fn custom_menu(name: &str) -> CustomMenuItem {
         let c = CustomMenuItem::new(name.to_string(), name);
@@ -39,7 +77,8 @@ fn main() {
     tauri::Builder::default()
         .setup(|app| {
             let window = app.get_window("main").unwrap();
-            window.set_title("Trunk Mini");
+            window.set_title("Trunk Mini").unwrap();
+            window.set_transparent_titlebar(true);
 
             #[cfg(any(target_os = "windows", target_os = "macos"))]
             set_shadow(&window, true).unwrap();

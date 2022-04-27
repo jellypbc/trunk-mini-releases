@@ -64,10 +64,10 @@
     "windows": [
       {
         "title": "MiniTrunk",
-        "minWidth": 800,
-        "minHeight": 600,
+        "minWidth": 580,
+        "minHeight": 500,
         "resizable": true,
-        "decorations": false,
+        // "decorations": false,
         "fullscreen": false,
         "transparent": true,
       }

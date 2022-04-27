@@ -7,7 +7,6 @@ import {
 import UserLogIn from '../frontend/user-log-in'
 import { useRouter } from 'next/router'
 
-
 export default function Page() {
   const [session, setSession] = useState<AuthSession | null>(null)
   const [roomID, setRoomID] = useState<string>('')
@@ -38,7 +37,9 @@ export default function Page() {
   }
 
   return (
-    <UserLogIn/>
+    <div>
+      <UserLogIn/>
+    </div>
   )
 }
 

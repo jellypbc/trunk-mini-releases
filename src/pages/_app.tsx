@@ -9,9 +9,12 @@ interface Props {
 
 export default function App({ Component } : Props) {
   return (
-    <WorkspaceProvider>
-      <Component />
-    </WorkspaceProvider>
+    <div>
+      <div data-tauri-drag-region id="nav"></div>
+      <WorkspaceProvider>
+        <Component />
+      </WorkspaceProvider>
+    </div>
   )
 }
 
