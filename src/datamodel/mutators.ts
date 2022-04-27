@@ -25,7 +25,9 @@ import {
   updateItemSourceURL,
   updateItemAddSingleArrow,
   updateItemArrowsDeleteArrow,
-  updateItemCreatedBy
+  updateItemCreatedBy,
+  updateItemWebSourceURL,
+  updateItemPublicationDate,
 } from './item';
 import {
   putArrow,
@@ -61,5 +63,7 @@ export const mutators = {
   setTrunkIDs,
   updateItemCreatedBy,
   updateArrowCreatedBy,
+  updateItemWebSourceURL,
+  updateItemPublicationDate,
   nop: async (_: WriteTransaction) => {},
 };

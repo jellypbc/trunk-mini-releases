@@ -47,7 +47,6 @@ type NavProps = {
 type SidebarProps = {
   createdBy: string
   arrowsCount: number
-  item: any
   itemID: string
   rep: Replicache<M>
 }
@@ -121,7 +120,6 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
             <Sidebar
               createdBy={item.createdBy}
               arrowsCount={item.arrows.length}
-              item={item}
               itemID={itemID}
               rep={rep}
             />
@@ -355,9 +353,11 @@ function DeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
   )
 }
 
-function MetadataModal({ item, itemID, rep} : any){
-  console.log('itemID', itemID, 'rep', rep)
+function MetadataModal({ itemID, rep} : any){
+  const item = useItemByID(rep, itemID)
+
   return (
+    item &&
     <div className={styles.metadataModal}>
       <div className={styles.metadataLabel}>
         Editing Item
@@ -373,11 +373,19 @@ function MetadataModal({ item, itemID, rep} : any){
         </div>
         <div className={styles.metadataThing}>
           <div className={styles.label}>URL</div>
-          <div>https://www.youtube.com/watch?v=hLjGEropDXc</div>
+          <input
+            placeholder={`www.whatever.com`}
+            value={item.webSourceURL}
+            onChange={(e:any) => rep.mutate.updateItemWebSourceURL({id: itemID, webSourceURL: e.target.value})}
+          />
         </div>
         <div className={styles.metadataThing}>
-          <div className={styles.label}>Authors</div>
-          <div>John Reed</div>
+          <div className={styles.label}>Publication date</div>
+          <input
+            placeholder={`June 4, 1843`}
+            value={item.publicationDate}
+            onChange={(e:any) => rep.mutate.updateItemPublicationDate({id: itemID, publicationDate: e.target.value})}
+          />
         </div>
       </div>
       <div className={styles.metadataThing}>
@@ -405,7 +413,7 @@ function MetadataModal({ item, itemID, rep} : any){
   )
 }
 
-function Sidebar({ createdBy, arrowsCount, item, itemID, rep } : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, itemID, rep } : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
 
@@ -413,7 +421,6 @@ function Sidebar({ createdBy, arrowsCount, item, itemID, rep } : SidebarProps){
     <div className={styles.sidebarContainer}>
       {showMetadataModal &&
         <MetadataModal
-          item={item}
           itemID={itemID}
           rep={rep}
 

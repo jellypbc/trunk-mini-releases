@@ -10,7 +10,9 @@ export const itemSchema = z.object({
   content: z.string(),
   arrows: z.string(),
   highlight: z.string(),
-  sourceURL: z.string()
+  sourceURL: z.string(),
+  webSourceURL: z.string(),
+  publicationDate: z.string(),
 })
 
 export type Item = z.infer<typeof itemSchema>
@@ -24,15 +26,25 @@ export async function getItem(
     console.log(`Specified item ${id} not found.`)
     return null
   }
-  console.log('jv', jv)
-  return itemSchema.parse(jv)
+
+  const changes = {
+    webSourceURL: '',
+    publicationDate: ''
+  }
+
+  if (jv.hasOwnProperty('webSourceURL')) {
+    return itemSchema.parse(jv)
+  }
+
+  const thing = jv as unknown as any
+
+  return itemSchema.parse({...thing, ...changes})
 }
 
 export function putItem(
   tx: WriteTransaction,
   { id, item }: { id: string; item: Item }
 ): Promise<void> {
-  console.log('item', item)
   return tx.put(key(id), item);
 }
 
@@ -48,9 +60,26 @@ export async function updateItemCreatedBy(
   { id, createdBy }: { id: string; createdBy : string }
 ): Promise<void> {
   const item = await getItem(tx, id)
-  console.log('item', item)
-  console.log('updateItemCreatedBy', {...item, createdBy: createdBy})
   return tx.put(key(id), {...item, createdBy: createdBy})
+}
+
+export async function updateItemWebSourceURL(
+  tx: WriteTransaction,
+  { id, webSourceURL }: { id: string; webSourceURL : string }
+): Promise<void> {
+  const item = await getItem(tx, id)
+  console.log('item', item)
+  console.log('webSourceURL', webSourceURL)
+  console.log({...item, webSourceURL: webSourceURL})
+  return tx.put(key(id), {...item, webSourceURL: webSourceURL})
+}
+
+export async function updateItemPublicationDate(
+  tx: WriteTransaction,
+  { id, publicationDate }: { id: string; publicationDate : string }
+): Promise<void> {
+  const item = await getItem(tx, id)
+  return tx.put(key(id), {...item, publicationDate: publicationDate})
 }
 
 export async function updateItemTitle(
@@ -134,7 +163,9 @@ export function randomItem() {
       content: '',
       arrows: '[]', // {arrowID, to, from, kind, backItemID}
       highlight: '',
-      sourceURL: ''
+      sourceURL: '',
+      webSourceURL: '',
+      publicationDate: ''
     } as Item,
   };
 }
