@@ -157,52 +157,52 @@ export default function Home() {
 
   return (
     session ? (
-    <>
-      {trunkID && rep && selectedItemID &&
-        <HotKeys
-          {...{
-            style: { outline: "none", display: "flex", flex: 1 },
-            keyMap,
-            handlers,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              height: "100%",
+      <>
+        {trunkID && rep && selectedItemID &&
+          <HotKeys
+            {...{
+              style: { outline: "none", display: "flex", flex: 1 },
+              keyMap,
+              handlers,
             }}
           >
-            {commandBar &&
-              <CommandBar
-                rep={rep}
-                handleSetSelectedItemID={handleSetSelectedItemID}
-                handleSetCommandBar={setCommandBar}
-                roomID={roomID}
-              />
-            }
-            {selectedItemID === "i" || '' ?
-              <Workspace
-                rep={rep}
-                handleSetSelectedItemID={setSelectedItemID}
-                roomID={roomID}
-                handleSetCommandBar={setCommandBar}
-              />
-              : selectedItemID === "next" ?
-                <div>loading</div>
-                :
-                <ItemPage
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              {commandBar &&
+                <CommandBar
                   rep={rep}
-                  itemID={selectedItemID}
                   handleSetSelectedItemID={handleSetSelectedItemID}
+                  handleSetCommandBar={setCommandBar}
+                  roomID={roomID}
+                />
+              }
+              {selectedItemID === "i" || '' ?
+                <Workspace
+                  rep={rep}
+                  handleSetSelectedItemID={setSelectedItemID}
                   roomID={roomID}
                   handleSetCommandBar={setCommandBar}
                 />
-            }
-          </div>
-        </HotKeys>
-      }
-    </>
+                : selectedItemID === "next" ?
+                  <div>loading</div>
+                  :
+                  <ItemPage
+                    rep={rep}
+                    itemID={selectedItemID}
+                    handleSetSelectedItemID={handleSetSelectedItemID}
+                    roomID={roomID}
+                    handleSetCommandBar={setCommandBar}
+                  />
+              }
+            </div>
+          </HotKeys>
+        }
+      </>
     ): (
       <>
         { rep && trunkID && selectedItemID &&
