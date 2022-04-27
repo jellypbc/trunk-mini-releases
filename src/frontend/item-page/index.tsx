@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import {
@@ -22,6 +22,12 @@ import ArrowsFront from './arrows-front'
 import ArrowsSub from './arrows-sub'
 import { HotKeys } from 'react-hotkeys'
 import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../../lib/constants'
+import { nanoid } from 'nanoid'
+import { uploadFileToIDB, trashFileFromIDB }  from '../../datamodel/local/file'
+import { uploadFileToSupabase, trashFileFromSupabase } from '../../datamodel/supabase/file'
+import { idbOK } from '../../lib/idbOK'
+import ItemFileUploadButton from './item-file-upload-button'
+import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constants'
 
 
 type ItemPageProps = {
@@ -135,7 +141,6 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 }
 
 function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetSelectedItemID } : MainProps){
-  console.log('itemID', itemID)
   function copyShareURLToClipboard(){
     navigator.clipboard.writeText(location.href)
       .then(() => {
@@ -162,6 +167,11 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
     >
       <div className={styles.mainContainer}>
         {/* <div>{itemID}</div> */}
+        <FileUploadContainer
+          itemID={itemID}
+          item={item}
+          rep={rep}
+        />
       <div className={styles.title}>
         <EditorContainer
           doc={title}
@@ -506,6 +516,113 @@ function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
     >
       <span>{htmlToText(item.title).split('[')[0].trim()}</span>
       {!isLast && <span>,&nbsp;</span>}
+    </div>
+  )
+}
+
+function FileUploadContainer({itemID, item, rep} : any) {
+  const [URL, setURL] = useState<any>('')
+
+  useEffect(() => {
+    generateIDBSourceFileURL(item.sourceURL)
+  }, [item.sourceURL])
+
+
+  function onUpload(e: ChangeEvent<HTMLInputElement>){
+    const file = e?.target.files?.[0]
+    if (!file) {
+      console.log(`No file found`)
+    } else {
+      // const itemID : string = itemID
+      const draftFileID = nanoid()
+      const fileType = file.type.split('/')[1]
+      const sourceURL = `${itemID}/${draftFileID}.${fileType}`
+
+      rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+      //upload file to indexedDB
+      uploadFileToIDB(file, sourceURL)
+      //upload file to supabase
+      uploadFileToSupabase(file, sourceURL)
+    }
+  }
+
+  function handleDeleteSourceFile() {
+    console.log('trashing...')
+    //delete from IDB
+    trashFileFromIDB(item.sourceURL)
+    //delete from supabase
+    trashFileFromSupabase(item.sourceURL)
+    //remove sourceURL from item
+    rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
+  }
+
+  function generateIDBSourceFileURL(sourceURL: string){
+    if (!idbOK()) return
+
+
+    let openRequest = indexedDB.open(DEFAULT_IDB_KEY, 1)
+
+    openRequest.onupgradeneeded = function(e: any){
+      let thisDB = e.target.result
+
+      if (!thisDB.objectStoreNames.contains(DEFAULT_SOURCE_FILES_BUCKET)) {
+        thisDB.createObjectStore(DEFAULT_SOURCE_FILES_BUCKET, { keyPath: 'id'})
+      }
+    }
+
+    openRequest.onsuccess = function(e : any) {
+      let db = e.target.result
+      let tx = db.transaction([DEFAULT_SOURCE_FILES_BUCKET], 'readwrite')
+      let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
+
+      let request = store.get(sourceURL)
+
+      request.onerror = function(e : any){
+        console.log('error', e.target.error.name)
+      }
+
+      request.onsuccess = function(e : any){
+        let result = e.target.result
+        result && setURL(window.URL.createObjectURL(result.file))
+      }
+
+      request.onerror = function(event: any) {
+        console.dir(event)
+      }
+
+    }
+    openRequest.onerror = function(event: any) {
+      console.dir(event)
+    }
+  }
+
+
+  return (
+    <div className={styles.upload}>
+      {item.sourceURL &&
+        <>
+          <div className={styles.file}>
+            <a href={URL} target="_blank" className={styles.link}>
+              {item.sourceURL && `🗂`}
+            </a>
+
+          </div>
+          <div
+            onClick={handleDeleteSourceFile}
+            className={styles.hoverOnly}
+          >
+            ⌘+T to Trash
+          </div>
+        </>
+      }
+      <div className={styles.hoverOnly}>
+        <ItemFileUploadButton
+          onUpload={onUpload}
+          loading={false}
+          sourceUrl={item.sourceURL}
+          itemID={itemID}
+        />
+      </div>
     </div>
   )
 }

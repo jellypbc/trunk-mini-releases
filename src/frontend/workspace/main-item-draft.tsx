@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import styles from './main-item-draft.module.css'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import { randomItem } from '../../datamodel/item'
 import { HotKeys } from 'react-hotkeys'
 import EditorDraftingContainer from './editor-drafting-container'
+import { nanoid } from 'nanoid'
+import { uploadFileToIDB, trashFileFromIDB }  from '../../datamodel/local/file'
+import { uploadFileToSupabase, trashFileFromSupabase } from '../../datamodel/supabase/file'
+import { idbOK } from '../../lib/idbOK'
+import ItemFileUploadButton from './item-file-upload-button'
+import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constants'
 
 type MainItemDraftProps = {
   rep: Replicache<M>
@@ -26,23 +32,37 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
 
   const [showContentEditor, setShowContentEditor] = useState<boolean>(false)
   const [showTitleEditor, setShowTitleEditor] = useState<boolean>(false)
+  const [file, setFile] = useState<any>(null)
+  const [itemDraft, setItemDraft] = useState<any>(randomItem())
+  const [URL, setURL] = useState<any>('')
+
+  rep.mutate.deleteItem("1QId2w-LurCfnajoR3eOh")
+
+  useEffect(() => {
+    console.log('itemDraft', itemDraft)
+  }, [itemDraft])
 
   function saveDraftAsItem(){
-    const item = randomItem()
+    const item = itemDraft.item
+    console.log('item beep boop', item)
     const changes = {
       title: titleDraft,
       content: contentDraft,
       createdBy: clientEmail || 'Anonymous Aardvark',
     }
 
-    const itemItem = {...item.item, ...changes}
-    rep.mutate.createItem({id: item.id, item: itemItem})
+    const itemItem = {...item, ...changes}
+
+    console.log('{id: itemDraft.id, item: itemItem}', {id: itemDraft.id, item: itemItem})
+    rep.mutate.createItem({id: itemDraft.id, item: itemItem})
+
   }
 
   const handlers = {
     createItem: () => {
       console.log('something is happening')
       saveDraftAsItem()
+      setItemDraft(randomItem())
       setTitleDraft('<p> </p>')
       setContentDraft('<p> </p>')
       setShowTitleEditor(false)
@@ -65,34 +85,47 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
   dropArea && dropArea.addEventListener('drop', handleDrop, false)
 
   function handleDrop(e:any) {
+    console.log('i am in handleDrop')
     let dt = e.dataTransfer
     let files = dt.files
 
     handleFiles(files)
   }
 
-function handleFiles(files :any) {
-  ([...files]).forEach(uploadFile)
-}
+  function handleFiles(files :any) {
+    // ([...files]).forEach(uploadFile)
 
-function uploadFile(file :any) {
-  console.log('file', file)
-  // let formData = new FormData()
+    uploadFile(files[0])
+  }
 
-  // formData.append('file', file)
+  function uploadFile(file :any) {
+    console.log('file', file)
+    setFile(file)
+  }
 
-  // fetch(url, {
-  //   method: 'POST',
-  //   body: formData
-  // })
-  // .then(() => { /* Done. Inform the user */ })
-  // .catch(() => { /* Error. Inform the user */ })
-}
+  useEffect(() => {
+    if (!file) {
+      console.log(`No file found`)
+    } else {
+      // const itemID : string = itemID
+      const draftFileID = nanoid()
+      const fileType = file.type.split('/')[1]
+      const sourceURL = `${itemDraft.id}/${draftFileID}.${fileType}`
 
-function preventDefaults (e: any) {
-  e.preventDefault()
-  e.stopPropagation()
-}
+      // rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+      setItemDraft({id: itemDraft.id, item: {...itemDraft.item, sourceURL: sourceURL}})
+      //upload file to indexedDB
+      uploadFileToIDB(file, sourceURL)
+      //upload file to supabase
+      uploadFileToSupabase(file, sourceURL)
+    }
+
+  }, [file])
+
+  function preventDefaults (e: any) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
 
 return (
   <HotKeys
@@ -102,6 +135,7 @@ return (
     }}
   >
     <div className={styles.container}>
+      <div className={styles.dropArea} id="drop-area">Drop area</div>
       <div className={styles.draftContainer}>
         <div className={styles.avatarContainer}>
           <div className={styles.avatar}>
@@ -143,6 +177,13 @@ return (
               />
             }
           </div>
+          <FileUploadContainer
+            itemID={itemDraft.id}
+            item={itemDraft.item}
+            handleSetItemDraft={setItemDraft}
+            URL={URL}
+            handleSetURL={setURL}
+          />
         </div>
       </div>
       <div className={styles.actionsContainer}>
@@ -159,10 +200,115 @@ return (
           ⌘+Enter to Publish
         </div>
       </div>
-      {/* <div id="drop-area" className={styles.dropArea}>
-        Drop a file
-      </div> */}
     </div>
   </HotKeys>
+  )
+}
+
+function FileUploadContainer({itemID, item, handleSetItemDraft, URL, handleSetURL} : any) {
+
+  useEffect(() => {
+    generateIDBSourceFileURL(item.sourceURL)
+  }, [item.sourceURL])
+
+
+  function onUpload(e: ChangeEvent<HTMLInputElement>){
+    const file = e?.target.files?.[0]
+    if (!file) {
+      console.log(`No file found`)
+    } else {
+      // const itemID : string = itemID
+      const draftFileID = nanoid()
+      const fileType = file.type.split('/')[1]
+      const sourceURL = `${itemID}/${draftFileID}.${fileType}`
+
+      // rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+      handleSetItemDraft({id: itemID, item: {...item, sourceURL: sourceURL}})
+      //upload file to indexedDB
+      uploadFileToIDB(file, sourceURL)
+      //upload file to supabase
+      uploadFileToSupabase(file, sourceURL)
+    }
+  }
+
+  function handleDeleteSourceFile() {
+    console.log('trashing...')
+    //delete from IDB
+    trashFileFromIDB(item.sourceURL)
+    //delete from supabase
+    trashFileFromSupabase(item.sourceURL)
+    //remove sourceURL from item
+    // rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
+    handleSetItemDraft({id: itemID, item: {...item, sourceURL: ''}})
+  }
+
+  function generateIDBSourceFileURL(sourceURL: string){
+    if (!idbOK()) return
+
+
+    let openRequest = indexedDB.open(DEFAULT_IDB_KEY, 1)
+
+    openRequest.onupgradeneeded = function(e: any){
+      let thisDB = e.target.result
+
+      if (!thisDB.objectStoreNames.contains(DEFAULT_SOURCE_FILES_BUCKET)) {
+        thisDB.createObjectStore(DEFAULT_SOURCE_FILES_BUCKET, { keyPath: 'id'})
+      }
+    }
+
+    openRequest.onsuccess = function(e : any) {
+      let db = e.target.result
+      let tx = db.transaction([DEFAULT_SOURCE_FILES_BUCKET], 'readwrite')
+      let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
+
+      let request = store.get(sourceURL)
+
+      request.onerror = function(e : any){
+        console.log('error', e.target.error.name)
+      }
+
+      request.onsuccess = function(e : any){
+        let result = e.target.result
+        result && handleSetURL(window.URL.createObjectURL(result.file))
+      }
+
+      request.onerror = function(event: any) {
+        console.dir(event)
+      }
+
+    }
+    openRequest.onerror = function(event: any) {
+      console.dir(event)
+    }
+  }
+
+
+  return (
+    <div className={styles.upload}>
+      {item.sourceURL &&
+        <>
+          <div className={styles.file}>
+            <a href={URL} target="_blank" className={styles.link}>
+              {item.sourceURL && `🗂`}
+            </a>
+
+          </div>
+          <div
+            onClick={handleDeleteSourceFile}
+            className={styles.hoverOnly}
+          >
+            ⌘+T to Trash
+          </div>
+        </>
+      }
+      <div className={styles.hoverOnly}>
+        <ItemFileUploadButton
+          onUpload={onUpload}
+          loading={false}
+          sourceUrl={item.sourceURL}
+          itemID={itemID}
+        />
+      </div>
+    </div>
   )
 }

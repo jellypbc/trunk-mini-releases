@@ -78,3 +78,18 @@
   color: hsl(0, 0%, 80%);
   padding-left: 1rem;
 }
+
+.dropArea {
+  min-height: 100px;
+  margin-bottom: 1rem;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  border: 1px dashed hsl(0, 0%, 70%);
+}
+
+.dropArea:hover {
+  background-color: hsl(0, 0%, 93%);
+}
+
