@@ -1,11 +1,26 @@
 import React, { useState } from 'react'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
-import { useItemByID, useClientEmail } from '../../datamodel/subscriptions'
+import {
+  useItemByID,
+  useClientEmail,
+  getArrowsByIDs,
+  useAuthorsByItemID
+ } from '../../datamodel/subscriptions'
 import { useRouter } from 'next/router'
 import { htmlToText } from '../../util/htmlToText'
 import styles from './index.module.css'
 import { supabase } from '../../lib/supabase-client'
+import EditorContainer from './editor-container'
+import ItemMainSubItems from './item-main-sub-items'
+import ArrowsAuthoredBy from './arrows-authored-by'
+import ArrowsAuthor from './arrows-author'
+import ArrowsBack from './arrows-back'
+import ArrowsComment from './arrows-comment'
+import ArrowsFootnote from './arrows-footnote'
+import ArrowsFront from './arrows-front'
+import ArrowsSub from './arrows-sub'
+
 
 type ItemPageProps = {
   itemID: string
@@ -30,6 +45,9 @@ type MainProps = {
   title: string
   content: string
   routeToWorkspace: () => void
+  rep: Replicache<M>
+  item: any
+  handleSetSelectedItemID: (itemID: string) => void
 }
 
 export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar } : ItemPageProps ) {
@@ -42,8 +60,6 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
     router.push(`/workspace/${roomID}/i`)
     handleSetSelectedItemID('i')
   }
-
-
 
   return (
     <div className={styles.container}>
@@ -63,8 +79,10 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
               title={item.title}
               content={item.content}
               routeToWorkspace={routeToWorkspace}
+              rep={rep}
+              item={item}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
-
           </div>
         </>
         :
@@ -77,7 +95,7 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
   )
 }
 
-function Main ({ itemID, title, content, routeToWorkspace} : MainProps){
+function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetSelectedItemID } : MainProps){
   console.log('itemID', itemID)
   function copyShareURLToClipboard(){
     navigator.clipboard.writeText(location.href)
@@ -88,30 +106,45 @@ function Main ({ itemID, title, content, routeToWorkspace} : MainProps){
         alert(`Failed to copy to clipboard: ${location.href}`)
       })
   }
+
   return(
     <div className={styles.mainContainer}>
     {/* <div>{itemID}</div> */}
-    <div className={styles.title}>{htmlToText(title)}</div>
-    <div className={styles.authors}>
-      Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin
+    <div className={styles.title}>
+      <EditorContainer
+        doc={title}
+        type={'title'}
+        rep={rep}
+        itemID={itemID}
+        arrows={[]}
+      />
+    </div>
+    <div className={styles.authorsContainer}>
+      {item.arrows.length > 0 &&
+        <AuthorInfo
+          rep={rep}
+          itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+        />
+      }
     </div>
     <div className={styles.content}>
-      {htmlToText(content)}
+      <EditorContainer
+        doc={content}
+        type={'content'}
+        rep={rep}
+        itemID={itemID}
+        arrows={[]}
+      />
     </div>
-    <div className={styles.arrows}>
-      <div className={styles.arrowsFront}>
-        Links
-      </div>
-      <div className={styles.arrowsBack}>
-        Backlinks
-      </div>
-      <div className={styles.arrowsFootnote}>
-        Footnotes
-      </div>
-      <div className={styles.arrowsComment}>
-        Comments
-      </div>
-    </div>
+    <ItemArrows
+      rep={rep}
+      itemID={itemID}
+      arrows={item.arrows}
+      item={item}
+      handleSetSelectedItemID={handleSetSelectedItemID}
+      isPerson={item.title.includes('[person]')}
+    />
     <div className={styles.inputContainer}>
       <input
         onClick={() => copyShareURLToClipboard()}
@@ -126,9 +159,133 @@ function Main ({ itemID, title, content, routeToWorkspace} : MainProps){
     </div>
     <button onClick={() => routeToWorkspace()}>Back to workspace</button>
   </div>
-
   )
 }
+
+function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson}: any) {
+  const arrowIDs = item.arrows.map((a: any) => a.arrowID)
+  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+
+  return (
+    arrowIDs && fullArrows &&
+    <>
+      <div className={styles.mainSubItems}>
+        <ItemMainSubItems
+          rep={rep}
+          itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+          fullArrows={fullArrows}
+        />
+      </div>
+      { isPerson &&
+        <PersonFooter
+          rep={rep}
+          fullArrows={fullArrows}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+        />
+      }
+      <Footer
+        rep={rep}
+        itemID={itemID}
+        arrows={arrows}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+    </>
+  )
+}
+
+function PersonFooter({rep, fullArrows, handleSetSelectedItemID}: any) {
+  return (
+    <div className={styles.meta}>
+      <ArrowsAuthoredBy
+        rep={rep}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+    </div>
+  )
+}
+
+function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any) {
+  return (
+    <div className={styles.meta}>
+      <ArrowsFootnote
+        rep={rep}
+        itemID={itemID}
+        arrows={arrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+      <ArrowsAuthor
+        rep={rep}
+        itemID={itemID}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+      <ArrowsSub
+        rep={rep}
+        itemID={itemID}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+      <ArrowsFront
+        rep={rep}
+        itemID={itemID}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+      <ArrowsBack
+        rep={rep}
+        itemID={itemID}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+      <ArrowsComment
+        rep={rep}
+        itemID={itemID}
+        arrows={arrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+      <DeleteItem
+        rep={rep}
+        itemID={itemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+    </div>
+  )
+}
+
+function DeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
+  const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
+  const item = useItemByID(rep, itemID)
+
+  function deleteItemAndSetSelectedItemIDToEmpty() {
+    rep.mutate.deleteItem(itemID)
+    handleSetSelectedItemID('')
+  }
+  return (
+    <div
+      className={styles.section}
+    >
+      <div
+        className={styles.sectionHeader}
+        onClick={() => setDeleteConfirmation(true)}
+      >Delete</div>
+      {deleteConfirmation && item &&
+        <>
+        <button
+          onClick={() => deleteItemAndSetSelectedItemIDToEmpty()}
+        >Delete {htmlToText(item.title)}</button>
+        <span
+          className={styles.cancel}
+          onClick={() => setDeleteConfirmation(false)}
+        >Cancel</span>
+        </>
+      }
+    </div>
+  )
+}
+
 
 function Sidebar({ createdBy, arrowsCount } : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
@@ -215,6 +372,56 @@ function Nav({ email, handleSetCommandBar } : NavProps) {
       >
           { email }
       </div>
+    </div>
+  )
+}
+
+function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
+  const authors = useAuthorsByItemID(rep, itemID)
+
+  return (
+    authors &&
+      <AuthorArrows
+        rep={rep}
+        authorArrowIDs={authors}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+  )
+}
+
+function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
+  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+
+  if (!fullArrows) return null
+
+  return (
+    <>
+    {fullArrows &&
+      fullArrows.map((a, i) => {
+        return (
+          <AuthorItem
+            key={`author-${a.id}`}
+            rep={rep}
+            itemID={a.frontItemID}
+            isLast={i === fullArrows.length - 1 && true}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+          />
+        )
+    })}
+    </>
+  )
+}
+
+function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
+  const item = useItemByID(rep, itemID)
+  return (
+    item &&
+    <div
+      className={styles.authors}
+      onClick={() => handleSetSelectedItemID(itemID)}
+    >
+      <span>{htmlToText(item.title).split('[')[0].trim()}</span>
+      {!isLast && <span>,&nbsp;</span>}
     </div>
   )
 }

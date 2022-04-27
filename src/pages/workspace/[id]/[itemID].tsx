@@ -159,6 +159,11 @@ export default function Home() {
     router.push(`/`)
   }
 
+  function handleSetSelectedItemID(id: string) {
+    setSelectedItemID('next')
+    setNextID(id)
+  }
+
   return (
     session && trunkID && rep && selectedItemID &&
       <HotKeys
@@ -178,7 +183,7 @@ export default function Home() {
           {commandBar &&
             <CommandBar
               rep={rep}
-              handleSetSelectedItemID={setSelectedItemID}
+              handleSetSelectedItemID={handleSetSelectedItemID}
               handleSetCommandBar={setCommandBar}
               roomID={roomID}
             />
@@ -190,14 +195,16 @@ export default function Home() {
               roomID={roomID}
               handleSetCommandBar={setCommandBar}
             />
-            :
-            <ItemPage
-              rep={rep}
-              itemID={selectedItemID}
-              handleSetSelectedItemID={setSelectedItemID}
-              roomID={roomID}
-              handleSetCommandBar={setCommandBar}
-            />
+            : selectedItemID === "next" ?
+              <div>loading</div>
+              :
+              <ItemPage
+                rep={rep}
+                itemID={selectedItemID}
+                handleSetSelectedItemID={handleSetSelectedItemID}
+                roomID={roomID}
+                handleSetCommandBar={setCommandBar}
+              />
           }
         </div>
       </HotKeys>

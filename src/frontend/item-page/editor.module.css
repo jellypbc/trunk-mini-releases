@@ -1,0 +1,29 @@
+.container * {
+  border: none;
+  resize: none;
+  background-color: inherit;
+  outline: none;
+  font-size: 1rem;
+  line-height: 1.6em;
+  overflow: auto;
+}
+
+.titleContainer * {
+  border: none;
+  overflow: auto;
+  resize: none;
+  background-color: inherit;
+  outline: none;
+  font-size: 1.6rem;
+}
+
+.commentDraft * {
+  border: none;
+  overflow: auto;
+  resize: none;
+  background-color: inherit;
+  outline: none;
+  width: 100%;
+  font-size: 1.2rem;
+  max-height: 15vh;
+}
