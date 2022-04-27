@@ -20,6 +20,7 @@ import ArrowsComment from './arrows-comment'
 import ArrowsFootnote from './arrows-footnote'
 import ArrowsFront from './arrows-front'
 import ArrowsSub from './arrows-sub'
+import { HotKeys } from 'react-hotkeys'
 
 
 type ItemPageProps = {
@@ -48,6 +49,10 @@ type MainProps = {
   rep: Replicache<M>
   item: any
   handleSetSelectedItemID: (itemID: string) => void
+}
+
+const keyMap = {
+  saveItem: ['command+s']
 }
 
 export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar } : ItemPageProps ) {
@@ -107,58 +112,72 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
       })
   }
 
+  const handlers = {
+    saveItem: (e: any) => {
+      e.preventDefault()
+      alert('Item saved!')
+    }
+  }
+
   return(
-    <div className={styles.mainContainer}>
-    {/* <div>{itemID}</div> */}
-    <div className={styles.title}>
-      <EditorContainer
-        doc={title}
-        type={'title'}
-        rep={rep}
-        itemID={itemID}
-        arrows={[]}
-      />
-    </div>
-    <div className={styles.authorsContainer}>
-      {item.arrows.length > 0 &&
-        <AuthorInfo
+    <HotKeys
+      {...{
+        keyMap,
+        handlers,
+      }}
+    >
+      <div className={styles.mainContainer}>
+        {/* <div>{itemID}</div> */}
+      <div className={styles.title}>
+        <EditorContainer
+          doc={title}
+          type={'title'}
           rep={rep}
           itemID={itemID}
-          handleSetSelectedItemID={handleSetSelectedItemID}
+          arrows={[]}
         />
-      }
-    </div>
-    <div className={styles.content}>
-      <EditorContainer
-        doc={content}
-        type={'content'}
+      </div>
+      <div className={styles.authorsContainer}>
+        {item.arrows.length > 0 &&
+          <AuthorInfo
+            rep={rep}
+            itemID={itemID}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+          />
+        }
+      </div>
+      <div className={styles.content}>
+        <EditorContainer
+          doc={content}
+          type={'content'}
+          rep={rep}
+          itemID={itemID}
+          arrows={[]}
+        />
+      </div>
+      <ItemArrows
         rep={rep}
         itemID={itemID}
-        arrows={[]}
+        arrows={item.arrows}
+        item={item}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+        isPerson={item.title.includes('[person]')}
       />
+      <div className={styles.inputContainer}>
+        <input
+          onClick={() => copyShareURLToClipboard()}
+          id={`shareURL`}
+          className={styles.input}
+          defaultValue={location.href}
+          readOnly={true}
+        />
+        <button
+          onClick={() => copyShareURLToClipboard()}
+        >Copy</button>
+      </div>
+      <button onClick={() => routeToWorkspace()}>Back to workspace</button>
     </div>
-    <ItemArrows
-      rep={rep}
-      itemID={itemID}
-      arrows={item.arrows}
-      item={item}
-      handleSetSelectedItemID={handleSetSelectedItemID}
-      isPerson={item.title.includes('[person]')}
-    />
-    <div className={styles.inputContainer}>
-      <input
-        onClick={() => copyShareURLToClipboard()}
-        id={`shareURL`}
-        className={styles.input}
-        defaultValue={location.href}
-        readOnly={true}
-      />
-      <button
-        onClick={() => copyShareURLToClipboard()}
-      >Copy</button>
-    </div>
-    <button onClick={() => routeToWorkspace()}>Back to workspace</button>
-  </div>
+  </HotKeys>
   )
 }
 
