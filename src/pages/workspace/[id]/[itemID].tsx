@@ -38,7 +38,6 @@ export default function Home() {
 
   useEffect(() => {
     let [, , roomID, itemID] = location.pathname.split("/");
-    console.log('itemID', itemID)
     setSelectedItemID(itemID)
     setRoomID(roomID)
 

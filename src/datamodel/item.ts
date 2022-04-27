@@ -24,6 +24,7 @@ export async function getItem(
     console.log(`Specified item ${id} not found.`)
     return null
   }
+  console.log('jv', jv)
   return itemSchema.parse(jv)
 }
 
@@ -40,6 +41,16 @@ export async function deleteItem(
   id: string
 ): Promise<void> {
   await tx.del(key(id))
+}
+
+export async function updateItemCreatedBy(
+  tx: WriteTransaction,
+  { id, createdBy }: { id: string; createdBy : string }
+): Promise<void> {
+  const item = await getItem(tx, id)
+  console.log('item', item)
+  console.log('updateItemCreatedBy', {...item, createdBy: createdBy})
+  return tx.put(key(id), {...item, createdBy: createdBy})
 }
 
 export async function updateItemTitle(

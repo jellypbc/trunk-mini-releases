@@ -8,7 +8,7 @@ import { exampleSetup } from './../editor/plugins/index'
 import Editor from './editor'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
-import EditorArrowCreate from './../editor-arrow-create'
+import EditorArrowCreate from './editor-arrow-create'
 import { useUserInfo, useItemByID, useItemIDs, useClientEmail } from '../../datamodel/subscriptions'
 import { randomItem } from '../../datamodel/item'
 import { randomArrow } from '../../datamodel/arrow'
@@ -32,6 +32,8 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
   // const [showArrows, setShowArrows] = useState<boolean>(true)
   const [serializedSelection, setSerializedSelection] = useState<string>()
   const [showArrowFloater, setShowArrowFloater] = useState<boolean>(false)
+  const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
+  const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const email = useClientEmail(rep)
 
 
@@ -40,6 +42,12 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
   const itemIDs = useItemIDs(rep)
 
   useEffect(() => {
+    const anonItemIDs = localStorage.getItem('trunk.anonItemIDs') || `[]`
+    setAnonItemIDs(JSON.parse(anonItemIDs))
+    const anonArrowIDs = localStorage.getItem('trunk.anonArrowIDs') || `[]`
+    setAnonItemIDs(JSON.parse(anonItemIDs))
+    setAnonArrowIDs(JSON.parse(anonArrowIDs))
+
     const state = createStateFromProps(
       doc,
       schema,
@@ -52,6 +60,14 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
   }, [])
+
+  useEffect(() => {
+    localStorage.setItem('trunk.anonItemIDs', JSON.stringify(anonItemIDs))
+  }, [anonItemIDs])
+
+  useEffect(() => {
+    localStorage.setItem('trunk.anonArrowIDs', JSON.stringify(anonArrowIDs))
+  }, [anonArrowIDs])
 
   // useEffect(() => {
   //   const state = createStateFromProps(
@@ -127,7 +143,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     let commentItem : any = randomItem()
     const commentItemChanges = {
       content: commentDraft,
-      createdBy: email && email || 'no email',
+      createdBy: email && email !== 'guest' && email || 'Anonymous Aardvark',
       highlight: serializedSelection,
     }
 
@@ -140,7 +156,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     let selection = state?.selection
     let commentArrow : any = randomArrow()
     const arrowChanges = {
-      createdBy: email && email || 'no email',
+      createdBy: email && email !== 'guest' && email || 'Anonymous Aardvark',
       frontItemID: frontItemID,
       backItemID: itemID,
       content: commentDraft,
@@ -190,15 +206,36 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
     // set arrows in this component, so that the editor knows to draw the decoration
     // setArrows(itemArrows)
+
+    if (email === 'guest') {
+      //set localStorage items that belong to anon aardvark
+      const commentItemID = commentItem.id
+
+      const draftAnonItemIDs : string[] = []
+      anonItemIDs && anonItemIDs.map((id: string) => draftAnonItemIDs.push(id))
+
+      draftAnonItemIDs.push(commentItemID)
+
+      setAnonItemIDs(draftAnonItemIDs)
+      // set localStorage arrows that belong to anon aardvark
+
+      const arrowItemID = newA.arrowID
+      const draftAnonArrowIDs : string[] = []
+      anonArrowIDs && anonArrowIDs.map((id: string) => draftAnonArrowIDs.push(id))
+
+      draftAnonArrowIDs.push(arrowItemID)
+      setAnonArrowIDs(draftAnonArrowIDs)
+
+    }
+
     setShowArrowFloater(false)
   }
-
 
   function createFootnoteItem(commentDraft: string){
     let footnoteItem : any = randomItem()
     const footnoteItemChanges = {
       content: commentDraft,
-      createdBy: email && email || 'no email',
+      createdBy: email && email !== 'guest' && email || 'Anonymous Aardvark',
       title: footnoteItem.id,
       highlight: serializedSelection
     }
@@ -257,7 +294,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     let referenceItem = randomItem()
     const referenceItemChanges = {
       title: commentDraft,
-      createdBy: email && email || 'no email',
+      createdBy: email && email !== 'guest' && email || 'Anonymous Aardvark',
     }
 
     referenceItem.item = {...referenceItem.item, ...referenceItemChanges}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import {
@@ -35,6 +35,7 @@ type ItemPageProps = {
 type NavProps = {
   email: string
   handleSetCommandBar: (state: boolean) => void
+  rep: Replicache<M>
 }
 
 type SidebarProps = {
@@ -59,6 +60,7 @@ const keyMap = {
 export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar } : ItemPageProps ) {
   const item = useItemByID(rep, itemID)
   const clientEmail = useClientEmail(rep)
+
 
   const router = useRouter()
 
@@ -104,6 +106,7 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
           <Nav
             email={clientEmail}
             handleSetCommandBar={handleSetCommandBar}
+            rep={rep}
           />
           <div className={styles.bodyContainer}>
             <Sidebar
@@ -183,7 +186,7 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
           type={'content'}
           rep={rep}
           itemID={itemID}
-          arrows={[]}
+          arrows={item.arrows as any || []}
         />
       </div>
       <ItemArrows
@@ -399,7 +402,38 @@ function Sidebar({ createdBy, arrowsCount } : SidebarProps){
   )
 }
 
-function Nav({ email, handleSetCommandBar } : NavProps) {
+function Nav({ email, handleSetCommandBar, rep } : NavProps) {
+
+  const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
+  const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
+
+  useEffect(() => {
+    const anonItemIDs = localStorage.getItem('trunk.anonItemIDs')
+    setAnonItemIDs(anonItemIDs && JSON.parse(anonItemIDs) || [])
+    const anonArrowIDs = localStorage.getItem('trunk.anonArrowIDs')
+    setAnonArrowIDs(anonArrowIDs && JSON.parse(anonArrowIDs) || [])
+  }, [])
+
+  useEffect(() => {
+    console.log('anonItemIDs', anonItemIDs)
+    if (anonItemIDs.length > 0 && email !== 'guest') {
+      anonItemIDs.map((itemID: any) => {
+        rep.mutate.updateItemCreatedBy({id: itemID, createdBy: email})
+      })
+      localStorage.setItem('trunk.anonItemIDs', JSON.stringify([]))
+    }
+  }, [anonItemIDs])
+
+  useEffect(() => {
+    console.log('anonArrowIDs', anonArrowIDs)
+    if (anonArrowIDs.length > 0 && email !== 'guest') {
+      anonArrowIDs.map((arrowID: any) => {
+        rep.mutate.updateArrowCreatedBy({id: arrowID, createdBy: email})
+      })
+      localStorage.setItem('trunk.anonArrowIDs', JSON.stringify([]))
+    }
+  }, [anonArrowIDs])
+
   const router = useRouter()
 
   async function logOut() {

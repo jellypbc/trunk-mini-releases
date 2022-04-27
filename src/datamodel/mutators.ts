@@ -24,11 +24,13 @@ import {
   updateItemArrows,
   updateItemSourceURL,
   updateItemAddSingleArrow,
-  updateItemArrowsDeleteArrow
+  updateItemArrowsDeleteArrow,
+  updateItemCreatedBy
 } from './item';
 import {
   putArrow,
-  deleteArrow
+  deleteArrow,
+  updateArrowCreatedBy,
 } from './arrow'
 
 export type M = typeof mutators;
@@ -57,5 +59,7 @@ export const mutators = {
   setUsername,
   setAvatarURL,
   setTrunkIDs,
+  updateItemCreatedBy,
+  updateArrowCreatedBy,
   nop: async (_: WriteTransaction) => {},
 };

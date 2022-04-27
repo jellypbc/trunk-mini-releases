@@ -43,6 +43,14 @@ export async function deleteArrow(
   await tx.del(key(id))
 }
 
+export async function updateArrowCreatedBy(
+  tx: WriteTransaction,
+  { id, createdBy }: { id: string; createdBy : string }
+): Promise<void> {
+  const arrow = await getArrow(tx, id)
+  return tx.put(key(id), {...arrow, createdBy: createdBy})
+}
+
 export type Arrow = z.infer<typeof arrowSchema>
 
 function key(id: string): string {
