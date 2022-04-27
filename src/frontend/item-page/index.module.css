@@ -400,3 +400,74 @@ a.link:hover {
 .bannerAnon {
   color: #009B2B;
 }
+
+.metadataModal {
+  z-index: 1;
+  background: hsl(0, 0%, 96%);
+  position: absolute;
+  width: 440px;
+  right: 0;
+  top: 10%;
+  bottom: 10%;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 1px solid hsla(0, 0%, 77%);
+  box-shadow: 0 4px 20px hsla(0, 0%, 77%), 0 4px 20px hsla(0, 0%, 77%);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  /* animation: move 1s linear 1s 1; */
+}
+
+/* @keyframes move {
+  from {-webkit-transform: translateX(400px);}
+  to {-webkit-transform: translateX(0px);}
+} */
+
+.metadataLabel {
+  font-size: 1.4rem;
+  /* padding: 1rem 0; */
+}
+
+.metadataCreatedBy {
+  padding: 1rem 0;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.boxStuff {
+  border: 1px solid hsl(0, 0%, 80%);
+  padding: .5rem;
+}
+
+.metadataThing {
+  padding: 1rem 0;
+}
+
+.tagContainer {
+
+
+}
+
+.tagAdd {
+  display: flex;
+  align-items: center;
+}
+
+.bigLabel {
+  font-size: 1.2rem;
+}
+
+.addTagThing input {
+  margin :1rem;
+}
+
+.tags span {
+  padding-right: 1rem;
+}
+
+.archiveContainer {
+  padding: 1rem 0;
+}

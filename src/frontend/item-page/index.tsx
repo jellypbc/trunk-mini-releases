@@ -47,6 +47,9 @@ type NavProps = {
 type SidebarProps = {
   createdBy: string
   arrowsCount: number
+  item: any
+  itemID: string
+  rep: Replicache<M>
 }
 
 type MainProps = {
@@ -118,6 +121,9 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
             <Sidebar
               createdBy={item.createdBy}
               arrowsCount={item.arrows.length}
+              item={item}
+              itemID={itemID}
+              rep={rep}
             />
             <Main
               itemID={itemID}
@@ -349,11 +355,70 @@ function DeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
   )
 }
 
+function MetadataModal({ item, itemID, rep} : any){
+  console.log('itemID', itemID, 'rep', rep)
+  return (
+    <div className={styles.metadataModal}>
+      <div className={styles.metadataLabel}>
+        Editing Item
+      </div>
+      <div className={styles.metadataCreatedBy}>
+        <div className={styles.label}>Created by</div>
+        <div>{item.createdBy}</div>
+      </div>
+      <div className={styles.boxStuff}>
+        <div className={styles.metadataThing}>
+          <div className={styles.label}>Title</div>
+          <div>{htmlToText(item.title)}</div>
+        </div>
+        <div className={styles.metadataThing}>
+          <div className={styles.label}>URL</div>
+          <div>https://www.youtube.com/watch?v=hLjGEropDXc</div>
+        </div>
+        <div className={styles.metadataThing}>
+          <div className={styles.label}>Authors</div>
+          <div>John Reed</div>
+        </div>
+      </div>
+      <div className={styles.metadataThing}>
+        <div className={styles.label}>Label</div>
+        <div>John Reed</div>
+      </div>
+      <div className={styles.tagContainer}>
+        <div className={styles.tagAdd}>
+          <div className={styles.bigLabel}>Tags</div>
+          <div className={styles.addTagThing}>
+            <input placeholder={`Enter tag text`}/>
+            <button>Save</button>
+          </div>
+        </div>
+        <div className={styles.tags}>
+          <span>biology</span>
+          <span>distillation technology</span>
+          <span>caves</span>
+          </div>
+      </div>
+      <div className={styles.archiveContainer}>
+        <button>Archive</button>
+      </div>
+    </div>
+  )
+}
 
-function Sidebar({ createdBy, arrowsCount } : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, item, itemID, rep } : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
+  const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
+
   return(
     <div className={styles.sidebarContainer}>
+      {showMetadataModal &&
+        <MetadataModal
+          item={item}
+          itemID={itemID}
+          rep={rep}
+
+        />
+      }
       <div className={styles.top}>
         <div className={styles.createdByContainer}>
           <div className={styles.avatarContainer}>
@@ -373,7 +438,10 @@ function Sidebar({ createdBy, arrowsCount } : SidebarProps){
           <div className={styles.updatedAtLabel}>Last updated</div>
           <div>April 4, 2022</div>
         </div>
-        <div className={styles.metadataContainer}>
+        <div
+          className={styles.metadataContainer}
+          onClick={() => setShowMetadataModal(!showMetadataModal)}
+        >
           View Metadata
         </div>
         <div className={styles.viewPDFContainer}>
