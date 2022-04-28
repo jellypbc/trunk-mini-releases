@@ -88,3 +88,14 @@
   font-size: .8rem;
   color: hsl(0, 0%, 60%);
 }
+
+.parentTitle {
+  font-size: .8rem;
+  cursor: pointer;
+  color: hsl(0, 0%, 70%);
+}
+
+.parentArrow {
+  color: #027B00;
+}
+

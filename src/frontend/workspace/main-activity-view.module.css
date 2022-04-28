@@ -1,4 +1,5 @@
 .container {
+  color: hsl(0, 0%, 30%);
 }
 
 .activityItemContainer {
@@ -51,8 +52,7 @@
 .avatar {
   padding: .6rem;
   margin: 0 auto;
-  /* background-color: hsl(0, 0%, 92%); */
-  background-color: lightskyblue;
+  background-color: hsl(0, 0%, 92%);
   border-radius: .6rem;
 }
 
@@ -74,6 +74,7 @@
   padding: .5rem 0;
   display: flex;
   font-size: .7rem;
+  min-height: 34px;
 }
 
 .arrowCountContainer {
@@ -99,6 +100,10 @@
 
 .addLink:hover {
   color: white;
-  background-color: hsl(0, 0%, 60%);
+  background-color: #007D3A;
   border-radius: .2rem;
+}
+
+.parentContainer {
+  padding: 1rem 0;
 }
