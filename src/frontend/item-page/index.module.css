@@ -110,6 +110,19 @@
   padding: .2rem 0;
 }
 
+.viewPDFContainer:hover {
+  background-color: hsl(0, 0%, 96%);
+}
+
+.viewPDFContainer a {
+  text-decoration: none;
+}
+
+.viewPDFContainer a:hover {
+  color: black;
+}
+
+
 .arrowsCountContainer {
   display: flex;
   padding: .2rem 0;

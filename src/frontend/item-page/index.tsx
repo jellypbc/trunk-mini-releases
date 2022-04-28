@@ -419,6 +419,54 @@ function MetadataModal({ itemID, rep} : any){
 function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
+  const [URL, setURL] = useState<string>('')
+
+  useEffect(() => {
+    generateIDBSourceFileURL(item.sourceURL)
+  }, [])
+
+  function generateIDBSourceFileURL(sourceURL: string){
+    if (!idbOK()) return
+
+    let openRequest = indexedDB.open(DEFAULT_IDB_KEY, 1)
+
+    openRequest.onupgradeneeded = function(e: any){
+      let thisDB = e.target.result
+
+      if (!thisDB.objectStoreNames.contains(DEFAULT_SOURCE_FILES_BUCKET)) {
+        thisDB.createObjectStore(DEFAULT_SOURCE_FILES_BUCKET, { keyPath: 'id'})
+      }
+    }
+
+    openRequest.onsuccess = function(e : any) {
+      let db = e.target.result
+      let tx = db.transaction([DEFAULT_SOURCE_FILES_BUCKET], 'readwrite')
+      let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
+
+      let request = store.get(sourceURL)
+      console.log('request', request)
+
+      request.onerror = function(e : any){
+        console.log('error', e.target.error.name)
+      }
+
+      request.onsuccess = function(e : any){
+        let result = e.target.result
+        // if result == undefined then fetch from supabase
+        // then generateIDBSourceFileURL again
+        result && setURL(window.URL.createObjectURL(result.file))
+      }
+
+      request.onerror = function(event: any) {
+        console.dir(event)
+      }
+
+    }
+    openRequest.onerror = function(event: any) {
+      console.dir(event)
+    }
+  }
+
 
   return(
     <div className={styles.sidebarContainer}>
@@ -455,7 +503,10 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
           View Metadata
         </div>
         <div className={styles.viewPDFContainer}>
-          View PDF
+          <a
+            href={URL}
+            target="_blank"
+          >View PDF</a>
         </div>
         <div className={styles.shareItemContainer}>
           Share this item
@@ -638,12 +689,7 @@ function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
 }
 
 function FileUploadContainer({itemID, item, rep} : any) {
-  const [URL, setURL] = useState<any>('')
-
-  useEffect(() => {
-    generateIDBSourceFileURL(item.sourceURL)
-  }, [item.sourceURL])
-
+  // const [URL, setURL] = useState<any>('')
 
   function onUpload(e: ChangeEvent<HTMLInputElement>){
     const file = e?.target.files?.[0]
@@ -673,62 +719,62 @@ function FileUploadContainer({itemID, item, rep} : any) {
     rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
   }
 
-  function generateIDBSourceFileURL(sourceURL: string){
-    if (!idbOK()) return
+  // function generateIDBSourceFileURL(sourceURL: string){
+  //   if (!idbOK()) return
 
 
-    let openRequest = indexedDB.open(DEFAULT_IDB_KEY, 1)
+  //   let openRequest = indexedDB.open(DEFAULT_IDB_KEY, 1)
 
-    openRequest.onupgradeneeded = function(e: any){
-      let thisDB = e.target.result
+  //   openRequest.onupgradeneeded = function(e: any){
+  //     let thisDB = e.target.result
 
-      if (!thisDB.objectStoreNames.contains(DEFAULT_SOURCE_FILES_BUCKET)) {
-        thisDB.createObjectStore(DEFAULT_SOURCE_FILES_BUCKET, { keyPath: 'id'})
-      }
-    }
+  //     if (!thisDB.objectStoreNames.contains(DEFAULT_SOURCE_FILES_BUCKET)) {
+  //       thisDB.createObjectStore(DEFAULT_SOURCE_FILES_BUCKET, { keyPath: 'id'})
+  //     }
+  //   }
 
-    openRequest.onsuccess = function(e : any) {
-      let db = e.target.result
-      let tx = db.transaction([DEFAULT_SOURCE_FILES_BUCKET], 'readwrite')
-      let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
+  //   openRequest.onsuccess = function(e : any) {
+  //     let db = e.target.result
+  //     let tx = db.transaction([DEFAULT_SOURCE_FILES_BUCKET], 'readwrite')
+  //     let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
 
-      let request = store.get(sourceURL)
+  //     let request = store.get(sourceURL)
 
-      request.onerror = function(e : any){
-        console.log('error', e.target.error.name)
-      }
+  //     request.onerror = function(e : any){
+  //       console.log('error', e.target.error.name)
+  //     }
 
-      request.onsuccess = function(e : any){
-        let result = e.target.result
-        result && setURL(window.URL.createObjectURL(result.file))
-      }
+  //     request.onsuccess = function(e : any){
+  //       let result = e.target.result
+  //       result && setURL(window.URL.createObjectURL(result.file))
+  //     }
 
-      request.onerror = function(event: any) {
-        console.dir(event)
-      }
+  //     request.onerror = function(event: any) {
+  //       console.dir(event)
+  //     }
 
-    }
-    openRequest.onerror = function(event: any) {
-      console.dir(event)
-    }
-  }
+  //   }
+  //   openRequest.onerror = function(event: any) {
+  //     console.dir(event)
+  //   }
+  // }
 
 
   return (
     <div className={styles.upload}>
       {item.sourceURL &&
         <>
-          <div className={styles.file}>
+          {/* <div className={styles.file}>
             <a href={URL} target="_blank" className={styles.link}>
               {item.sourceURL && `🗂`}
             </a>
 
-          </div>
+          </div> */}
           <div
             onClick={handleDeleteSourceFile}
             className={styles.hoverOnly}
           >
-            ⌘+T to Trash
+            ⌘+T to Trash PDF
           </div>
         </>
       }
