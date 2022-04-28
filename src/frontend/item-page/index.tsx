@@ -29,6 +29,7 @@ import { idbOK } from '../../lib/idbOK'
 import ItemFileUploadButton from './item-file-upload-button'
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constants'
 import SidebarOutline from './sidebar-outline'
+import ItemParent from './item-parent'
 
 
 type ItemPageProps = {
@@ -179,6 +180,13 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
           item={item}
           rep={rep}
         />
+        <div className={styles.parentContainer}>
+          <ItemParent
+            rep={rep}
+            itemID={itemID}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+          />
+        </div>
       <div className={styles.title}>
         <EditorContainer
           doc={title}

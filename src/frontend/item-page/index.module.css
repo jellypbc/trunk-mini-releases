@@ -530,3 +530,16 @@ a.link:hover {
   font-weight: 500;
 }
 
+.parentTitle {
+  font-size: .8rem;
+  cursor: pointer;
+}
+
+.parentArrow {
+  color: #027B00;
+}
+
+.parentContainer {
+  padding: 1rem 0;
+
+}
