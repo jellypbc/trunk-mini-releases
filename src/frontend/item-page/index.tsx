@@ -425,6 +425,16 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
     generateIDBSourceFileURL(item.sourceURL)
   }, [])
 
+  function copyShareURLToClipboard(){
+    navigator.clipboard.writeText(location.href)
+      .then(() => {
+        alert(`Copied to clipboard: ${location.href}`)
+      })
+      .catch(() => {
+        alert(`Failed to copy to clipboard: ${location.href}`)
+      })
+  }
+
   function generateIDBSourceFileURL(sourceURL: string){
     if (!idbOK()) return
 
@@ -508,7 +518,10 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
             target="_blank"
           >View PDF</a>
         </div>
-        <div className={styles.shareItemContainer}>
+        <div
+          className={styles.shareItemContainer}
+          onClick={() => copyShareURLToClipboard()}
+        >
           Share this item
         </div>
         <div className={styles.arrowsCountContainer}>

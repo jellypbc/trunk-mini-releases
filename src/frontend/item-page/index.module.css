@@ -110,8 +110,9 @@
   padding: .2rem 0;
 }
 
-.viewPDFContainer:hover {
+.viewPDFContainer:hover, .shareItemContainer:hover, .metadataContainer:hover {
   background-color: hsl(0, 0%, 96%);
+  cursor: pointer;
 }
 
 .viewPDFContainer a {
@@ -121,7 +122,6 @@
 .viewPDFContainer a:hover {
   color: black;
 }
-
 
 .arrowsCountContainer {
   display: flex;
