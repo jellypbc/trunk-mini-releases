@@ -92,6 +92,12 @@ function Nav({ email, handleSetCommandBar } : NavProps) {
 
   return(
     <div className={styles.navContainer}>
+      <div className={styles.left}>
+
+      </div>
+      <div className={styles.right}>
+
+      </div>
       <div
         className={styles.searchBar}
         onClick={() => handleSetCommandBar(true)}>

@@ -11,6 +11,7 @@ import { HotKeys } from 'react-hotkeys'
 import Workspace from '../../../frontend/workspace/index'
 import ItemPage from '../../../frontend/item-page/index'
 import CommandBar from '../../../frontend/command-bar/index'
+import { useRouter } from 'next/router'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null)
@@ -20,6 +21,7 @@ export default function Home() {
   const [commandBar, setCommandBar] = useState<boolean>(false)
   const [nextID, setNextID] = useState<string>('')
   const [roomID, setRoomID] = useState<string>('')
+  const router = useRouter()
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -153,6 +155,10 @@ export default function Home() {
   function handleSetSelectedItemID(id: string) {
     setSelectedItemID('next')
     setNextID(id)
+  }
+
+  if (selectedItemID === "i" && !session) {
+    router.push('/')
   }
 
   return (

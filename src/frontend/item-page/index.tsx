@@ -491,6 +491,7 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
 
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
+  const [showProfileDropdown, setShowProfileDropdown] = useState<boolean>(false)
 
   useEffect(() => {
     const anonItemIDs = localStorage.getItem('trunk.anonItemIDs')
@@ -529,17 +530,49 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
       router.push('/')
   }
 
+  if (typeof window !== 'undefined') {
+    window.onclick = function(event: any) {
+      if (showProfileDropdown && event?.target?.id !== 'profileDropdown') {
+        setShowProfileDropdown(false)
+      }
+    }
+  }
+
   return(
     <div className={styles.navContainer}>
-      <div
-        className={styles.searchBar}
-        onClick={() => handleSetCommandBar(true)}>
-        Search or type ⌘ + K
+      <div className={styles.left}>
+
       </div>
-      <div
-        onClick={() => logOut()}
-      >
-          { email }
+      <div className={styles.rightContainer}>
+        <div className={styles.right}>
+          <div
+            className={styles.searchBar}
+            onClick={() => handleSetCommandBar(true)}>
+            Search or type ⌘ + K
+          </div>
+          <div
+            className={styles.options}
+            id="profileDropdown"
+            onClick={() => setShowProfileDropdown(true)}
+          >
+            ≡
+          </div>
+        </div>
+        {showProfileDropdown &&
+          <div
+            className={styles.rightAlignedDropdownMenu}
+            onClick={() => logOut()}
+            id="profileDropdown"
+          >
+            <div className={styles.left}>
+              <div
+                className={styles.option}
+              >Log out</div>
+            </div>
+            <div className={styles.right}>
+            </div>
+          </div>
+        }
       </div>
     </div>
   )
