@@ -28,6 +28,7 @@ import { uploadFileToSupabase, trashFileFromSupabase } from '../../datamodel/sup
 import { idbOK } from '../../lib/idbOK'
 import ItemFileUploadButton from './item-file-upload-button'
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constants'
+import SidebarOutline from './sidebar-outline'
 
 
 type ItemPageProps = {
@@ -49,6 +50,7 @@ type SidebarProps = {
   arrowsCount: number
   itemID: string
   rep: Replicache<M>
+  item: any
 }
 
 type MainProps = {
@@ -122,6 +124,7 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
               arrowsCount={item.arrows.length}
               itemID={itemID}
               rep={rep}
+              item={item}
             />
             <Main
               itemID={itemID}
@@ -413,7 +416,7 @@ function MetadataModal({ itemID, rep} : any){
   )
 }
 
-function Sidebar({ createdBy, arrowsCount, itemID, rep } : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
 
@@ -469,12 +472,18 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep } : SidebarProps){
           className={styles.outlineMinimapContainer}
           onClick={() => setShowOutline(!showOutline)}
         >
-          {showOutline ? <span className={styles.bold}>Outline</span> : <span>Outline</span>}
-          <span>/</span>
-          {!showOutline ? <span className={styles.bold}>Minimap</span> : <span>Minimap</span>}
+          <div className={styles.outlineMinimapLabel}>
+            {showOutline ? <span className={styles.bold}>Outline</span> : <span>Outline</span>}
+            <span>/</span>
+            {!showOutline ? <span className={styles.bold}>Minimap</span> : <span>Minimap</span>}
+          </div>
           {showOutline ?
             <div className={styles.outlineContainer}>
-              Outline
+              <SidebarOutline
+                rep={rep}
+                item={item}
+                itemID={itemID}
+              />
             </div>
           :
             <div className={styles.outlineContainer}>

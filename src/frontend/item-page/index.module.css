@@ -130,6 +130,10 @@
   font-weight: 500;
 }
 
+.outlineMinimapLabel {
+  color: hsl(0, 0%, 60%);
+}
+
 .outlineContainer, .minimapContainer {
   padding-top: 1rem;
 }
