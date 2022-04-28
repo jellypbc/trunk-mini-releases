@@ -1,5 +1,6 @@
 .container {
   position: absolute;
+  color: hsl(0, 0%, 30%);
 }
 
 .trunkContainer {

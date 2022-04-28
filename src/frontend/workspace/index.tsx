@@ -90,23 +90,25 @@ function Nav({ email, handleSetCommandBar } : NavProps) {
       router.push('/')
   }
 
+
   return(
     <div className={styles.navContainer}>
       <div className={styles.left}>
+        <div className={styles.logo}>Trunk</div>
+        <div
+          className={styles.searchBar}
+          onClick={() => handleSetCommandBar(true)}>
+          Search or type ⌘ + K
+        </div>
 
       </div>
       <div className={styles.right}>
-
-      </div>
-      <div
-        className={styles.searchBar}
-        onClick={() => handleSetCommandBar(true)}>
-        Search or type ⌘ + K
-      </div>
-      <div
-        onClick={() => logOut()}
-      >
-          { email }
+        <div
+          className={styles.logOut}
+          onClick={() => logOut()}
+        >
+          {email } ≡
+        </div>
       </div>
     </div>
   )

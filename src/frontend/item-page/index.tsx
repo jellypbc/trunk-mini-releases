@@ -569,7 +569,6 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
 }
 
 function Nav({ email, handleSetCommandBar, rep } : NavProps) {
-
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const [showProfileDropdown, setShowProfileDropdown] = useState<boolean>(false)
@@ -582,7 +581,6 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
   }, [])
 
   useEffect(() => {
-    console.log('anonItemIDs', anonItemIDs)
     if (anonItemIDs.length > 0 && email !== 'guest') {
       anonItemIDs.map((itemID: any) => {
         rep.mutate.updateItemCreatedBy({id: itemID, createdBy: email})
@@ -592,7 +590,6 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
   }, [anonItemIDs])
 
   useEffect(() => {
-    console.log('anonArrowIDs', anonArrowIDs)
     if (anonArrowIDs.length > 0 && email !== 'guest') {
       anonArrowIDs.map((arrowID: any) => {
         rep.mutate.updateArrowCreatedBy({id: arrowID, createdBy: email})

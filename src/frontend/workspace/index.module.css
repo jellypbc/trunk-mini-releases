@@ -40,6 +40,51 @@
 }
 
 .searchBar {
-  background-color: hsl(0, 0%, 90%);
-  padding: 1rem;
+  background-color: hsl(0, 0%, 95%);
+  padding: .5rem 1rem;
+  border-radius: .5rem;
+  color: hsl(0, 0%, 60%);
+  font-size: .8rem;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  padding-right: 1rem;
+  font-weight: 500;
+  color: #007D3A;
+}
+
+.right {
+  position: relative;
+}
+
+.options {
+  position: relative;
+  text-align: right;
+  font-size: 2rem;
+  color: hsl(0, 0%, 70%);
+}
+
+.rightAlignedDropdownMenu{
+  position: absolute;
+  border: 2px solid hsl(0, 0%, 86%);
+  border-radius: .5rem;
+  min-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: -.2rem;
+  background-color: white;
+}
+
+.rightAlignedDropdownMenu:hover {
+  background-color: hsl(0, 0%, 96%);
+}
+
+.logOut {
+  font-size: .8rem;
+  color: hsl(0, 0%, 60%);
 }
