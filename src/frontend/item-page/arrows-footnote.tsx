@@ -23,7 +23,8 @@ function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID } : any){
   return (
     <>
       <div className={styles.sectionHeader}>
-        Footnotes <span className={styles.count}>{arrows.length}</span>
+        <span className={styles.count}>{arrows.length}</span>
+        Footnotes
       </div>
       {arrows && arrows.map((a: any) => {
         return (

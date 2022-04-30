@@ -1,5 +1,5 @@
 import React from 'react'
-import { useItemByID } from '../../datamodel/subscriptions'
+import { useItemByID, useAuthorsByItemID, getArrowsByIDs } from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
@@ -20,8 +20,8 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
     uniqueFrontItemIDs &&
     <>
       <div className={styles.sectionHeader}>
-        <span>→</span>
         <span className={styles.count}>{forwardArrows.length}</span>
+        <span>Links</span>
       </div>
       {uniqueFrontItemIDs.map((itemID: any) => {
         return (
@@ -45,13 +45,77 @@ type FrontArrowItemProps = {
 
 function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
   const item = useItemByID(rep, itemID)
+  console.log('item.publicationDate', item && item.publicationDate === "")
   return (
+    item &&
     <div
       className={styles.item}
       onClick={() => handleSetSelectedItemID(itemID)}
     >
-      {item && htmlToText(item.title) || 'nothing here'}
+      {item.arrows.length > 0 &&
+        <AuthorInfo
+          rep={rep}
+          itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+        />
+      }
+      {item.publicationDate &&
+        <span>{item.publicationDate}</span>
+      }
+      <span className={styles.arrowTitle}>{htmlToText(item.title) || 'nothing here'}</span>
     </div>
   )
 }
+
+function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
+  const authors = useAuthorsByItemID(rep, itemID)
+
+  return (
+    authors &&
+      <AuthorArrows
+        rep={rep}
+        authorArrowIDs={authors}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+  )
+}
+
+function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
+  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+
+  if (!fullArrows) return null
+
+
+  return (
+    <>
+    {fullArrows && fullArrows.length > 0 &&
+      <AuthorItem
+        key={`author-${fullArrows[0].id}`}
+        rep={rep}
+        itemID={fullArrows[0].frontItemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+        authorCount={fullArrows.length}
+      />
+    }
+    </>
+  )
+}
+
+function AuthorItem({rep, itemID, handleSetSelectedItemID, authorCount}: any) {
+  const item = useItemByID(rep, itemID)
+  const additionalAuthors = authorCount - 1
+  return (
+    item &&
+    <span
+      onClick={() => handleSetSelectedItemID(itemID)}
+    >
+      {htmlToText(item.title).split('[')[0].trim()}
+      {additionalAuthors > 0 &&
+       ` + ${additionalAuthors}`
+      // ` et al.`
+       }
+    </span>
+  )
+}
+
 

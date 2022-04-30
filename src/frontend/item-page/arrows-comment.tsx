@@ -25,10 +25,8 @@ function CommentItemContainer({ arrowIDs, rep, handleSetSelectedItemID } : any){
   return (
     <>
       <div className={styles.sectionHeader}>
+        <span className={styles.count}>{arrowIDs.length}</span>
         Reactions and responses
-        <span className={styles.count}>
-          {arrowIDs.length}
-        </span>
       </div>
       {arrows && arrows.map((a: any) => {
         return (

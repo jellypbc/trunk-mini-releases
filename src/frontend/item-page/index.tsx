@@ -1,4 +1,8 @@
-import React, { useState, useEffect, ChangeEvent } from 'react'
+import React, {
+  useState,
+  useEffect,
+  // ChangeEvent
+} from 'react'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import {
@@ -22,11 +26,11 @@ import ArrowsFront from './arrows-front'
 import ArrowsSub from './arrows-sub'
 import { HotKeys } from 'react-hotkeys'
 import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../../lib/constants'
-import { nanoid } from 'nanoid'
-import { uploadFileToIDB, trashFileFromIDB }  from '../../datamodel/local/file'
-import { uploadFileToSupabase, trashFileFromSupabase } from '../../datamodel/supabase/file'
+// import { nanoid } from 'nanoid'
+// import { uploadFileToIDB, trashFileFromIDB }  from '../../datamodel/local/file'
+// import { uploadFileToSupabase, trashFileFromSupabase } from '../../datamodel/supabase/file'
 import { idbOK } from '../../lib/idbOK'
-import ItemFileUploadButton from './item-file-upload-button'
+// import ItemFileUploadButton from './item-file-upload-button'
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constants'
 import SidebarOutline from './sidebar-outline'
 import ItemParent from './item-parent'
@@ -175,11 +179,11 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
     >
       <div className={styles.mainContainer}>
         {/* <div>{itemID}</div> */}
-        <FileUploadContainer
+        {/* <FileUploadContainer
           itemID={itemID}
           item={item}
           rep={rep}
-        />
+        /> */}
         <div className={styles.parentContainer}>
           <ItemParent
             rep={rep}
@@ -187,24 +191,27 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         </div>
-      <div className={styles.title}>
-        <EditorContainer
-          doc={title}
-          type={'title'}
-          rep={rep}
-          itemID={itemID}
-          arrows={[]}
-        />
-      </div>
-      <div className={styles.authorsContainer}>
-        {item.arrows.length > 0 &&
-          <AuthorInfo
-            rep={rep}
-            itemID={itemID}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-          />
-        }
-      </div>
+        <div className={styles.mainHeader}>
+          <div className={styles.title}>
+            <EditorContainer
+              doc={title}
+              type={'title'}
+              rep={rep}
+              itemID={itemID}
+              arrows={[]}
+            />
+          </div>
+          <div className={styles.authorsContainer}>
+            {item.arrows.length > 0 &&
+              <AuthorInfo
+                rep={rep}
+                itemID={itemID}
+                handleSetSelectedItemID={handleSetSelectedItemID}
+              />
+            }
+          </div>
+        </div>
+
       <div className={styles.content}>
         <EditorContainer
           doc={content}
@@ -294,18 +301,6 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      <ArrowsAuthor
-        rep={rep}
-        itemID={itemID}
-        fullArrows={fullArrows}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      />
-      <ArrowsSub
-        rep={rep}
-        itemID={itemID}
-        fullArrows={fullArrows}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      />
       <ArrowsFront
         rep={rep}
         itemID={itemID}
@@ -322,6 +317,18 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
         rep={rep}
         itemID={itemID}
         arrows={arrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+       <ArrowsAuthor
+        rep={rep}
+        itemID={itemID}
+        fullArrows={fullArrows}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+      <ArrowsSub
+        rep={rep}
+        itemID={itemID}
+        fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
       <DeleteItem
@@ -569,6 +576,7 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
 }
 
 function Nav({ email, handleSetCommandBar, rep } : NavProps) {
+  console.log('handleSetCommandBar', handleSetCommandBar)
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const [showProfileDropdown, setShowProfileDropdown] = useState<boolean>(false)
@@ -623,7 +631,7 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
       </div>
       <div className={styles.rightContainer}>
         <div className={styles.right}>
-          <div
+          {/* <div
             className={styles.searchBar}
             onClick={() => handleSetCommandBar(true)}>
             Search or type ⌘ + K
@@ -634,7 +642,7 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
             onClick={() => setShowProfileDropdown(true)}
           >
             ≡
-          </div>
+          </div> */}
         </div>
         {showProfileDropdown &&
           <div
@@ -706,104 +714,104 @@ function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
   )
 }
 
-function FileUploadContainer({itemID, item, rep} : any) {
-  // const [URL, setURL] = useState<any>('')
+// function FileUploadContainer({itemID, item, rep} : any) {
+//   // const [URL, setURL] = useState<any>('')
 
-  function onUpload(e: ChangeEvent<HTMLInputElement>){
-    const file = e?.target.files?.[0]
-    if (!file) {
-      console.log(`No file found`)
-    } else {
-      // const itemID : string = itemID
-      const draftFileID = nanoid()
-      const fileType = file.type.split('/')[1]
-      const sourceURL = `${itemID}/${draftFileID}.${fileType}`
+//   function onUpload(e: ChangeEvent<HTMLInputElement>){
+//     const file = e?.target.files?.[0]
+//     if (!file) {
+//       console.log(`No file found`)
+//     } else {
+//       // const itemID : string = itemID
+//       const draftFileID = nanoid()
+//       const fileType = file.type.split('/')[1]
+//       const sourceURL = `${itemID}/${draftFileID}.${fileType}`
 
-      rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
-      //upload file to indexedDB
-      uploadFileToIDB(file, sourceURL)
-      //upload file to supabase
-      uploadFileToSupabase(file, sourceURL)
-    }
-  }
+//       rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+//       //upload file to indexedDB
+//       uploadFileToIDB(file, sourceURL)
+//       //upload file to supabase
+//       uploadFileToSupabase(file, sourceURL)
+//     }
+//   }
 
-  function handleDeleteSourceFile() {
-    console.log('trashing...')
-    //delete from IDB
-    trashFileFromIDB(item.sourceURL)
-    //delete from supabase
-    trashFileFromSupabase(item.sourceURL)
-    //remove sourceURL from item
-    rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
-  }
+//   function handleDeleteSourceFile() {
+//     console.log('trashing...')
+//     //delete from IDB
+//     trashFileFromIDB(item.sourceURL)
+//     //delete from supabase
+//     trashFileFromSupabase(item.sourceURL)
+//     //remove sourceURL from item
+//     rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
+//   }
 
-  // function generateIDBSourceFileURL(sourceURL: string){
-  //   if (!idbOK()) return
-
-
-  //   let openRequest = indexedDB.open(DEFAULT_IDB_KEY, 1)
-
-  //   openRequest.onupgradeneeded = function(e: any){
-  //     let thisDB = e.target.result
-
-  //     if (!thisDB.objectStoreNames.contains(DEFAULT_SOURCE_FILES_BUCKET)) {
-  //       thisDB.createObjectStore(DEFAULT_SOURCE_FILES_BUCKET, { keyPath: 'id'})
-  //     }
-  //   }
-
-  //   openRequest.onsuccess = function(e : any) {
-  //     let db = e.target.result
-  //     let tx = db.transaction([DEFAULT_SOURCE_FILES_BUCKET], 'readwrite')
-  //     let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
-
-  //     let request = store.get(sourceURL)
-
-  //     request.onerror = function(e : any){
-  //       console.log('error', e.target.error.name)
-  //     }
-
-  //     request.onsuccess = function(e : any){
-  //       let result = e.target.result
-  //       result && setURL(window.URL.createObjectURL(result.file))
-  //     }
-
-  //     request.onerror = function(event: any) {
-  //       console.dir(event)
-  //     }
-
-  //   }
-  //   openRequest.onerror = function(event: any) {
-  //     console.dir(event)
-  //   }
-  // }
+//   // function generateIDBSourceFileURL(sourceURL: string){
+//   //   if (!idbOK()) return
 
 
-  return (
-    <div className={styles.upload}>
-      {item.sourceURL &&
-        <>
-          {/* <div className={styles.file}>
-            <a href={URL} target="_blank" className={styles.link}>
-              {item.sourceURL && `🗂`}
-            </a>
+//   //   let openRequest = indexedDB.open(DEFAULT_IDB_KEY, 1)
 
-          </div> */}
-          <div
-            onClick={handleDeleteSourceFile}
-            className={styles.hoverOnly}
-          >
-            ⌘+T to Trash PDF
-          </div>
-        </>
-      }
-      <div className={styles.hoverOnly}>
-        <ItemFileUploadButton
-          onUpload={onUpload}
-          loading={false}
-          sourceUrl={item.sourceURL}
-          itemID={itemID}
-        />
-      </div>
-    </div>
-  )
-}
+//   //   openRequest.onupgradeneeded = function(e: any){
+//   //     let thisDB = e.target.result
+
+//   //     if (!thisDB.objectStoreNames.contains(DEFAULT_SOURCE_FILES_BUCKET)) {
+//   //       thisDB.createObjectStore(DEFAULT_SOURCE_FILES_BUCKET, { keyPath: 'id'})
+//   //     }
+//   //   }
+
+//   //   openRequest.onsuccess = function(e : any) {
+//   //     let db = e.target.result
+//   //     let tx = db.transaction([DEFAULT_SOURCE_FILES_BUCKET], 'readwrite')
+//   //     let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
+
+//   //     let request = store.get(sourceURL)
+
+//   //     request.onerror = function(e : any){
+//   //       console.log('error', e.target.error.name)
+//   //     }
+
+//   //     request.onsuccess = function(e : any){
+//   //       let result = e.target.result
+//   //       result && setURL(window.URL.createObjectURL(result.file))
+//   //     }
+
+//   //     request.onerror = function(event: any) {
+//   //       console.dir(event)
+//   //     }
+
+//   //   }
+//   //   openRequest.onerror = function(event: any) {
+//   //     console.dir(event)
+//   //   }
+//   // }
+
+
+//   return (
+//     <div className={styles.upload}>
+//       {item.sourceURL &&
+//         <>
+//           {/* <div className={styles.file}>
+//             <a href={URL} target="_blank" className={styles.link}>
+//               {item.sourceURL && `🗂`}
+//             </a>
+
+//           </div> */}
+//           <div
+//             onClick={handleDeleteSourceFile}
+//             className={styles.hoverOnly}
+//           >
+//             ⌘+T to Trash PDF
+//           </div>
+//         </>
+//       }
+//       <div className={styles.hoverOnly}>
+//         <ItemFileUploadButton
+//           onUpload={onUpload}
+//           loading={false}
+//           sourceUrl={item.sourceURL}
+//           itemID={itemID}
+//         />
+//       </div>
+//     </div>
+//   )
+// }

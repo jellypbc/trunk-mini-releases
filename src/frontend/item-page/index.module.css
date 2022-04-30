@@ -38,7 +38,10 @@
   margin-right: 15px;
   display: flex;
   flex-direction: column;
+}
 
+.mainHeader {
+  min-height: 220px;
 }
 
 .input {
@@ -59,7 +62,6 @@
   width: 1rem;
   padding-right: 1rem;
   padding: .2rem 0;
-  /* background-color: orange; */
 }
 
 .avatar {
@@ -239,11 +241,23 @@
 }
 
 .item {
-  padding: 0 1rem;
+  padding: .5rem 1rem;
+  color: hsl(0, 0%, 40%);
+  border: 2px solid transparent;
+}
+
+.item span {
+  margin-right: .5rem;
+}
+
+.arrowTitle {
+  font-weight: bold;
 }
 
 .item:hover {
-  background-color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 98%);
+  border: 2px solid hsl(0, 0%, 90%);
+  border-radius: .2rem;
 }
 
 .parent {
@@ -260,12 +274,16 @@
 }
 
 .count {
-  padding: 0 .5rem;
-  color: hsl(0, 0%, 70%);
+  padding: .1rem .5rem;
+  color: black;
+  background-color: hsl(0, 0%, 80%);
+  border-radius: 1rem;
+  margin-right: .5rem;
+  font-size: .8rem;
 }
 
 .mainSubItems {
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .titleSubItem {
@@ -274,7 +292,7 @@
 }
 
 .subItemTitleContainer {
-  padding: .5rem 2rem 1rem 2rem;
+  padding: .5rem 0;
   display: flex;
   flex-direction: column;
 }
@@ -286,7 +304,10 @@
 .sectionHeader {
   padding: .5rem;
   margin: 1rem 0;
-  border-bottom: 1px solid hsl(0, 0%, 90%);
+  font-size: 1.2rem;
+  align-items: center;
+  display: flex;
+  font-weight: 500;
 }
 
 
