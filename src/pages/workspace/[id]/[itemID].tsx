@@ -233,7 +233,6 @@ export default function Home() {
                 roomID={roomID}
                 handleSetCommandBar={setCommandBar}
               />
-
             </div>
           </HotKeys>
         }

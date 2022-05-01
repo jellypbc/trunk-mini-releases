@@ -76,7 +76,6 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
   const item = useItemByID(rep, itemID)
   const clientEmail = useClientEmail(rep)
 
-
   const router = useRouter()
 
   function routeToWorkspace(){
@@ -84,6 +83,40 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
     handleSetSelectedItemID('i')
   }
 
+  if (!item) {
+    return (
+      <div className={styles.container}>
+        <div>Loading...</div>
+        <button onClick={() => routeToWorkspace()}>Return to workspace</button>
+      </div>
+    )
+  }
+
+  return (
+    <>
+    {item && clientEmail &&
+      <Container
+        itemID={itemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+        rep={rep}
+        roomID={roomID}
+        handleSetCommandBar={handleSetCommandBar}
+        item={item}
+        clientEmail={clientEmail}
+      />}
+    </>
+  )
+}
+
+function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar, item, clientEmail } : any ) {
+
+
+  const router = useRouter()
+
+  function routeToWorkspace(){
+    router.push(`/workspace/${roomID}/i`)
+    handleSetSelectedItemID('i')
+  }
 
   async function signInWithGoogle() {
     const redirectUrl = location.href
@@ -105,49 +138,47 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 
   return (
     <div className={styles.container}>
-      {item ?
         <>
-          {clientEmail == "guest" &&
-            <div
-              className={styles.banner}
-              onClick={(e) => {
-                e.preventDefault()
-                signInWithGoogle()
-              }}
-            >
-              You look familiar. Have we met? <span className={styles.bannerLogin}>Log in or register</span> to save your contributions. You look like someone named... <span className={styles.bannerAnon}>Anonymous Aardvark</span>. We'll call you that.
-            </div>
-          }
-          <Nav
-            email={clientEmail}
-            handleSetCommandBar={handleSetCommandBar}
-            rep={rep}
-          />
-          <div className={styles.bodyContainer}>
-            <Sidebar
-              createdBy={item.createdBy}
-              arrowsCount={item.arrows.length}
-              itemID={itemID}
-              rep={rep}
-              item={item}
-            />
-            <Main
-              itemID={itemID}
-              title={item.title}
-              content={item.content}
-              routeToWorkspace={routeToWorkspace}
-              rep={rep}
-              item={item}
-              handleSetSelectedItemID={handleSetSelectedItemID}
-            />
+        {clientEmail === "guest" &&
+          <div
+            className={styles.banner}
+            onClick={(e) => {
+              e.preventDefault()
+              signInWithGoogle()
+            }}
+          >
+            You look familiar. Have we met? <span className={styles.bannerLogin}>Log in or register</span> to save your contributions. You look like someone named... <span className={styles.bannerAnon}>Anonymous Aardvark</span>. We'll call you that.
           </div>
-        </>
-        :
-        <div>
-          <div>{itemID} does not exist</div>
-          <button onClick={() => routeToWorkspace()}>go back to workspace</button>
+        }
+        <Nav
+          email={clientEmail}
+          handleSetCommandBar={handleSetCommandBar}
+          rep={rep}
+        />
+        <div className={styles.bodyContainer}>
+          <Sidebar
+            createdBy={item.createdBy}
+            arrowsCount={item.arrows.length}
+            itemID={itemID}
+            rep={rep}
+            item={item}
+          />
+          <Main
+            itemID={itemID}
+            title={item.title}
+            content={item.content}
+            routeToWorkspace={routeToWorkspace}
+            rep={rep}
+            item={item}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+          />
         </div>
-      }
+      </>
+      :
+      <div>
+        <div>{itemID} does not exist</div>
+        <button onClick={() => routeToWorkspace()}>go back to workspace</button>
+      </div>
     </div>
   )
 }
