@@ -87,7 +87,7 @@ export default function Home() {
       defaultSupabaseUserInfo.email = email
 
       let supabaseProfileData : any = defaultSupabaseUserInfo
-      await getProfile()
+      session && await getProfile()
 
       async function getProfile() {
         try {
@@ -209,7 +209,7 @@ export default function Home() {
           </HotKeys>
         }
       </>
-    ): (
+    ) : (
       <>
         { rep && trunkID && selectedItemID &&
           <HotKeys
