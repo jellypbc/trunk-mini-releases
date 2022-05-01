@@ -130,7 +130,7 @@ function Trunk({trunkID} : any){
   function routeToTrunk() {
     router.push({
       pathname: `/t/[roomID]`,
-      query: { roomID: trunkID }
+      query: { roomID: `${trunkID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)}` }
     })
 
   }

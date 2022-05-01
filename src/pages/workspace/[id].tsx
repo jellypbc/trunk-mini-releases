@@ -14,7 +14,7 @@ export default function Home() {
     :
     router.push({
       pathname: `/workspace/[roomID]/i`,
-      query: { roomID: encodeURIComponent(roomID) }
+      query: { roomID: `${roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)}` }
     })
 
     localStorage.setItem(LOCAL_STORAGE_REDIRECT_URL_KEY, '')

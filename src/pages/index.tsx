@@ -32,7 +32,7 @@ export default function Page() {
   function handleTrunkSelect() {
     router.push({
       pathname: `/workspace/[roomID]`,
-      query: { roomID: encodeURIComponent(roomID) }
+      query: {  roomID: `${roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)}` }
     })
   }
 

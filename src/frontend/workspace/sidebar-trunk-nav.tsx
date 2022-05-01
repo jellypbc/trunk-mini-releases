@@ -61,7 +61,7 @@ function Trunk({ trunkID, clientEmail } : TrunkProps) {
   function routeToTrunk() {
     router.push({
       pathname: `/workspace/[roomID]`,
-      query: { roomID: encodeURIComponent(trunkID) }
+      query: { roomID: `${trunkID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)}` }
     })
   }
   return (
