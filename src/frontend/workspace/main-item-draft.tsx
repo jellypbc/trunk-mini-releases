@@ -36,8 +36,6 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
   const [itemDraft, setItemDraft] = useState<any>(randomItem())
   const [URL, setURL] = useState<any>('')
 
-  rep.mutate.deleteItem("1QId2w-LurCfnajoR3eOh")
-
   useEffect(() => {
     console.log('itemDraft', itemDraft)
   }, [itemDraft])

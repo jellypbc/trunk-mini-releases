@@ -76,8 +76,11 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
   const authorArrows = useAuthorsByItemID(rep, item.id)
   const [showLinks, setShowLinks] = useState<boolean>(false)
 
+  const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
+
+
   function routeToItem(){
-    router.push(`/workspace/${roomID}/${item.id}`)
+    router.push(`/workspace/${modifiedRoomID}/${item.id}`)
     handleSetSelectedItemID(item.id)
   }
   return (

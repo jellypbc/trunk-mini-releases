@@ -110,6 +110,8 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
   const processContentChange = debounce((thing: any) => rep.mutate.updateItemContent(thing))
 
   const processTitleChange = debounce((thing: any) => rep.mutate.updateItemTitle(thing))
+  const processWebSourceURLChange = debounce((thing: any) => rep.mutate.updateItemWebSourceURL(thing))
+  const processPublicationDateChange = debounce((thing: any) => rep.mutate.updateItemPublicationDate(thing))
 
   const dispatchTransaction = (tx: Transaction | any) => {
     const view = viewRef.current.view
@@ -124,6 +126,10 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
       processTitleChange({id: itemID, title: serializer(newState.doc)})
     } else if (type === 'content') {
       processContentChange({id: itemID, content: serializer(newState.doc)})
+    } else if (type === `webSourceURL`) {
+      processWebSourceURLChange({id: itemID, webSourceURL: serializer(newState.doc)})
+    } else if (type === `publicationDate`) {
+      processPublicationDateChange({id: itemID, publicationDate: serializer(newState.doc)})
     }
 
     setArrowFloater(tx)
@@ -433,7 +439,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
       } */}
       {state &&
         <>
-          {showArrowFloater &&
+          {showArrowFloater && type === 'content' &&
             <EditorArrowCreate
               serializedSelection={serializedSelection}
               rep={rep}

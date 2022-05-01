@@ -96,11 +96,13 @@ type SearchResultProps = {
 
 function SearchResult({ result, handleSetSelectedItemID, handleSetCommandBar, roomID } : SearchResultProps) {
   const router = useRouter()
+  const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
+
 
   function handleRouteToItem(){
     handleSetSelectedItemID(result.id)
     handleSetCommandBar(false)
-    router.push(`/workspace/${roomID}/${result.id}`)
+    router.push(`/workspace/${modifiedRoomID}/${result.id}`)
   }
 
   return(

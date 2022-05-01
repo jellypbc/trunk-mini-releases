@@ -16,6 +16,8 @@ type Props = {
   handleSetSelectedItemID: (item: string) => void
 }
 
+          {/* <div className={styles.label}>Authors</div>
+          <div>...thing of authors</div> */}
 export default function ArrowsAuthor({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
   const email = useClientEmail(rep)
 
@@ -26,15 +28,11 @@ export default function ArrowsAuthor({ rep, itemID, fullArrows, handleSetSelecte
   const authorItemIDs = authorArrows.map((a: any) => a.frontItemID)
   const uniqueAuthorItemIDs = [...new Set(authorItemIDs)]
   return (
-    <div className={styles.section}>
-      <div className={styles.sectionHeader}>
-        <span>Authors</span>
-        <span className={styles.count}>{uniqueAuthorItemIDs.length}</span>
-        <span
-          onClick={() => setShowAddAuthor(true)}
-        >
-          Add author
-        </span>
+    <>
+      <div className={styles.label}>
+        <div>Authors</div>
+        <div>{uniqueAuthorItemIDs.length}</div>
+        <div onClick={() => setShowAddAuthor(true)}>Add author</div>
       </div>
       {showAddAuthor && allItems && email &&(
         <AddAuthorThing
@@ -56,7 +54,7 @@ export default function ArrowsAuthor({ rep, itemID, fullArrows, handleSetSelecte
           />
         )
       })}
-    </div>
+    </>
   )
 }
 
@@ -81,7 +79,7 @@ function AuthorArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowIte
 
 
 function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAuthor, email} : any) {
-  const [authorDraft, setAuthorDraft] = useState<string>('<p>hi</p>')
+  const [authorDraft, setAuthorDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
   const options = {

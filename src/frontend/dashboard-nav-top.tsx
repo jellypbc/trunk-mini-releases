@@ -18,11 +18,12 @@ export default function DashboardNavTop({ itemCount, arrowCount, handleSetComman
 
   const email = useClientEmail(rep)
   const username = useClientUsername(rep)
-  // const trunkIDs = useClientTrunkIDs(rep)
 
   const [showProfile, setShowProfile] = useState<boolean>(false)
 
   const router = useRouter()
+
+  const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
 
   useEffect(() => {
     (async()  => {
@@ -40,7 +41,7 @@ export default function DashboardNavTop({ itemCount, arrowCount, handleSetComman
   }
 
   function routeToSettings() {
-    router.push(`${roomID}/settings`)
+    router.push(`${modifiedRoomID}/settings`)
   }
 
   return (

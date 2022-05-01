@@ -56,6 +56,9 @@ type SidebarProps = {
   itemID: string
   rep: Replicache<M>
   item: any
+  handleSetSelectedItemID: (itemID: string) => void
+  authorArrowIDs: any
+  trunkID: string
 }
 
 type MainProps = {
@@ -78,8 +81,10 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 
   const router = useRouter()
 
+  const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
+
   function routeToWorkspace(){
-    router.push(`/workspace/${roomID}/i`)
+    router.push(`/workspace/${modifiedRoomID}/i`)
     handleSetSelectedItemID('i')
   }
 
@@ -110,11 +115,14 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 
 function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar, item, clientEmail } : any ) {
 
+  const authors = useAuthorsByItemID(rep, itemID)
+
+  const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
 
   const router = useRouter()
 
   function routeToWorkspace(){
-    router.push(`/workspace/${roomID}/i`)
+    router.push(`/workspace/${modifiedRoomID}/i`)
     handleSetSelectedItemID('i')
   }
 
@@ -136,6 +144,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
     }
   }
 
+
   return (
     <div className={styles.container}>
         <>
@@ -156,13 +165,18 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
           rep={rep}
         />
         <div className={styles.bodyContainer}>
-          <Sidebar
-            createdBy={item.createdBy}
-            arrowsCount={item.arrows.length}
-            itemID={itemID}
-            rep={rep}
-            item={item}
-          />
+          {authors &&
+            <Sidebar
+              createdBy={item.createdBy}
+              arrowsCount={item.arrows.length}
+              itemID={itemID}
+              rep={rep}
+              item={item}
+              handleSetSelectedItemID={handleSetSelectedItemID}
+              authorArrowIDs={authors}
+              trunkID={roomID}
+            />
+          }
           <Main
             itemID={itemID}
             title={item.title}
@@ -179,15 +193,15 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
 }
 
 function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetSelectedItemID } : MainProps){
-  function copyShareURLToClipboard(){
-    navigator.clipboard.writeText(location.href)
-      .then(() => {
-        alert(`Copied to clipboard: ${location.href}`)
-      })
-      .catch(() => {
-        alert(`Failed to copy to clipboard: ${location.href}`)
-      })
-  }
+  // function copyShareURLToClipboard(){
+  //   navigator.clipboard.writeText(location.href)
+  //     .then(() => {
+  //       alert(`Copied to clipboard: ${location.href}`)
+  //     })
+  //     .catch(() => {
+  //       alert(`Failed to copy to clipboard: ${location.href}`)
+  //     })
+  // }
 
   const handlers = {
     saveItem: (e: any) => {
@@ -255,7 +269,7 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
         handleSetSelectedItemID={handleSetSelectedItemID}
         isPerson={item.title.includes('[person]')}
       />
-      <div className={styles.inputContainer}>
+      {/* <div className={styles.inputContainer}>
         <input
           onClick={() => copyShareURLToClipboard()}
           id={`shareURL`}
@@ -266,7 +280,7 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
         <button
           onClick={() => copyShareURLToClipboard()}
         >Copy</button>
-      </div>
+      </div> */}
       <button onClick={() => routeToWorkspace()}>Back to workspace</button>
     </div>
   </HotKeys>
@@ -345,43 +359,46 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-       <ArrowsAuthor
+       {/* <ArrowsAuthor
         rep={rep}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
-      />
+      /> */}
       <ArrowsSub
         rep={rep}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      <DeleteItem
+      {/* <DeleteItem
         rep={rep}
         itemID={itemID}
         handleSetSelectedItemID={handleSetSelectedItemID}
-      />
+      /> */}
     </div>
   )
 }
 
-function DeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
+function DeleteItem({rep, itemID, handleSetSelectedItemID, trunkID} : any) {
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
   const item = useItemByID(rep, itemID)
+  const router = useRouter()
+  const modifiedRoomID = trunkID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
+
 
   function deleteItemAndSetSelectedItemIDToEmpty() {
     rep.mutate.deleteItem(itemID)
     handleSetSelectedItemID('')
+    router.push(`/workspace/${modifiedRoomID}`)
   }
+
   return (
-    <div
-      className={styles.section}
-    >
+    <>
       <div
-        className={styles.sectionHeader}
+        className={styles.archiveContainer}
         onClick={() => setDeleteConfirmation(true)}
-      >Delete</div>
+      >Archive</div>
       {deleteConfirmation && item &&
         <>
         <button
@@ -393,11 +410,11 @@ function DeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
         >Cancel</span>
         </>
       }
-    </div>
+    </>
   )
 }
 
-function MetadataModal({ itemID, rep} : any){
+function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunkID} : any){
   const item = useItemByID(rep, itemID)
 
   return (
@@ -416,20 +433,38 @@ function MetadataModal({ itemID, rep} : any){
           <div>{htmlToText(item.title)}</div>
         </div>
         <div className={styles.metadataThing}>
+          {fullArrows &&
+            <ArrowsAuthor
+              rep={rep}
+              itemID={itemID}
+              fullArrows={fullArrows}
+              handleSetSelectedItemID={handleSetSelectedItemID}
+            />
+          }
+        </div>
+        <div className={styles.metadataThing}>
           <div className={styles.label}>URL</div>
-          <input
-            placeholder={`www.whatever.com`}
-            value={item.webSourceURL}
-            onChange={(e:any) => rep.mutate.updateItemWebSourceURL({id: itemID, webSourceURL: e.target.value})}
-          />
+          <div className={styles.input}>
+            <EditorContainer
+              doc={item.webSourceURL}
+              type={'webSourceURL'}
+              rep={rep}
+              itemID={itemID}
+              arrows={[]}
+            />
+          </div>
         </div>
         <div className={styles.metadataThing}>
           <div className={styles.label}>Publication date</div>
-          <input
-            placeholder={`June 4, 1843`}
-            value={item.publicationDate}
-            onChange={(e:any) => rep.mutate.updateItemPublicationDate({id: itemID, publicationDate: e.target.value})}
-          />
+          <div className={styles.input}>
+            <EditorContainer
+              doc={item.publicationDate}
+              type={'publicationDate'}
+              rep={rep}
+              itemID={itemID}
+              arrows={[]}
+            />
+          </div>
         </div>
       </div>
       <div className={styles.metadataThing}>
@@ -451,16 +486,24 @@ function MetadataModal({ itemID, rep} : any){
           </div>
       </div>
       <div className={styles.archiveContainer}>
-        <button>Archive</button>
+        <DeleteItem
+          rep={rep}
+          itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+          trunkID={trunkID}
+        />
       </div>
+
     </div>
   )
 }
 
-function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrowIDs, trunkID } : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
   const [URL, setURL] = useState<string>('')
+  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+
 
   useEffect(() => {
     generateIDBSourceFileURL(item.sourceURL)
@@ -521,11 +564,13 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item } : SidebarProps){
 
   return(
     <div className={styles.sidebarContainer}>
-      {showMetadataModal &&
+      {showMetadataModal && fullArrows &&
         <MetadataModal
           itemID={itemID}
           rep={rep}
-
+          handleSetSelectedItemID={handleSetSelectedItemID}
+          fullArrows={fullArrows}
+          trunkID={trunkID}
         />
       }
       <div className={styles.top}>

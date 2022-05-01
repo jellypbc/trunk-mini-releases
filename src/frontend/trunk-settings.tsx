@@ -11,6 +11,8 @@ export default function TrunkSettings() {
     setRoomID(roomID)
   })
 
+  const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
+
   return (
     <div className={styles.container}>
       <div className={styles.settingsModalContainer}>
@@ -20,7 +22,7 @@ export default function TrunkSettings() {
           </div>
           <div
             className={styles.exit}
-            onClick={() => router.push(`/t/${roomID}`)}
+            onClick={() => router.push(`/workspace/${modifiedRoomID}`)}
           >
             &times;
           </div>

@@ -45,8 +45,9 @@
 }
 
 .input {
-  width: 500px;
   font-size: .8rem;
+  height: 20px;
+  width: 50%;
 }
 
 .inputContainer {
@@ -467,6 +468,11 @@ a.link:hover {
 
 .label {
   font-weight: 600;
+  display: flex;
+}
+
+.label div {
+  padding-right: .5rem;
 }
 
 .boxStuff {
