@@ -142,25 +142,54 @@ function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
     <div className={styles.authorContainer}>
       <span className={styles.by}>By</span>
       <span className={styles.authorName}>
-        {authorItemIDs.slice(0,1).map((itemID: string) =>
+        {authorItemIDs.slice(0,2).map((itemID: any, index: any) =>
           <AuthorName
             key={`author-${itemID}`}
             rep={rep}
             itemID={itemID}
             authorCount={authorItemIDs.length}
+            index={index}
           />
         )}
       </span>
+      {authorItemIDs.length > 2 &&
+        <span>
+          and {authorItemIDs.length - 2} more
+        </span>
+      }
     </div>
   )
 }
 
-function AuthorName({ rep, itemID, authorCount}: any){
+function AuthorName({ rep, itemID, authorCount, index}: any){
   const item = useItemByID(rep, itemID)
+  console.log('index',index)
+
   return (
     item &&
     <>
-      <span>{htmlToText(item.title).split(`[`)[0]} {authorCount > 1 && `+ ${authorCount - 1}`}</span>
+      { authorCount === 1 &&
+        <span>
+          {`${htmlToText(item.title).split(`[`)[0].trim()}`}
+        </span>
+      }
+      { authorCount === 2 &&
+        index === 0 &&
+        <span>
+          {`${htmlToText(item.title).split(`[`)[0].trim()} and `}
+        </span>
+      }
+      { authorCount === 2 &&
+        index === 1 &&
+        <span>
+          {`${htmlToText(item.title).split(`[`)[0].trim()}`}
+        </span>
+      }
+      { authorCount > 2 &&
+      <span>
+        {`${htmlToText(item.title).split(`[`)[0].trim()}, `}
+      </span>
+      }
     </>
   )
 }

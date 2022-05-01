@@ -45,7 +45,6 @@ type FrontArrowItemProps = {
 
 function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
   const item = useItemByID(rep, itemID)
-  console.log('item.publicationDate', item && item.publicationDate === "")
   return (
     item &&
     <div
@@ -56,7 +55,6 @@ function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItem
         <AuthorInfo
           rep={rep}
           itemID={itemID}
-          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       }
       {item.publicationDate &&
@@ -67,55 +65,81 @@ function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItem
   )
 }
 
-function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
+function AuthorInfo({rep, itemID }: any){
   const authors = useAuthorsByItemID(rep, itemID)
 
   return (
     authors &&
-      <AuthorArrows
-        rep={rep}
-        authorArrowIDs={authors}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      />
+    <AuthorArrows
+      rep={rep}
+      authorArrowIDs={authors}
+    />
   )
 }
 
-function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
+function AuthorArrows({rep, authorArrowIDs} : any) {
   const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
 
   if (!fullArrows) return null
 
-
   return (
     <>
-    {fullArrows && fullArrows.length > 0 &&
-      <AuthorItem
-        key={`author-${fullArrows[0].id}`}
-        rep={rep}
-        itemID={fullArrows[0].frontItemID}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-        authorCount={fullArrows.length}
-      />
-    }
+      {fullArrows && fullArrows.length > 0 &&
+        <span className={styles.arrowAuthorDataSpan}>
+          {fullArrows
+            .slice(0, 2)
+            .map((fullArrow: any, index: any) => {
+              return (
+              <AuthorItem
+                key={`author-${fullArrow.id}`}
+                rep={rep}
+                itemID={fullArrow.frontItemID}
+                authorCount={fullArrows.length}
+                index={index}
+              />
+            )
+          })
+          }
+          {fullArrows.length > 2 &&
+            <span>{`and ${fullArrows.length - 2} more `}</span>
+          }
+        </span>
+      }
     </>
   )
 }
 
-function AuthorItem({rep, itemID, handleSetSelectedItemID, authorCount}: any) {
+
+function AuthorItem({rep, itemID, authorCount, index}: any) {
   const item = useItemByID(rep, itemID)
-  const additionalAuthors = authorCount - 1
   return (
     item &&
-    <span
-      onClick={() => handleSetSelectedItemID(itemID)}
-    >
-      {htmlToText(item.title).split('[')[0].trim()}
-      {additionalAuthors > 0 &&
-       ` + ${additionalAuthors}`
-      // ` et al.`
-       }
-    </span>
+    <>
+      { authorCount === 1 &&
+        <>
+          {`${htmlToText(item.title).split(`[`)[0].trim()}`}
+        </>
+      }
+      { authorCount === 2 &&
+        index === 0 &&
+        <>
+          {`${htmlToText(item.title).split(`[`)[0].trim()} and `}
+        </>
+      }
+      { authorCount === 2 &&
+        index === 1 &&
+        <>
+          {`${htmlToText(item.title).split(`[`)[0].trim()}`}
+        </>
+      }
+      { authorCount > 2 &&
+      <>
+        {`${htmlToText(item.title).split(`[`)[0].trim()}, `}
+      </>
+      }
+    </>
   )
 }
+
 
 

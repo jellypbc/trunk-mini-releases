@@ -174,11 +174,6 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
           />
         </div>
       </>
-      :
-      <div>
-        <div>{itemID} does not exist</div>
-        <button onClick={() => routeToWorkspace()}>go back to workspace</button>
-      </div>
     </div>
   )
 }
