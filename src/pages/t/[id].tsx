@@ -81,8 +81,8 @@ export default function Home() {
 
       let url
 
-      await getProfile()
-      await downloadImage(url)
+      session && await getProfile()
+      session && await downloadImage(url)
 
       async function getProfile() {
         try {

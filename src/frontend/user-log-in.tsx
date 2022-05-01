@@ -47,7 +47,13 @@ export default function UserLogIn() {
           signInWithGoogle()
         }}
       >
-        Login or Register
+        <div className={styles.left}>
+          Search or type ⌘ + K
+        </div>
+        <div className={styles.right}>
+          Login or Register
+        </div>
+
       </div>
       <main className={styles.main}>
         <h1 className={styles.title}>
@@ -59,13 +65,13 @@ export default function UserLogIn() {
         <div className={'button-group'}>
           { !isTauri &&
             <Link href={url}>
-              <button className={'button button-primary'} >
+              <button className={'button button-home'} >
                 Get Trunk for macOS
               </button>
             </Link>
           }
           <button
-            className={'button button-primary'}
+            className={'button button-home'}
             onClick={(e) => {
             e.preventDefault()
             signInWithGoogle()
@@ -76,9 +82,8 @@ export default function UserLogIn() {
       </main>
       <footer
         className={styles.footer}
-        onClick={() => alert('Under construction...')}
       >
-        See the benefits of connected notes
+        {/* See the benefits of connected notes */}
       </footer>
   </div>
   )
