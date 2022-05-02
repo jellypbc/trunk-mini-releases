@@ -114,7 +114,7 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
         rep={rep}
       /> */}
       <div className={styles.titleContainer}>
-        {safeTitle}
+        {(safeTitle !== (`Untitled` || ``)) ? safeTitle : `[${htmlToText(item.content).substring(0,30)}...]`}
       </div>
       {authorArrows && authorArrows.length > 0 &&
         <AuthorInfo
