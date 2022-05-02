@@ -578,8 +578,8 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
           <div className={styles.avatarContainer}>
             <div className={styles.avatar}>
               <div className={styles.profile}>
-                <div className={styles.online}>
-                </div>
+                {/* <div className={styles.online}>
+                </div> */}
               </div>
 
             </div>
