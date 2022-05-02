@@ -80,7 +80,7 @@ function SubItemArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowIt
 
 
 function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAddSubItem, email} : any) {
-  const [subItemDraft, setSubItemDraft] = useState<string>('<p>replace with sub-item</p>')
+  const [subItemDraft, setSubItemDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
   const options = {
@@ -160,7 +160,7 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
 
     // add arrow to existing item
     rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
-    setSubItemDraft('<p>replace with sub-item</p>')
+    setSubItemDraft('<p></p>')
     handleSetShowAddSubItem(false)
   }
 
@@ -206,7 +206,7 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
     // add author arrow to existing item
     rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
 
-    setSubItemDraft('<p>replace with sub-item</p>')
+    setSubItemDraft('<p></p>')
     handleSetShowAddSubItem(false)
   }
 

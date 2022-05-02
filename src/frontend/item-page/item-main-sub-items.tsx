@@ -27,7 +27,7 @@ export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID,
 
 function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, itemID)
-  const [showContent, setShowContent] = useState<boolean>(false)
+  const [showContent, setShowContent] = useState<boolean>(true)
 
   return (
     <div className={styles.subItemTitleContainer}>
@@ -45,7 +45,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
             type={'content'}
             rep={rep}
             itemID={itemID}
-            arrows={[]}
+            arrows={item.arrows as any || []}
           />
           <ItemMainSubItemsA
             rep={rep}
