@@ -40,6 +40,7 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
         <SubItemLinks
           rep={rep}
           subItemItemIDs={subItemItemIDs}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
         </>
       }
@@ -47,13 +48,8 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
   )
 }
 
-// function SubItemLinks({rep, subItemItemIDs}: any){
-//   return (
-//     <div>subItem links</div>
-//   )
-// }
 
-function SubItemLinks({rep, subItemItemIDs}: any){
+function SubItemLinks({rep, subItemItemIDs, handleSetSelectedItemID}: any){
 
   return(
     //loops through sub item ids
@@ -63,6 +59,7 @@ function SubItemLinks({rep, subItemItemIDs}: any){
           key={`subItemLink-${itemID}`}
           itemID={itemID}
           rep={rep}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       )
     })
@@ -70,7 +67,7 @@ function SubItemLinks({rep, subItemItemIDs}: any){
 }
 
 // each sub item
-function SubItemLink({itemID, rep}: any){
+function SubItemLink({itemID, rep, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, itemID)
   return(
     item &&
@@ -79,12 +76,13 @@ function SubItemLink({itemID, rep}: any){
         item={item}
         rep={rep}
         itemID={itemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
       />
     </div>
   )
 }
 
-function SubItemLinkLinks({item, rep, itemID}: any){
+function SubItemLinkLinks({item, rep, itemID, handleSetSelectedItemID}: any){
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
   const fullArrows = getArrowsByIDs(rep, arrowIDs) //sub item full arrows
 
@@ -95,11 +93,12 @@ function SubItemLinkLinks({item, rep, itemID}: any){
       arrows = {fullArrows}
       rep={rep}
       itemID={itemID}
+      handleSetSelectedItemID={handleSetSelectedItemID}
     />
   )
 }
 
-function SubItemFootnoteFootnotesA({arrows, rep, itemID}: any) {
+function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID}: any) {
   // const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
   // const footnoteArrowIDs = footnotes.map((a: any) => a.id)
 
@@ -111,10 +110,11 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID}: any) {
     <>
     {uniqueFrontItemIDs && uniqueFrontItemIDs.map((itemID: any) => {
       return (
-        <Arrow2
+        <FrontArrowItem2
           key={`arrow2a-${itemID}`}
           rep={rep}
           itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       )
     })}
@@ -122,39 +122,25 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID}: any) {
   )
 }
 
-// function Thing({frontItemIDs, rep}: any){
-//   console.log('frontItemIDs', frontItemIDs)
-//   const arrows = getArrowsByIDs(rep, frontItemIDs)
-//   console.log('arrows arrows', arrows)
-//   return (
-//     <>
-//     {arrows && arrows.map((a: any) => {
-//       return (
-//         <Arrow2
-//           key={a.id}
-//           arrow={a}
-//           rep={rep}
-//           // handleSetSelectedItemID={handleSetSelectedItemID}
-//         />
-//       )
-//     })}
-//     </>
-//   )
-// }
 
-
-function Arrow2({rep, itemID}: any){
+function FrontArrowItem2({ rep, itemID, handleSetSelectedItemID }: any){
   const item = useItemByID(rep, itemID)
   return (
+    item &&
     <div
-      className={styles.commentItem}
-      // onClick={() => handleSetSelectedItemID(arrow.frontItemID)}
+      className={styles.item}
+      onClick={() => handleSetSelectedItemID(itemID)}
     >
-      {item &&
-        <>
-          <div>{htmlToText(item.title)}</div>
-        </>
+      {item.arrows.length > 0 &&
+        <AuthorInfo
+          rep={rep}
+          itemID={itemID}
+        />
       }
+      {item.publicationDate &&
+        <span>{htmlToText(item.publicationDate)}</span>
+      }
+      <span className={styles.arrowTitle}>{htmlToText(item.title) || 'nothing here'}</span>
     </div>
   )
 }

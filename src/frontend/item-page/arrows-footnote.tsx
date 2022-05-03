@@ -51,6 +51,7 @@ function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID, subItemItem
         <SubItemFootnotes
           rep={rep}
           subItemItemIDs={subItemItemIDs}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
         </>
       }
@@ -58,7 +59,7 @@ function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID, subItemItem
   )
 }
 
-function SubItemFootnotes({rep, subItemItemIDs}: any){
+function SubItemFootnotes({rep, subItemItemIDs, handleSetSelectedItemID}: any){
 
   return(
     subItemItemIDs.map((itemID :any) => {
@@ -67,13 +68,14 @@ function SubItemFootnotes({rep, subItemItemIDs}: any){
           key={`sub-item-footnote-${itemID}`}
           itemID={itemID}
           rep={rep}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       )
     })
   )
 }
 
-function SubItemFootnote({itemID, rep}: any){
+function SubItemFootnote({itemID, rep, handleSetSelectedItemID}: any){
   console.log('itemID',itemID)
   const item = useItemByID(rep, itemID)
   return(
@@ -83,12 +85,13 @@ function SubItemFootnote({itemID, rep}: any){
         item={item}
         rep={rep}
         itemID={itemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
       />
     </div>
   )
 }
 
-function SubItemFootnoteFootnotes({item, rep, itemID}: any){
+function SubItemFootnoteFootnotes({item, rep, itemID, handleSetSelectedItemID}: any){
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
   const fullArrows = getArrowsByIDs(rep, arrowIDs)
 
@@ -98,11 +101,12 @@ function SubItemFootnoteFootnotes({item, rep, itemID}: any){
       arrows = {fullArrows}
       rep={rep}
       itemID={itemID}
+      handleSetSelectedItemID={handleSetSelectedItemID}
     />
   )
 }
 
-function SubItemFootnoteFootnotesA({arrows, rep, itemID}: any) {
+function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID}: any) {
   const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
   const footnoteArrowIDs = footnotes.map((a: any) => a.id)
   return (
@@ -111,12 +115,13 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID}: any) {
     <Thing
       footnoteArrowIDs={footnoteArrowIDs}
       rep={rep}
+      handleSetSelectedItemID={handleSetSelectedItemID}
     />}
     </>
   )
 }
 
-function Thing({footnoteArrowIDs, rep}: any){
+function Thing({footnoteArrowIDs, rep, handleSetSelectedItemID}: any){
   const arrows = getArrowsByIDs(rep, footnoteArrowIDs)
   return (
     <>
@@ -127,7 +132,7 @@ function Thing({footnoteArrowIDs, rep}: any){
           key={a.id}
           arrow={a}
           rep={rep}
-          // handleSetSelectedItemID={handleSetSelectedItemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       )
     })}
@@ -136,12 +141,12 @@ function Thing({footnoteArrowIDs, rep}: any){
 }
 
 
-function Arrow2({rep, arrow}: any){
+function Arrow2({rep, arrow, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, arrow.frontItemID)
   return (
     <div
       className={styles.commentItem}
-      // onClick={() => handleSetSelectedItemID(arrow.frontItemID)}
+      onClick={() => handleSetSelectedItemID(arrow.frontItemID)}
     >
       {item &&
         <>
@@ -162,7 +167,7 @@ function Arrow({rep, arrow, handleSetSelectedItemID}: any){
     >
       {item &&
         <>
-          <div>{htmlToText(item.content) || 'nothing here'}</div>
+          <div>{htmlToText(item.content)}</div>
         </>
       }
     </div>

@@ -28,15 +28,20 @@ export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID,
 function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, itemID)
   const [showContent, setShowContent] = useState<boolean>(true)
+  const [showExpand, setShowExpand] = useState<boolean>(false)
 
   return (
     <div className={styles.subItemTitleContainer}>
       <div
         className={styles.titleEditor}
         onClick={() => setShowContent(!showContent)}
+        onMouseOver={() => setShowExpand(true)}
+        onMouseLeave={() => setShowExpand(false)}
       >
         <span className={styles.titleSubItem}>{item && htmlToText(item.title) || 'nothing here'}</span>
-        <span className={styles.expand} onClick={() => handleSetSelectedItemID(itemID)}>↗</span>
+        {showExpand &&
+          <span className={styles.expand} onClick={() => handleSetSelectedItemID(itemID)}>↗</span>
+        }
       </div>
       { showContent && item &&
         <div className={styles.subItemContent}>

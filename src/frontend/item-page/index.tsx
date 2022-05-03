@@ -68,7 +68,6 @@ type MainProps = {
   itemID: string
   title: string
   content: string
-  routeToWorkspace: () => void
   rep: Replicache<M>
   item: any
   handleSetSelectedItemID: (itemID: string) => void
@@ -117,17 +116,7 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 }
 
 function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar, item, clientEmail } : any ) {
-
   const authors = useAuthorsByItemID(rep, itemID)
-
-  const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
-
-  const router = useRouter()
-
-  function routeToWorkspace(){
-    router.push(`/workspace/${modifiedRoomID}/i`)
-    handleSetSelectedItemID('i')
-  }
 
   async function signInWithGoogle() {
     const redirectUrl = location.href
@@ -187,7 +176,6 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
             itemID={itemID}
             title={item.title}
             content={item.content}
-            routeToWorkspace={routeToWorkspace}
             rep={rep}
             item={item}
             handleSetSelectedItemID={handleSetSelectedItemID}
@@ -198,7 +186,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
   )
 }
 
-function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetSelectedItemID } : MainProps){
+function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : MainProps){
   // function copyShareURLToClipboard(){
   //   navigator.clipboard.writeText(location.href)
   //     .then(() => {
@@ -275,19 +263,6 @@ function Main ({ itemID, title, content, routeToWorkspace, rep, item, handleSetS
         handleSetSelectedItemID={handleSetSelectedItemID}
         isPerson={item.title.includes('[person]')}
       />
-      {/* <div className={styles.inputContainer}>
-        <input
-          onClick={() => copyShareURLToClipboard()}
-          id={`shareURL`}
-          className={styles.input}
-          defaultValue={location.href}
-          readOnly={true}
-        />
-        <button
-          onClick={() => copyShareURLToClipboard()}
-        >Copy</button>
-      </div> */}
-      <button onClick={() => routeToWorkspace()}>Back to workspace</button>
     </div>
   </HotKeys>
   )
@@ -373,23 +348,12 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-       {/* <ArrowsAuthor
-        rep={rep}
-        itemID={itemID}
-        fullArrows={fullArrows}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      /> */}
       <ArrowsSub
         rep={rep}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
-      {/* <DeleteItem
-        rep={rep}
-        itemID={itemID}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      /> */}
     </div>
   )
 }
