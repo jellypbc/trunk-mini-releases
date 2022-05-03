@@ -14,7 +14,7 @@ class Arrow {
 }
 
 function deco(from, to, arrow) {
-  return Decoration.inline(from, to, { style: `background-color: hsla(89.7, 69%, 72%, 50%);` }, { arrow })
+  return Decoration.inline(from, to, { style: `background-color: hsla(0.96, 96%, 90%);` }, { arrow })
 }
 
 class ArrowState {

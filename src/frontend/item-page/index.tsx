@@ -48,6 +48,9 @@ type NavProps = {
   email: string
   handleSetCommandBar: (state: boolean) => void
   rep: Replicache<M>
+  roomID: string
+  title: string
+  handleSetSelectedItemID: (itemID: string) => void
 }
 
 type SidebarProps = {
@@ -163,6 +166,9 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
           email={clientEmail}
           handleSetCommandBar={handleSetCommandBar}
           rep={rep}
+          roomID={roomID}
+          title={item.title}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
         <div className={styles.bodyContainer}>
           {authors &&
@@ -646,7 +652,7 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
   )
 }
 
-function Nav({ email, handleSetCommandBar, rep } : NavProps) {
+function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelectedItemID} : NavProps) {
   console.log('handleSetCommandBar', handleSetCommandBar)
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
@@ -679,6 +685,13 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
 
   const router = useRouter()
 
+  const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
+
+  function routeToWorkspace(){
+    router.push(`/workspace/${modifiedRoomID}/i`)
+    handleSetSelectedItemID('i')
+  }
+
   async function logOut() {
     const { error } = await supabase.auth.signOut()
     error ?
@@ -695,14 +708,23 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
     }
   }
 
+
+
   return(
     <div className={styles.navContainer}>
       <div className={styles.left}>
-
+        <div
+          className={styles.roomID}
+          onClick={() => routeToWorkspace()}
+        >
+          {roomID.replace(`-`, ` `)}
+        </div>
+        <div>&rsaquo;</div>
+        <div>{htmlToText(title)}</div>
       </div>
       <div className={styles.rightContainer}>
         <div className={styles.right}>
-          {/* <div
+          <div
             className={styles.searchBar}
             onClick={() => handleSetCommandBar(true)}>
             Search or type ⌘ + K
@@ -713,7 +735,7 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
             onClick={() => setShowProfileDropdown(true)}
           >
             ≡
-          </div> */}
+          </div>
         </div>
         {showProfileDropdown &&
           <div
@@ -721,13 +743,16 @@ function Nav({ email, handleSetCommandBar, rep } : NavProps) {
             onClick={() => logOut()}
             id="profileDropdown"
           >
-            <div className={styles.left}>
+            <div className={styles.profileDropdownLeft}>
+              <div>
+                {email}
+              </div>
               <div
                 className={styles.option}
               >Log out</div>
             </div>
-            <div className={styles.right}>
-            </div>
+            {/* <div className={styles.profileDropdownRight}>
+            </div> */}
           </div>
         }
       </div>
