@@ -10,9 +10,10 @@ type Props = {
   itemID: string
   fullArrows: any[]
   handleSetSelectedItemID: (item: string) => void
+  subItemItemIDs: any
 }
 
-export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
+export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelectedItemID, subItemItemIDs} : Props) {
   const forwardArrows = fullArrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
   const frontItemIDs = forwardArrows.map((a: any) => a.frontItemID)
   const uniqueFrontItemIDs = [...new Set(frontItemIDs)]
@@ -33,9 +34,131 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
           />
         )
       })}
+      {subItemItemIDs &&
+        <>
+        Sub-item links
+        <SubItemLinks
+          rep={rep}
+          subItemItemIDs={subItemItemIDs}
+        />
+        </>
+      }
     </>
   )
 }
+
+// function SubItemLinks({rep, subItemItemIDs}: any){
+//   return (
+//     <div>subItem links</div>
+//   )
+// }
+
+function SubItemLinks({rep, subItemItemIDs}: any){
+
+  return(
+    //loops through sub item ids
+    subItemItemIDs.map((itemID :any) => {
+      return (
+        <SubItemLink
+          key={`subItemLink-${itemID}`}
+          itemID={itemID}
+          rep={rep}
+        />
+      )
+    })
+  )
+}
+
+// each sub item
+function SubItemLink({itemID, rep}: any){
+  const item = useItemByID(rep, itemID)
+  return(
+    item &&
+    <div>
+      <SubItemLinkLinks
+        item={item}
+        rep={rep}
+        itemID={itemID}
+      />
+    </div>
+  )
+}
+
+function SubItemLinkLinks({item, rep, itemID}: any){
+  const arrowIDs = item.arrows.map((a: any) => a.arrowID)
+  const fullArrows = getArrowsByIDs(rep, arrowIDs) //sub item full arrows
+
+
+  return (
+    fullArrows &&
+    <SubItemFootnoteFootnotesA
+      arrows = {fullArrows}
+      rep={rep}
+      itemID={itemID}
+    />
+  )
+}
+
+function SubItemFootnoteFootnotesA({arrows, rep, itemID}: any) {
+  // const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
+  // const footnoteArrowIDs = footnotes.map((a: any) => a.id)
+
+  const forwardArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
+  const frontItemIDs = forwardArrows.map((a: any) => a.frontItemID)
+  const uniqueFrontItemIDs = [...new Set(frontItemIDs)]
+  console.log('uniqueFrontItemIDs', uniqueFrontItemIDs)
+  return (
+    <>
+    {uniqueFrontItemIDs && uniqueFrontItemIDs.map((itemID: any) => {
+      return (
+        <Arrow2
+          key={`arrow2a-${itemID}`}
+          rep={rep}
+          itemID={itemID}
+        />
+      )
+    })}
+    </>
+  )
+}
+
+// function Thing({frontItemIDs, rep}: any){
+//   console.log('frontItemIDs', frontItemIDs)
+//   const arrows = getArrowsByIDs(rep, frontItemIDs)
+//   console.log('arrows arrows', arrows)
+//   return (
+//     <>
+//     {arrows && arrows.map((a: any) => {
+//       return (
+//         <Arrow2
+//           key={a.id}
+//           arrow={a}
+//           rep={rep}
+//           // handleSetSelectedItemID={handleSetSelectedItemID}
+//         />
+//       )
+//     })}
+//     </>
+//   )
+// }
+
+
+function Arrow2({rep, itemID}: any){
+  const item = useItemByID(rep, itemID)
+  return (
+    <div
+      className={styles.commentItem}
+      // onClick={() => handleSetSelectedItemID(arrow.frontItemID)}
+    >
+      {item &&
+        <>
+          <div>{htmlToText(item.title)}</div>
+        </>
+      }
+    </div>
+  )
+}
+
 
 type FrontArrowItemProps = {
   rep: Replicache<M>

@@ -339,20 +339,28 @@ function PersonFooter({rep, fullArrows, handleSetSelectedItemID}: any) {
 }
 
 function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any) {
+  const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
+  const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
   return (
     <div className={styles.meta}>
-      <ArrowsFootnote
-        rep={rep}
-        itemID={itemID}
-        arrows={arrows}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      />
-      <ArrowsFront
-        rep={rep}
-        itemID={itemID}
-        fullArrows={fullArrows}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      />
+      {subItemItemIDs &&
+        <>
+          <ArrowsFootnote
+            rep={rep}
+            itemID={itemID}
+            arrows={arrows}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+            subItemItemIDs={subItemItemIDs}
+          />
+            <ArrowsFront
+            rep={rep}
+            itemID={itemID}
+            fullArrows={fullArrows}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+            subItemItemIDs={subItemItemIDs}
+          />
+        </>
+      }
       <ArrowsBack
         rep={rep}
         itemID={itemID}
