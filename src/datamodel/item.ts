@@ -59,7 +59,7 @@ export function putItem(
   tx: WriteTransaction,
   { id, item }: { id: string; item: Item }
 ): Promise<void> {
-  return tx.put(key(id), item);
+  return tx.put(key(id), item)
 }
 
 export async function deleteItem(

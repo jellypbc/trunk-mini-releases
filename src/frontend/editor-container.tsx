@@ -29,7 +29,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
 
   const [state, setState] = useState<EditorState | undefined>()
   const [_, setView] = useState<EditorView>()
-  const [showArrows, setShowArrows] = useState<boolean>(true)
+  // const [showArrows, setShowArrows] = useState<boolean>(true)
   const [serializedSelection, setSerializedSelection] = useState<string>()
   const [showArrowFloater, setShowArrowFloater] = useState<boolean>(false)
   const email = useClientEmail(rep)
@@ -53,19 +53,20 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     setView(viewRef && viewRef.current && viewRef.current.view)
   }, [])
 
-  useEffect(() => {
-    const state = createStateFromProps(
-      doc,
-      schema,
-      parser,
-      viewRef && viewRef.current && viewRef.current.view,
-      rep,
-      itemID,
-      showArrows && arrows || [],
-    )
-    setState(state)
-    setView(viewRef && viewRef.current && viewRef.current.view)
-  }, [showArrows])
+  // useEffect(() => {
+  //   const state = createStateFromProps(
+  //     doc,
+  //     schema,
+  //     parser,
+  //     viewRef && viewRef.current && viewRef.current.view,
+  //     rep,
+  //     itemID,
+  //     // showArrows && arrows || [],
+  //     arrows,
+  //   )
+  //   setState(state)
+  //   setView(viewRef && viewRef.current && viewRef.current.view)
+  // }, [showArrows])
 
   useEffect(() => {
       const state = createStateFromProps(
@@ -75,7 +76,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
         viewRef && viewRef.current && viewRef.current.view,
         rep,
         itemID,
-        showArrows && arrows || [],
+        arrows,
       )
       setState(state)
       setView(viewRef && viewRef.current && viewRef.current.view)
@@ -388,11 +389,11 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
 
   return (
     <>
-      {type === 'content' &&
+      {/* {type === 'content' &&
         <div style={{cursor: 'pointer', padding: '1rem 0'}} onClick={() => setShowArrows(!showArrows)}>
           →
         </div>
-      }
+      } */}
       {state &&
         <>
           {showArrowFloater &&

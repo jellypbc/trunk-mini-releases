@@ -34,7 +34,7 @@ import { idbOK } from '../../lib/idbOK'
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constants'
 import SidebarOutline from './sidebar-outline'
 import ItemParent from './item-parent'
-import { dateInWordsIncludeYear } from '../../lib/dateInWords'
+import { dateInWordsIncludeYear, dateInWordsTimeOnly } from '../../lib/dateInWords'
 
 
 type ItemPageProps = {
@@ -82,6 +82,8 @@ const keyMap = {
 
 export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar } : ItemPageProps ) {
   const item = useItemByID(rep, itemID)
+
+
 
   const clientEmail = useClientEmail(rep)
 
@@ -489,7 +491,6 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
   const [URL, setURL] = useState<string>('')
   const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
 
-
   useEffect(() => {
     generateIDBSourceFileURL(item.sourceURL)
   }, [])
@@ -575,7 +576,8 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
         </div>
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Last updated</div>
-          <div>{dateInWordsIncludeYear(new Date(updatedAt))}</div>
+          <div className={styles.updatedAt}>{dateInWordsIncludeYear(new Date(updatedAt))}</div>
+          <div className={styles.updatedAt}>{dateInWordsTimeOnly(new Date(updatedAt))}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Publication date</div>

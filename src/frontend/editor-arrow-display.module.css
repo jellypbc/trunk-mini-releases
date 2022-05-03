@@ -1,5 +1,8 @@
 .container {
-  background-color: hsl(0, 0%, 96%) !important;
+  background-color: hsla(0, 0%, 100%, 100%) !important;
+  border: 3px solid hsl(0, 0%, 92%) !important;
+  padding-top: 1rem;
+  border-radius: .3rem;
 }
 
 .highlight {
@@ -7,7 +10,7 @@
   margin: 2rem;
   width: 80%;
   color: #2E7B21;
-  background-color: hsl(0, 0%, 96%);
+  background-color: transparent;
   border-left: .5rem solid hsl(89.7, 69%, 72%, 50%) ! important;
 }
 
@@ -22,16 +25,6 @@
 
 .content {
   padding: 0 2rem;
-}
-
-.itemID {
-  margin: 2rem;
-  color: transparent;
-  font-size: .8rem;
-}
-
-.itemID:hover {
-  color: hsl(0, 0%, 70%);
 }
 
 .deleteOptions {
@@ -52,4 +45,37 @@
 .toggleDeleteOptions {
   text-align: right;
   padding: .5rem;
+}
+
+.arrowFloaterFooter {
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem 1rem;
+  border-top: 3px solid hsl(0, 0%, 90%) !important;
+  background-color: hsl(0, 0%, 97%) !important;
+}
+
+.replyForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.replyTextarea {
+  background-color: hsl(0, 0%, 96%) !important;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.actionContainer {
+  display: flex;
+  justify-content: right;
+}
+
+.actionContainer div {
+  padding: .5rem 1rem;
+  margin: .5rem 1rem;
+}
+
+.submitButton {
+  background-color: hsl(0, 0%, 70%) !important;
 }

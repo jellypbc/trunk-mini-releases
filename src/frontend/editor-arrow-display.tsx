@@ -2,8 +2,13 @@ import React, { useState } from 'react'
 import styles from './editor-arrow-display.module.css'
 import { htmlToText } from '../util/htmlToText'
 import EditorContainer from './editor-container'
+import { useItemByID, useClientEmail, getArrowsByIDs } from '../datamodel/subscriptions'
+import { randomItem } from '../datamodel/item'
+import { randomArrow } from '../datamodel/arrow'
+
 
 export default function EditorArrowDisplay({rep, arrow, arrowID}: {rep:any, arrow:any, arrowID:string}) {
+  const email = useClientEmail(rep)
 
   const [showDeleteOptions, setShowDeleteOptions] = useState<boolean>(false)
 
@@ -20,12 +25,22 @@ export default function EditorArrowDisplay({rep, arrow, arrowID}: {rep:any, arro
     rep.mutate.deleteItem(arrow.frontItemID)
   }
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.itemID}>
-        {arrow.frontItemID}
-      </div>
+  if (arrow.kind === 'comment' || arrow.kind === 'footnote') {
+    return (
+      <CommentDisplay
+        rep={rep}
+        itemID={arrow.frontItemID}
+        arrow={arrow}
+        kind={arrow.kind}
+        email={email}
+      />
+    )
 
+  }
+
+  return (
+    email &&
+    <div className={styles.container}>
       {showDeleteOptions ?
         <div className={styles.deleteOptions}>
           <div
@@ -52,18 +67,304 @@ export default function EditorArrowDisplay({rep, arrow, arrowID}: {rep:any, arro
       <div className={styles.highlight}>
         {htmlToText(arrow.highlight)}
       </div>
-      <FrontItemStuff
-        rep={rep}
-        itemID={arrow.frontItemID}
-        arrow={arrow}
-      />
+      {email &&
+        <FrontItemStuff
+          rep={rep}
+          itemID={arrow.frontItemID}
+          arrow={arrow}
+        />
+      }
+
     </div>
   )
 }
 
-import { useItemByID } from '../datamodel/subscriptions'
-import { dateInWords } from '../lib/dateInWords'
 
+import EditorDraftingContainer from './item-page/editor-drafting-container'
+
+function CommentDisplay({ rep, itemID, arrow, kind, email} : any) {
+  const item = useItemByID(rep, itemID)
+  const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
+  const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
+
+  function submitComment(){
+
+    let newItem = randomItem()
+    let newArrow = randomArrow()
+
+    //create randomitem
+    //create randomarrow
+
+    //set arrow data
+    const arrowChanges = {
+      backItemID: itemID,
+      createdBy: email,
+      frontItemID: newItem.id,
+      kind: "comment",
+      parentItemID: itemID
+    }
+
+    const arrow = {...newArrow.arrow, ...arrowChanges}
+
+    const miniArrow = {
+      arrowID: newArrow.id,
+      to: 0,
+      from: 0,
+      kind: arrow.kind,
+      backItemID: arrow.backItemID
+    }
+
+    // {arrowID, to, from, kind, backItemID}
+
+    const newItemArrows = []
+    newItemArrows.push(miniArrow)
+
+
+
+    //set item data
+    const itemChanges = {
+      content: commentDraft,
+      createdBy: email,
+      arrows: JSON.stringify(newItemArrows),
+    }
+
+
+    const updatedItem = {...newItem.item, ...itemChanges}
+
+
+    // apply arrow to new item
+    // apply arrow to existing item
+
+    // save new arro using rep
+    // console.log('new arrow: { id: newArrow.id, arrow: arrow }', { id: newArrow.id, arrow: arrow })
+    rep.mutate.createArrow({ id: newArrow.id, arrow: arrow })
+
+    // save new item using rep
+    // console.log('new item: {id: newItem.id, item: updatedItem}', {id: newItem.id, item: updatedItem})
+    rep.mutate.createItem({id: newItem.id, item: updatedItem})
+
+    // update existing itme with rep
+    // console.log('{ id: itemID, arrow: miniArrow }', { id: itemID, arrow: miniArrow })
+    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
+  }
+
+  return (
+    item &&
+    <div className={styles.container}>
+      <div className={styles.highlight}>
+        {htmlToText(arrow.highlight)}
+      </div>
+      <div className={styles.content}>
+        <EditorContainer
+          doc={item.content}
+          type={'content'}
+          rep={rep}
+          itemID={itemID}
+          arrows={[]}
+        />
+      </div>
+      {item.arrows.length === 1 ?
+       <ReplyForm
+          itemID={itemID}
+          rep={rep}
+          email={email}
+       />
+      :
+        <CommentReply
+          arrows={item.arrows}
+          rep={rep}
+          itemID={itemID}
+          email={email}
+        />
+      }
+      {kind === 'comment' && !showReplyForm && item.arrows.length < 1 &&
+        <button onClick={() => setShowReplyForm(true)}>Reply</button>
+      }
+      {showReplyForm &&
+        <div className={styles.replyForm}>
+          <>
+              <EditorDraftingContainer
+                rep={rep}
+                content={commentDraft}
+                setValue={setCommentDraft}
+                type={'comment'}
+              />
+            </>
+          <div className={styles.actionContainer}>
+            <div onClick={() => setShowReplyForm(false)}>Cancel</div>
+            <div
+              className={styles.submitButton}
+              onClick={() => submitComment()}
+            >Submit</div>
+          </div>
+        </div>
+      }
+      <div className={styles.arrowFloaterFooter}>
+        <div>3 notes</div>
+        <div>3d ago</div>
+        <div>cindywu</div>
+      </div>
+    </div>
+  )
+}
+
+function CommentReply({arrows, rep, itemID, email}:any) {
+  const arrowIDs = arrows.map((a: any) => a.arrowID)
+  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+  return (
+    <>
+      {fullArrows &&
+      <OtherThing
+        fullArrows={fullArrows}
+        rep={rep}
+        itemID={itemID}
+        email={email}
+      />}
+    </>
+  )
+}
+
+function OtherThing({fullArrows, rep, itemID, email}:any){
+  const comments = fullArrows.filter((a: any) => a.kind === 'comment'
+  && a.backItemID === itemID && a.parentItemID === itemID) || []
+  // const commentArrowIDs = comments.map((a: any) => a.arrowID)
+  // console.log('commentArrowIDs', commentArrowIDs)
+
+  return (
+    <>
+    {comments.map((fullCommentArrow: any) => {
+      return (
+        <CommentArrows
+          key={`comment-arrow-${fullCommentArrow.frontItemID}`}
+          itemID={fullCommentArrow.frontItemID}
+          rep={rep}
+          lastCommentID={comments[comments.length - 1].frontItemID}
+          email={email}
+        />
+      )
+    })}
+    </>
+  )
+}
+
+function CommentArrows({itemID, rep, lastCommentID, email} : any){
+  console.log("lastCommentID", lastCommentID)
+  const item = useItemByID(rep, itemID)
+
+  return(
+    item &&
+      <div>
+      <div>
+        {item.createdBy}: {htmlToText(item.content)}
+      </div>
+      {item.arrows.length < 2 ?
+        <ReplyForm
+          itemID={itemID}
+          rep={rep}
+          email={email}
+        />
+        :
+        <CommentReply
+          arrows={item.arrows}
+          rep={rep}
+          itemID={itemID}
+          email={email}
+        />
+      }
+    </div>
+  )
+}
+
+function ReplyForm({ itemID, rep, email} : any){
+  const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
+  const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
+
+  function submitComment(){
+
+    let newItem = randomItem()
+    let newArrow = randomArrow()
+
+    //create randomitem
+    //create randomarrow
+
+    //set arrow data
+    const arrowChanges = {
+      backItemID: itemID,
+      createdBy: email,
+      frontItemID: newItem.id,
+      kind: "comment",
+      parentItemID: itemID
+    }
+
+    const arrow = {...newArrow.arrow, ...arrowChanges}
+
+    const miniArrow = {
+      arrowID: newArrow.id,
+      to: 0,
+      from: 0,
+      kind: arrow.kind,
+      backItemID: arrow.backItemID
+    }
+
+    // {arrowID, to, from, kind, backItemID}
+
+    const newItemArrows = []
+    newItemArrows.push(miniArrow)
+
+
+
+    //set item data
+    const itemChanges = {
+      content: commentDraft,
+      createdBy: email,
+      arrows: JSON.stringify(newItemArrows),
+    }
+
+
+    const updatedItem = {...newItem.item, ...itemChanges}
+
+
+    // apply arrow to new item
+    // apply arrow to existing item
+
+    // save new arro using rep
+    // console.log('new arrow: { id: newArrow.id, arrow: arrow }', { id: newArrow.id, arrow: arrow })
+    rep.mutate.createArrow({ id: newArrow.id, arrow: arrow })
+
+    // save new item using rep
+    // console.log('new item: {id: newItem.id, item: updatedItem}', {id: newItem.id, item: updatedItem})
+    rep.mutate.createItem({id: newItem.id, item: updatedItem})
+
+    // update existing itme with rep
+    // console.log('{ id: itemID, arrow: miniArrow }', { id: itemID, arrow: miniArrow })
+    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
+  }
+  return (
+    <>
+    {!showReplyForm && <div onClick={() => setShowReplyForm(true)}>you can reply</div> }
+    {showReplyForm &&
+      <div className={styles.replyForm}>
+        <>
+            <EditorDraftingContainer
+              rep={rep}
+              content={commentDraft}
+              setValue={setCommentDraft}
+              type={'comment'}
+            />
+          </>
+        <div className={styles.actionContainer}>
+          <div onClick={() => setShowReplyForm(false)}>Cancel</div>
+          <div
+            className={styles.submitButton}
+            onClick={() => submitComment()}
+          >Submit</div>
+        </div>
+      </div>
+    }
+    </>
+
+  )
+}
 function FrontItemStuff({rep, itemID, arrow }:{rep: any, itemID: string, arrow: any}) {
   console.log({arrow})
   const item = useItemByID(rep, itemID)
@@ -71,60 +372,29 @@ function FrontItemStuff({rep, itemID, arrow }:{rep: any, itemID: string, arrow: 
   return (
     item &&
     <>
-      <div className={styles.meta}>
-        <div>{item.createdBy}</div>
-        <div>{dateInWords(new Date(item.createdAt))}</div>
-      </div>
       <div className={styles.title}>
-        <FrontItemEditorB
-        itemID={itemID}
-        item={item}
-        rep={rep}
+        <EditorContainer
+          doc={item.title}
+          type={'title'}
+          rep={rep}
+          itemID={itemID}
+          arrows={[]}
         />
       </div>
       <div className={styles.content}>
-      <FrontItemEditorA
-        itemID={itemID}
-        item={item}
-        rep={rep}
-      />
+        <EditorContainer
+          doc={item.content}
+          type={'content'}
+          rep={rep}
+          itemID={itemID}
+          arrows={[]}
+        />
+      </div>
+      <div className={styles.arrowFloaterFooter}>
+        <div>3 notes</div>
+        <div>3d ago</div>
+        <div>cindywu</div>
       </div>
     </>
-  )
-}
-
-function FrontItemEditorA({itemID, item, rep}: any){
-  const [showEditor, setShowEditor] = useState<boolean>(false)
-  return (
-    showEditor ? (
-      <EditorContainer
-        doc={item.content}
-        type={'content'}
-        rep={rep}
-        itemID={itemID}
-        arrows={[]}
-      />
-    ) : (
-      <div onClick={() => setShowEditor(true)}>
-        {htmlToText(item.content ? item.content : 'empty')}
-      </div>
-    )
-  )
-}
-
-function FrontItemEditorB({itemID, item, rep}: any){
-  const [showEditor, setShowEditor] = useState<boolean>(false)
-  return (
-    showEditor ? (
-      <EditorContainer
-        doc={item.title}
-        type={'title'}
-        rep={rep}
-        itemID={itemID}
-        arrows={[]}
-      />
-    ): (
-      <div onClick={() => setShowEditor(true)}>{htmlToText(item.title ? item.title : 'empty')}</div>
-    )
   )
 }
