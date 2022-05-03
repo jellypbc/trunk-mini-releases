@@ -72,7 +72,7 @@ function Trunk({ trunkID, clientEmail } : TrunkProps) {
       <div className={styles.trunkType}>
         {clientEmail === trunkID && `private` || `shared`}
       </div>
-      <div>{trunkID}</div>
+      <div>{trunkID.split('@')[0]}</div>
     </div>
   )
 }

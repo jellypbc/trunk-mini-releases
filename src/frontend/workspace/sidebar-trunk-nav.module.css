@@ -1,5 +1,6 @@
 .container {
   position: absolute;
+  max-width: 150px;
   color: hsl(0, 0%, 30%);
 }
 

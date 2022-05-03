@@ -9,11 +9,12 @@ export default function ArrowsComment({ rep, itemID, arrows, handleSetSelectedIt
   const comments = arrows.filter((a: any) => a.kind === 'comment'
   && a.backItemID === itemID) || []
   const commentArrowIDs = comments.map((a: any) => a.arrowID)
+  const uniqueCommentArrows = [...new Set(commentArrowIDs)]
   return (
     commentArrowIDs && email &&
     <div className={styles.section}>
       <CommentItemContainer
-        arrowIDs={commentArrowIDs}
+        arrowIDs={uniqueCommentArrows}
         rep={rep}
         itemID={itemID}
         handleSetSelectedItemID={handleSetSelectedItemID}

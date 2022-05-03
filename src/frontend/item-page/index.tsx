@@ -83,8 +83,6 @@ const keyMap = {
 export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar } : ItemPageProps ) {
   const item = useItemByID(rep, itemID)
 
-
-
   const clientEmail = useClientEmail(rep)
 
   const router = useRouter()
@@ -123,7 +121,6 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 
 function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar, item, clientEmail } : any ) {
   const authors = useAuthorsByItemID(rep, itemID)
-  console.log("item", item)
 
   async function signInWithGoogle() {
     const redirectUrl = location.href
@@ -524,7 +521,6 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
       let store = tx.objectStore(DEFAULT_SOURCE_FILES_BUCKET)
 
       let request = store.get(sourceURL)
-      console.log('request', request)
 
       request.onerror = function(e : any){
         console.log('error', e.target.error.name)
@@ -638,7 +634,6 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
 }
 
 function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelectedItemID} : NavProps) {
-  console.log('handleSetCommandBar', handleSetCommandBar)
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const [showProfileDropdown, setShowProfileDropdown] = useState<boolean>(false)
@@ -692,7 +687,6 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
       }
     }
   }
-
 
 
   return(
