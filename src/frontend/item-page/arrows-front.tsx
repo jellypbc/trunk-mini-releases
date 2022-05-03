@@ -17,6 +17,7 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
   const forwardArrows = fullArrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
   const frontItemIDs = forwardArrows.map((a: any) => a.frontItemID)
   const uniqueFrontItemIDs = [...new Set(frontItemIDs)]
+  const item = useItemByID(rep, itemID)
   return (
     uniqueFrontItemIDs &&
     <>
@@ -34,9 +35,8 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
           />
         )
       })}
-      {subItemItemIDs &&
+      {subItemItemIDs && item &&
         <>
-        Sub-item links
         <SubItemLinks
           rep={rep}
           subItemItemIDs={subItemItemIDs}
@@ -50,9 +50,7 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
 
 
 function SubItemLinks({rep, subItemItemIDs, handleSetSelectedItemID}: any){
-
   return(
-    //loops through sub item ids
     subItemItemIDs.map((itemID :any) => {
       return (
         <SubItemLink
@@ -66,12 +64,12 @@ function SubItemLinks({rep, subItemItemIDs, handleSetSelectedItemID}: any){
   )
 }
 
-// each sub item
 function SubItemLink({itemID, rep, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, itemID)
   return(
     item &&
     <div>
+      {htmlToText(item.title)}
       <SubItemLinkLinks
         item={item}
         rep={rep}
@@ -85,7 +83,7 @@ function SubItemLink({itemID, rep, handleSetSelectedItemID}: any){
 function SubItemLinkLinks({item, rep, itemID, handleSetSelectedItemID}: any){
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
   const fullArrows = getArrowsByIDs(rep, arrowIDs) //sub item full arrows
-
+  //put something there
 
   return (
     fullArrows &&
@@ -98,14 +96,13 @@ function SubItemLinkLinks({item, rep, itemID, handleSetSelectedItemID}: any){
   )
 }
 
-function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID}: any) {
-  // const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
-  // const footnoteArrowIDs = footnotes.map((a: any) => a.id)
+function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID }: any) {
+  const subItemArrows= arrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
+  const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
 
   const forwardArrows = arrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
   const frontItemIDs = forwardArrows.map((a: any) => a.frontItemID)
   const uniqueFrontItemIDs = [...new Set(frontItemIDs)]
-  console.log('uniqueFrontItemIDs', uniqueFrontItemIDs)
   return (
     <>
     {uniqueFrontItemIDs && uniqueFrontItemIDs.map((itemID: any) => {
@@ -118,6 +115,15 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID
         />
       )
     })}
+    {subItemItemIDs &&
+        <>
+        <SubItemLinks
+          rep={rep}
+          subItemItemIDs={subItemItemIDs}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+        />
+        </>
+      }
     </>
   )
 }

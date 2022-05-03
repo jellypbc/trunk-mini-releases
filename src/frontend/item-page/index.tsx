@@ -62,6 +62,7 @@ type SidebarProps = {
   handleSetSelectedItemID: (itemID: string) => void
   authorArrowIDs: any
   trunkID: string
+  publicationDate: string
 }
 
 type MainProps = {
@@ -170,6 +171,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
               handleSetSelectedItemID={handleSetSelectedItemID}
               authorArrowIDs={authors}
               trunkID={roomID}
+              publicationDate={item.publicationDate}
             />
           }
           <Main
@@ -476,7 +478,7 @@ function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunk
   )
 }
 
-function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrowIDs, trunkID } : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrowIDs, trunkID, publicationDate} : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
   const [URL, setURL] = useState<string>('')
@@ -569,6 +571,10 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Last updated</div>
           <div>April 4, 2022</div>
+        </div>
+        <div className={styles.updatedAtContainer}>
+          <div className={styles.updatedAtLabel}>Publication date</div>
+          <div>{htmlToText(publicationDate)}</div>
         </div>
         <div
           className={styles.metadataContainer}

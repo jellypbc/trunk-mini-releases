@@ -27,7 +27,7 @@ export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID,
 
 function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, itemID)
-  const [showContent, setShowContent] = useState<boolean>(true)
+  const [showContent, setShowContent] = useState<boolean>(false)
   const [showExpand, setShowExpand] = useState<boolean>(false)
 
   return (
