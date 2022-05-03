@@ -34,6 +34,7 @@ import { idbOK } from '../../lib/idbOK'
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constants'
 import SidebarOutline from './sidebar-outline'
 import ItemParent from './item-parent'
+import { dateInWordsIncludeYear } from '../../lib/dateInWords'
 
 
 type ItemPageProps = {
@@ -63,6 +64,7 @@ type SidebarProps = {
   authorArrowIDs: any
   trunkID: string
   publicationDate: string
+  updatedAt: any
 }
 
 type MainProps = {
@@ -80,6 +82,7 @@ const keyMap = {
 
 export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar } : ItemPageProps ) {
   const item = useItemByID(rep, itemID)
+
   const clientEmail = useClientEmail(rep)
 
   const router = useRouter()
@@ -118,6 +121,7 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 
 function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar, item, clientEmail } : any ) {
   const authors = useAuthorsByItemID(rep, itemID)
+  console.log("item", item)
 
   async function signInWithGoogle() {
     const redirectUrl = location.href
@@ -172,6 +176,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
               authorArrowIDs={authors}
               trunkID={roomID}
               publicationDate={item.publicationDate}
+              updatedAt={item.updatedAt}
             />
           }
           <Main
@@ -478,7 +483,7 @@ function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunk
   )
 }
 
-function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrowIDs, trunkID, publicationDate} : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrowIDs, trunkID, publicationDate, updatedAt} : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
   const [URL, setURL] = useState<string>('')
@@ -570,7 +575,7 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
         </div>
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Last updated</div>
-          <div>April 4, 2022</div>
+          <div>{dateInWordsIncludeYear(new Date(updatedAt))}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Publication date</div>

@@ -13,6 +13,7 @@ export const itemSchema = z.object({
   sourceURL: z.string(),
   webSourceURL: z.string(),
   publicationDate: z.string(),
+  updatedAt: z.string(),
 })
 
 export type Item = z.infer<typeof itemSchema>
@@ -27,14 +28,27 @@ export async function getItem(
     return null
   }
 
-  const changes = {
+  let changes = {
     webSourceURL: '',
-    publicationDate: ''
+    publicationDate: '',
+    updatedAt: new Date().toISOString(),
   }
 
   if (jv.hasOwnProperty('webSourceURL')) {
-    return itemSchema.parse(jv)
+    const thing = jv as unknown as any
+    changes.webSourceURL = thing.webSourceURL
   }
+
+  if (jv.hasOwnProperty('publicationDate')) {
+    const thing = jv as unknown as any
+    changes.publicationDate = thing.publicationDate
+  }
+
+  if (jv.hasOwnProperty('updatedAt')) {
+    const thing = jv as unknown as any
+    changes.updatedAt = thing.updatedAt
+  }
+
 
   const thing = jv as unknown as any
 
@@ -60,7 +74,11 @@ export async function updateItemCreatedBy(
   { id, createdBy }: { id: string; createdBy : string }
 ): Promise<void> {
   const item = await getItem(tx, id)
-  return tx.put(key(id), {...item, createdBy: createdBy})
+  const changes = {
+    createdBy: createdBy,
+    updatedAt: new Date().toISOString(),
+  }
+  return tx.put(key(id), {...item, ...changes})
 }
 
 export async function updateItemWebSourceURL(
@@ -68,10 +86,11 @@ export async function updateItemWebSourceURL(
   { id, webSourceURL }: { id: string; webSourceURL : string }
 ): Promise<void> {
   const item = await getItem(tx, id)
-  console.log('item', item)
-  console.log('webSourceURL', webSourceURL)
-  console.log({...item, webSourceURL: webSourceURL})
-  return tx.put(key(id), {...item, webSourceURL: webSourceURL})
+  const changes = {
+    webSourceURL: webSourceURL,
+    updatedAt: new Date().toISOString(),
+  }
+  return tx.put(key(id), {...item, ...changes})
 }
 
 export async function updateItemPublicationDate(
@@ -79,7 +98,11 @@ export async function updateItemPublicationDate(
   { id, publicationDate }: { id: string; publicationDate : string }
 ): Promise<void> {
   const item = await getItem(tx, id)
-  return tx.put(key(id), {...item, publicationDate: publicationDate})
+  const changes = {
+    publicationDate: publicationDate,
+    updatedAt: new Date().toISOString()
+  }
+  return tx.put(key(id), {...item, ...changes})
 }
 
 export async function updateItemTitle(
@@ -87,7 +110,11 @@ export async function updateItemTitle(
   { id, title }: { id: string; title: string }
 ): Promise<void> {
   const item = await getItem(tx, id)
-  return tx.put(key(id), {...item, title: title})
+  const changes = {
+    title: title,
+    updatedAt: new Date().toISOString(),
+  }
+  return tx.put(key(id), {...item, ...changes})
 }
 
 export async function updateItemContent(
@@ -95,7 +122,11 @@ export async function updateItemContent(
   { id, content }: { id: string; content: string }
 ): Promise<void> {
   const item = await getItem(tx, id)
-  return tx.put(key(id), {...item, content: content})
+  const changes = {
+    content: content,
+    updatedAt: new Date().toISOString(),
+  }
+  return tx.put(key(id), {...item, ...changes})
 }
 
 export async function updateItemArrows(
@@ -103,7 +134,11 @@ export async function updateItemArrows(
   { id, arrows }: { id: string, arrows: any[] }
 ): Promise<void> {
   const item = await getItem(tx, id)
-  return tx.put(key(id), {...item, arrows: JSON.stringify(arrows)})
+  const changes = {
+    arrows: JSON.stringify(arrows),
+    updatedAt: new Date().toISOString(),
+  }
+  return tx.put(key(id), {...item, ...changes})
 }
 
 export async function updateItemAddSingleArrow(
@@ -115,7 +150,8 @@ export async function updateItemAddSingleArrow(
   arrows.push(arrow)
   const stringifiedArrows = JSON.stringify(arrows)
   const changes = {
-    arrows: stringifiedArrows
+    arrows: stringifiedArrows,
+    updatedAt: new Date().toISOString(),
   }
 
   const changedItem = {...item, ...changes}
@@ -131,7 +167,8 @@ export async function updateItemArrowsDeleteArrow(
   arrows = arrows.filter((arrow : any) => arrow.arrowID !== arrowID)
   const stringifiedArrows = JSON.stringify(arrows)
   const changes = {
-    arrows: stringifiedArrows
+    arrows: stringifiedArrows,
+    updatedAt: new Date().toISOString()
   }
   const changedItem = {...item, ...changes}
   return tx.put(key(itemID), changedItem)
@@ -143,7 +180,11 @@ export async function updateItemSourceURL(
   { id, sourceURL } : { id: string, sourceURL: string }
 ): Promise<void> {
   const item = await getItem(tx, id)
-  return tx.put(key(id), {...item, sourceURL: sourceURL})
+  const changes ={
+    sourceURL: sourceURL,
+    updatedAt: new Date().toISOString()
+  }
+  return tx.put(key(id), {...item, ...changes})
 }
 
 function key(id: string): string {
@@ -165,7 +206,8 @@ export function randomItem() {
       highlight: '',
       sourceURL: '',
       webSourceURL: '',
-      publicationDate: ''
+      publicationDate: '',
+      updatedAt: '',
     } as Item,
   };
 }

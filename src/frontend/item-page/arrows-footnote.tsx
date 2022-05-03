@@ -47,7 +47,7 @@ function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID, subItemItem
       })}
       {subItemItemIDs &&
         <>
-        Sub-item footnotes
+        --
         <SubItemFootnotes
           rep={rep}
           subItemItemIDs={subItemItemIDs}
