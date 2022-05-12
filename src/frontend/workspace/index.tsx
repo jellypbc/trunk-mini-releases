@@ -35,6 +35,7 @@ type BodyProps = {
 
 type SidebarProps = {
   rep: Replicache<M>
+  roomID: string
 }
 
 type MainProps = {
@@ -119,6 +120,7 @@ function Body({ rep, items, handleSetSelectedItemID, roomID, clientEmail, client
     <div className={styles.bodyContainer}>
       <Sidebar
         rep={rep}
+        roomID={roomID}
       />
       <Main
         items={items}
@@ -134,11 +136,12 @@ function Body({ rep, items, handleSetSelectedItemID, roomID, clientEmail, client
   )
 }
 
-function Sidebar({ rep } : SidebarProps ){
+function Sidebar({ rep, roomID } : SidebarProps ){
   return(
     <div className={styles.sidebar}>
       <SidebarTrunkNav
         rep={rep}
+        roomID={roomID}
       />
     </div>
   )

@@ -8,11 +8,13 @@ import { useRouter } from 'next/router'
 
 type SidebarTrunkNavProps = {
  rep: Replicache<M>
+ roomID: string
 }
 
 type TrunkProps = {
   trunkID: string
   clientEmail: string
+  selectedTrunkID: boolean
 }
 
 type AddTrunkProps = {
@@ -21,11 +23,13 @@ type AddTrunkProps = {
   clientID: string
 }
 
-export default function SidebarTrunkNav({ rep } : SidebarTrunkNavProps) {
+export default function SidebarTrunkNav({ rep, roomID } : SidebarTrunkNavProps) {
   const clientTrunkIDs : string[] = useClientTrunkIDsArray(rep)
   const clientEmail : any = useClientEmail(rep)
 
   const [clientID, setClientID] = useState<string>('')
+
+  const cleanRoomID = `${roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)}`
 
   useEffect(() => {
     (async()  => {
@@ -43,6 +47,7 @@ export default function SidebarTrunkNav({ rep } : SidebarTrunkNavProps) {
             key={`trunk-${trunkID}`}
             trunkID={trunkID}
             clientEmail={clientEmail}
+            selectedTrunkID={cleanRoomID === `${trunkID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)}`}
           />
         )}
       </div>
@@ -55,7 +60,7 @@ export default function SidebarTrunkNav({ rep } : SidebarTrunkNavProps) {
   )
 }
 
-function Trunk({ trunkID, clientEmail } : TrunkProps) {
+function Trunk({ trunkID, clientEmail, selectedTrunkID } : TrunkProps) {
   const router = useRouter()
 
   function routeToTrunk() {
@@ -68,6 +73,9 @@ function Trunk({ trunkID, clientEmail } : TrunkProps) {
     <div
       className={styles.trunk}
       onClick={() => routeToTrunk()}
+      style={{
+        backgroundColor: `${selectedTrunkID === true && 'hsl(0, 0%, 94%)'}`,
+      }}
     >
       <div className={styles.trunkType}>
         {clientEmail === trunkID && `private` || `shared`}
