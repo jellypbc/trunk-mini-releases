@@ -1,20 +1,17 @@
 import React from 'react'
-import { useEffect, useState } from "react";
 import styles from './user-log-in.module.css'
 import Head from 'next/head'
 import Link from 'next/link'
 import { supabase } from '../lib/supabase-client'
 import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../lib/constants'
+import { useWorkspace } from './workspace-provider'
 
 import version from '../util/version'
 const url = `https://github.com/jellypbc/trunk-mini-releases/releases/download/${version}/MiniTrunk_${version}_x64.dmg`
 
 export default function UserLogIn() {
-  const [isTauri, setTauri] = useState<boolean>(false)
 
-  useEffect(() => {
-    if (window && '__TAURI__' in window) { setTauri(true) }
-  }, [])
+  const { isTauri } = useWorkspace()
 
   async function signInWithGoogle() {
     const redirectUrl = location.href

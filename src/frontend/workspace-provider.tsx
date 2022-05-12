@@ -9,14 +9,18 @@ import React, {
 type WorkspaceContextType = {
   selectedTrunkID: string
   trunkIDs: string[]
+  isTauri: boolean
+  isFocused: boolean
   handleTrunkSelect: (trunkID: string) => void
   addTrunkIDToWorkspace: (trunkID: string) => void
 }
 
 const defaultContextValue = {
   selectedTrunkID: '',
-  handleTrunkSelect: (_trunkID: string) => {},
   trunkIDs: [],
+  isTauri: false,
+  isFocused: false,
+  handleTrunkSelect: (_trunkID: string) => {},
   addTrunkIDToWorkspace: (_trunkID: string) => {}
 }
 
