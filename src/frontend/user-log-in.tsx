@@ -23,7 +23,9 @@ export default function UserLogIn() {
       const { error } : { error: any } = await supabase.auth.signIn({
         provider: 'google',
       }, {
-        redirectTo: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : null || undefined
+        redirectTo: (process.env.NODE_ENV === 'development') ?
+          'http://localhost:3000' :
+          (null || undefined)
       })
       if (error) throw error
     } catch (error : any) {
