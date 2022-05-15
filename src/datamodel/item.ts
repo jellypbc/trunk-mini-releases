@@ -207,7 +207,7 @@ export function randomItem() {
       sourceURL: '',
       webSourceURL: '',
       publicationDate: '',
-      updatedAt: '',
+      updatedAt: new Date().toISOString(),
     } as Item,
   };
 }

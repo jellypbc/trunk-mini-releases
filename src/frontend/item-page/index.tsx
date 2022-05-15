@@ -65,6 +65,7 @@ type SidebarProps = {
   trunkID: string
   publicationDate: string
   updatedAt: any
+  createdAt: any
 }
 
 type MainProps = {
@@ -176,6 +177,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
               trunkID={roomID}
               publicationDate={item.publicationDate}
               updatedAt={item.updatedAt}
+              createdAt={item.createdAt}
             />
           }
           <Main
@@ -482,7 +484,7 @@ function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunk
   )
 }
 
-function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrowIDs, trunkID, publicationDate, updatedAt} : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrowIDs, trunkID, publicationDate, updatedAt, createdAt} : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
   const [URL, setURL] = useState<string>('')
@@ -569,6 +571,11 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
           <div className={styles.createdBy}>
             {createdBy ? createdBy.split(`@`)[0] : 'anonymous'}
           </div>
+        </div>
+        <div className={styles.updatedAtContainer}>
+          <div className={styles.updatedAtLabel}>Created at</div>
+          <div className={styles.updatedAt}>{dateInWordsIncludeYear(new Date(createdAt))}</div>
+          <div className={styles.updatedAt}>{dateInWordsTimeOnly(new Date(createdAt))}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Last updated</div>
