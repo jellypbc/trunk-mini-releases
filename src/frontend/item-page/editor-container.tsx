@@ -9,7 +9,12 @@ import Editor from './editor'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import EditorArrowCreate from './editor-arrow-create'
-import { useUserInfo, useItemByID, useItemIDs, useClientEmail } from '../../datamodel/subscriptions'
+import {
+  useUserInfo,
+  useItemByID,
+  useItemIDs,
+  useClientEmail
+} from '../../datamodel/subscriptions'
 import { randomItem } from '../../datamodel/item'
 import { randomArrow } from '../../datamodel/arrow'
 import { htmlToText } from '../../util/htmlToText'
@@ -19,10 +24,10 @@ type Props = {
   type: string
   rep: Replicache<M>
   itemID: string
-  arrows: any[]
+  commentArrows: any[]
 }
 
-function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
+function EditorContainer({ doc, type, rep, itemID, commentArrows } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
@@ -35,7 +40,6 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const email = useClientEmail(rep)
-
 
   const userInfo = useUserInfo(rep)
   const item : any = useItemByID(rep, itemID)
@@ -55,7 +59,7 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
       viewRef && viewRef.current && viewRef.current.view,
       rep,
       itemID,
-      arrows,
+      commentArrows, // TODO: add forward arrows
     )
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
@@ -92,11 +96,11 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
         rep,
         itemID,
         // showArrows && arrows || [],
-        arrows || [],
+        commentArrows || [],
       )
       setState(state)
       setView(viewRef && viewRef.current && viewRef.current.view)
-  }, [arrows.length])
+  }, [commentArrows.length])
 
   const debounce = (func : any, timeout = 300) => {
     let timer : any
@@ -208,7 +212,6 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     // save commentItem
     rep.mutate.createItem({ id: commentItem.id, item: commentItem.item })
     // update arrows on selectedItem
-    console.log('itemArrows', itemArrows)
     rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
     // set arrows in this component, so that the editor knows to draw the decoration
     // setArrows(itemArrows)

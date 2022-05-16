@@ -4,7 +4,7 @@ import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
 import type { Replicache } from 'replicache'
 import EditorDraftingContainer from './../editor-drafting-container'
-import { getSortedItems, useItemByID, useClientEmail } from '../../datamodel/subscriptions'
+import { useSortedItems, useItemByID, useClientEmail } from '../../datamodel/subscriptions'
 import Fuse from 'fuse.js'
 import { randomArrow } from '../../datamodel/arrow'
 import { randomItem } from '../../datamodel/item'
@@ -18,7 +18,7 @@ type Props = {
 
 export default function ArrowsSub({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
   const email = useClientEmail(rep)
-  const allItems = getSortedItems(rep)
+  const allItems = useSortedItems(rep)
 
   const [showAddSubItem, setShowAddSubItem] = useState<boolean>(false)
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []

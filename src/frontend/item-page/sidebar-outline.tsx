@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  getArrowsByIDs,
+  useArrowsByIDs,
   useItemByID
 } from '../../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
@@ -16,7 +16,7 @@ type SidebarOutlineProps = {
 
 export default function SidebarOutline({ rep, item, itemID } : SidebarOutlineProps) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(rep, arrowIDs)
 
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
   const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)

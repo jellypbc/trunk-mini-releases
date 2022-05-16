@@ -1,5 +1,8 @@
 import React from 'react'
-import { getArrowsByIDs , useItemByID } from '../../datamodel/subscriptions'
+import {
+  useArrowsByIDs,
+  useItemByID
+} from '../../datamodel/subscriptions'
 import styles from './index.module.css'
 import { htmlToText } from '../../util/htmlToText'
 
@@ -28,7 +31,7 @@ export default function ArrowsFootnote({ rep, arrows, itemID, handleSetSelectedI
 }
 
 function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID, subItemItemIDs } : any){
-  const arrows = getArrowsByIDs(rep, arrowIDs)
+  const arrows = useArrowsByIDs(rep, arrowIDs)
   return (
     <>
       <div className={styles.sectionHeader}>
@@ -76,7 +79,6 @@ function SubItemFootnotes({rep, subItemItemIDs, handleSetSelectedItemID}: any){
 }
 
 function SubItemFootnote({itemID, rep, handleSetSelectedItemID}: any){
-  console.log('itemID',itemID)
   const item = useItemByID(rep, itemID)
   return(
     item &&
@@ -93,7 +95,7 @@ function SubItemFootnote({itemID, rep, handleSetSelectedItemID}: any){
 
 function SubItemFootnoteFootnotes({item, rep, itemID, handleSetSelectedItemID}: any){
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(rep, arrowIDs)
 
   return (
     fullArrows &&
@@ -122,7 +124,7 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID
 }
 
 function Thing({footnoteArrowIDs, rep, handleSetSelectedItemID}: any){
-  const arrows = getArrowsByIDs(rep, footnoteArrowIDs)
+  const arrows = useArrowsByIDs(rep, footnoteArrowIDs)
   return (
     <>
     {arrows && arrows.map((a: any) => {

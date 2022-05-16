@@ -1,5 +1,5 @@
 import React from 'react'
-import { getArrowsByIDs , useItemByID } from '../datamodel/subscriptions'
+import { useArrowsByIDs, useItemByID } from '../datamodel/subscriptions'
 import styles from './item-container.module.css'
 import { htmlToText } from '../util/htmlToText'
 
@@ -19,7 +19,7 @@ export default function ItemArrowsFootnote({ rep, arrows, itemID, handleSetSelec
 }
 
 function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID } : any){
-  const arrows = getArrowsByIDs(rep, arrowIDs)
+  const arrows = useArrowsByIDs(rep, arrowIDs)
   return (
     <>
       <div className={styles.sectionHeader}>

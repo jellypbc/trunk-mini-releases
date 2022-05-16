@@ -8,8 +8,9 @@ import type { M } from '../../datamodel/mutators'
 import {
   useItemByID,
   useClientEmail,
-  getArrowsByIDs,
-  useAuthorsByItemID
+  useArrowsByIDs,
+  useAuthorsByItemID,
+  useCommentArrowsByItemID
  } from '../../datamodel/subscriptions'
 import { useRouter } from 'next/router'
 import { htmlToText } from '../../util/htmlToText'
@@ -205,6 +206,8 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : 
   //     })
   // }
 
+  const commentArrows = useCommentArrowsByItemID(rep, itemID)
+
   const handlers = {
     saveItem: (e: any) => {
       e.preventDefault()
@@ -212,7 +215,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : 
     }
   }
 
-  return(
+  return (
     <HotKeys
       {...{
         keyMap,
@@ -240,7 +243,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : 
               type={'title'}
               rep={rep}
               itemID={itemID}
-              arrows={[]}
+              commentArrows={[]}
             />
           </div>
           <div className={styles.authorsContainer}>
@@ -255,13 +258,15 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : 
         </div>
 
       <div className={styles.content}>
-        <EditorContainer
-          doc={content}
-          type={'content'}
-          rep={rep}
-          itemID={itemID}
-          arrows={item.arrows as any || []}
-        />
+        {commentArrows &&
+          <EditorContainer
+            doc={content}
+            type={'content'}
+            rep={rep}
+            itemID={itemID}
+            commentArrows={commentArrows}
+          />
+        }
       </div>
       <ItemArrows
         rep={rep}
@@ -278,7 +283,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : 
 
 function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(rep, arrowIDs)
 
   return (
     arrowIDs && fullArrows &&
@@ -436,7 +441,7 @@ function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunk
               type={'webSourceURL'}
               rep={rep}
               itemID={itemID}
-              arrows={[]}
+              commentArrows={[]}
             />
           </div>
         </div>
@@ -448,7 +453,7 @@ function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunk
               type={'publicationDate'}
               rep={rep}
               itemID={itemID}
-              arrows={[]}
+              commentArrows={[]}
             />
           </div>
         </div>
@@ -488,7 +493,7 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
   const [URL, setURL] = useState<string>('')
-  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
 
   useEffect(() => {
     generateIDBSourceFileURL(item.sourceURL)
@@ -760,7 +765,7 @@ function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
 }
 
 function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
-  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
 
   if (!fullArrows) return null
 

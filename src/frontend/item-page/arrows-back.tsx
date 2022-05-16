@@ -1,5 +1,8 @@
 import React from 'react'
-import { useItemByID, useAuthorsByItemID, getArrowsByIDs } from '../../datamodel/subscriptions'
+import {
+  useItemByID,
+  useAuthorsByItemID,
+  useArrowsByIDs } from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
@@ -81,7 +84,7 @@ function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
 }
 
 function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
-  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
 
   if (!fullArrows) return null
 

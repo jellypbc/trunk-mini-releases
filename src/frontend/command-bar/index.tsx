@@ -3,7 +3,7 @@ import styles from './index.module.css'
 import Fuse from 'fuse.js'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
-import { getSortedItems } from '../../datamodel/subscriptions'
+import { useSortedItems } from '../../datamodel/subscriptions'
 import { htmlToText } from '../../util/htmlToText'
 import { useRouter } from 'next/router'
 
@@ -18,7 +18,7 @@ export default function CommandBar({ rep, handleSetSelectedItemID, handleSetComm
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
-  const list = getSortedItems(rep)
+  const list = useSortedItems(rep)
   const options = {
     // isCaseSensitive: false,
     // includeScore: false,

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import styles from './index.module.css'
-import { getSortedItems, useClientEmail, useClientUsername, useClientAvatarURL } from '../../datamodel/subscriptions'
+import { useSortedItems, useClientEmail, useClientUsername, useClientAvatarURL } from '../../datamodel/subscriptions'
 import { useRouter } from 'next/router'
 import { supabase } from '../../lib/supabase-client'
 
@@ -50,7 +50,7 @@ type MainProps = {
 
 
 export default function Workspace({ rep, handleSetSelectedItemID, roomID, handleSetCommandBar }: WorkspaceProps) {
-  const items = getSortedItems(rep)
+  const items = useSortedItems(rep)
   const clientEmail = useClientEmail(rep)
   const clientUsername = useClientUsername(rep)
   const clientAvatarURL = useClientAvatarURL(rep)

@@ -3,7 +3,7 @@ import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
 import styles from './dashboard-body-index-view.module.css'
 import { htmlToText } from '../util/htmlToText'
-import { useItemByID, getArrowsByIDs, useAuthorsByItemID } from '../datamodel/subscriptions'
+import { useItemByID, useArrowsByIDs, useAuthorsByItemID } from '../datamodel/subscriptions'
 
 type IndexViewProps = {
   setShowIndex: (state: boolean) => void
@@ -87,7 +87,7 @@ type AuthorItemsProps = {
 }
 
 function AuthorItems({rep, authorArrowIDs} : AuthorItemsProps) {
-  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
 
   return (
     fullArrows.length > 0 ?

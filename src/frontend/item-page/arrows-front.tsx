@@ -1,5 +1,9 @@
 import React from 'react'
-import { useItemByID, useAuthorsByItemID, getArrowsByIDs } from '../../datamodel/subscriptions'
+import {
+  useItemByID,
+  useAuthorsByItemID,
+  useArrowsByIDs
+} from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
@@ -82,7 +86,7 @@ function SubItemLink({itemID, rep, handleSetSelectedItemID}: any){
 
 function SubItemLinkLinks({item, rep, itemID, handleSetSelectedItemID}: any){
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs) //sub item full arrows
+  const fullArrows = useArrowsByIDs(rep, arrowIDs) //sub item full arrows
   //put something there
 
   return (
@@ -193,7 +197,7 @@ function AuthorInfo({rep, itemID }: any){
 }
 
 function AuthorArrows({rep, authorArrowIDs} : any) {
-  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
 
   if (!fullArrows) return null
 

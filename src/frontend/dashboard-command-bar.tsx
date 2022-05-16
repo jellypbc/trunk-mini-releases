@@ -3,7 +3,7 @@ import styles from './dashboard-command-bar.module.css'
 import Fuse from 'fuse.js'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
-import { getSortedItems } from '../datamodel/subscriptions'
+import { useSortedItems } from '../datamodel/subscriptions'
 import { htmlToText } from '../util/htmlToText'
 
 type Props = {
@@ -16,7 +16,7 @@ export default function DashboardCommandBar({ rep, handleSetSelectedItemID, hand
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
-  const list = getSortedItems(rep)
+  const list = useSortedItems(rep)
   const options = {
     // isCaseSensitive: false,
     // includeScore: false,

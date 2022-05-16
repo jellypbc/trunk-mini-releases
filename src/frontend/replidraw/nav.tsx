@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import styles from "./nav.module.css";
 import { randomShape } from "../../datamodel/shape";
 import { randomItem } from "../../datamodel/item";
-import { useUserInfo, getItemCount } from "../../datamodel/subscriptions";
+import { useUserInfo, useItemCount } from "../../datamodel/subscriptions";
 import type { M } from "../../datamodel/mutators";
 import { supabase } from "src/lib/supabase-client";
 import { useRouter } from 'next/router'
@@ -30,7 +30,7 @@ export function Nav({ rep }: { rep: Replicache<M>}) {
   const [isTauri, setTauri] = useState(false)
   const userInfo = useUserInfo(rep);
   const router = useRouter()
-  const itemCount = getItemCount(rep) || 0
+  const itemCount = useItemCount(rep) || 0
 
   useEffect(() => {
     // if (window && window.__TAURI__ !== undefined) { setTauri(true) }

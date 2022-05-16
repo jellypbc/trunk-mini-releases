@@ -2,19 +2,26 @@ import React, { useState } from 'react'
 import styles from './editor-arrow-display.module.css'
 import { htmlToText } from '../util/htmlToText'
 import EditorContainer from './editor-container'
-import { useItemByID, useClientEmail, getArrowsByIDs } from '../datamodel/subscriptions'
+import { useItemByID, useClientEmail, useArrowsByIDs } from '../datamodel/subscriptions'
 import { randomItem } from '../datamodel/item'
 import { randomArrow } from '../datamodel/arrow'
+import type { Replicache } from 'replicache'
+import type { M } from '../datamodel/mutators'
 
+type EditorArrowDisplayProps = {
+  rep: Replicache<M>
+  arrow: any
+}
 
-export default function EditorArrowDisplay({rep, arrow, arrowID}: {rep:any, arrow:any, arrowID:string}) {
+export default function EditorArrowDisplay({ rep, arrow }: EditorArrowDisplayProps) {
   const email = useClientEmail(rep)
+  const { id : arrowID } = arrow
 
   const [showDeleteOptions, setShowDeleteOptions] = useState<boolean>(false)
 
   function deleteArrowOnly() {
     rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
-    rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
+    rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrow.id })
     rep.mutate.deleteArrow(arrowID)
   }
 
@@ -210,7 +217,7 @@ function CommentDisplay({ rep, itemID, arrow, kind, email} : any) {
 
 function CommentReply({arrows, rep, itemID, email}:any) {
   const arrowIDs = arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(rep, arrowIDs)
   return (
     <>
       {fullArrows &&

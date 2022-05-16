@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './dashboard.module.css'
 import type { Replicache } from 'replicache'
 import type { M } from '../datamodel/mutators'
-import { getSortedItems, getArrows } from '../datamodel/subscriptions'
+import { useSortedItems, useArrows } from '../datamodel/subscriptions'
 
 import DashboardNavLeft from './dashboard-nav-left'
 import DashboardNavTop from './dashboard-nav-top'
@@ -17,8 +17,8 @@ type Props = {
 }
 
 export default function Dashboard({ roomID, rep, handleSetSelectedItemID, handleSetCommandBar, session } : Props) {
-  const items = getSortedItems(rep)
-  const arrows = getArrows(rep)
+  const items = useSortedItems(rep)
+  const arrows = useArrows(rep)
 
   return (
     <div className={styles.container}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styles from './editor-arrow-create.module.css'
 import { htmlToText } from '../util/htmlToText'
-import { getSortedItems } from '../datamodel/subscriptions'
+import { useSortedItems } from '../datamodel/subscriptions'
 import EditorDraftingContainer from './editor-drafting-container'
 import Fuse from 'fuse.js'
 
@@ -11,7 +11,7 @@ export default function EditorArrowCreate({ serializedSelection, rep, userInfo, 
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
-  const allItems = getSortedItems(rep)
+  const allItems = useSortedItems(rep)
 
   const options = {
     // isCaseSensitive: false,

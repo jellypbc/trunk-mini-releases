@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
-import { useItemByID, getArrowsByIDs } from '../../datamodel/subscriptions'
+import {
+  useItemByID,
+  useArrowsByIDs,
+  useCommentArrowsByItemID
+} from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import EditorContainer from './editor-container'
@@ -29,6 +33,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
   const item = useItemByID(rep, itemID)
   const [showContent, setShowContent] = useState<boolean>(false)
   const [showExpand, setShowExpand] = useState<boolean>(false)
+  const commentArrows = useCommentArrowsByItemID(rep, itemID)
 
   return (
     <div className={styles.subItemTitleContainer}>
@@ -45,13 +50,15 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
       </div>
       { showContent && item &&
         <div className={styles.subItemContent}>
-          <EditorContainer
-            doc={item.content}
-            type={'content'}
-            rep={rep}
-            itemID={itemID}
-            arrows={item.arrows as any || []}
-          />
+          {commentArrows &&
+            <EditorContainer
+              doc={item.content}
+              type={'content'}
+              rep={rep}
+              itemID={itemID}
+              commentArrows={commentArrows}
+            />
+          }
           <ItemMainSubItemsA
             rep={rep}
             itemID={itemID}
@@ -66,7 +73,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
 
 function ItemMainSubItemsA({ rep, itemID, handleSetSelectedItemID, item}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(rep, arrowIDs)
   return (
     fullArrows &&
     <ItemMainSubItemsB
@@ -77,7 +84,6 @@ function ItemMainSubItemsA({ rep, itemID, handleSetSelectedItemID, item}: any) {
     />
   )
 }
-
 
 function ItemMainSubItemsB({ rep, itemID, handleSetSelectedItemID, fullArrows} : any) {
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []

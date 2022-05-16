@@ -4,11 +4,10 @@ import ReactDOM from 'react-dom'
 import { useItemByID, useArrowsByIDs, useArrowByID } from '../../../datamodel/subscriptions'
 
 class Arrow {
-  constructor(arrowID, to, from, kind, backItemID) {
-    this.arrowID = arrowID,
+  constructor(id, to, from, backItemID) {
+    this.id = id,
     this.to = to,
     this.from = from,
-    this.kind = kind,
     this.backItemID = backItemID
   }
 }
@@ -132,7 +131,7 @@ function renderArrows(arrows, dispatch, state, rep) {
         return (
           <div key={i}>
             <EditorArrowThread
-              arrowID={a.spec.arrow.arrowID}
+              arrow={a.spec.arrow}
               dispatch={dispatch}
               state={state}
               showActions={{ reply: isLast, delete: true}}
@@ -149,15 +148,11 @@ function renderArrows(arrows, dispatch, state, rep) {
 
 import EditorArrowDisplay from '../../editor-arrow-display'
 
-function EditorArrowThread({ arrowID, dispatch, state, showActions, rep }) {
-  const fullArrow = useArrowByID(rep, arrowID)
-
+function EditorArrowThread({ arrow, dispatch, state, showActions, rep }) {
   return (
-    fullArrow &&
-      <EditorArrowDisplay
-        rep={rep}
-        arrow={fullArrow}
-        arrowID={arrowID}
-      />
+    <EditorArrowDisplay
+      rep={rep}
+      arrow={arrow}
+    />
   )
 }

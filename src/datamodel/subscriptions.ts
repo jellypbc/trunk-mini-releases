@@ -7,6 +7,7 @@ import { getItem, itemPrefix } from './item'
 import { getArrow, arrowPrefix } from './arrow'
 import type { M } from './mutators'
 
+// Item
 export function useItemIDs(rep: Replicache<M>) {
   return useSubscribe(
     rep,
@@ -36,34 +37,59 @@ export function useItemByID(rep: Replicache<M>, id: string) {
   )
 }
 
-export function useArrowIDs(rep: Replicache<M>) {
+export function useItemArrowIDsByID(rep: Replicache<M>, id: string) {
   return useSubscribe(
     rep,
     async (tx) => {
-      const arrows = (await tx
-        .scan({ prefix: arrowPrefix })
-        .keys()
-        .toArray()) as string[]
-      return arrows.map((k) => k.substring(arrowPrefix.length))
-    },
-    []
-  )
-}
-
-export function useArrowByID(rep: Replicache<M>, id: string) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      const arrow = await getArrow(tx, id)
-      if (arrow) {
-        arrow.createdAt = new Date(arrow.createdAt) as unknown as any
-      }
-      return arrow
+      const item = await getItem(tx, id)
+      const arrows = item && JSON.parse(item.arrows) as unknown as any
+      const arrowIDArray : [] = arrows && arrows.map((arrow: any) => arrow.arrowID)
+      return arrowIDArray
     },
     null
   )
 }
 
+
+export function useSortedItems(rep: Replicache<M>) {
+  const items = useItems(rep)
+  let parsedItems: any[] = []
+  items.map(([k, v]: [string, any]) => {
+    const changes = {
+      createdAt:  new Date(v.createdAt),
+      arrows: v.arrows && JSON.parse(v.arrows) || [],
+    }
+    let value = { ...v, ...changes }
+    Object.assign(value, { id: k.substr(itemPrefix.length) })
+    parsedItems.push(value)
+  })
+  const sortedItems = parsedItems.sort((a, b) => b.createdAt - a.createdAt)
+  return sortedItems
+}
+
+export function useItems(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async(tx) => {
+      const items = await tx.scan({ prefix: itemPrefix }).entries().toArray();
+      return items
+    },
+    []
+  )
+}
+
+export function useItemCount(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async(tx) => {
+      const items = await tx.scan({ prefix: itemPrefix }).keys().toArray()
+      return items.length.toString()
+    },
+    null
+  )
+}
+
+// User Info
 export function useUserInfo(rep: Replicache<M>) {
   return useSubscribe(
     rep,
@@ -149,44 +175,36 @@ export function useClientInfo(
   )
 }
 
-
-export function getItems(rep: Replicache<M>) {
+// Arrow
+export function useArrowIDs(rep: Replicache<M>) {
   return useSubscribe(
     rep,
-    async(tx) => {
-      const items = await tx.scan({ prefix: itemPrefix }).entries().toArray();
-      return items
+    async (tx) => {
+      const arrows = (await tx
+        .scan({ prefix: arrowPrefix })
+        .keys()
+        .toArray()) as string[]
+      return arrows.map((k) => k.substring(arrowPrefix.length))
     },
     []
   )
 }
 
-export function getClientStates(rep: Replicache<M>) {
+export function useArrowByID(rep: Replicache<M>, id: string) {
   return useSubscribe(
     rep,
-    async(tx) => {
-      const clientStates = await tx.scan({ prefix: clientStatePrefix }).entries().toArray();
-      const things = clientStates && clientStates.filter((clientState :any) => clientState[1].hasOwnProperty("supabaseUserInfo") )
-      return things
-    },
-    []
-  )
-}
-
-
-export function getItemCount(rep: Replicache<M>) {
-  return useSubscribe(
-    rep,
-    async(tx) => {
-      const items = await tx.scan({ prefix: itemPrefix }).keys().toArray()
-      return items.length.toString()
+    async (tx) => {
+      const arrow = await getArrow(tx, id)
+      if (arrow) {
+        arrow.createdAt = new Date(arrow.createdAt) as unknown as any
+      }
+      return arrow
     },
     null
   )
 }
 
-
-export function getArrows(rep: Replicache<M>) {
+export function useArrows(rep: Replicache<M>) {
   return useSubscribe(
     rep,
     async(tx) => {
@@ -197,39 +215,29 @@ export function getArrows(rep: Replicache<M>) {
   )
 }
 
-export function getCommentArrowsByArrowIDArray(rep: Replicache<M>, arrowIDs: string[]) {
-  let arrows : any[] = []
-  arrowIDs && arrowIDs.map(id => {
-    const arrow = useArrowByID(rep, id)
-    arrows.push(arrow)
-  })
-  return arrows
-}
-
-export function getSortedItems(rep: Replicache<M>) {
-  const items = getItems(rep)
-  let parsedItems: any[] = []
-  items.map(([k, v]: [string, any]) => {
-    const changes = {
-      createdAt:  new Date(v.createdAt),
-      arrows: v.arrows && JSON.parse(v.arrows) || [],
-    }
-    let value = { ...v, ...changes }
-    Object.assign(value, { id: k.substr(itemPrefix.length) })
-    parsedItems.push(value)
-  })
-  const sortedItems = parsedItems.sort((a, b) => b.createdAt - a.createdAt)
-  return sortedItems
-}
-
-
-export function getArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
+export function useCommentArrowsByItemID(rep: Replicache<M>, itemID: string) {
   // this needs to be refactored bc allArrows can be a huge array
-  const allArrows = getArrows(rep)
+  const allArrows = useArrows(rep)
+  const arrowIDs = useItemArrowIDsByID(rep, itemID) as unknown as any
+  let commentArrows : any[] = []
+  arrowIDs && arrowIDs.map((arrowID: string) => {
+    allArrows.find(([k, v]: [string, any]) => {
+      const id = k.substring(arrowPrefix.length)
+      if (id === arrowID && v.kind === `comment`) {
+        commentArrows.push(Object.assign(v, {id: id}))
+      }
+    })
+  })
+  return commentArrows
+}
+
+export function useArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
+  // this needs to be refactored bc allArrows can be a huge array
+  const allArrows = useArrows(rep)
   let arrows : any[] = []
   arrowIDs && arrowIDs.map((arrowID: any) => {
     allArrows.find(([k, v]: [string, any]) => {
-      const id = k.substr(arrowPrefix.length)
+      const id = k.substring(arrowPrefix.length)
       if (id === arrowID) {
         arrows.push(Object.assign(v, {id: id}))
       }
@@ -249,12 +257,13 @@ export function useAuthorsByItemID(rep: Replicache<M>, itemID: string) {
 }
 
 export function useAuthorItemsByArrowIDs(rep: Replicache<M>, arrowIDs: string[]){
-  const arrows = getArrowsByIDs(rep, arrowIDs)
+  const arrows = useArrowsByIDs(rep, arrowIDs)
   return (
     arrows.map((a: any) => a.frontItemID)
   )
 }
 
+// Shape
 export function useShapeIDs(rep: Replicache<M>) {
   return useSubscribe(
     rep,
@@ -263,7 +272,7 @@ export function useShapeIDs(rep: Replicache<M>) {
       return shapes.map((k) => k.substring(shapePrefix.length))
     },
     []
-  );
+  )
 }
 
 export function useShapeByID(rep: Replicache<M>, id: string) {
@@ -276,7 +285,6 @@ export function useShapeByID(rep: Replicache<M>, id: string) {
   )
 }
 
-
 export function useOverShapeID(rep: Replicache<M>) {
   return useSubscribe(
     rep,
@@ -284,7 +292,7 @@ export function useOverShapeID(rep: Replicache<M>) {
       return (await getClientState(tx, await rep.clientID)).overID;
     },
     ""
-  );
+  )
 }
 
 export function useSelectedShapeID(rep: Replicache<M>) {
@@ -294,7 +302,7 @@ export function useSelectedShapeID(rep: Replicache<M>) {
       return (await getClientState(tx, await rep.clientID)).selectedID;
     },
     ""
-  );
+  )
 }
 
 export function useCollaboratorIDs(rep: Replicache<M>) {
@@ -311,6 +319,6 @@ export function useCollaboratorIDs(rep: Replicache<M>) {
         .map((k) => k.substr(clientStatePrefix.length));
     },
     []
-  );
+  )
 }
 

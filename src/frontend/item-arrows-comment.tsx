@@ -1,5 +1,5 @@
 import React from 'react'
-import { useItemByID, getArrowsByIDs } from '../datamodel/subscriptions'
+import { useItemByID, useArrowsByIDs } from '../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './item-container.module.css'
 
@@ -21,7 +21,7 @@ export default function ItemArrowsComment({ rep, itemID, arrows, handleSetSelect
 }
 
 function CommentItemContainer({ arrowIDs, rep, handleSetSelectedItemID } : any){
-  const arrows = getArrowsByIDs(rep, arrowIDs)
+  const arrows = useArrowsByIDs(rep, arrowIDs)
   return (
     <>
       <div className={styles.sectionHeader}>

@@ -5,7 +5,7 @@ import styles from './dashboard-body-activity-view.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
 import { randomItem } from '../datamodel/item'
 import { HotKeys } from 'react-hotkeys'
-import { useItemByID, useArrowByID, getArrowsByIDs, useAuthorsByItemID, useClientEmail, useClientUsername, useClientAvatarURL } from '../datamodel/subscriptions'
+import { useItemByID, useArrowByID, useArrowsByIDs, useAuthorsByItemID, useClientEmail, useClientUsername, useClientAvatarURL } from '../datamodel/subscriptions'
 import { htmlToText } from '../util/htmlToText'
 import ItemParent from './item-parent'
 import EditorContainer from './editor-container'
@@ -537,7 +537,7 @@ type AuthorItemsProps = {
 }
 
 function AuthorItems({rep, authorArrowIDs} : AuthorItemsProps) {
-  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
 
   return (
     fullArrows.length > 0 ?

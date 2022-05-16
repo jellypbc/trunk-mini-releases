@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
-import { useItemByID, getArrowsByIDs, useClientEmail } from '../../datamodel/subscriptions'
+import {
+  useItemByID,
+  useArrowsByIDs,
+  useClientEmail
+} from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
@@ -28,7 +32,7 @@ import { randomItem } from '../../datamodel/item'
 import { randomArrow } from '../../datamodel/arrow'
 
 function CommentItemContainer({ arrowIDs, rep, itemID, handleSetSelectedItemID, email } : any){
-  const arrows = getArrowsByIDs(rep, arrowIDs)
+  const arrows = useArrowsByIDs(rep, arrowIDs)
   const [showCommentEditor, setShowCommentEditor] = useState<boolean>(false)
 
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
-import { useItemByID, getArrowsByIDs, useArrowByID, useAuthorsByItemID } from '../datamodel/subscriptions'
+import { useItemByID, useArrowsByIDs, useArrowByID, useAuthorsByItemID } from '../datamodel/subscriptions'
 import EditorContainer from './editor-container'
 import { htmlToText } from '../util/htmlToText'
 import styles from './item-container.module.css'
@@ -106,7 +106,7 @@ export default function ItemContainer({rep, itemID, handleSetSelectedItemID} : a
 
 function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = getArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(rep, arrowIDs)
 
   return (
     arrowIDs && fullArrows &&
@@ -406,7 +406,7 @@ function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
 }
 
 function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
-  const fullArrows = getArrowsByIDs(rep, authorArrowIDs)
+  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
 
   if (!fullArrows) return null
 
