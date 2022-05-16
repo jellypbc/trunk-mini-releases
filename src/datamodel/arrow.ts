@@ -74,7 +74,7 @@ export function randomArrow() {
       to: 0,
       from: 0,
       parentItemID: '',
-      kind: '',
+      kind: '', // comment, sub, author, reference, footnote
     } as Arrow,
   }
 }

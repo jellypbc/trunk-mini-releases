@@ -223,7 +223,7 @@ export function useCommentArrowsByItemID(rep: Replicache<M>, itemID: string) {
   arrowIDs && arrowIDs.map((arrowID: string) => {
     allArrows.find(([k, v]: [string, any]) => {
       const id = k.substring(arrowPrefix.length)
-      if (id === arrowID && v.kind === `comment`) {
+      if (id === arrowID && (v.kind === "reference" || v.kind === "comment" || v.kind === "footnote")) {
         commentArrows.push(Object.assign(v, {id: id}))
       }
     })

@@ -78,7 +78,6 @@ export default function EditorArrowDisplay({ rep, arrow }: EditorArrowDisplayPro
         <FrontItemStuff
           rep={rep}
           itemID={arrow.frontItemID}
-          arrow={arrow}
         />
       }
 
@@ -234,8 +233,6 @@ function CommentReply({arrows, rep, itemID, email}:any) {
 function OtherThing({fullArrows, rep, itemID, email}:any){
   const comments = fullArrows.filter((a: any) => a.kind === 'comment'
   && a.backItemID === itemID && a.parentItemID === itemID) || []
-  // const commentArrowIDs = comments.map((a: any) => a.arrowID)
-  // console.log('commentArrowIDs', commentArrowIDs)
 
   return (
     <>
@@ -245,7 +242,6 @@ function OtherThing({fullArrows, rep, itemID, email}:any){
           key={`comment-arrow-${fullCommentArrow.frontItemID}`}
           itemID={fullCommentArrow.frontItemID}
           rep={rep}
-          lastCommentID={comments[comments.length - 1].frontItemID}
           email={email}
         />
       )
@@ -254,8 +250,7 @@ function OtherThing({fullArrows, rep, itemID, email}:any){
   )
 }
 
-function CommentArrows({itemID, rep, lastCommentID, email} : any){
-  console.log("lastCommentID", lastCommentID)
+function CommentArrows({itemID, rep, email} : any){
   const item = useItemByID(rep, itemID)
 
   return(
@@ -372,8 +367,7 @@ function ReplyForm({ itemID, rep, email} : any){
 
   )
 }
-function FrontItemStuff({rep, itemID, arrow }:{rep: any, itemID: string, arrow: any}) {
-  console.log({arrow})
+function FrontItemStuff({rep, itemID }:{rep: any, itemID: string}) {
   const item = useItemByID(rep, itemID)
 
   return (

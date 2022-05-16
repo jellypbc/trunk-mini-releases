@@ -186,7 +186,6 @@ function EditorContainer({ doc, type, rep, itemID, arrows } : Props) {
     // save commentItem
     rep.mutate.createItem({ id: commentItem.id, item: commentItem.item })
     // update arrows on selectedItem
-    console.log('itemArrows', itemArrows)
     rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
     // set arrows in this component, so that the editor knows to draw the decoration
     // setArrows(itemArrows)
