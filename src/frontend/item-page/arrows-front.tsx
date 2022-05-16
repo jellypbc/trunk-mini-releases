@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   useItemByID,
-  useAuthorsByItemID,
+  useAuthorArrowsByItemID,
   useArrowsByIDs
 } from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
@@ -185,45 +185,42 @@ function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItem
 }
 
 function AuthorInfo({rep, itemID }: any){
-  const authors = useAuthorsByItemID(rep, itemID)
+  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
 
   return (
-    authors &&
+    authorArrows && authorArrows.length > 0 ?
     <AuthorArrows
       rep={rep}
-      authorArrowIDs={authors}
-    />
+      authorArrows={authorArrows}
+      authorCount={authorArrows.length}
+    /> : null
   )
 }
 
-function AuthorArrows({rep, authorArrowIDs} : any) {
-  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
-
-  if (!fullArrows) return null
+function AuthorArrows({rep, authorArrows, authorCount} : any) {
 
   return (
     <>
-      {fullArrows && fullArrows.length > 0 &&
-        <span className={styles.arrowAuthorDataSpan}>
-          {fullArrows
-            .slice(0, 2)
-            .map((fullArrow: any, index: any) => {
-              return (
-              <AuthorItem
-                key={`author-${fullArrow.id}`}
-                rep={rep}
-                itemID={fullArrow.frontItemID}
-                authorCount={fullArrows.length}
-                index={index}
-              />
-            )
-          })
-          }
-          {fullArrows.length > 2 &&
-            <span>{`and ${fullArrows.length - 2} more `}</span>
-          }
-        </span>
-      }
+      <span className={styles.arrowAuthorDataSpan}>
+        {authorArrows
+          .slice(0, 2)
+          .map((arrow: any, index: any) => {
+            return (
+            <AuthorItem
+              key={`author-${arrow.id}`}
+              rep={rep}
+              itemID={arrow.frontItemID}
+              authorCount={authorCount}
+              index={index}
+            />
+          )
+        })
+        }
+        {authorArrows.length > 2 &&
+          <span>{`and ${authorCount - 2} more `}</span>
+        }
+      </span>
+
     </>
   )
 }

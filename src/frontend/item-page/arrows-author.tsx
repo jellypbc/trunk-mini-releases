@@ -12,19 +12,16 @@ import { randomItem } from '../../datamodel/item'
 type Props = {
   rep: Replicache<M>
   itemID: string
-  fullArrows: any[]
+  authorArrows: any[]
   handleSetSelectedItemID: (item: string) => void
 }
 
-          {/* <div className={styles.label}>Authors</div>
-          <div>...thing of authors</div> */}
-export default function ArrowsAuthor({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
+export default function ArrowsAuthor({ rep, itemID, authorArrows, handleSetSelectedItemID} : Props) {
   const email = useClientEmail(rep)
 
   const allItems = useSortedItems(rep)
 
   const [showAddAuthor, setShowAddAuthor] = useState<boolean>(false)
-  const authorArrows= fullArrows.filter((a: any) => a.kind === 'author' && a.backItemID === itemID ) || []
   const authorItemIDs = authorArrows.map((a: any) => a.frontItemID)
   const uniqueAuthorItemIDs = [...new Set(authorItemIDs)]
   return (

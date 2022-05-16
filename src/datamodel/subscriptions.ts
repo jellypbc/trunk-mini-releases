@@ -231,6 +231,22 @@ export function useCommentArrowsByItemID(rep: Replicache<M>, itemID: string) {
   return commentArrows
 }
 
+export function useAuthorArrowsByItemID(rep: Replicache<M>, itemID: string) {
+  // this needs to be refactored bc allArrows can be a huge array
+  const allArrows = useArrows(rep)
+  const arrowIDs = useItemArrowIDsByID(rep, itemID) as unknown as any
+  let authorArrows : any[] = []
+  arrowIDs && arrowIDs.map((arrowID: string) => {
+    allArrows.find(([k, v]: [string, any]) => {
+      const id = k.substring(arrowPrefix.length)
+      if (id === arrowID && v.kind === `author`) {
+        authorArrows.push(Object.assign(v, {id: id}))
+      }
+    })
+  })
+  return authorArrows
+}
+
 export function useArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
   // this needs to be refactored bc allArrows can be a huge array
   const allArrows = useArrows(rep)
@@ -246,22 +262,6 @@ export function useArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
   return arrows
 }
 
-export function useAuthorsByItemID(rep: Replicache<M>, itemID: string) {
-  const item = useItemByID(rep, itemID) as unknown as any
-  return (
-    item &&
-    item.arrows.filter((a: any) => {
-      return a.kind === 'author' && a.backItemID === itemID
-    }).map((a: any) => a.arrowID)
-  )
-}
-
-export function useAuthorItemsByArrowIDs(rep: Replicache<M>, arrowIDs: string[]){
-  const arrows = useArrowsByIDs(rep, arrowIDs)
-  return (
-    arrows.map((a: any) => a.frontItemID)
-  )
-}
 
 // Shape
 export function useShapeIDs(rep: Replicache<M>) {

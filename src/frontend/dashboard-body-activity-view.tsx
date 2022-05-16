@@ -5,7 +5,14 @@ import styles from './dashboard-body-activity-view.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
 import { randomItem } from '../datamodel/item'
 import { HotKeys } from 'react-hotkeys'
-import { useItemByID, useArrowByID, useArrowsByIDs, useAuthorsByItemID, useClientEmail, useClientUsername, useClientAvatarURL } from '../datamodel/subscriptions'
+import {
+  useItemByID,
+  useArrowByID,
+  useClientEmail,
+  useClientUsername,
+  useClientAvatarURL,
+  useAuthorArrowsByItemID,
+} from '../datamodel/subscriptions'
 import { htmlToText } from '../util/htmlToText'
 import ItemParent from './item-parent'
 import EditorContainer from './editor-container'
@@ -521,50 +528,30 @@ type AuthorInfoProps = {
 }
 
 function AuthorInfo({rep, itemID}: AuthorInfoProps){
-  const authors = useAuthorsByItemID(rep, itemID)
+  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
 
   return (
+    authorArrows && authorArrows.length > 0 ?
     <AuthorItems
+      authorArrows={authorArrows}
       rep={rep}
-      authorArrowIDs={authors}
-    />
+    /> : null
   )
 }
 
 type AuthorItemsProps = {
+  authorArrows: any[]
   rep: Replicache<M>
-  authorArrowIDs: string[]
 }
 
-function AuthorItems({rep, authorArrowIDs} : AuthorItemsProps) {
-  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
+function AuthorItems({authorArrows, rep} : AuthorItemsProps) {
+  const authorCount = authorArrows.length
+  const firstAuthorArrow = authorArrows[0]
+  const item = useItemByID(rep, firstAuthorArrow.id)
 
-  return (
-    fullArrows.length > 0 ?
-      <AuthorFull
-        rep={rep}
-        itemID={fullArrows[0].frontItemID}
-        authorLength={fullArrows.length}
-      />
-      :
-      null
-  )
-}
-
-type AuthorFullProps = {
-  rep: Replicache<M>
-  itemID: string
-  authorLength: number
-}
-
-
-function AuthorFull({rep, itemID, authorLength}: AuthorFullProps) {
-  const item = useItemByID(rep, itemID)
   return (
     item &&
-    <div>By {htmlToText(item.title).split('[')[0]}  {authorLength > 1 && `+ ${authorLength - 1}`} </div>
+    <div>By {htmlToText(item.title).split('[')[0]}  {authorCount > 1 && `+ ${authorCount - 1}`} </div>
   )
 }
-
-
 

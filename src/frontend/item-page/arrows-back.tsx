@@ -1,8 +1,8 @@
 import React from 'react'
 import {
   useItemByID,
-  useAuthorsByItemID,
-  useArrowsByIDs } from '../../datamodel/subscriptions'
+  useAuthorArrowsByItemID
+} from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
@@ -71,36 +71,16 @@ function BackArrowItem({ rep, itemID, handleSetSelectedItemID }: BackArrowItemPr
 
 
 function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
-  const authors = useAuthorsByItemID(rep, itemID)
+  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
 
   return (
-    authors &&
-      <AuthorArrows
-        rep={rep}
-        authorArrowIDs={authors}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      />
-  )
-}
-
-function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
-  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
-
-  if (!fullArrows) return null
-
-
-  return (
-    <>
-    {fullArrows && fullArrows.length > 0 &&
+    authorArrows && authorArrows.length > 0 ?
       <AuthorItem
-        key={`author-${fullArrows[0].id}`}
         rep={rep}
-        itemID={fullArrows[0].frontItemID}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-        authorCount={fullArrows.length}
-      />
-    }
-    </>
+        itemID= {authorArrows[0].frontItemID}
+        handleSeSelectedItemID={handleSetSelectedItemID}
+        authorCount={authorArrows.length}
+      /> : null
   )
 }
 

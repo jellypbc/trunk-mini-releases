@@ -30,7 +30,6 @@ export default function DashboardBody({ rep, items, handleSetSelectedItemID } : 
             setShowIndex={setShowIndex}
             items={items}
             handleSetSelectedItemID={handleSetSelectedItemID}
-            rep={rep}
           />
         }
       </div>

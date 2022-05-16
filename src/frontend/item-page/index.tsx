@@ -9,7 +9,7 @@ import {
   useItemByID,
   useClientEmail,
   useArrowsByIDs,
-  useAuthorsByItemID,
+  useAuthorArrowsByItemID,
   useCommentArrowsByItemID
  } from '../../datamodel/subscriptions'
 import { useRouter } from 'next/router'
@@ -62,7 +62,7 @@ type SidebarProps = {
   rep: Replicache<M>
   item: any
   handleSetSelectedItemID: (itemID: string) => void
-  authorArrowIDs: any
+  authorArrows: any
   trunkID: string
   publicationDate: string
   updatedAt: any
@@ -122,7 +122,7 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 }
 
 function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar, item, clientEmail } : any ) {
-  const authors = useAuthorsByItemID(rep, itemID)
+  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
 
   async function signInWithGoogle() {
     const redirectUrl = location.href
@@ -166,7 +166,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
         <div className={styles.bodyContainer}>
-          {authors &&
+          {authorArrows &&
             <Sidebar
               createdBy={item.createdBy}
               arrowsCount={item.arrows.length}
@@ -174,7 +174,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
               rep={rep}
               item={item}
               handleSetSelectedItemID={handleSetSelectedItemID}
-              authorArrowIDs={authors}
+              authorArrows={authorArrows}
               trunkID={roomID}
               publicationDate={item.publicationDate}
               updatedAt={item.updatedAt}
@@ -405,7 +405,7 @@ function DeleteItem({rep, itemID, handleSetSelectedItemID, trunkID} : any) {
   )
 }
 
-function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunkID} : any){
+function MetadataModal({ itemID, rep, handleSetSelectedItemID, authorArrows, trunkID} : any){
   const item = useItemByID(rep, itemID)
 
   return (
@@ -424,11 +424,11 @@ function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunk
           <div>{htmlToText(item.title)}</div>
         </div>
         <div className={styles.metadataThing}>
-          {fullArrows &&
+          {authorArrows &&
             <ArrowsAuthor
               rep={rep}
               itemID={itemID}
-              fullArrows={fullArrows}
+              authorArrows={authorArrows}
               handleSetSelectedItemID={handleSetSelectedItemID}
             />
           }
@@ -489,11 +489,10 @@ function MetadataModal({ itemID, rep, handleSetSelectedItemID, fullArrows, trunk
   )
 }
 
-function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrowIDs, trunkID, publicationDate, updatedAt, createdAt} : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrows, trunkID, publicationDate, updatedAt, createdAt} : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
   const [URL, setURL] = useState<string>('')
-  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
 
   useEffect(() => {
     generateIDBSourceFileURL(item.sourceURL)
@@ -553,12 +552,12 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
 
   return(
     <div className={styles.sidebarContainer}>
-      {showMetadataModal && fullArrows &&
+      {showMetadataModal && authorArrows &&
         <MetadataModal
           itemID={itemID}
           rep={rep}
           handleSetSelectedItemID={handleSetSelectedItemID}
-          fullArrows={fullArrows}
+          authorArrows={authorArrows}
           trunkID={trunkID}
         />
       }
@@ -752,38 +751,30 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
 }
 
 function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
-  const authors = useAuthorsByItemID(rep, itemID)
+  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
 
   return (
-    authors &&
+    authorArrows && authorArrows.length > 0 ?
       <AuthorArrows
         rep={rep}
-        authorArrowIDs={authors}
+        authorArrows={authorArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
-      />
+      /> : null
   )
 }
 
-function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
-  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
-
-  if (!fullArrows) return null
-
+function AuthorArrows({rep, authorArrows, handleSetSelectedItemID} : any) {
+  const authorCount = authorArrows.length
   return (
-    <>
-    {fullArrows &&
-      fullArrows.map((a, i) => {
-        return (
-          <AuthorItem
-            key={`author-${a.id}`}
-            rep={rep}
-            itemID={a.frontItemID}
-            isLast={i === fullArrows.length - 1 && true}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-          />
-        )
-    })}
-    </>
+    authorArrows.map((arrow: any, i: number) =>
+      <AuthorItem
+        key={`author-${arrow.id}`}
+        rep={rep}
+        itemID={arrow.frontItemID}
+        isLast={i === authorCount - 1 && true}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+      />
+    )
   )
 }
 

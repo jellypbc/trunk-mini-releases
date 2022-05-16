@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
-import { useItemByID, useArrowsByIDs, useArrowByID, useAuthorsByItemID } from '../datamodel/subscriptions'
+import { useItemByID, useArrowsByIDs, useArrowByID } from '../datamodel/subscriptions'
 import EditorContainer from './editor-container'
 import { htmlToText } from '../util/htmlToText'
 import styles from './item-container.module.css'
@@ -72,15 +72,6 @@ export default function ItemContainer({rep, itemID, handleSetSelectedItemID} : a
               arrows={[]}
             />
           </div>
-        </div>
-        <div className={styles.authorsContainer}>
-          {item.arrows.length > 0 &&
-            <AuthorInfo
-              rep={rep}
-              itemID={itemID}
-              handleSetSelectedItemID={handleSetSelectedItemID}
-            />
-          }
         </div>
         <div className={styles.content}>
           <EditorContainer
@@ -388,56 +379,6 @@ function ItemDeleteItem({rep, itemID, handleSetSelectedItemID} : any) {
         >Cancel</span>
         </>
       }
-    </div>
-  )
-}
-
-function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
-  const authors = useAuthorsByItemID(rep, itemID)
-
-  return (
-    authors &&
-      <AuthorArrows
-        rep={rep}
-        authorArrowIDs={authors}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-      />
-  )
-}
-
-function AuthorArrows({rep, authorArrowIDs, handleSetSelectedItemID} : any) {
-  const fullArrows = useArrowsByIDs(rep, authorArrowIDs)
-
-  if (!fullArrows) return null
-
-  return (
-    <>
-    {fullArrows &&
-      fullArrows.map((a, i) => {
-        return (
-          <AuthorItem
-            key={`author-${a.id}`}
-            rep={rep}
-            itemID={a.frontItemID}
-            isLast={i === fullArrows.length - 1 && true}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-          />
-        )
-    })}
-    </>
-  )
-}
-
-function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
-  const item = useItemByID(rep, itemID)
-  return (
-    item &&
-    <div
-      className={styles.authors}
-      onClick={() => handleSetSelectedItemID(itemID)}
-    >
-      <span>{htmlToText(item.title).split('[')[0].trim()}</span>
-      {!isLast && <span>,&nbsp;</span>}
     </div>
   )
 }

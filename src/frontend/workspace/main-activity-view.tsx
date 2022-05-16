@@ -4,8 +4,7 @@ import { htmlToText } from '../../util/htmlToText'
 import { dateInWords } from '../../lib/dateInWords'
 import { useRouter } from 'next/router'
 import {
-  useAuthorsByItemID,
-  useAuthorItemsByArrowIDs,
+  useAuthorArrowsByItemID,
   useItemByID
 } from '../../datamodel/subscriptions'
 import type { Replicache } from 'replicache'
@@ -73,7 +72,7 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
   const safeTitle = htmlToText(item.title)
   const safeCreatedAt = dateInWords(item.createdAt) || 'a while ago'
   const router = useRouter()
-  const authorArrows = useAuthorsByItemID(rep, item.id)
+  const authorArrows = useAuthorArrowsByItemID(rep, item.id)
   const [showLinks, setShowLinks] = useState<boolean>(false)
 
   const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
@@ -139,25 +138,25 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
 }
 
 function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
-  const authorItemIDs = useAuthorItemsByArrowIDs(rep, authorArrows)
+  const authorCount = authorArrows.length
+
   return (
-    authorItemIDs &&
     <div className={styles.authorContainer}>
       <span className={styles.by}>By</span>
       <span className={styles.authorName}>
-        {authorItemIDs.slice(0,2).map((itemID: any, index: any) =>
+        {authorArrows.slice(0,2).map((arrow: any, i: any) =>
           <AuthorName
-            key={`author-${itemID}`}
+            key={`author-${arrow.id}`}
             rep={rep}
-            itemID={itemID}
-            authorCount={authorItemIDs.length}
-            index={index}
+            itemID={arrow.frontItemID}
+            authorCount={authorCount}
+            index={i}
           />
         )}
       </span>
-      {authorItemIDs.length > 2 &&
+      {authorCount > 2 &&
         <span>
-          and {authorItemIDs.length - 2} more
+          and {authorCount - 2} more
         </span>
       }
     </div>
@@ -166,7 +165,6 @@ function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
 
 function AuthorName({ rep, itemID, authorCount, index}: any){
   const item = useItemByID(rep, itemID)
-  console.log('index',index)
 
   return (
     item &&
