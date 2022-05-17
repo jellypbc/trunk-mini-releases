@@ -19,7 +19,6 @@ import { supabase } from '../../lib/supabase-client'
 import EditorContainer from './editor-container'
 import ItemMainSubItems from './item-main-sub-items'
 import ArrowsAuthoredBy from './arrows-authored-by'
-import ArrowsAuthor from './arrows-author'
 import ArrowsBack from './arrows-back'
 import ArrowsComment from './arrows-comment'
 import ArrowsFootnote from './arrows-footnote'
@@ -36,6 +35,7 @@ import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constant
 import SidebarOutline from './sidebar-outline'
 import ItemParent from './item-parent'
 import { dateInWordsIncludeYear, dateInWordsTimeOnly } from '../../lib/dateInWords'
+import MetadataModal from './metadata-modal'
 
 
 type ItemPageProps = {
@@ -371,124 +371,6 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
   )
 }
 
-function DeleteItem({rep, itemID, handleSetSelectedItemID, trunkID} : any) {
-  const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
-  const item = useItemByID(rep, itemID)
-  const router = useRouter()
-  const modifiedRoomID = trunkID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
-
-
-  function deleteItemAndSetSelectedItemIDToEmpty() {
-    rep.mutate.deleteItem(itemID)
-    handleSetSelectedItemID('')
-    router.push(`/workspace/${modifiedRoomID}`)
-  }
-
-  return (
-    <>
-      <div
-        className={styles.archiveContainer}
-        onClick={() => setDeleteConfirmation(true)}
-      >Archive</div>
-      {deleteConfirmation && item &&
-        <>
-        <button
-          onClick={() => deleteItemAndSetSelectedItemIDToEmpty()}
-        >Delete {htmlToText(item.title)}</button>
-        <span
-          className={styles.cancel}
-          onClick={() => setDeleteConfirmation(false)}
-        >Cancel</span>
-        </>
-      }
-    </>
-  )
-}
-
-function MetadataModal({ itemID, rep, handleSetSelectedItemID, authorArrows, trunkID} : any){
-  const item = useItemByID(rep, itemID)
-
-  return (
-    item &&
-    <div className={styles.metadataModal}>
-      <div className={styles.metadataLabel}>
-        Editing Item
-      </div>
-      <div className={styles.metadataCreatedBy}>
-        <div className={styles.label}>Created by</div>
-        <div>{item.createdBy}</div>
-      </div>
-      <div className={styles.boxStuff}>
-        <div className={styles.metadataThing}>
-          <div className={styles.label}>Title</div>
-          <div>{htmlToText(item.title)}</div>
-        </div>
-        <div className={styles.metadataThing}>
-          {authorArrows &&
-            <ArrowsAuthor
-              rep={rep}
-              itemID={itemID}
-              authorArrows={authorArrows}
-              handleSetSelectedItemID={handleSetSelectedItemID}
-            />
-          }
-        </div>
-        <div className={styles.metadataThing}>
-          <div className={styles.label}>URL</div>
-          <div className={styles.input}>
-            <EditorContainer
-              doc={item.webSourceURL}
-              type={'webSourceURL'}
-              rep={rep}
-              itemID={itemID}
-              commentArrows={[]}
-            />
-          </div>
-        </div>
-        <div className={styles.metadataThing}>
-          <div className={styles.label}>Publication date</div>
-          <div className={styles.input}>
-            <EditorContainer
-              doc={item.publicationDate}
-              type={'publicationDate'}
-              rep={rep}
-              itemID={itemID}
-              commentArrows={[]}
-            />
-          </div>
-        </div>
-      </div>
-      <div className={styles.metadataThing}>
-        <div className={styles.label}>Label</div>
-        <div>John Reed</div>
-      </div>
-      <div className={styles.tagContainer}>
-        <div className={styles.tagAdd}>
-          <div className={styles.bigLabel}>Tags</div>
-          <div className={styles.addTagThing}>
-            <input placeholder={`Enter tag text`}/>
-            <button>Save</button>
-          </div>
-        </div>
-        <div className={styles.tags}>
-          <span>biology</span>
-          <span>distillation technology</span>
-          <span>caves</span>
-          </div>
-      </div>
-      <div className={styles.archiveContainer}>
-        <DeleteItem
-          rep={rep}
-          itemID={itemID}
-          handleSetSelectedItemID={handleSetSelectedItemID}
-          trunkID={trunkID}
-        />
-      </div>
-
-    </div>
-  )
-}
-
 function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrows, trunkID, publicationDate, updatedAt, createdAt} : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
@@ -559,6 +441,8 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
           handleSetSelectedItemID={handleSetSelectedItemID}
           authorArrows={authorArrows}
           trunkID={trunkID}
+          handleSetShowMetadataModal={setShowMetadataModal}
+          item={item}
         />
       }
       <div className={styles.top}>

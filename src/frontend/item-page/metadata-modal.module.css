@@ -1,0 +1,160 @@
+.container {
+  position: absolute;
+  background-color: hsl(0, 0%, 98%);
+  width: 440px;
+  right: 0;
+  top: 10%;
+  bottom: 10%;
+  margin: 0 auto;
+  padding: 1.4rem;
+  border: 2px solid hsla(0, 0%, 85%);
+  border-right: none;
+  box-shadow: 0 4px 20px hsla(0, 0%, 90%), 0 4px 20px hsla(0, 0%, 90%);
+  border-radius: .5rem 0 0 .5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  /* animation: move 1s linear 1s 1; */
+}
+
+/* @keyframes move {
+  from {-webkit-transform: translateX(400px);}
+  to {-webkit-transform: translateX(0px);}
+} */
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.exit {
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: hsl(0, 0%, 80%);
+}
+
+.readOnlyFields {
+  padding: 1rem 0;
+}
+
+.label {
+  font-weight: 600;
+  display: flex;
+}
+
+.label div {
+  padding-right: .5rem;
+}
+
+.editableFields {
+  border: 1px solid hsl(0, 0%, 90%);
+  padding: .5rem;
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 1rem;
+}
+
+.left {
+  display: flex;
+}
+
+.left div {
+  padding-right: 1rem;
+}
+
+.field {
+  padding-bottom: 1rem;
+}
+
+.lastField {
+  padding-bottom: 0rem;
+}
+
+
+.tagAdd {
+  display: flex;
+  align-items: center;
+}
+
+.bigLabel {
+  font-size: 1.2rem;
+}
+
+.addTagThing input {
+  margin :1rem;
+}
+
+.tags span {
+  padding-right: 1rem;
+}
+
+.archiveContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+
+.archiveConfirmation {
+  display: flex;
+  padding: 1rem 0;
+}
+
+.authorContainer {
+  padding-bottom: 1rem;
+}
+
+.individualAuthorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.individualAuthorContainer:hover {
+  background-color: hsl(0, 0%, 95%);
+
+}
+
+.authorTitle {
+  padding-right: 1rem;
+
+}
+
+.removeAuthor {
+  color: hsl(0, 71%, 66%);
+  border: 1px solid hsl(0, 71%, 66%);
+  border-radius: 100%;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.minusSign {
+  margin-left: .25rem;
+  margin-top: -.2rem;
+}
+
+.addAuthor {
+  color: 	hsl(165, 54%, 52%);
+  border: 1px solid 	hsl(165, 54%, 52%);
+  border-radius: 100%;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  font-size: .6rem;
+}
+
+.plusSign {
+  margin-left: .25rem;
+  margin-top: -.01rem;
+}
