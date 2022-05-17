@@ -1,0 +1,33 @@
+.container {
+  margin: 0 auto;
+  width: 60vw;
+}
+
+.card {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+.contentContainer {
+  width: 100%;
+}
+
+.highlight {
+  font-size: 2rem;
+  overflow: auto;
+  max-height: 80vh;
+}
+
+.title {
+  padding: 1rem 0;
+  color: hsl(0, 0%, 80%);
+}
+
+.back, .next {
+  font-size: 2rem;
+  font-weight: 100;
+  padding: 2rem;
+}

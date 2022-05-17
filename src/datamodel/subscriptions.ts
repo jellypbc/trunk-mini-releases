@@ -215,6 +215,24 @@ export function useArrows(rep: Replicache<M>) {
   )
 }
 
+export function useCommentArrows(rep: Replicache<M>) {
+  return useSubscribe(
+    rep,
+    async(tx) => {
+      const arrows = await tx.scan({ prefix: arrowPrefix}).entries().toArray()
+      const filtered = arrows.filter((arrow: any) => arrow[1].kind === "comment")
+      const simplified : any[] = []
+      filtered.map(([k, v]: [string, any]) => {
+        const thing = v
+        Object.assign(thing, { id: k.substring(arrowPrefix.length)})
+        simplified.push(thing)
+      })
+      return simplified
+    },
+    []
+  )
+}
+
 export function useCommentArrowsByItemID(rep: Replicache<M>, itemID: string) {
   // this needs to be refactored bc allArrows can be a huge array
   const allArrows = useArrows(rep)
