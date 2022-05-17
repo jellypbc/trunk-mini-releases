@@ -12,6 +12,7 @@ import Workspace from '../../../frontend/workspace/index'
 import ItemPage from '../../../frontend/item-page/index'
 import CommandBar from '../../../frontend/command-bar/index'
 import { useRouter } from 'next/router'
+import FlashCards from '../../../frontend/experimental/flashcards'
 
 export default function Home() {
   const [rep, setRep] = useState<Replicache<M> | null>(null)
@@ -159,6 +160,14 @@ export default function Home() {
 
   if (selectedItemID === "i" && !session) {
     router.push('/')
+  }
+
+  if (selectedItemID === "flashcards" && session && rep) {
+    return (
+      <FlashCards
+        rep={rep}
+      />
+    )
   }
 
   return (
