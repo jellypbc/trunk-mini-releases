@@ -1,6 +1,6 @@
 .container {
-  z-index: 1;
   position: absolute;
+  background-color: hsl(0, 0%, 98%);
   width: 440px;
   right: 0;
   top: 10%;
@@ -56,21 +56,30 @@
   padding: .5rem;
 }
 
+.labelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 1rem;
+}
+
+.left {
+  display: flex;
+}
+
+.left div {
+  padding-right: 1rem;
+}
+
 .field {
-  padding-bottom: .5rem;
+  padding-bottom: 1rem;
 }
 
 .lastField {
   padding-bottom: 0rem;
 }
 
-.input {
-
-}
-
-.tagContainer {
-
-}
 
 .tagAdd {
   display: flex;
@@ -100,6 +109,52 @@
   padding: 1rem 0;
 }
 
-.cancel {
-  padding-left: 1rem;
+.authorContainer {
+  padding-bottom: 1rem;
+}
+
+.individualAuthorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.individualAuthorContainer:hover {
+  background-color: hsl(0, 0%, 95%);
+
+}
+
+.authorTitle {
+  padding-right: 1rem;
+
+}
+
+.removeAuthor {
+  color: hsl(0, 71%, 66%);
+  border: 1px solid hsl(0, 71%, 66%);
+  border-radius: 100%;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.minusSign {
+  margin-left: .25rem;
+  margin-top: -.2rem;
+}
+
+.addAuthor {
+  color: 	hsl(165, 54%, 52%);
+  border: 1px solid 	hsl(165, 54%, 52%);
+  border-radius: 100%;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  font-size: .6rem;
+}
+
+.plusSign {
+  margin-left: .25rem;
+  margin-top: -.01rem;
 }

@@ -3,8 +3,8 @@ import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
 import type { Replicache } from 'replicache'
-import EditorDraftingContainer from './../editor-drafting-container'
-import { useSortedItems, useItemByID, useClientEmail } from '../../datamodel/subscriptions'
+import EditorDraftingContainer from '../editor-drafting-container'
+import { useSortedItems, useClientEmail } from '../../datamodel/subscriptions'
 import Fuse from 'fuse.js'
 import { randomArrow } from '../../datamodel/arrow'
 import { randomItem } from '../../datamodel/item'
@@ -12,68 +12,28 @@ import { randomItem } from '../../datamodel/item'
 type Props = {
   rep: Replicache<M>
   itemID: string
-  authorArrows: any[]
-  handleSetSelectedItemID: (item: string) => void
+  handleSetShowAddAuthor: (state: boolean) => void
 }
 
-export default function ArrowsAuthor({ rep, itemID, authorArrows, handleSetSelectedItemID} : Props) {
+export default function AddAuthorArrow({ rep, itemID, handleSetShowAddAuthor} : Props) {
   const email = useClientEmail(rep)
-
   const allItems = useSortedItems(rep)
 
-  const [showAddAuthor, setShowAddAuthor] = useState<boolean>(false)
-  const authorItemIDs = authorArrows.map((a: any) => a.frontItemID)
-  const uniqueAuthorItemIDs = [...new Set(authorItemIDs)]
   return (
     <>
-      <div className={styles.label}>
-        <div>Authors</div>
-        <div>{uniqueAuthorItemIDs.length}</div>
-        <div onClick={() => setShowAddAuthor(true)}>Add author</div>
-      </div>
-      {showAddAuthor && allItems && email &&(
+      {allItems && email &&(
         <AddAuthorThing
           rep={rep}
           userInfo={null}
           allItems={allItems}
           itemID={itemID}
-          handleSetShowAddAuthor={setShowAddAuthor}
+          handleSetShowAddAuthor={handleSetShowAddAuthor}
           email={email}
         />
       )}
-      {uniqueAuthorItemIDs.map((itemID: any) => {
-        return (
-          <AuthorArrowItem
-            key={`frontArrow-${itemID}`}
-            itemID={itemID}
-            rep={rep}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-          />
-        )
-      })}
     </>
   )
 }
-
-type FrontArrowItemProps = {
-  rep: Replicache<M>
-  itemID: string
-  handleSetSelectedItemID: (itemID: string) => void
-}
-
-
-function AuthorArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
-  const item = useItemByID(rep, itemID)
-  return (
-    <div
-      className={styles.item}
-      onClick={() => handleSetSelectedItemID(itemID)}
-    >
-      {item && htmlToText(item.title) || 'nothing here'}
-    </div>
-  )
-}
-
 
 function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAuthor, email} : any) {
   const [authorDraft, setAuthorDraft] = useState<string>('<p></p>')
@@ -95,10 +55,7 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
     // fieldNormWeight: 1,
     keys: [
       'id',
-      'content',
-      'highlight',
-      'title',
-      'createdBy'
+      'title'
     ]
   }
   const fuse = new Fuse(allItems, options)
@@ -115,11 +72,6 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
     }
   }, [authorDraft])
 
-  // function handleArrowAdd(){
-  //   console.log(
-  //     'add something', commentDraft
-  //   )
-  // }
 
   function createArrow(type: string, frontItemID: string, commentDraft : string) {
     let commentArrow : any = randomArrow()
@@ -139,13 +91,11 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
     return commentArrow
   }
 
-  // create arrow to existing author
-  function handleArrowAdd(id: string) {
-    //create arrow
-    const referenceArrow = createArrow('author', id, '')
-    //make newA
 
-    const newA = {
+  function handleArrowAdd(authorItemID: string) {
+    const referenceArrow = createArrow('author', authorItemID, '')
+
+    const newItemArrow = {
       arrowID: referenceArrow.id,
       to: referenceArrow.arrow.to,
       from: referenceArrow.arrow.from,
@@ -153,15 +103,12 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
       backItemID: referenceArrow.arrow.backItemID
     }
 
-    // save arrow!
+    const frontItemID = authorItemID
+    const backItemID = itemID
+
     rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
-
-
-    // save arrow to the item of id passed in
-    rep.mutate.updateItemAddSingleArrow({ id: id, arrow: newA})
-
-    // add arrow to existing item
-    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
+    rep.mutate.updateItemAddSingleArrow({ id: frontItemID, arrow: newItemArrow})
+    rep.mutate.updateItemAddSingleArrow({ id: backItemID, arrow: newItemArrow })
     setAuthorDraft('<p></p>')
     handleSetShowAddAuthor(false)
   }
@@ -179,14 +126,10 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
   }
 
   function handleReferenceAdd(){
-    // create referenceItem
     const referenceItem = createAuthorItem(authorDraft)
-
-    // create arrow
     const referenceArrow = createArrow('author', referenceItem.id, authorDraft)
 
-    // set newA
-    const newA = {
+    const newItemArrow = {
       arrowID: referenceArrow.id,
       to: referenceArrow.arrow.to,
       from: referenceArrow.arrow.from,
@@ -194,19 +137,15 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
       backItemID: referenceArrow.arrow.backItemID
     }
 
-    // push newA to referenceItem.arrows
     const arrows = []
-    arrows.push(newA)
+    arrows.push(newItemArrow)
     referenceItem.item.arrows = JSON.stringify(arrows)
 
-    // save author arrow
+    const frontItemID = referenceItem.id
+    const backItemID = itemID
     rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
-
-    // save new item, with author arrow
-    rep.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
-
-    // add author arrow to existing item
-    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
+    rep.mutate.createItem({ id: frontItemID, item: referenceItem.item })
+    rep.mutate.updateItemAddSingleArrow({ id: backItemID, arrow: newItemArrow })
 
     setAuthorDraft('<p></p>')
     handleSetShowAddAuthor(false)
@@ -224,7 +163,9 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
         />
       </div>
       <div className={styles.authorActions}>
-        <button onClick={handleReferenceAdd}>Add</button>
+        <button
+          className={`btn btn-1`}
+          onClick={handleReferenceAdd}>Add</button>
         <div
           className={styles.addArrowExit}
           onClick={() => handleSetShowAddAuthor(false)}
