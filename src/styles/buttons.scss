@@ -34,8 +34,8 @@
 }
 
 .btn {
-
   font-size: .8rem;
+  outline: none;
 }
 
 .btn-1 {
@@ -45,7 +45,7 @@
 }
 
 .btn-1:hover {
-  background-color: hsl(0, 0%, 90%);
+  background-color: hsl(0, 0%, 97%);
   color: hsl(0, 0%, 50%);
 }
 
@@ -55,6 +55,17 @@
 
 .btn-2:hover {
 
+}
+
+.btn-x {
+  padding: .1rem 1rem;
+  color: 	hsl(0, 71%, 66%);
+  border: 2px solid hsl(0, 71%, 66%);
+}
+
+.btn-x:hover {
+  background-color: hsl(0, 71%, 66%);
+  color: hsl(0, 0%, 100%);
 }
 
 .button-home {

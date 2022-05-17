@@ -441,6 +441,8 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
           handleSetSelectedItemID={handleSetSelectedItemID}
           authorArrows={authorArrows}
           trunkID={trunkID}
+          handleSetShowMetadataModal={setShowMetadataModal}
+          item={item}
         />
       }
       <div className={styles.top}>

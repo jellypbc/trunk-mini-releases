@@ -7,36 +7,42 @@ import { useRouter } from 'next/router'
 import ArrowsAuthor from './arrows-author'
 import EditorContainer from './editor-container'
 
-export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, authorArrows, trunkID} : any) {
-  const item = useItemByID(rep, itemID)
+export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, authorArrows, trunkID, handleSetShowMetadataModal, item} : any) {
   return (
-    item &&
-    <div className={styles.metadataModal}>
-      <div className={styles.metadataLabel}>
-        Editing Item
+    <div className={styles.container}>
+      <div className={styles.nav}>
+        <div className={styles.title}>
+          Editing Item
+        </div>
+        <div
+          className={styles.exit}
+          onClick={() => handleSetShowMetadataModal(false)}
+        >&times;</div>
       </div>
-      <div className={styles.metadataCreatedBy}>
+      <div className={styles.readOnlyFields}>
         <div className={styles.label}>Created by</div>
         <div>{item.createdBy}</div>
       </div>
-      <div className={styles.boxStuff}>
-        <div className={styles.metadataThing}>
+      <div className={styles.editableFields}>
+        <div className={styles.field}>
           <div className={styles.label}>Title</div>
-          <div>{htmlToText(item.title)}</div>
+          <div>{htmlToText(item.title)}</div> // make ediable
         </div>
-        <div className={styles.metadataThing}>
-          {authorArrows &&
+        <div className={styles.field}>
+          <div className={styles.label}>Authors</div>
+          <div>stuff</div>
+          {/* {authorArrows &&
             <ArrowsAuthor
               rep={rep}
               itemID={itemID}
               authorArrows={authorArrows}
               handleSetSelectedItemID={handleSetSelectedItemID}
             />
-          }
+          } */}
         </div>
-        <div className={styles.metadataThing}>
+        <div className={styles.field}>
           <div className={styles.label}>URL</div>
-          <div className={styles.input}>
+          {/* <div className={styles.input}>
             <EditorContainer
               doc={item.webSourceURL}
               type={'webSourceURL'}
@@ -44,11 +50,12 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
               itemID={itemID}
               commentArrows={[]}
             />
-          </div>
+          </div> */}
+          <div>stuff</div>
         </div>
-        <div className={styles.metadataThing}>
+        <div className={styles.lastField}>
           <div className={styles.label}>Publication date</div>
-          <div className={styles.input}>
+          {/* <div className={styles.input}>
             <EditorContainer
               doc={item.publicationDate}
               type={'publicationDate'}
@@ -56,42 +63,23 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
               itemID={itemID}
               commentArrows={[]}
             />
-          </div>
+          </div> */}
+          <div>stuff</div>
         </div>
       </div>
-      <div className={styles.metadataThing}>
-        <div className={styles.label}>Label</div>
-        <div>John Reed</div>
-      </div>
-      <div className={styles.tagContainer}>
-        <div className={styles.tagAdd}>
-          <div className={styles.bigLabel}>Tags</div>
-          <div className={styles.addTagThing}>
-            <input placeholder={`Enter tag text`}/>
-            <button>Save</button>
-          </div>
-        </div>
-        <div className={styles.tags}>
-          <span>biology</span>
-          <span>distillation technology</span>
-          <span>caves</span>
-          </div>
-      </div>
-      <div className={styles.archiveContainer}>
-        <DeleteItem
-          rep={rep}
-          itemID={itemID}
-          handleSetSelectedItemID={handleSetSelectedItemID}
-          trunkID={trunkID}
-        />
-      </div>
+      <DeleteItem
+        rep={rep}
+        itemID={itemID}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+        trunkID={trunkID}
+        item={item}
+      />
     </div>
   )
 }
 
-function DeleteItem({rep, itemID, handleSetSelectedItemID, trunkID} : any) {
+function DeleteItem({rep, itemID, handleSetSelectedItemID, trunkID, item} : any) {
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
-  const item = useItemByID(rep, itemID)
   const router = useRouter()
   const modifiedRoomID = trunkID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
 
@@ -103,22 +91,27 @@ function DeleteItem({rep, itemID, handleSetSelectedItemID, trunkID} : any) {
   }
 
   return (
-    <>
-      <div
-        className={styles.archiveContainer}
-        onClick={() => setDeleteConfirmation(true)}
-      >Archive</div>
-      {deleteConfirmation && item &&
-        <>
+    <div className={styles.archiveContainer}>
+      <div>
         <button
+          className={`btn btn-1`}
+          onClick={() => setDeleteConfirmation(true)}
+        >
+          Archive
+        </button>
+      </div>
+      {deleteConfirmation && item &&
+        <div className={styles.archiveConfirmation}>
+        <button
+          className={`btn btn-x`}
           onClick={() => deleteItemAndSetSelectedItemIDToEmpty()}
-        >Delete {htmlToText(item.title)}</button>
-        <span
-          className={styles.cancel}
+        >Archive <span className={styles.itemTitle}>{htmlToText(item.title)}</span></button>
+        <button
+          className={`btn btn-2`}
           onClick={() => setDeleteConfirmation(false)}
-        >Cancel</span>
-        </>
+        >Cancel</button>
+        </div>
       }
-    </>
+    </div>
   )
 }
