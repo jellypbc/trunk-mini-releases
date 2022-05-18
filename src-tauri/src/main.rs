@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::{api, CustomMenuItem, Manager, Menu, MenuItem, Submenu, WindowBuilder, WindowUrl};
+use tauri::{api, CustomMenuItem, Manager, Menu, MenuItem, Submenu, WindowBuilder, WindowUrl, AboutMetadata};
 use window_shadows::set_shadow;
 
 // mod transparent_window;
@@ -63,7 +63,7 @@ fn main() {
                 .add_native_item(MenuItem::Separator)
                 .add_native_item(MenuItem::Quit),
         ))
-        .add_native_item(MenuItem::About("Trunk".to_string()))
+        .add_native_item( MenuItem::About("Trunk".to_string(), AboutMetadata::new() ) )
         .add_native_item(MenuItem::Copy)
         .add_native_item(MenuItem::Quit)
         .add_native_item(MenuItem::Separator)

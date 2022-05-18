@@ -13,7 +13,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "jellypbc",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -28,13 +28,11 @@
       "shortDescription": "",
       "longDescription": "",
       "deb": {
-        "depends": [],
-        "useBootstrapper": false
+        "depends": []
       },
       "macOS": {
         "frameworks": [],
         "minimumSystemVersion": "10.13",
-        "useBootstrapper": false,
         "exceptionDomain": "",
         "signingIdentity": null,
         "providerShortName": null,
@@ -67,9 +65,9 @@
         "minWidth": 580,
         "minHeight": 500,
         "resizable": true,
-        // "decorations": false,
         "fullscreen": false,
-        "transparent": true,
+        "decorations": true,
+        "transparent": false,
       }
     ],
     "security": {

@@ -8,7 +8,7 @@ export default function AppNav() {
   return (
     <>
       { isTauri &&
-        <div data-tauri-drag-region id="nav">nav</div>
+        <div data-tauri-drag-region id="nav"></div>
       }
     </>
   )
