@@ -156,3 +156,12 @@
   margin: 1rem 0;
   padding: 1rem;
 }
+
+.error {
+  color: tomato;
+  font-size: .8rem;
+  border: 1px solid tomato;
+  padding: .5rem 1rem;
+  margin-bottom: 1rem;
+}
+

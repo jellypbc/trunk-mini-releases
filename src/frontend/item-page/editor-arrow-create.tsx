@@ -5,7 +5,7 @@ import { useSortedItems, useClientEmail } from '../../datamodel/subscriptions'
 import EditorDraftingContainer from './editor-drafting-container'
 import Fuse from 'fuse.js'
 
-export default function EditorArrowCreate({ serializedSelection, rep, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd }:any) {
+export default function EditorArrowCreate({ serializedSelection, rep, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd, showEmptyCommentError, handleSetShowEmptyCommentError }:any) {
   // const [showOptions, setShowOptions] = useState<boolean>(false)
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
@@ -104,6 +104,16 @@ export default function EditorArrowCreate({ serializedSelection, rep, handleRefe
           </div>
         } */}
         {/* {clientEmail === 'guest' ? 'Anonymous Aardvark' : clientEmail} */}
+        {showEmptyCommentError &&
+          <>
+            <div
+              className={styles.error}
+              onClick={() => handleSetShowEmptyCommentError(false)}
+            >
+              <div className={styles.message}>Say something before submitting...</div>
+            </div>
+          </>
+        }
         <div className={styles.arrowCreatorLabel}>Create a linked block</div>
         <div className={styles.arrowActions}>
           <span
