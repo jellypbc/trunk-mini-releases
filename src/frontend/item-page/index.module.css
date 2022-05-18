@@ -22,18 +22,6 @@
   flex: 1;
 }
 
-.sidebarContainer {
-  width: 150px;
-  margin-right: 15px;
-  font-size: .8rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.top {
-  position: absolute;
-}
-
 .mainContainer {
   width: 550px;
   margin-right: 15px;
@@ -53,106 +41,6 @@
 
 .inputContainer {
   display: flex;
-}
-
-.createdByContainer {
-  display: flex;
-  align-items: center;
-}
-
-.avatarContainer {
-  width: 1rem;
-  padding-right: 1rem;
-  padding: .2rem 0;
-}
-
-.avatar {
-  width: 2rem;
-  background-color: hsl(0, 0%, 88%);
-  height: 2rem;
-  margin: 0 auto;
-  border-radius: 50%;
-}
-
-.createdBy {
-  /* background-color: pink; */
-  padding: 0rem 1rem;
-  padding-left: 1.4rem;
-  font-size: .8rem;
-  flex: 1;
-  font-weight: 500;
-}
-
-.profile {
-  margin: 0 auto;
-  padding: 1rem;
-  border-radius: 1rem;
-  background-color: hsl(0, 0%, 80%);
-}
-
-.online {
-  position: absolute;
-  margin-left: .5rem;
-  margin-top: .5rem;
-  width: .1rem;
-  padding: .2rem;
-  border-radius: .4rem;
-  background-color: #2BD04F;
-  border: .2px solid hsl(0, 0%, 96%);
-}
-
-.updatedAtContainer {
-  font-size: .8rem;
-  padding: .2rem 0;
-}
-
-.updatedAtLabel {
-  color: hsl(0, 0%, 70%);
-}
-
-.metadataContainer, .viewPDFContainer, .shareItemContainer {
-  padding: .2rem 0;
-}
-
-.viewPDFContainer:hover, .shareItemContainer:hover, .metadataContainer:hover {
-  background-color: hsl(0, 0%, 96%);
-  cursor: pointer;
-}
-
-.viewPDFContainer a {
-  text-decoration: none;
-}
-
-.viewPDFContainer a:hover {
-  color: black;
-}
-
-.arrowsCountContainer {
-  display: flex;
-  padding: .2rem 0;
-}
-
-.arrowsCount {
-  padding: 0 .5rem;
-  background-color: hsl(0, 0%, 70%);
-  border-radius: 1rem;
-  margin-right: .2rem;
-}
-
-.outlineMinimapContainer {
-  padding-top: 4rem;
-}
-
-.bold {
-  font-weight: 500;
-}
-
-.outlineMinimapLabel {
-  color: hsl(0, 0%, 60%);
-}
-
-.outlineContainer, .minimapContainer {
-  padding-top: 1rem;
 }
 
 .title {
@@ -520,19 +408,5 @@ a.link:hover {
 
 .profileDropdownLeft div:hover {
   background-color: hsl(0, 0%, 96%);
-}
-
-.highlightBoxOn {
-  padding: 0rem .5rem;
-  margin-right: .5rem;
-  background-color: hsl(345, 96%, 90%);
-  border: 1px solid hsl(0, 0%, 10%);
-}
-
-.highlightBoxOff {
-  padding: 0rem .5rem;
-  margin-right: .5rem;
-  background-color: white;
-  border: 1px solid hsl(0, 0%, 10%);
 }
 
