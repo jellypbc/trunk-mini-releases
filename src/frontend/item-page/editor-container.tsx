@@ -25,9 +25,10 @@ type Props = {
   rep: Replicache<M>
   itemID: string
   commentArrows: any[]
+  showHighlights: boolean
 }
 
-function EditorContainer({ doc, type, rep, itemID, commentArrows } : Props) {
+function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
@@ -59,7 +60,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows } : Props) {
       viewRef && viewRef.current && viewRef.current.view,
       rep,
       itemID,
-      commentArrows, // TODO: add forward arrows
+      commentArrows || [],
     )
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
@@ -73,19 +74,19 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows } : Props) {
     localStorage.setItem('trunk.anonArrowIDs', JSON.stringify(anonArrowIDs))
   }, [anonArrowIDs])
 
-  // useEffect(() => {
-  //   const state = createStateFromProps(
-  //     doc,
-  //     schema,
-  //     parser,
-  //     viewRef && viewRef.current && viewRef.current.view,
-  //     rep,
-  //     itemID,
-  //     showArrows && arrows || [],
-  //   )
-  //   setState(state)
-  //   setView(viewRef && viewRef.current && viewRef.current.view)
-  // }, [showArrows])
+  useEffect(() => {
+    const state = createStateFromProps(
+      doc,
+      schema,
+      parser,
+      viewRef && viewRef.current && viewRef.current.view,
+      rep,
+      itemID,
+      showHighlights && commentArrows || [],
+    )
+    setState(state)
+    setView(viewRef && viewRef.current && viewRef.current.view)
+  }, [showHighlights])
 
   useEffect(() => {
       const state = createStateFromProps(
@@ -95,8 +96,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows } : Props) {
         viewRef && viewRef.current && viewRef.current.view,
         rep,
         itemID,
-        // showArrows && arrows || [],
-        commentArrows || [],
+        showHighlights && commentArrows || [],
       )
       setState(state)
       setView(viewRef && viewRef.current && viewRef.current.view)

@@ -67,6 +67,8 @@ type SidebarProps = {
   publicationDate: string
   updatedAt: any
   createdAt: any
+  showHighlights: boolean
+  handleSetShowHighlights: (state: boolean) => void
 }
 
 type MainProps = {
@@ -76,6 +78,7 @@ type MainProps = {
   rep: Replicache<M>
   item: any
   handleSetSelectedItemID: (itemID: string) => void
+  showHighlights: boolean
 }
 
 const keyMap = {
@@ -123,6 +126,7 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
 
 function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar, item, clientEmail } : any ) {
   const authorArrows = useAuthorArrowsByItemID(rep, itemID)
+  const [showHighlights, setShowHighlights] = useState<boolean>(true)
 
   async function signInWithGoogle() {
     const redirectUrl = location.href
@@ -179,6 +183,8 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
               publicationDate={item.publicationDate}
               updatedAt={item.updatedAt}
               createdAt={item.createdAt}
+              showHighlights={showHighlights}
+              handleSetShowHighlights={setShowHighlights}
             />
           }
           <Main
@@ -188,6 +194,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
             rep={rep}
             item={item}
             handleSetSelectedItemID={handleSetSelectedItemID}
+            showHighlights={showHighlights}
           />
         </div>
       </>
@@ -195,7 +202,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
   )
 }
 
-function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : MainProps){
+function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, showHighlights } : MainProps){
   // function copyShareURLToClipboard(){
   //   navigator.clipboard.writeText(location.href)
   //     .then(() => {
@@ -244,6 +251,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : 
               rep={rep}
               itemID={itemID}
               commentArrows={[]}
+              showHighlights={false}
             />
           </div>
           <div className={styles.authorsContainer}>
@@ -265,6 +273,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : 
             rep={rep}
             itemID={itemID}
             commentArrows={commentArrows}
+            showHighlights={showHighlights}
           />
         }
       </div>
@@ -275,13 +284,14 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID } : 
         item={item}
         handleSetSelectedItemID={handleSetSelectedItemID}
         isPerson={item.title.includes('[person]')}
+        showHighlights={showHighlights}
       />
     </div>
   </HotKeys>
   )
 }
 
-function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson}: any) {
+function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson, showHighlights}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
   const fullArrows = useArrowsByIDs(rep, arrowIDs)
 
@@ -294,6 +304,7 @@ function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPers
           itemID={itemID}
           handleSetSelectedItemID={handleSetSelectedItemID}
           fullArrows={fullArrows}
+          showHighlights={showHighlights}
         />
       </div>
       { isPerson &&
@@ -371,9 +382,10 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
   )
 }
 
-function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrows, trunkID, publicationDate, updatedAt, createdAt} : SidebarProps){
+function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrows, trunkID, publicationDate, updatedAt, createdAt, showHighlights, handleSetShowHighlights} : SidebarProps){
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
+
   const [URL, setURL] = useState<string>('')
 
   useEffect(() => {
@@ -473,6 +485,18 @@ function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedI
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Publication date</div>
           <div>{htmlToText(publicationDate)}</div>
+        </div>
+        <div className={styles.updatedAtContainer}>
+          {showHighlights ?
+          <div onClick={() => handleSetShowHighlights(false)}>
+            <span className={styles.highlightBoxOn}></span>
+            <span>Highlights on</span>
+          </div>
+          :
+          <div onClick={() => handleSetShowHighlights(true)}>
+            <span className={styles.highlightBoxOff}></span>
+            <span>Highlights off</span>
+          </div>}
         </div>
         <div
           className={styles.metadataContainer}

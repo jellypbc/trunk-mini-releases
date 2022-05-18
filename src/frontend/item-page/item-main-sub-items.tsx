@@ -8,7 +8,7 @@ import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import EditorContainer from './editor-container'
 
-export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID, fullArrows} : any) {
+export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID, fullArrows, showHighlights} : any) {
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
   const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
   return (
@@ -21,6 +21,7 @@ export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID,
               key={`subItemMain-${itemID}`}
               itemID={itemID}
               handleSetSelectedItemID={handleSetSelectedItemID}
+              showHighlights={showHighlights}
             />
           )
         })}
@@ -29,7 +30,7 @@ export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID,
 }
 
 
-function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
+function SubItemMain({rep, itemID, handleSetSelectedItemID, showHighlights}: any){
   const item = useItemByID(rep, itemID)
   const [showContent, setShowContent] = useState<boolean>(false)
   const [showExpand, setShowExpand] = useState<boolean>(false)
@@ -57,6 +58,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
               rep={rep}
               itemID={itemID}
               commentArrows={commentArrows}
+              showHighlights={showHighlights}
             />
           }
           <ItemMainSubItemsA
@@ -64,6 +66,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
             itemID={itemID}
             handleSetSelectedItemID={handleSetSelectedItemID}
             item={item}
+            showHighlights={showHighlights}
           />
         </div>
       }
@@ -71,7 +74,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID}: any){
   )
 }
 
-function ItemMainSubItemsA({ rep, itemID, handleSetSelectedItemID, item}: any) {
+function ItemMainSubItemsA({ rep, itemID, handleSetSelectedItemID, item, showHighlights}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
   const fullArrows = useArrowsByIDs(rep, arrowIDs)
   return (
@@ -81,11 +84,12 @@ function ItemMainSubItemsA({ rep, itemID, handleSetSelectedItemID, item}: any) {
       itemID={itemID}
       handleSetSelectedItemID={handleSetSelectedItemID}
       fullArrows={fullArrows}
+      showHighlights={showHighlights}
     />
   )
 }
 
-function ItemMainSubItemsB({ rep, itemID, handleSetSelectedItemID, fullArrows} : any) {
+function ItemMainSubItemsB({ rep, itemID, handleSetSelectedItemID, fullArrows, showHighlights} : any) {
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
   const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
   return (
@@ -98,6 +102,7 @@ function ItemMainSubItemsB({ rep, itemID, handleSetSelectedItemID, fullArrows} :
               key={`subItemMain-${itemID}`}
               itemID={itemID}
               handleSetSelectedItemID={handleSetSelectedItemID}
+              showHighlights={showHighlights}
             />
           )
         })}
