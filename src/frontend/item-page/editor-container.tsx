@@ -10,7 +10,6 @@ import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import EditorArrowCreate from './editor-arrow-create'
 import {
-  useUserInfo,
   useItemByID,
   useItemIDs,
   useClientEmail
@@ -35,14 +34,13 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
 
   const [state, setState] = useState<EditorState | undefined>()
   const [_, setView] = useState<EditorView>()
-  // const [showArrows, setShowArrows] = useState<boolean>(true)
   const [serializedSelection, setSerializedSelection] = useState<string>()
   const [showArrowFloater, setShowArrowFloater] = useState<boolean>(false)
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const email = useClientEmail(rep)
+  const [showEmptyCommentError, setShowEmptyCommentError] = useState<boolean>(false)
 
-  const userInfo = useUserInfo(rep)
   const item : any = useItemByID(rep, itemID)
   const itemIDs = useItemIDs(rep)
 
@@ -180,7 +178,24 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
     return commentArrow
   }
 
+  // function checkEmptyDraft(draft:string) {
+  //   if (draft === '<p></p>' || draft === '') {
+  //     setShowEmptyCommentError(true)
+  //     return
+  //   } else {
+  //     setShowEmptyCommentError(false)
+  //   }
+  // }
+
   function handleCommentAdd(commentDraft: string) {
+    // checkEmptyDraft(commentDraft)
+    if (commentDraft === '<p></p>' || commentDraft === '') {
+      setShowEmptyCommentError(true)
+      return
+    } else {
+      setShowEmptyCommentError(false)
+    }
+
     const commentItem = createCommentItem(commentDraft)
 
     const commentArrow = createArrow('comment', commentItem.id, commentDraft)
@@ -255,6 +270,13 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
   }
 
   function handleFootnoteAdd(commentDraft: string) {
+    // checkEmptyDraft(commentDraft)
+    if (commentDraft === '<p></p>' || commentDraft === '') {
+      setShowEmptyCommentError(true)
+      return
+    } else {
+      setShowEmptyCommentError(false)
+    }
     // create footnoteItem
     let footnoteItem = createFootnoteItem(commentDraft)
     console.log('footnoteItem', footnoteItem)
@@ -313,6 +335,13 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
 
 
   function handleReferenceAdd(commentDraft : string){
+    if (commentDraft === '<p></p>' || commentDraft === '') {
+      setShowEmptyCommentError(true)
+      return
+    } else {
+      setShowEmptyCommentError(false)
+    }
+    // checkEmptyDraft(commentDraft)
     // find if the comment is a valid itemID
     const cleanText = htmlToText(commentDraft)
 
@@ -430,7 +459,6 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
     // add arrow to existing item
     rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
     setShowArrowFloater(false)
-
   }
 
   return (
@@ -446,11 +474,12 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
             <EditorArrowCreate
               serializedSelection={serializedSelection}
               rep={rep}
-              userInfo={userInfo}
               handleReferenceAdd={handleReferenceAdd}
               handleCommentAdd={handleCommentAdd}
               handleFootnoteAdd={handleFootnoteAdd}
               handleArrowAdd={handleArrowAdd}
+              showEmptyCommentError={showEmptyCommentError}
+              handleSetShowEmptyCommentError={setShowEmptyCommentError}
             />
           }
           <Editor

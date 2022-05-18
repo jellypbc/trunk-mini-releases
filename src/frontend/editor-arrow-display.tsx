@@ -21,7 +21,7 @@ export default function EditorArrowDisplay({ rep, arrow }: EditorArrowDisplayPro
 
   function deleteArrowOnly() {
     rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
-    rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrow.id })
+    rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
     rep.mutate.deleteArrow(arrowID)
   }
 

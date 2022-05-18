@@ -7,7 +7,7 @@ import { createParser, createSerializer } from './../editor/config/utils'
 import type { EditorView } from 'prosemirror-view'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { exampleSetup } from './../editor/plugins/index'
-import Editor from './../editor'
+import Editor from './editor'
 
 type Props = {
   rep: Replicache<M>
@@ -48,6 +48,18 @@ function EditorDraftingContainer({ rep, content : doc, setValue, type } : Props)
     }
   }, [doc])
 
+
+  const debounce = (func : any, timeout = 300) => {
+    let timer : any
+    return (...args : any) => {
+      clearTimeout(timer)
+      // @ts-ignore
+      timer = setTimeout(() => {func.apply(this, args)}, timeout)
+    }
+  }
+
+  const processDraftChange = debounce((thing: any) => setValue(thing))
+
   const dispatchTransaction = (tx: Transaction) => {
     const view = viewRef.current.view
     setView(view)
@@ -56,7 +68,7 @@ function EditorDraftingContainer({ rep, content : doc, setValue, type } : Props)
     view.updateState(newState)
 
     setState(newState)
-    setValue(serializer(newState.doc))
+    processDraftChange(serializer(newState.doc))
   }
 
   return (
