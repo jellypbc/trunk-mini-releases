@@ -522,3 +522,17 @@ a.link:hover {
   background-color: hsl(0, 0%, 96%);
 }
 
+.highlightBoxOn {
+  padding: 0rem .5rem;
+  margin-right: .5rem;
+  background-color: hsl(345, 96%, 90%);
+  border: 1px solid hsl(0, 0%, 10%);
+}
+
+.highlightBoxOff {
+  padding: 0rem .5rem;
+  margin-right: .5rem;
+  background-color: white;
+  border: 1px solid hsl(0, 0%, 10%);
+}
+
