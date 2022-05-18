@@ -10,7 +10,6 @@ import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import EditorArrowCreate from './editor-arrow-create'
 import {
-  useUserInfo,
   useItemByID,
   useItemIDs,
   useClientEmail
@@ -41,7 +40,6 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const email = useClientEmail(rep)
 
-  const userInfo = useUserInfo(rep)
   const item : any = useItemByID(rep, itemID)
   const itemIDs = useItemIDs(rep)
 
@@ -444,7 +442,6 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
             <EditorArrowCreate
               serializedSelection={serializedSelection}
               rep={rep}
-              userInfo={userInfo}
               handleReferenceAdd={handleReferenceAdd}
               handleCommentAdd={handleCommentAdd}
               handleFootnoteAdd={handleFootnoteAdd}

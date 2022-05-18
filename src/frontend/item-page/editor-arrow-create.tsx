@@ -5,7 +5,7 @@ import { useSortedItems, useClientEmail } from '../../datamodel/subscriptions'
 import EditorDraftingContainer from './editor-drafting-container'
 import Fuse from 'fuse.js'
 
-export default function EditorArrowCreate({ serializedSelection, rep, userInfo, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd }:any) {
+export default function EditorArrowCreate({ serializedSelection, rep, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd }:any) {
   // const [showOptions, setShowOptions] = useState<boolean>(false)
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
