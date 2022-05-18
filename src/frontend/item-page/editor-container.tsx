@@ -35,7 +35,6 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
 
   const [state, setState] = useState<EditorState | undefined>()
   const [_, setView] = useState<EditorView>()
-  // const [showArrows, setShowArrows] = useState<boolean>(true)
   const [serializedSelection, setSerializedSelection] = useState<string>()
   const [showArrowFloater, setShowArrowFloater] = useState<boolean>(false)
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
@@ -430,7 +429,6 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
     // add arrow to existing item
     rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
     setShowArrowFloater(false)
-
   }
 
   return (

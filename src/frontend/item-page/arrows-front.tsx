@@ -22,6 +22,7 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
   const frontItemIDs = forwardArrows.map((a: any) => a.frontItemID)
   const uniqueFrontItemIDs = [...new Set(frontItemIDs)]
   const item = useItemByID(rep, itemID)
+
   return (
     uniqueFrontItemIDs &&
     <>
@@ -186,6 +187,7 @@ function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItem
 
 function AuthorInfo({rep, itemID }: any){
   const authorArrows = useAuthorArrowsByItemID(rep, itemID)
+
 
   return (
     authorArrows && authorArrows.length > 0 ?
