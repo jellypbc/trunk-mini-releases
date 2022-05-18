@@ -51,22 +51,6 @@ type NavProps = {
   handleSetSelectedItemID: (itemID: string) => void
 }
 
-type SidebarProps = {
-  createdBy: string
-  arrowsCount: number
-  itemID: string
-  rep: Replicache<M>
-  item: any
-  handleSetSelectedItemID: (itemID: string) => void
-  authorArrows: any
-  trunkID: string
-  publicationDate: string
-  updatedAt: any
-  createdAt: any
-  showHighlights: boolean
-  handleSetShowHighlights: (state: boolean) => void
-}
-
 type MainProps = {
   itemID: string
   title: string
@@ -232,6 +216,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
           item={item}
           rep={rep}
         /> */}
+
         <div className={styles.parentContainer}>
           <ItemParent
             rep={rep}
