@@ -50,7 +50,6 @@ export function useItemArrowIDsByID(rep: Replicache<M>, id: string) {
   )
 }
 
-
 export function useSortedItems(rep: Replicache<M>) {
   const items = useItems(rep)
   let parsedItems: any[] = []
@@ -223,11 +222,16 @@ export function useCommentArrows(rep: Replicache<M>) {
       const filtered = arrows.filter((arrow: any) => arrow[1].kind === "comment")
       const simplified : any[] = []
       filtered.map(([k, v]: [string, any]) => {
-        const thing = v
+
+        const changes = {
+          createdAt:  new Date(v.createdAt),
+        }
+        const thing = {...v, ...changes}
         Object.assign(thing, { id: k.substring(arrowPrefix.length)})
         simplified.push(thing)
       })
-      return simplified
+      const sortedArrows = simplified.sort((a, b) => b.createdAt - a.createdAt)
+      return sortedArrows
     },
     []
   )
