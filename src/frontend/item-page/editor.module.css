@@ -9,7 +9,6 @@
 
 .titleContainer * {
   border: none;
-  overflow: auto;
   resize: none;
   background-color: inherit;
   outline: none;
@@ -18,7 +17,6 @@
 
 .commentDraft * {
   border: none;
-  overflow: auto;
   resize: none;
   background-color: inherit;
   outline: none;
@@ -29,7 +27,6 @@
 
 .arrowDraft * {
   border: none;
-  overflow: auto;
   resize: none;
   background-color: inherit;
   outline: none;
