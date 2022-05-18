@@ -56,14 +56,16 @@ export default function MainActivityView({ items, handleSetSelectedItemID, roomI
           itemID={item.id}
         />
       )}
-      <div className={styles.buttonContainer}>
-        <button
-          className={`btn btn-1`}
-          onClick={showTenMoreItems}
-        >
-          Show 10 more items
-        </button>
-      </div>
+      {items.length - itemsShown > 0 &&
+        <div className={styles.buttonContainer}>
+          <button
+            className={`btn btn-1`}
+            onClick={showTenMoreItems}
+          >
+            Show more items
+          </button>
+        </div>
+      }
     </div>
   )
 }
