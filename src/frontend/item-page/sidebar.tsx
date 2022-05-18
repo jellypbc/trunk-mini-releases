@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import type { Replicache } from 'Replicache'
+import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
 import styles from './sidebar.module.css'
 import { idbOK } from '../../lib/idbOK'
