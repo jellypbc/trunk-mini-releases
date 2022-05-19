@@ -1,4 +1,10 @@
+.outsideContainer {
+  margin: 0 auto;
+  width: 100vw;
+}
+
 .container {
+  max-width: 980px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -6,13 +12,18 @@
 }
 
 .navContainer {
-  width: 980px;
-  margin-top: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   max-height: 100vh;
   padding-bottom: 4rem;
+}
+
+.top {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 980px;
+  padding-top: 1rem;
+  background-color: white;
+
 }
 
 .bodyContainer {
@@ -50,10 +61,6 @@
 
 .arrows div {
   padding: 1rem 0 ;
-}
-
-.container{
-  overflow: auto;
 }
 
 .expandedEditorContainer {
