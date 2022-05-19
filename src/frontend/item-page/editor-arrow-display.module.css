@@ -1,0 +1,135 @@
+.container {
+  position: absolute;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  background: transparent;
+  right: 0;
+  left: 0;
+  top: 40%;
+  width: 980px;
+  height: 2px;
+}
+
+.sidebar {
+  min-width: 150px;
+  margin-right: 15px;
+  background-color: blue;
+}
+
+.main {
+  min-width: 550px;
+  margin-right: 15px;
+  background-color: orange;
+}
+
+.gutter {
+  min-width: 250px;
+}
+
+.gutterContainer {
+  border: 2px solid hsl(0, 0%, 90%) !important;
+  background-color: hsla(0, 0%, 100%) !important;
+  border-radius: .3rem;
+}
+
+.highlight {
+  padding: .2rem 1rem;
+  margin: 1.5rem 1rem 1.5rem 1.5rem;
+  font-size: .8rem !important;
+  color: #2E7B21;
+  border-left: .2rem solid hsl(89.7, 69%, 72%, 50%) !important;
+}
+
+.arrowMetadata {
+  display: flex;
+  justify-content: space-between;
+  right: 1rem;
+  padding: .4rem 1rem;
+  border-top: 2px solid hsl(0, 0%, 90%) !important;
+}
+
+.arrowMetadata div {
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.title {
+  max-height: 5vh;
+  overflow: auto;
+  margin: 1rem 0;
+}
+
+.content {
+  margin-top: 1rem;
+  max-height: 20vh;
+  overflow: auto;
+}
+
+/*
+
+.meta {
+  padding: 0 2rem;
+  display: flex;
+}
+
+.title {
+  padding: 0 2rem;
+}
+
+.content {
+  padding: 0 2rem;
+}
+
+.deleteOptions {
+  display: flex;
+  justify-content: space-around;
+  cursor: pointer;
+}
+
+.deleteOption {
+  padding: .5rem;
+  font-size: .8rem;
+}
+
+.deleteOption:hover {
+  background-color: hsl(0, 0%, 70%);
+}
+
+.toggleDeleteOptions {
+  text-align: right;
+  padding: .5rem;
+}
+
+.arrowFloaterFooter {
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem 1rem;
+  border-top: 3px solid hsl(0, 0%, 90%) !important;
+  background-color: hsl(0, 0%, 97%) !important;
+}
+
+.replyForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.replyTextarea {
+  background-color: hsl(0, 0%, 96%) !important;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.actionContainer {
+  display: flex;
+  justify-content: right;
+}
+
+.actionContainer div {
+  padding: .5rem 1rem;
+  margin: .5rem 1rem;
+}
+
+.submitButton {
+  background-color: hsl(0, 0%, 70%) !important;
+} */

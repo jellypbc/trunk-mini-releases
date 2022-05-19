@@ -32,3 +32,21 @@
   outline: none;
   font-size: .8rem;
 }
+
+.arrowTitle * {
+  border: none;
+  resize: none;
+  outline: none;
+  font-weight: bold;
+  font-size: .9rem;
+  padding: 0 1rem;
+
+}
+
+.arrowContent * {
+  border: none;
+  resize: none;
+  outline: none;
+  font-size: .8rem;
+  padding: 0 1rem;
+}

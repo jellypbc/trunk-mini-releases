@@ -146,7 +146,7 @@ function renderArrows(arrows, dispatch, state, rep) {
   return node
 }
 
-import EditorArrowDisplay from '../../editor-arrow-display'
+import EditorArrowDisplay from '../../item-page/editor-arrow-display'
 
 function EditorArrowThread({ arrow, dispatch, state, showActions, rep }) {
   return (

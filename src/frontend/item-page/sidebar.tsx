@@ -126,7 +126,7 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
         </div>
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Publication date</div>
-          <div>{htmlToText(publicationDate)}</div>
+          <div>{publicationDate ? htmlToText(publicationDate) : `--`}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           {showHighlights ?

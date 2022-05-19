@@ -77,6 +77,10 @@ export default forwardRef<Handle, Props>(function Editor(
     className = styles.arrowDraft
   } else if (type === 'commentDraft') {
     className = styles.commentDraft
+  } else if (type === 'arrowTitle') {
+    className = styles.arrowTitle
+  } else if (type === 'arrowContent') {
+    className = styles.arrowContent
   } else {
     className = styles.container
   }
