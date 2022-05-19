@@ -15,22 +15,22 @@ type EditorArrowDisplayProps = {
 
 export default function EditorArrowDisplay({ rep, arrow }: EditorArrowDisplayProps) {
   const email = useClientEmail(rep)
-  const { id : arrowID } = arrow
+  // const { id : arrowID } = arrow
 
-  const [showDeleteOptions, setShowDeleteOptions] = useState<boolean>(false)
+  // const [showDeleteOptions, setShowDeleteOptions] = useState<boolean>(false)
 
-  function deleteArrowOnly() {
-    rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
-    rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
-    rep.mutate.deleteArrow(arrowID)
-  }
+  // function deleteArrowOnly() {
+  //   rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
+  //   rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
+  //   rep.mutate.deleteArrow(arrowID)
+  // }
 
-  function deleteArrowAndFrontItem(){
-    rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
-    rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
-    rep.mutate.deleteArrow(arrowID)
-    rep.mutate.deleteItem(arrow.frontItemID)
-  }
+  // function deleteArrowAndFrontItem(){
+  //   rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
+  //   rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
+  //   rep.mutate.deleteArrow(arrowID)
+  //   rep.mutate.deleteItem(arrow.frontItemID)
+  // }
 
   if (arrow.kind === 'comment' || arrow.kind === 'footnote') {
     return (
@@ -92,71 +92,77 @@ export default function EditorArrowDisplay({ rep, arrow }: EditorArrowDisplayPro
 
 import EditorDraftingContainer from './editor-drafting-container'
 
-function CommentDisplay({ rep, itemID, arrow, kind, email} : any) {
+function CommentDisplay({
+  rep,
+  itemID,
+  arrow,
+  // kind,
+  // email
+} : any) {
   const item = useItemByID(rep, itemID)
-  const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
-  const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
+  // const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
+  // const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
 
-  function submitComment(){
+  // function submitComment(){
 
-    let newItem = randomItem()
-    let newArrow = randomArrow()
+  //   let newItem = randomItem()
+  //   let newArrow = randomArrow()
 
-    //create randomitem
-    //create randomarrow
+  //   //create randomitem
+  //   //create randomarrow
 
-    //set arrow data
-    const arrowChanges = {
-      backItemID: itemID,
-      createdBy: email,
-      frontItemID: newItem.id,
-      kind: "comment",
-      parentItemID: itemID
-    }
+  //   //set arrow data
+  //   const arrowChanges = {
+  //     backItemID: itemID,
+  //     createdBy: email,
+  //     frontItemID: newItem.id,
+  //     kind: "comment",
+  //     parentItemID: itemID
+  //   }
 
-    const arrow = {...newArrow.arrow, ...arrowChanges}
+  //   const arrow = {...newArrow.arrow, ...arrowChanges}
 
-    const miniArrow = {
-      arrowID: newArrow.id,
-      to: 0,
-      from: 0,
-      kind: arrow.kind,
-      backItemID: arrow.backItemID
-    }
+  //   const miniArrow = {
+  //     arrowID: newArrow.id,
+  //     to: 0,
+  //     from: 0,
+  //     kind: arrow.kind,
+  //     backItemID: arrow.backItemID
+  //   }
 
-    // {arrowID, to, from, kind, backItemID}
+  //   // {arrowID, to, from, kind, backItemID}
 
-    const newItemArrows = []
-    newItemArrows.push(miniArrow)
-
-
-
-    //set item data
-    const itemChanges = {
-      content: commentDraft,
-      createdBy: email,
-      arrows: JSON.stringify(newItemArrows),
-    }
+  //   const newItemArrows = []
+  //   newItemArrows.push(miniArrow)
 
 
-    const updatedItem = {...newItem.item, ...itemChanges}
+
+  //   //set item data
+  //   const itemChanges = {
+  //     content: commentDraft,
+  //     createdBy: email,
+  //     arrows: JSON.stringify(newItemArrows),
+  //   }
 
 
-    // apply arrow to new item
-    // apply arrow to existing item
+  //   const updatedItem = {...newItem.item, ...itemChanges}
 
-    // save new arro using rep
-    // console.log('new arrow: { id: newArrow.id, arrow: arrow }', { id: newArrow.id, arrow: arrow })
-    rep.mutate.createArrow({ id: newArrow.id, arrow: arrow })
 
-    // save new item using rep
-    // console.log('new item: {id: newItem.id, item: updatedItem}', {id: newItem.id, item: updatedItem})
-    rep.mutate.createItem({id: newItem.id, item: updatedItem})
+  //   // apply arrow to new item
+  //   // apply arrow to existing item
 
-    // update existing itme with rep
-    // console.log('{ id: itemID, arrow: miniArrow }', { id: itemID, arrow: miniArrow })
-    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
-  }
+  //   // save new arro using rep
+  //   // console.log('new arrow: { id: newArrow.id, arrow: arrow }', { id: newArrow.id, arrow: arrow })
+  //   rep.mutate.createArrow({ id: newArrow.id, arrow: arrow })
+
+  //   // save new item using rep
+  //   // console.log('new item: {id: newItem.id, item: updatedItem}', {id: newItem.id, item: updatedItem})
+  //   rep.mutate.createItem({id: newItem.id, item: updatedItem})
+
+  //   // update existing itme with rep
+  //   // console.log('{ id: itemID, arrow: miniArrow }', { id: itemID, arrow: miniArrow })
+  //   rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
+  // }
 
   return (
     item &&
