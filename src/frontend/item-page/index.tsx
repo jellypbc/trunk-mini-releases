@@ -128,6 +128,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
 
 
   return (
+    <div className={styles.outsideContainer}>
     <div className={styles.container}>
         <>
         {clientEmail === "guest" &&
@@ -178,6 +179,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
           />
         </div>
       </>
+    </div>
     </div>
   )
 }
@@ -421,49 +423,51 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
 
   return(
     <div className={styles.navContainer}>
-      <div className={styles.left}>
-        <div
-          className={styles.roomID}
-          onClick={() => routeToWorkspace()}
-        >
-          {roomID.replace(`-`, ` `)}
-        </div>
-        <div>&rsaquo;</div>
-        <div>{htmlToText(title)}</div>
-      </div>
-      <div className={styles.rightContainer}>
-        <div className={styles.right}>
+      <div className={styles.top}>
+        <div className={styles.left}>
           <div
-            className={styles.searchBar}
-            onClick={() => handleSetCommandBar(true)}>
-            Search or type ⌘ + K
-          </div>
-          <div
-            className={styles.options}
-            id="profileDropdown"
-            onClick={() => setShowProfileDropdown(true)}
+            className={styles.roomID}
+            onClick={() => routeToWorkspace()}
           >
-            ≡
+            {roomID.replace(`-`, ` `)}
           </div>
+          <div>&rsaquo;</div>
+          <div>{htmlToText(title)}</div>
         </div>
-        {showProfileDropdown &&
-          <div
-            className={styles.rightAlignedDropdownMenu}
-            onClick={() => logOut()}
-            id="profileDropdown"
-          >
-            <div className={styles.profileDropdownLeft}>
-              <div>
-                {email}
-              </div>
-              <div
-                className={styles.option}
-              >Log out</div>
+        <div className={styles.rightContainer}>
+          <div className={styles.right}>
+            <div
+              className={styles.searchBar}
+              onClick={() => handleSetCommandBar(true)}>
+              Search or type ⌘ + K
             </div>
-            {/* <div className={styles.profileDropdownRight}>
-            </div> */}
+            <div
+              className={styles.options}
+              id="profileDropdown"
+              onClick={() => setShowProfileDropdown(true)}
+            >
+              ≡
+            </div>
           </div>
-        }
+          {showProfileDropdown &&
+            <div
+              className={styles.rightAlignedDropdownMenu}
+              onClick={() => logOut()}
+              id="profileDropdown"
+            >
+              <div className={styles.profileDropdownLeft}>
+                <div>
+                  {email}
+                </div>
+                <div
+                  className={styles.option}
+                >Log out</div>
+              </div>
+              {/* <div className={styles.profileDropdownRight}>
+              </div> */}
+            </div>
+          }
+        </div>
       </div>
     </div>
   )
