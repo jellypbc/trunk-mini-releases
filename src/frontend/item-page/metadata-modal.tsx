@@ -110,7 +110,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
           <div className={styles.input}>
             <EditorContainer
               doc={item.webSourceURL}
-              type={'metadataEditor'}
+              type={'webSourceURL'}
               rep={rep}
               itemID={itemID}
               commentArrows={[]}
@@ -123,7 +123,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
           <div className={styles.input}>
             <EditorContainer
               doc={item.publicationDate}
-              type={'metadataEditor'}
+              type={'publicationDate'}
               rep={rep}
               itemID={itemID}
               commentArrows={[]}
