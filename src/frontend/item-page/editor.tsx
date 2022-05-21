@@ -81,6 +81,8 @@ export default forwardRef<Handle, Props>(function Editor(
     className = styles.arrowTitle
   } else if (type === 'arrowContent') {
     className = styles.arrowContent
+  } else if (type === 'metadataEditor') {
+    className= styles.metadataEditor
   } else {
     className = styles.container
   }

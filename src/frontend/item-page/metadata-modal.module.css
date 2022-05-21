@@ -45,6 +45,7 @@
 .label {
   font-weight: 600;
   display: flex;
+  padding-bottom: .2rem;
 }
 
 .label div {

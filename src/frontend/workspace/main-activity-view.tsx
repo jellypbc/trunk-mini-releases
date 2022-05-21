@@ -78,6 +78,7 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
   const [showLinks, setShowLinks] = useState<boolean>(false)
 
   const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
+  const shortWebSourceURL = htmlToText(item.webSourceURL).replace(/^https?:\/\//, '').replace(/\/$/, '').split('/')[0]
 
 
   function routeToItem(){
@@ -108,6 +109,9 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
           <div className={styles.createdByEmail}>{item.createdBy}</div>
         </div>
         <div className={styles.createdAt}>{safeCreatedAt}</div>
+        {shortWebSourceURL &&
+          <div className={styles.webSourceDomain}>{shortWebSourceURL}</div>
+        }
       </div>
       {/* <FileUploadContainer
         itemID={item.id}
