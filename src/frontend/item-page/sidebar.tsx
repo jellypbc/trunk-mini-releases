@@ -8,6 +8,7 @@ import SidebarOutline from './sidebar-outline'
 import MetadataModal from './metadata-modal'
 import { dateInWordsIncludeYear, dateInWordsTimeOnly } from '../../lib/dateInWords'
 import { htmlToText } from '../../util/htmlToText'
+import Link from 'next/link'
 
 type SidebarProps = {
   createdBy: string
@@ -27,6 +28,8 @@ type SidebarProps = {
 export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrows, trunkID, publicationDate, updatedAt, createdAt, showHighlights, handleSetShowHighlights} : SidebarProps) {
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
+
+  const shortWebSourceURL = htmlToText(item.webSourceURL).replace(/^https?:\/\//, '').replace(/\/$/, '').split('/')[0]
 
   const [URL, setURL] = useState<string>('')
 
@@ -127,6 +130,10 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Publication date</div>
           <div>{publicationDate ? htmlToText(publicationDate) : `--`}</div>
+        </div>
+        <div className={styles.updatedAtContainer}>
+          <div className={styles.updatedAtLabel}>Web source</div>
+          <div>{shortWebSourceURL ? <Link href={htmlToText(item.webSourceURL)}><a target="_blank">{shortWebSourceURL}</a></Link> : `--`}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           {showHighlights ?
