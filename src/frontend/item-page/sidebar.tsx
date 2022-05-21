@@ -8,6 +8,7 @@ import SidebarOutline from './sidebar-outline'
 import MetadataModal from './metadata-modal'
 import { dateInWordsIncludeYear, dateInWordsTimeOnly } from '../../lib/dateInWords'
 import { htmlToText } from '../../util/htmlToText'
+import Link from 'next/link'
 
 type SidebarProps = {
   createdBy: string
@@ -131,8 +132,8 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
           <div>{publicationDate ? htmlToText(publicationDate) : `--`}</div>
         </div>
         <div className={styles.updatedAtContainer}>
-          <div className={styles.updatedAtLabel}>Source URL</div>
-          <div>{shortWebSourceURL ? shortWebSourceURL : `--`}</div>
+          <div className={styles.updatedAtLabel}>Web source</div>
+          <div>{shortWebSourceURL ? <Link href={htmlToText(item.webSourceURL)}><a target="_blank">{shortWebSourceURL}</a></Link> : `--`}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           {showHighlights ?
