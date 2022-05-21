@@ -7,6 +7,7 @@ import { randomItem } from '../../datamodel/item'
 import { randomArrow } from '../../datamodel/arrow'
 import type { Replicache } from 'replicache'
 import type { M } from '../../datamodel/mutators'
+import { dateInWords } from '../../lib/dateInWords'
 
 type EditorArrowDisplayProps = {
   rep: Replicache<M>
@@ -199,11 +200,7 @@ function CommentDisplay({
             } */}
 
           </div>
-          <div className={styles.arrowMetadata}>
-            <div>3 notes</div>
-            <div>3d ago</div>
-            <div>cindywu</div>
-          </div>
+          <Footer item={item}/>
         </div>
       </div>
 
@@ -442,11 +439,17 @@ function FrontItemStuff({rep, itemID }:{rep: any, itemID: string}) {
           showHighlights={false}
         />
       </div>
-      <div className={styles.arrowMetadata}>
-        <div>3 notes</div>
-        <div>3d ago</div>
-        <div>cindywu</div>
-      </div>
+      <Footer item={item}/>
     </>
+  )
+}
+
+function Footer({ item } : any){
+  return (
+    <div className={styles.arrowMetadata}>
+      <div>{item.arrows.length} links</div>
+      <div>{dateInWords(item.createdAt) || 'a while ago'}</div>
+      <div>{item.createdBy ? item.createdBy.split(`@`)[0] : 'anonymous'}</div>
+    </div>
   )
 }
