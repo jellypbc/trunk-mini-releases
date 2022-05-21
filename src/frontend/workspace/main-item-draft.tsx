@@ -42,7 +42,6 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
 
   function saveDraftAsItem(){
     const item = itemDraft.item
-    console.log('item beep boop', item)
     const changes = {
       title: titleDraft,
       content: contentDraft,
@@ -51,7 +50,6 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
 
     const itemItem = {...item, ...changes}
 
-    console.log('{id: itemDraft.id, item: itemItem}', {id: itemDraft.id, item: itemItem})
     rep.mutate.createItem({id: itemDraft.id, item: itemItem})
 
   }

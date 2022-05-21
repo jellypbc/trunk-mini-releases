@@ -28,6 +28,8 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
 
+  const shortWebSourceURL = htmlToText(item.webSourceURL).replace(/^https?:\/\//, '').replace(/\/$/, '').split('/')[0]
+
   const [URL, setURL] = useState<string>('')
 
   useEffect(() => {
@@ -127,6 +129,10 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Publication date</div>
           <div>{publicationDate ? htmlToText(publicationDate) : `--`}</div>
+        </div>
+        <div className={styles.updatedAtContainer}>
+          <div className={styles.updatedAtLabel}>Source URL</div>
+          <div>{shortWebSourceURL ? shortWebSourceURL : `--`}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           {showHighlights ?
