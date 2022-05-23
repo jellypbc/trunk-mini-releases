@@ -21,6 +21,7 @@ class MyDocument extends Document {
             integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
             crossOrigin="anonymous"
           />
+          <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
           <Main />
