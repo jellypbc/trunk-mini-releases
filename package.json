@@ -17,7 +17,6 @@
     "format": "prettier --write './**/*.{js,jsx,json,ts,tsx,html,css,md}'",
     "check-types": "tsc -p tsconfig.json --noEmit && tsc -p worker/tsconfig.json --noEmit",
     "tauri": "tauri",
-    "f": "echo $APPLE_ID",
     "make": "rm -rf dist && next build && next export -o ./dist && npm run build-worker && yarn run tauri build --debug"
   },
   "dependencies": {
