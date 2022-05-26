@@ -1,12 +1,6 @@
-// module.exports = {
-//   eslint: {
-//     ignoreDuringBuilds: true,
-//   }
-// }
-
-// building tauri, maybe disable the disable line, or run in node_env 'production'
-
 const withPWA = require('next-pwa')
+
+// when building tauri, maybe disable the disable line, or run in node_env 'production'
 
 module.exports = withPWA({
   eslint: {

@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "MiniTrunk",
+    "productName": "Trunk",
     "version": "0.1.1"
   },
   "build": {
@@ -61,7 +61,7 @@
     },
     "windows": [
       {
-        "title": "MiniTrunk",
+        "title": "Trunk",
         "minWidth": 580,
         "minHeight": 500,
         "resizable": true,
