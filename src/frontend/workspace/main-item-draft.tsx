@@ -21,8 +21,8 @@ type MainItemDraftProps = {
 }
 
 const keyMap = {
-  createItem: ['command+enter'],
-  hideItemDraft: ['command+c']
+  createItem: ['command+enter', 'ctrl+enter'],
+  hideItemDraft: ['command+c', 'ctrl+c']
 }
 
 export default function MainItemDraft({ rep, clientEmail, clientUsername, clientAvatarURL, handleSetShowMainItemDraft }: MainItemDraftProps) {
