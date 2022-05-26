@@ -110,7 +110,7 @@ export default function UserOnboarding({ session, roomID, handleTrunkSelect } : 
 }
 
 const keyMap = {
-  changeCommandBar: ['command+k']
+  changeCommandBar: ['command+k', 'ctrl+k'],
 }
 
 

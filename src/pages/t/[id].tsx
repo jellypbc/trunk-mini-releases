@@ -208,5 +208,5 @@ export default function Home() {
 }
 
 const keyMap = {
-  changeCommandBar: ['command+k']
+  changeCommandBar: ['command+k', 'ctrl+k']
 }
