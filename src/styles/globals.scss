@@ -58,3 +58,13 @@ blockquote {
 .ProseMirror img {
   max-width: 550px;
 }
+
+.ProseMirror a {
+  color: 	hsl(211, 100%, 35%);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  text-decoration: none;
+}
