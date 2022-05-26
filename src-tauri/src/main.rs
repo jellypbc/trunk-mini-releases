@@ -3,7 +3,9 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::{api, CustomMenuItem, Manager, Menu, MenuItem, Submenu, WindowBuilder, WindowUrl, AboutMetadata};
+
+#[allow(unused_imports)]
+use tauri::{api, CustomMenuItem, Manager, Menu, MenuItem, MenuEntry, Submenu, WindowBuilder, WindowUrl, AboutMetadata};
 use window_shadows::set_shadow;
 
 // mod transparent_window;
@@ -50,18 +52,16 @@ fn main() {
         return c;
     }
 
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let close = CustomMenuItem::new("close".to_string(), "Close");
+    let ctx = tauri::generate_context!();
 
-    let menu = Menu::new()
-        .add_submenu(Submenu::new(
-            "Trunk Mini",
-            Menu::new()
-                .add_item(quit)
-                .add_item(close)
-                .add_item(custom_menu("New").accelerator("cmdOrControl+N"))
-                .add_native_item(MenuItem::Separator)
-                .add_native_item(MenuItem::Quit),
+    let menu = Menu::new().add_submenu(Submenu::new(
+        "Trunk",
+        Menu::new()
+            .add_item(CustomMenuItem::new("quit".to_string(), "Quit").accelerator("cmdOrControl+q"))
+            .add_item(CustomMenuItem::new("close".to_string(), "Close"))
+            .add_item(custom_menu("New").accelerator("cmdOrControl+N"))
+            .add_native_item(MenuItem::Separator)
+            .add_native_item(MenuItem::Quit),
         ))
         .add_native_item( MenuItem::About("Trunk".to_string(), AboutMetadata::new() ) )
         .add_native_item(MenuItem::Copy)
@@ -71,13 +71,62 @@ fn main() {
         .add_native_item(MenuItem::HideOthers)
         .add_native_item(MenuItem::ShowAll)
         .add_native_item(MenuItem::Separator)
-        .add_item(CustomMenuItem::new("hide", "Hide"));
+        .add_item(CustomMenuItem::new("hide", "Hide"))
+    .add_submenu(Submenu::new(
+        "Edit", Menu::new()
+    ));
 
-    let ctx = tauri::generate_context!();
+
+    // ----
+
+    let menu2 = Menu::with_items([
+        #[cfg(target_os = "macos")]
+        MenuEntry::Submenu(Submenu::new(
+            "Trunk",
+            Menu::with_items([
+                MenuItem::About(ctx.package_info().name.clone(), AboutMetadata::new()).into(),
+                MenuItem::Separator.into(),
+                MenuItem::Services.into(),
+                MenuItem::Separator.into(),
+                MenuItem::Hide.into(),
+                MenuItem::HideOthers.into(),
+                MenuItem::ShowAll.into(),
+                MenuItem::Separator.into(),
+                MenuItem::Quit.into(),
+            ]),
+        )),
+        MenuEntry::Submenu(Submenu::new(
+          "Edit",
+          Menu::with_items([
+            MenuItem::Undo.into(),
+            MenuItem::Redo.into(),
+            MenuItem::Separator.into(),
+            MenuItem::Cut.into(),
+            MenuItem::Copy.into(),
+            MenuItem::Paste.into(),
+            #[cfg(not(target_os = "macos"))]
+            MenuItem::Separator.into(),
+            MenuItem::SelectAll.into(),
+          ]),
+        )),
+        MenuEntry::Submenu(Submenu::new(
+          "Window",
+          Menu::with_items([MenuItem::Minimize.into(), MenuItem::Zoom.into()]),
+        )),
+        // You should always have a Help menu on macOS because it will automatically
+        // show a menu search field
+        MenuEntry::Submenu(Submenu::new(
+          "Help",
+          Menu::with_items([CustomMenuItem::new("Learn More", "Learn More").into()]),
+        ))
+    ]);
+
+    // ----
+
     tauri::Builder::default()
         .setup(|app| {
             let window = app.get_window("main").unwrap();
-            window.set_title("Trunk Mini").unwrap();
+            window.set_title("Trunk").unwrap();
             window.set_transparent_titlebar(true);
 
             #[cfg(any(target_os = "windows", target_os = "macos"))]
@@ -85,7 +134,7 @@ fn main() {
 
             Ok(())
         })
-        .menu(menu)
+        .menu(menu2)
         .on_menu_event(|event| match event.menu_item_id() {
             "quit" => {
                 std::process::exit(0);

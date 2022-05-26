@@ -1,12 +1,12 @@
 {
   "package": {
-    "productName": "MiniTrunk",
+    "productName": "Trunk",
     "version": "0.1.1"
   },
   "build": {
     "distDir": "../dist",
     "devPath": "http://localhost:3000",
-    "beforeDevCommand": "yarn dev",
+    "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": ""
   },
   "tauri": {
@@ -61,7 +61,7 @@
     },
     "windows": [
       {
-        "title": "MiniTrunk",
+        "title": "Trunk",
         "minWidth": 580,
         "minHeight": 500,
         "resizable": true,

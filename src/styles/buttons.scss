@@ -72,12 +72,16 @@
   font-size: .8rem;
   background-color: #008C39;
   margin: .5rem;
+  font-weight: 600;
   padding: .75rem 2rem;
   border-radius: .4rem;
 }
 
 .button-home:hover {
-  color: hsl(0, 71%, 66%);
+  background-color: darken(#008C39, 3);
+  transition-duration: 0.11s;
+  color: #E6F4E4;
+  // color: hsl(0, 71%, 66%);
 }
 
 
