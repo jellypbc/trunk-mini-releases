@@ -46,14 +46,11 @@ export default function UserLogIn() {
           signInWithGoogle()
         }}
       >
-        <div className={styles.left}>
-          Search or type ⌘ + K
-        </div>
         <div className={styles.right}>
           Login or Register
         </div>
-
       </div>
+
       <main className={styles.main}>
         <h1 className={styles.title}>
           <div>Trunk</div>
@@ -75,7 +72,12 @@ export default function UserLogIn() {
             e.preventDefault()
             signInWithGoogle()
           }}>
-            Use Trunk in browser
+            { !isTauri ?
+              "Use Trunk in browser"
+              :
+              "Open your trunk"
+            }
+
           </button>
         </div>
       </main>
