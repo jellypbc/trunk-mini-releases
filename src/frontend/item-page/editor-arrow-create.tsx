@@ -6,7 +6,6 @@ import EditorDraftingContainer from './editor-drafting-container'
 import Fuse from 'fuse.js'
 
 export default function EditorArrowCreate({ serializedSelection, rep, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd, showEmptyCommentError, handleSetShowEmptyCommentError }:any) {
-  // const [showOptions, setShowOptions] = useState<boolean>(false)
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
@@ -80,30 +79,6 @@ export default function EditorArrowCreate({ serializedSelection, rep, handleRefe
       <div className={styles.sidebar}></div>
       <div className={styles.main}></div>
       <div className={styles.gutter}>
-        {/* { showOptions &&
-          <div className={styles.optionsContainer}>
-            <div
-              className={styles.option}
-              // dataTooltip={`Add Reaction · A`}
-            >
-              🙂
-            </div>
-            <div
-              className={styles.option}
-              // dataTooltip={`Reply · R`}
-              onClick={() => dosomething()}
-            >
-              💬
-            </div>
-            <div
-              className={styles.option}
-              // dataTooltip={`Delete · D`}
-            >
-              ...
-            </div>
-          </div>
-        } */}
-        {/* {clientEmail === 'guest' ? 'Anonymous Aardvark' : clientEmail} */}
         {showEmptyCommentError &&
           <>
             <div
@@ -131,7 +106,6 @@ export default function EditorArrowCreate({ serializedSelection, rep, handleRefe
         </div>
         <div
           className={styles.selectedText}
-          // onMouseOver={() => setShowOptions(true)}
         >
           {htmlToText(serializedSelection)}
         </div>

@@ -69,11 +69,29 @@ export default forwardRef<Handle, Props>(function Editor(
     }
   }))
 
+  let className : string
+
+  if (type === 'title') {
+    className = styles.titleContainer
+  } else if (type === 'arrowDraft') {
+    className = styles.arrowDraft
+  } else if (type === 'commentDraft') {
+    className = styles.commentDraft
+  } else if (type === 'arrowTitle') {
+    className = styles.arrowTitle
+  } else if (type === 'arrowContent') {
+    className = styles.arrowContent
+  } else if (type === 'webSourceURL' || type === 'publicationDate') {
+    className= styles.metadataEditor
+  } else {
+    className = styles.container
+  }
+
   return (
     <div
       ref={root}
       style={props.style}
-      className={type === 'title' ? styles.titleContainer : type === 'commentDraft' ? styles.commentDraft : styles.container}
+      className={className}
       spellCheck={false}
     />
   )
