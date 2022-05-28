@@ -7,7 +7,7 @@ import { createParser, createSerializer } from './../editor/config/utils'
 import type { EditorView } from 'prosemirror-view'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { exampleSetup } from './../editor/plugins/index'
-import Editor from './../editor'
+import Editor from './editor'
 
 type Props = {
   rep: Replicache<M>

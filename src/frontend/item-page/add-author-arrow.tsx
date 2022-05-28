@@ -3,7 +3,7 @@ import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
 import type { Replicache } from 'replicache'
-import EditorDraftingContainer from '../editor-drafting-container'
+import EditorDraftingContainer from './editor-drafting-container'
 import { useSortedItems, useClientEmail } from '../../datamodel/subscriptions'
 import Fuse from 'fuse.js'
 import { randomArrow } from '../../datamodel/arrow'
@@ -24,7 +24,6 @@ export default function AddAuthorArrow({ rep, itemID, handleSetShowAddAuthor} : 
       {allItems && email &&(
         <AddAuthorThing
           rep={rep}
-          userInfo={null}
           allItems={allItems}
           itemID={itemID}
           handleSetShowAddAuthor={handleSetShowAddAuthor}
@@ -35,7 +34,7 @@ export default function AddAuthorArrow({ rep, itemID, handleSetShowAddAuthor} : 
   )
 }
 
-function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAuthor, email} : any) {
+function AddAuthorThing({ rep, allItems, itemID, handleSetShowAddAuthor, email} : any) {
   const [authorDraft, setAuthorDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
@@ -157,7 +156,6 @@ function AddAuthorThing({ rep, userInfo, allItems, itemID, handleSetShowAddAutho
         <EditorDraftingContainer
           rep={rep}
           content={authorDraft}
-          clientInfo={userInfo}
           setValue={setAuthorDraft}
           type={''}
         />
