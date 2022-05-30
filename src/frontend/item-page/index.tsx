@@ -31,6 +31,7 @@ import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../../lib/constants'
 // import ItemFileUploadButton from './item-file-upload-button'
 import ItemParent from './item-parent'
 import Sidebar from './sidebar'
+import ItemMainSubItems from './item-main-sub-items'
 
 
 type ItemPageProps = {
@@ -280,7 +281,13 @@ function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPers
     arrowIDs && fullArrows &&
     <>
       <div className={styles.mainSubItems}>
-
+        <ItemMainSubItems
+          rep={rep}
+          itemID={itemID}
+          handleSetSelectedItemID={handleSetSelectedItemID}
+          fullArrows={fullArrows}
+          showHighlights={true}
+        />
       </div>
       { isPerson &&
         <PersonFooter
