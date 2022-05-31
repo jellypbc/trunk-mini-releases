@@ -103,18 +103,24 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
         />
       }
       <div className={styles.top}>
-        <div className={styles.createdByContainer}>
+        {/* <div className={styles.createdByContainer}>
           <div className={styles.avatarContainer}>
             <div className={styles.avatar}>
               <div className={styles.profile}>
-                {/* <div className={styles.online}>
-                </div> */}
+                <div className={styles.online}>
+                </div>
               </div>
 
             </div>
           </div>
           <div className={styles.createdBy}>
             {createdBy ? createdBy.split(`@`)[0] : 'anonymous'}
+          </div>
+        </div> */}
+        <div className={styles.updatedAtConatiner}>
+          <div className={styles.updatedAtLabel}>Created by</div>
+          <div className={styles.updatedAt}>
+              {createdBy ? createdBy.split(`@`)[0] : 'anonymous'}
           </div>
         </div>
         <div className={styles.updatedAtContainer}>

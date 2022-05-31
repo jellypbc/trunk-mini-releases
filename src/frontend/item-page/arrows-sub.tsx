@@ -3,7 +3,7 @@ import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
 import type { Replicache } from 'replicache'
-import EditorDraftingContainer from './../editor-drafting-container'
+import EditorDraftingContainer from './editor-drafting-container'
 import { useSortedItems, useItemByID, useClientEmail } from '../../datamodel/subscriptions'
 import Fuse from 'fuse.js'
 import { randomArrow } from '../../datamodel/arrow'
@@ -38,7 +38,6 @@ export default function ArrowsSub({ rep, itemID, fullArrows, handleSetSelectedIt
       {showAddSubItem && allItems && email &&
         <AddSubItemContainer
           rep={rep}
-          userInfo={null}
           allItems={allItems}
           itemID={itemID}
           handleSetShowAddSubItem={setShowAddSubItem}
@@ -79,7 +78,7 @@ function SubItemArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowIt
 }
 
 
-function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAddSubItem, email} : any) {
+function AddSubItemContainer({ rep, allItems, itemID, handleSetShowAddSubItem, email} : any) {
   const [subItemDraft, setSubItemDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
@@ -107,17 +106,46 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
   }
   const fuse = new Fuse(allItems, options)
 
+  // useEffect(() => {
+  //   if (subItemDraft) {
+  //     const searchTerm = htmlToText(subItemDraft)
+  //     if (allItems) {
+  //       const results = fuse.search(searchTerm)
+  //       setSearchResults(results)
+  //     }
+  //   } else {
+  //     setSearchResults([])
+  //   }
+  // }, [subItemDraft])
+
   useEffect(() => {
     if (subItemDraft) {
-      const searchTerm = htmlToText(subItemDraft)
-      if (allItems) {
-        const results = fuse.search(searchTerm)
-        setSearchResults(results)
+      if (subItemDraft.length < 30) {
+        const searchTerm = htmlToText(subItemDraft)
+        if (allItems) {
+          const results = fuse.search(searchTerm)
+          processSearchResultChange(results)
+        }
+      } else {
+        setSearchResults([])
       }
     } else {
       setSearchResults([])
     }
   }, [subItemDraft])
+
+
+  const debounce = (func : any, timeout = 300) => {
+    let timer : any
+    return (...args : any) => {
+      clearTimeout(timer)
+      // @ts-ignore
+      timer = setTimeout(() => {func.apply(this, args)}, timeout)
+    }
+  }
+
+  const processSearchResultChange = debounce((thing: any) => setSearchResults(thing))
+
 
   function createArrow(type: string, frontItemID: string, commentDraft : string) {
     let commentArrow : any = randomArrow()
@@ -216,7 +244,6 @@ function AddSubItemContainer({ rep, userInfo, allItems, itemID, handleSetShowAdd
         <EditorDraftingContainer
           rep={rep}
           content={subItemDraft}
-          clientInfo={userInfo}
           setValue={setSubItemDraft}
           type={''}
         />

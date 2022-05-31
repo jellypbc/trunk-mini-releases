@@ -17,7 +17,6 @@ import { htmlToText } from '../../util/htmlToText'
 import styles from './index.module.css'
 import { supabase } from '../../lib/supabase-client'
 import EditorContainer from './editor-container'
-import ItemMainSubItems from './item-main-sub-items'
 import ArrowsAuthoredBy from './arrows-authored-by'
 import ArrowsBack from './arrows-back'
 import ArrowsComment from './arrows-comment'
@@ -32,6 +31,7 @@ import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../../lib/constants'
 // import ItemFileUploadButton from './item-file-upload-button'
 import ItemParent from './item-parent'
 import Sidebar from './sidebar'
+import ItemMainSubItems from './item-main-sub-items'
 
 
 type ItemPageProps = {
@@ -267,14 +267,13 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
         item={item}
         handleSetSelectedItemID={handleSetSelectedItemID}
         isPerson={item.title.includes('[person]')}
-        showHighlights={showHighlights}
       />
     </div>
   </HotKeys>
   )
 }
 
-function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson, showHighlights}: any) {
+function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
   const fullArrows = useArrowsByIDs(rep, arrowIDs)
 
@@ -287,7 +286,7 @@ function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPers
           itemID={itemID}
           handleSetSelectedItemID={handleSetSelectedItemID}
           fullArrows={fullArrows}
-          showHighlights={showHighlights}
+          showHighlights={true}
         />
       </div>
       { isPerson &&
