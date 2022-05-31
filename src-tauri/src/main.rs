@@ -2,9 +2,8 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-
-
 #[allow(unused_imports)]
+
 use tauri::{api, CustomMenuItem, Manager, Menu, MenuItem, MenuEntry, Submenu, WindowBuilder, WindowUrl, AboutMetadata};
 use window_shadows::set_shadow;
 
