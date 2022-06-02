@@ -102,10 +102,10 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
       {/* <div onClick={() => routeToItem()}>Expand</div> */}
       <div className={styles.createdContainer}>
         <div className={styles.createdBy}>
-          <div className={styles.avatarContainer}>
+          {/* <div className={styles.avatarContainer}>
             <div className={styles.avatar}>
             </div>
-          </div>
+          </div> */}
           <div className={styles.createdByEmail}>{item.createdBy}</div>
         </div>
         <div className={styles.createdAt}>{safeCreatedAt}</div>
