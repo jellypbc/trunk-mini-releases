@@ -5,9 +5,10 @@ type MainNavProps = {
   itemCount: number
   handleSetShowMainItemDraft: (state: boolean) => void
   handleSetCommandBar: (state: boolean) => void
+  showMainItemDraft: boolean
 }
 
-export default function MainNav({ itemCount, handleSetShowMainItemDraft, handleSetCommandBar } : MainNavProps ) {
+export default function MainNav({ itemCount, handleSetShowMainItemDraft, handleSetCommandBar, showMainItemDraft } : MainNavProps ) {
 
   function handleShowMainItemDraftAndCloseCommandBar() {
     handleSetShowMainItemDraft(true)
@@ -16,10 +17,12 @@ export default function MainNav({ itemCount, handleSetShowMainItemDraft, handleS
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <span
-          onClick={() => handleShowMainItemDraftAndCloseCommandBar()}
-          className={styles.addItemButton}
-        >Add new item</span>
+        {!showMainItemDraft &&
+          <span
+            onClick={() => handleShowMainItemDraftAndCloseCommandBar()}
+            className={`btn btn-green`}
+          >New item</span>
+        }
       </div>
       { itemCount > 0 &&
         <div className={styles.right}>

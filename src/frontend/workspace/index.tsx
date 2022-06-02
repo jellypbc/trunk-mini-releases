@@ -161,6 +161,7 @@ function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, client
         itemCount={itemCount}
         handleSetShowMainItemDraft={setShowMainItemDraft}
         handleSetCommandBar={handleSetCommandBar}
+        showMainItemDraft={showMainItemDraft}
       />
       {showMainItemDraft &&
         <MainItemDraft
