@@ -5,14 +5,3 @@
   font-size: .8rem;
   color: hsl(0, 0%, 60%);
 }
-
-.addItemButton {
-  background-color: #007D3A;
-  color: white;
-  padding: .5rem 1rem;
-  border-radius: .3rem;
-}
-
-.addItemButton:hover {
-  background-color: #009B2B;
-}

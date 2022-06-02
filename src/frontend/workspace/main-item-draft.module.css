@@ -1,5 +1,6 @@
 .container {
-
+  background-color:hsl(0, 0%, 96%);
+  padding: 2rem;
 }
 
 .dropArea {
@@ -18,7 +19,6 @@
 .draftContainer {
   display: flex;
   height: 220px;
-
 }
 
 .avatarContainer {
@@ -37,8 +37,8 @@
 .itemDraft {
   border: 1px solid hsl(0, 0%, 80%);
   width: 100%;
-  margin-left: 2rem;
   background-color: white;
+  overflow: auto;
 }
 
 .titleTextArea {
@@ -68,10 +68,8 @@
 
 .actionsContainer {
   display: flex;
-  justify-content: right;
-  border-bottom: 1px solid hsl(0, 0%, 80%);
-  margin-bottom: 1rem;
-  padding: 1rem 0;
+  justify-content: space-between;
+  padding-top: 1rem;
 }
 
 .action {
@@ -93,3 +91,21 @@
   background-color: hsl(0, 0%, 93%);
 }
 
+.upload {
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  display: flex;
+}
+
+.file {
+  font-size: .7rem;
+}
+
+.uploadedFileContainer {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}

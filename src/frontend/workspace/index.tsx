@@ -31,6 +31,7 @@ type BodyProps = {
   clientEmail: string
   clientUsername: string
   clientAvatarURL: string
+  handleSetCommandBar: (state: boolean) => void
 }
 
 type SidebarProps = {
@@ -46,6 +47,7 @@ type MainProps = {
   clientEmail: string
   clientUsername: string
   clientAvatarURL: string
+  handleSetCommandBar: (state: boolean) => void
 }
 
 
@@ -73,6 +75,7 @@ export default function Workspace({ rep, handleSetSelectedItemID, roomID, handle
           clientEmail={clientEmail}
           clientUsername={clientUsername}
           clientAvatarURL={clientAvatarURL}
+          handleSetCommandBar={handleSetCommandBar}
         />
       }
     </div>
@@ -115,7 +118,7 @@ function Nav({ email, handleSetCommandBar } : NavProps) {
   )
 }
 
-function Body({ rep, items, handleSetSelectedItemID, roomID, clientEmail, clientUsername, clientAvatarURL } : BodyProps) {
+function Body({ rep, items, handleSetSelectedItemID, roomID, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar} : BodyProps) {
   return(
     <div className={styles.bodyContainer}>
       <Sidebar
@@ -130,6 +133,7 @@ function Body({ rep, items, handleSetSelectedItemID, roomID, clientEmail, client
         clientEmail={clientEmail}
         clientUsername={clientUsername}
         clientAvatarURL={clientAvatarURL}
+        handleSetCommandBar={handleSetCommandBar}
       />
       <VariableGutter/>
     </div>
@@ -147,7 +151,7 @@ function Sidebar({ rep, roomID } : SidebarProps ){
   )
 }
 
-function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, clientUsername, clientAvatarURL } : MainProps){
+function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar } : MainProps){
   const itemCount = items.length
   const [showMainItemDraft, setShowMainItemDraft] = useState<boolean>(false)
 
@@ -156,6 +160,8 @@ function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, client
       <MainNav
         itemCount={itemCount}
         handleSetShowMainItemDraft={setShowMainItemDraft}
+        handleSetCommandBar={handleSetCommandBar}
+        showMainItemDraft={showMainItemDraft}
       />
       {showMainItemDraft &&
         <MainItemDraft

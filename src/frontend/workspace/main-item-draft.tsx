@@ -36,10 +36,6 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
   const [itemDraft, setItemDraft] = useState<any>(randomItem())
   const [URL, setURL] = useState<any>('')
 
-  useEffect(() => {
-    console.log('itemDraft', itemDraft)
-  }, [itemDraft])
-
   function saveDraftAsItem(){
     const item = itemDraft.item
     const changes = {
@@ -131,13 +127,13 @@ return (
     }}
   >
     <div className={styles.container}>
-      <div className={styles.dropArea} id="drop-area">Drop area</div>
+      {/* <div className={styles.dropArea} id="drop-area">Drop area</div> */}
       <div className={styles.draftContainer}>
-        <div className={styles.avatarContainer}>
+        {/* <div className={styles.avatarContainer}>
           <div className={styles.avatar}>
 
           </div>
-        </div>
+        </div> */}
         <div className={styles.itemDraft}>
           <div
             className={styles.itemDraftTitle}
@@ -173,6 +169,11 @@ return (
               />
             }
           </div>
+
+        </div>
+      </div>
+      <div className={styles.actionsContainer}>
+        <div className={styles.left}>
           <FileUploadContainer
             itemID={itemDraft.id}
             item={itemDraft.item}
@@ -181,19 +182,19 @@ return (
             handleSetURL={setURL}
           />
         </div>
-      </div>
-      <div className={styles.actionsContainer}>
-        <div
-          className={styles.action}
-          onClick={() => handleSetShowMainItemDraft(false)}
-        >
-          ⌘+C to Cancel
-        </div>
-        <div
-          className={styles.action}
-          onClick={() => saveDraftAsItem()}
-        >
-          ⌘+Enter to Publish
+        <div className={styles.right}>
+          <div
+            className={`btn btn-2`}
+            onClick={() => handleSetShowMainItemDraft(false)}
+          >
+            ⌘+C to Cancel
+          </div>
+          <div
+            className={`btn btn-green`}
+            onClick={() => saveDraftAsItem()}
+          >
+            ⌘+Enter to Publish
+          </div>
         </div>
       </div>
     </div>
@@ -203,13 +204,15 @@ return (
 
 function FileUploadContainer({itemID, item, handleSetItemDraft, URL, handleSetURL} : any) {
 
+  const [fileName, setFileName] = useState<string>('')
+
   useEffect(() => {
     generateIDBSourceFileURL(item.sourceURL)
   }, [item.sourceURL])
 
-
   function onUpload(e: ChangeEvent<HTMLInputElement>){
     const file = e?.target.files?.[0]
+    file && setFileName(file.name)
     if (!file) {
       console.log(`No file found`)
     } else {
@@ -280,24 +283,17 @@ function FileUploadContainer({itemID, item, handleSetItemDraft, URL, handleSetUR
 
 
   return (
-    <div className={styles.upload}>
-      {item.sourceURL &&
-        <>
-          <div className={styles.file}>
-            <a href={URL} target="_blank" className={styles.link}>
-              {item.sourceURL && `🗂`}
-            </a>
+    <>
 
-          </div>
+      <div className={styles.section}>
+        {item.sourceURL &&
           <div
             onClick={handleDeleteSourceFile}
-            className={styles.hoverOnly}
+            className={`btn btn-2`}
           >
-            ⌘+T to Trash
+            Remove file
           </div>
-        </>
-      }
-      <div className={styles.hoverOnly}>
+        }
         <ItemFileUploadButton
           onUpload={onUpload}
           loading={false}
@@ -305,6 +301,15 @@ function FileUploadContainer({itemID, item, handleSetItemDraft, URL, handleSetUR
           itemID={itemID}
         />
       </div>
-    </div>
+      {item.sourceURL &&
+        <div className={styles.uploadedFileContainer}>
+          <div className={styles.file}>
+            <a href={URL} target="_blank" className={styles.link}>
+              {item.sourceURL && `🗂 ` + fileName.slice(0, 30) + `...`}
+            </a>
+          </div>
+        </div>
+      }
+    </>
   )
 }

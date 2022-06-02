@@ -12,11 +12,11 @@ export default function ItemFileUploadButton(props: Props) {
   return (
     <div className={styles.container}>
       <label
-        className={styles.label}
+        className={`btn btn-2`}
         htmlFor={props.itemID}
       >
         {props.loading ? 'Uploading ...' :
-          props.sourceUrl ? '⌘+R to Replace' : '⌘+U to Upload File'
+          props.sourceUrl ? 'Replace file' : 'Upload File'
         }
       </label>
       <input
