@@ -52,7 +52,6 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
 
   const handlers = {
     createItem: () => {
-      console.log('something is happening')
       saveDraftAsItem()
       setItemDraft(randomItem())
       setTitleDraft('<p> </p>')

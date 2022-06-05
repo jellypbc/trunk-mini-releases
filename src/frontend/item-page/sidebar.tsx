@@ -90,7 +90,7 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
 
 
   return(
-    <div className={styles.sidebarContainer}>
+    <div className={styles.container}>
       {showMetadataModal && authorArrows &&
         <MetadataModal
           itemID={itemID}
@@ -135,11 +135,11 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
         </div>
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Publication date</div>
-          <div>{publicationDate ? htmlToText(publicationDate) : `--`}</div>
+          <div className={styles.updatedAt}>{publicationDate ? htmlToText(publicationDate) : `--`}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           <div className={styles.updatedAtLabel}>Web source</div>
-          <div>{shortWebSourceURL ? <Link href={htmlToText(item.webSourceURL)}><a target="_blank">{shortWebSourceURL}</a></Link> : `--`}</div>
+          <div className={styles.updatedAt}>{shortWebSourceURL ? <Link href={htmlToText(item.webSourceURL)}><a target="_blank">{shortWebSourceURL}</a></Link> : `--`}</div>
         </div>
         <div className={styles.updatedAtContainer}>
           {showHighlights ?
