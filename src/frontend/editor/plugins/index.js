@@ -1,16 +1,17 @@
-import {keymap} from "prosemirror-keymap"
-import {history} from "prosemirror-history"
-import {baseKeymap} from "prosemirror-commands"
-import {Plugin} from "prosemirror-state"
-import {dropCursor} from "prosemirror-dropcursor"
-import {gapCursor} from "prosemirror-gapcursor"
-import {menuBar} from "prosemirror-menu"
+import { keymap } from 'prosemirror-keymap'
+import { history } from 'prosemirror-history'
+import { baseKeymap } from 'prosemirror-commands'
+import { Plugin } from 'prosemirror-state'
+import { dropCursor } from 'prosemirror-dropcursor'
+import { gapCursor } from 'prosemirror-gapcursor'
+import { menuBar } from 'prosemirror-menu'
 
-import {buildMenuItems} from "../config/menu"
-import {buildKeymap} from "../config/keymap"
-import {buildInputRules} from "../config/inputrules"
-export {buildMenuItems, buildKeymap, buildInputRules}
+import { buildMenuItems } from '../config/menu'
+import { buildKeymap } from '../config/keymap'
+import { buildInputRules } from '../config/inputrules'
 import { arrowPlugin, arrowUI } from '../config/arrow'
+import { placeholder } from './placeholder'
+export { buildMenuItems, buildKeymap, buildInputRules }
 
 // !! This module exports helper functions for deriving a set of basic
 // menu items, input rules, or key bindings from a schema. These
@@ -51,6 +52,7 @@ import { arrowPlugin, arrowUI } from '../config/arrow'
 export function exampleSetup(options) {
   const { getView, rep } = options
   let plugins = [
+    placeholder(),
     buildInputRules(options.schema),
     keymap(buildKeymap(options.schema, options.mapKeys)),
     keymap(baseKeymap),
