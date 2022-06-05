@@ -25,9 +25,10 @@ type Props = {
   itemID: string
   commentArrows: any[]
   showHighlights: boolean
+  handleSetSelectedItemID: (itemID: string) => void
 }
 
-function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights } : Props) {
+function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights, handleSetSelectedItemID } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
@@ -59,6 +60,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
       rep,
       itemID,
       commentArrows || [],
+      handleSetSelectedItemID,
     )
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
@@ -81,6 +83,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
       rep,
       itemID,
       showHighlights && commentArrows || [],
+      handleSetSelectedItemID,
     )
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
@@ -95,6 +98,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
         rep,
         itemID,
         showHighlights && commentArrows || [],
+        handleSetSelectedItemID,
       )
       setState(state)
       setView(viewRef && viewRef.current && viewRef.current.view)
@@ -502,6 +506,7 @@ const createStateFromProps = (
   rep: Replicache<M>,
   itemID: string,
   arrows: any,
+  handleSetSelectedItemID: (id: string) => void,
 ) : EditorState<typeof schema> => {
   return EditorState.create({
     doc: parser(doc),
@@ -512,11 +517,13 @@ const createStateFromProps = (
       rep: rep,
       itemID: itemID,
       arrows: arrows,
+      handleSetSelectedItemID: handleSetSelectedItemID,
     }),
     // @ts-ignore
     rep: rep,
     itemID: itemID,
-    arrows: arrows
+    arrows: arrows,
+    handleSetSelectedItemID: handleSetSelectedItemID,
   })
 }
 

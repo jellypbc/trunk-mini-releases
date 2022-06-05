@@ -93,17 +93,17 @@ export const arrowPlugin = new Plugin({
   }
 })
 
-export const arrowUI = function(tx, rep) {
+export const arrowUI = function(tx, rep, handleSetSelectedItemID) {
   return new Plugin({
     props: {
       decorations(state) {
-        return arrowToolTip(state, tx, rep)
+        return arrowToolTip(state, tx, rep, handleSetSelectedItemID)
       }
     }
   })
 }
 
-function arrowToolTip(state, dispatch, rep) {
+function arrowToolTip(state, dispatch, rep, handleSetSelectedItemID) {
   let sel = state.selection
   if (!sel.empty) return null
   if (sel.from === 1) return null
@@ -112,7 +112,7 @@ function arrowToolTip(state, dispatch, rep) {
   return DecorationSet.create(state.doc, [
     Decoration.widget(
       sel.from,
-      renderArrows(arrows, dispatch, state, rep),
+      renderArrows(arrows, dispatch, state, rep, handleSetSelectedItemID),
       {
         ignoreSelection: true
       }
@@ -120,7 +120,7 @@ function arrowToolTip(state, dispatch, rep) {
   ])
 }
 
-function renderArrows(arrows, dispatch, state, rep) {
+function renderArrows(arrows, dispatch, state, rep, handleSetSelectedItemID) {
   const node = document.createElement('div')
   node.className = 'arrowTooltip'
 
@@ -136,6 +136,7 @@ function renderArrows(arrows, dispatch, state, rep) {
               state={state}
               showActions={{ reply: isLast, delete: true}}
               rep={rep}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
           </div>
         )
@@ -148,11 +149,12 @@ function renderArrows(arrows, dispatch, state, rep) {
 
 import EditorArrowDisplay from '../../item-page/editor-arrow-display'
 
-function EditorArrowThread({ arrow, dispatch, state, showActions, rep }) {
+function EditorArrowThread({ arrow, dispatch, state, showActions, rep, handleSetSelectedItemID }) {
   return (
     <EditorArrowDisplay
       rep={rep}
       arrow={arrow}
+      handleSetSelectedItemID={handleSetSelectedItemID}
     />
   )
 }

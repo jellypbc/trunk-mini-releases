@@ -59,6 +59,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID, showHighlights}: any
               itemID={itemID}
               commentArrows={commentArrows}
               showHighlights={showHighlights}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
           }
           <ItemMainSubItemsA

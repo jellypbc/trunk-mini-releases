@@ -115,6 +115,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
               itemID={itemID}
               commentArrows={[]}
               showHighlights={false}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
           </div>
         </div>
@@ -128,6 +129,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
               itemID={itemID}
               commentArrows={[]}
               showHighlights={false}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
           </div>
         </div>

@@ -235,6 +235,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
               itemID={itemID}
               commentArrows={[]}
               showHighlights={false}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
           </div>
           <div className={styles.authorsContainer}>
@@ -257,6 +258,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
             itemID={itemID}
             commentArrows={commentArrows}
             showHighlights={showHighlights}
+            handleSetSelectedItemID={handleSetSelectedItemID}
           />
         }
       </div>
