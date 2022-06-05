@@ -12,10 +12,12 @@ import { dateInWords } from '../../lib/dateInWords'
 type EditorArrowDisplayProps = {
   rep: Replicache<M>
   arrow: any
+  handleSetSelectedItemID: (itemID: string) => void
 }
 
-export default function EditorArrowDisplay({ rep, arrow }: EditorArrowDisplayProps) {
+export default function EditorArrowDisplay({ rep, arrow, handleSetSelectedItemID }: EditorArrowDisplayProps) {
   const email = useClientEmail(rep)
+
   // const { id : arrowID } = arrow
 
   // const [showDeleteOptions, setShowDeleteOptions] = useState<boolean>(false)
@@ -41,6 +43,7 @@ export default function EditorArrowDisplay({ rep, arrow }: EditorArrowDisplayPro
         arrow={arrow}
         kind={arrow.kind}
         email={email}
+        handleSetSelectedItemID={handleSetSelectedItemID}
       />
     )
   }
@@ -82,6 +85,7 @@ export default function EditorArrowDisplay({ rep, arrow }: EditorArrowDisplayPro
             <FrontItemStuff
               rep={rep}
               itemID={arrow.frontItemID}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
           }
         </div>
@@ -97,6 +101,7 @@ function CommentDisplay({
   rep,
   itemID,
   arrow,
+  handleSetSelectedItemID,
   // kind,
   // email
 } : any) {
@@ -183,6 +188,7 @@ function CommentDisplay({
               itemID={itemID}
               commentArrows={[]}
               showHighlights={false}
+              handleSetSelectedItemID={handleSetSelectedItemID}
             />
             {/* {item.arrows.length === 1 ?
             <ReplyForm
@@ -200,7 +206,11 @@ function CommentDisplay({
             } */}
 
           </div>
-          <Footer item={item}/>
+          <Footer
+            item={item}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+            itemID={itemID}
+          />
         </div>
       </div>
 
@@ -413,7 +423,7 @@ function ReplyForm({ itemID, rep, email} : any){
 
   )
 }
-function FrontItemStuff({rep, itemID }:{rep: any, itemID: string}) {
+function FrontItemStuff({rep, itemID, handleSetSelectedItemID }:{rep: any, itemID: string, handleSetSelectedItemID: (itemID: string) => void}) {
   const item = useItemByID(rep, itemID)
 
   return (
@@ -427,6 +437,7 @@ function FrontItemStuff({rep, itemID }:{rep: any, itemID: string}) {
           itemID={itemID}
           commentArrows={[]}
           showHighlights={false}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       </div>
       <div className={styles.content}>
@@ -437,19 +448,30 @@ function FrontItemStuff({rep, itemID }:{rep: any, itemID: string}) {
           itemID={itemID}
           commentArrows={[]}
           showHighlights={false}
+          handleSetSelectedItemID={handleSetSelectedItemID}
         />
       </div>
-      <Footer item={item}/>
+      <Footer
+        item={item}
+        handleSetSelectedItemID={handleSetSelectedItemID}
+        itemID={itemID}
+      />
     </>
   )
 }
 
-function Footer({ item } : any){
+function Footer({ item, handleSetSelectedItemID, itemID } : any){
   return (
     <div className={styles.arrowMetadata}>
       <div>{item.arrows.length} links</div>
       <div>{dateInWords(item.createdAt) || 'a while ago'}</div>
       <div>{item.createdBy ? item.createdBy.split(`@`)[0] : 'anonymous'}</div>
+      <span
+          className={styles.expand}
+          onClick={() => handleSetSelectedItemID(itemID)}
+        >
+          ↗
+        </span>
     </div>
   )
 }
