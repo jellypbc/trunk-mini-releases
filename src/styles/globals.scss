@@ -68,3 +68,7 @@ blockquote {
 .ProseMirror p.empty-node:first-child::before {
   content: "What's on your mind...";
 }
+
+.arrowTooltip {
+  display: inline-block;
+}
