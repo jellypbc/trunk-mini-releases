@@ -19,10 +19,21 @@
 .top {
   position: absolute;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   width: 980px;
   padding-top: 1rem;
   background-color: white;
+}
+
+.hello {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actionBanner {
+  width: 100%;
+  padding: 0;
 }
 
 .bodyContainer {
@@ -295,27 +306,24 @@ a.link:hover {
   font-size: 1.1rem;
 }
 
+.hi {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  z-index: 2;
+  max-width: 980px;
+  padding: 1rem 0;
+  margin: 0 auto;
+}
+
 .banner {
-  /* border: 1px solid #009B2B; */
+  border: 1px solid #009B2B;
   font-size: .8rem;
   padding: 2rem;
-  margin: 1rem;
-  /* overflow: hidden; */
-  /* white-space: nowrap; */
-  /* border-right: .15em solid black; */
-  /* animation:
-    typing 2.5s steps(40, end),
-    blink-caret .75s step-end infinite; */
+  position: relative;
 }
-
-/* @keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-} */
 
 .bannerLogin {
   color: #009B2B;

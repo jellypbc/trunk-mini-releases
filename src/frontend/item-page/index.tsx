@@ -129,8 +129,8 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
 
   return (
     <div className={styles.outsideContainer}>
-    <div className={styles.container}>
-        <>
+      <div className={styles.container}>
+        <div className={styles.hi}>
         {clientEmail === "guest" &&
           <div
             className={styles.banner}
@@ -139,9 +139,10 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
               signInWithGoogle()
             }}
           >
-            You look familiar. Have we met? <span className={styles.bannerLogin}>Log in or register</span> to save your contributions. You look like someone named... <span className={styles.bannerAnon}>Anonymous Aardvark</span>. We'll call you that.
+            You look familiar. Have we met? <span className={styles.bannerLogin}>Log in</span> to save your contributions. You look like someone named... <span className={styles.bannerAnon}>Anonymous Aardvark</span>. We'll call you that.
           </div>
         }
+        </div>
         <Nav
           email={clientEmail}
           handleSetCommandBar={handleSetCommandBar}
@@ -178,8 +179,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
             showHighlights={showHighlights}
           />
         </div>
-      </>
-    </div>
+      </div>
     </div>
   )
 }
@@ -218,7 +218,6 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
           item={item}
           rep={rep}
         /> */}
-
         <div className={styles.parentContainer}>
           <ItemParent
             rep={rep}
@@ -422,9 +421,12 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
   }
 
 
+
   return(
     <div className={styles.navContainer}>
       <div className={styles.top}>
+
+        <div className={styles.hello}>
         <div className={styles.left}>
           <div
             className={styles.roomID}
@@ -468,6 +470,7 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
               </div> */}
             </div>
           }
+        </div>
         </div>
       </div>
     </div>
