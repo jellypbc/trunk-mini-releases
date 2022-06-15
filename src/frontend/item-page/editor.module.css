@@ -55,6 +55,11 @@
   padding: 0;
 }
 
+.arrowContent strong,
+.arrowContent a {
+  padding: 0;
+}
+
 .metadataEditor * {
   border: none;
   resize: none;
