@@ -420,13 +420,18 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
     }
   }
 
+  function truncatedTitle() {
+    const titleAsText = htmlToText(title)
+    if (titleAsText.length > 20) {
+      return `${titleAsText.substring(0, 20)}...`
+    }
+    return titleAsText
+  }
 
-
-  return(
+  return (
     <div className={styles.navContainer}>
       <div className={styles.top}>
-
-        <div className={styles.hello}>
+        <div className={styles.leftContainer}>
         <div className={styles.left}>
           <div
             className={styles.roomID}
@@ -435,7 +440,7 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
             {roomID.replace(`-`, ` `)}
           </div>
           <div>&rsaquo;</div>
-          <div>{htmlToText(title)}</div>
+          <div>{truncatedTitle()}</div>
         </div>
         <div className={styles.rightContainer}>
           <div className={styles.right}>

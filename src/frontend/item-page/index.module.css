@@ -26,7 +26,7 @@
   background-color: white;
 }
 
-.hello {
+.leftContainer {
   display: flex;
   justify-content: space-between;
 }
