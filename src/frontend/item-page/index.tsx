@@ -32,6 +32,7 @@ import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../../lib/constants'
 import ItemParent from './item-parent'
 import Sidebar from './sidebar'
 import ItemMainSubItems from './item-main-sub-items'
+import TooltipBottom from '../tooltip/tooltip-bottom'
 
 
 type ItemPageProps = {
@@ -440,7 +441,10 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
             {roomID.replace(`-`, ` `)}
           </div>
           <div>&rsaquo;</div>
-          <div>{truncatedTitle()}</div>
+          <TooltipBottom
+            text={truncatedTitle()}
+            fullText={htmlToText(title)}
+          />
         </div>
         <div className={styles.rightContainer}>
           <div className={styles.right}>
