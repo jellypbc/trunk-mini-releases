@@ -55,29 +55,6 @@ export default function EditorArrowDisplay({ rep, arrow, handleSetSelectedItemID
       <div className={styles.main}></div>
       <div className={styles.gutter}>
         <div className={styles.gutterContainer}>
-          {/* {showDeleteOptions ?
-            <div className={styles.deleteOptions}>
-              <div
-                className={styles.deleteOption}
-                onClick={() => deleteArrowOnly()}
-              >Delete arrow</div>
-              <div
-                className={styles.deleteOption}
-                onClick={() => deleteArrowAndFrontItem()}
-              >
-                Delete arrow and item
-              </div>
-              <div
-                className={styles.deleteOption}
-                onClick={() => setShowDeleteOptions(false)}
-              >&times;</div>
-            </div>
-            :
-            <div
-              className={styles.toggleDeleteOptions}
-              onClick={() => setShowDeleteOptions(true)}
-              >...</div>
-          } */}
           <div className={styles.highlight}>
             {htmlToText(arrow.highlight)}
           </div>

@@ -26,7 +26,7 @@
   background-color: white;
 }
 
-.hello {
+.leftContainer {
   display: flex;
   justify-content: space-between;
 }
@@ -422,4 +422,3 @@ a.link:hover {
 .profileDropdownLeft div:hover {
   background-color: hsl(0, 0%, 96%);
 }
-

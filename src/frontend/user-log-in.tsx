@@ -46,11 +46,10 @@ export default function UserLogIn() {
           signInWithGoogle()
         }}
       >
-        <div className={styles.right}>
+        <div className={styles.logInRegister}>
           Login or Register
         </div>
       </div>
-
       <main className={styles.main}>
         <h1 className={styles.title}>
           <div>Trunk</div>
@@ -81,11 +80,6 @@ export default function UserLogIn() {
           </button>
         </div>
       </main>
-      <footer
-        className={styles.footer}
-      >
-        {/* See the benefits of connected notes */}
-      </footer>
   </div>
   )
 }
