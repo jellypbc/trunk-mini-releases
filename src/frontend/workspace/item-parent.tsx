@@ -2,16 +2,24 @@ import React from 'react'
 import { useItemByID, useArrowByID } from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
+import type { M } from '../../datamodel/mutators'
+import type { Reflect } from '@rocicorp/reflect'
 
-export default function ItemParent({ rep, itemID, handleSetSelectedItemID } : any) {
-  const item = useItemByID(rep, itemID)
+type ItemParentProps = {
+  reflect: Reflect<M>
+  itemID: string
+  handleSetSelectedItemID: (itemID: string) => void
+}
+
+export default function ItemParent({ reflect, itemID, handleSetSelectedItemID } : ItemParentProps) {
+  const item = useItemByID(reflect, itemID)
   return (
     item &&
     <>
       {item.arrows &&
         <ParentItemContainer
           arrows={item.arrows}
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
@@ -20,18 +28,18 @@ export default function ItemParent({ rep, itemID, handleSetSelectedItemID } : an
   )
 }
 
-function ParentItemContainer({ arrows, rep, itemID, handleSetSelectedItemID } : any){
+function ParentItemContainer({ arrows, reflect, itemID, handleSetSelectedItemID } : any){
   const parentItem = arrows.filter((a: any) => a.kind === 'sub' && a.backItemID !== itemID) || []
   return (
     <>
       {parentItem && parentItem.map((a: any) => {
-        const arrow = useArrowByID(rep, a.arrowID)
+        const arrow = useArrowByID(reflect, a.arrowID)
         return (
           arrow &&
           <Arrow
             key={a.arrowID}
             arrow={arrow}
-            rep={rep}
+            reflect={reflect}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
@@ -40,8 +48,8 @@ function ParentItemContainer({ arrows, rep, itemID, handleSetSelectedItemID } : 
   )
 }
 
-function Arrow({rep, arrow, handleSetSelectedItemID}: any){
-  const item = useItemByID(rep, arrow.backItemID)
+function Arrow({reflect, arrow, handleSetSelectedItemID}: any){
+  const item = useItemByID(reflect, arrow.backItemID)
   return (
     <div
       className={styles.parentTitle}

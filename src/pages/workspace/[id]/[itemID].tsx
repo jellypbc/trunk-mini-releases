@@ -156,7 +156,7 @@ export default function Home() {
   if (selectedItemID === "flashcards" && session && reflect) {
     return (
       <FlashCards
-        rep={reflect}
+        reflect={reflect}
       />
     )
   }

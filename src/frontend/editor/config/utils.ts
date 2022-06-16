@@ -39,8 +39,8 @@ export const createSerializer = (schema: any) => {
   }
 }
 
-export async function getClient(rep: Reflect<MutatorDefs>) {
-  return await Promise.resolve(rep.clientID)
+export async function getClient(reflect: Reflect<MutatorDefs>) {
+  return await Promise.resolve(reflect.clientID)
 }
 
 
