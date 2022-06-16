@@ -5,16 +5,18 @@ import {
 } from '../../datamodel/subscriptions'
 import styles from './index.module.css'
 import { htmlToText } from '../../util/htmlToText'
+import type { M } from '../../datamodel/mutators'
+import type { Reflect } from '@rocicorp/reflect'
 
 type ArrowsFootnoteProps = {
-  rep: any,
+  reflect: Reflect<M>,
   arrows: any[],
   itemID: string,
   handleSetSelectedItemID: any,
   subItemItemIDs: any
 }
 
-export default function ArrowsFootnote({ rep, arrows, itemID, handleSetSelectedItemID, subItemItemIDs } : ArrowsFootnoteProps) {
+export default function ArrowsFootnote({ reflect, arrows, itemID, handleSetSelectedItemID, subItemItemIDs } : ArrowsFootnoteProps) {
   const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
   const footnoteArrowIDs = footnotes.map((a: any) => a.arrowID)
   return (
@@ -22,7 +24,7 @@ export default function ArrowsFootnote({ rep, arrows, itemID, handleSetSelectedI
     <div className={styles.section}>
       <FootnoteContainer
         arrowIDs={footnoteArrowIDs}
-        rep={rep}
+        reflect={reflect}
         handleSetSelectedItemID={handleSetSelectedItemID}
         subItemItemIDs={subItemItemIDs}
       />
@@ -30,8 +32,8 @@ export default function ArrowsFootnote({ rep, arrows, itemID, handleSetSelectedI
   )
 }
 
-function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID, subItemItemIDs } : any){
-  const arrows = useArrowsByIDs(rep, arrowIDs)
+function FootnoteContainer({ reflect, arrowIDs, handleSetSelectedItemID, subItemItemIDs } : any){
+  const arrows = useArrowsByIDs(reflect, arrowIDs)
   return (
     <>
       <div className={styles.sectionHeader}>
@@ -43,7 +45,7 @@ function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID, subItemItem
           <Arrow
             key={a.id}
             arrow={a}
-            rep={rep}
+            reflect={reflect}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
@@ -52,7 +54,7 @@ function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID, subItemItem
         <>
         --
         <SubItemFootnotes
-          rep={rep}
+          reflect={reflect}
           subItemItemIDs={subItemItemIDs}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
@@ -62,7 +64,7 @@ function FootnoteContainer({ rep, arrowIDs, handleSetSelectedItemID, subItemItem
   )
 }
 
-function SubItemFootnotes({rep, subItemItemIDs, handleSetSelectedItemID}: any){
+function SubItemFootnotes({reflect, subItemItemIDs, handleSetSelectedItemID}: any){
 
   return(
     subItemItemIDs.map((itemID :any) => {
@@ -70,7 +72,7 @@ function SubItemFootnotes({rep, subItemItemIDs, handleSetSelectedItemID}: any){
         <SubItemFootnote
           key={`sub-item-footnote-${itemID}`}
           itemID={itemID}
-          rep={rep}
+          reflect={reflect}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
       )
@@ -78,14 +80,14 @@ function SubItemFootnotes({rep, subItemItemIDs, handleSetSelectedItemID}: any){
   )
 }
 
-function SubItemFootnote({itemID, rep, handleSetSelectedItemID}: any){
-  const item = useItemByID(rep, itemID)
+function SubItemFootnote({itemID, reflect, handleSetSelectedItemID}: any){
+  const item = useItemByID(reflect, itemID)
   return(
     item &&
     <div>
       <SubItemFootnoteFootnotes
         item={item}
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
@@ -93,22 +95,22 @@ function SubItemFootnote({itemID, rep, handleSetSelectedItemID}: any){
   )
 }
 
-function SubItemFootnoteFootnotes({item, rep, itemID, handleSetSelectedItemID}: any){
+function SubItemFootnoteFootnotes({item, reflect, itemID, handleSetSelectedItemID}: any){
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = useArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(reflect, arrowIDs)
 
   return (
     fullArrows &&
     <SubItemFootnoteFootnotesA
       arrows = {fullArrows}
-      rep={rep}
+      reflect={reflect}
       itemID={itemID}
       handleSetSelectedItemID={handleSetSelectedItemID}
     />
   )
 }
 
-function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID}: any) {
+function SubItemFootnoteFootnotesA({arrows, reflect, itemID, handleSetSelectedItemID}: any) {
   const footnotes = arrows.filter((a: any) => a.kind === 'footnote' && a.backItemID === itemID) || []
   const footnoteArrowIDs = footnotes.map((a: any) => a.id)
   return (
@@ -116,15 +118,15 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID
     {footnoteArrowIDs &&
     <Thing
       footnoteArrowIDs={footnoteArrowIDs}
-      rep={rep}
+      reflect={reflect}
       handleSetSelectedItemID={handleSetSelectedItemID}
     />}
     </>
   )
 }
 
-function Thing({footnoteArrowIDs, rep, handleSetSelectedItemID}: any){
-  const arrows = useArrowsByIDs(rep, footnoteArrowIDs)
+function Thing({footnoteArrowIDs, reflect, handleSetSelectedItemID}: any){
+  const arrows = useArrowsByIDs(reflect, footnoteArrowIDs)
   return (
     <>
     {arrows && arrows.map((a: any) => {
@@ -133,7 +135,7 @@ function Thing({footnoteArrowIDs, rep, handleSetSelectedItemID}: any){
           id={`arrow2-${a.id}`}
           key={a.id}
           arrow={a}
-          rep={rep}
+          reflect={reflect}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
       )
@@ -143,8 +145,8 @@ function Thing({footnoteArrowIDs, rep, handleSetSelectedItemID}: any){
 }
 
 
-function Arrow2({rep, arrow, handleSetSelectedItemID}: any){
-  const item = useItemByID(rep, arrow.frontItemID)
+function Arrow2({reflect, arrow, handleSetSelectedItemID}: any){
+  const item = useItemByID(reflect, arrow.frontItemID)
   return (
     <div
       className={styles.commentItem}
@@ -160,8 +162,8 @@ function Arrow2({rep, arrow, handleSetSelectedItemID}: any){
 }
 
 
-function Arrow({rep, arrow, handleSetSelectedItemID}: any){
-  const item = useItemByID(rep, arrow.frontItemID)
+function Arrow({reflect, arrow, handleSetSelectedItemID}: any){
+  const item = useItemByID(reflect, arrow.frontItemID)
   return (
     <div
       className={styles.commentItem}

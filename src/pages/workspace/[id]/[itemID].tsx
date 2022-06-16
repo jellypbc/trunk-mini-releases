@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Replicache } from 'replicache'
-import { M, mutators } from '../../../datamodel/mutators'
+import { Reflect } from '@rocicorp/reflect'
+import { M, clientMutators } from '../../../datamodel/mutators'
 import {
   randUserInfo } from '../../../datamodel/client-state'
 import type { AuthSession } from '@supabase/supabase-js'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
-import { Client } from 'reps-client'
 import { HotKeys } from 'react-hotkeys'
 import Workspace from '../../../frontend/workspace/index'
 import ItemPage from '../../../frontend/item-page/index'
 import CommandBar from '../../../frontend/command-bar/index'
 import { useRouter } from 'next/router'
 import FlashCards from '../../../frontend/experimental/flashcards'
+import { nanoid } from 'nanoid'
+import { consoleLogSink, OptionalLoggerImpl } from '@rocicorp/logger';
 
 export default function Home() {
-  const [rep, setRep] = useState<Replicache<M> | null>(null)
+  const [reflect, setReflectClient] = useState<Reflect<M> | null>(null);
+  const [online, setOnline] = useState(false);
   const [trunkID, setTrunkID] = useState<string>('')
   const [session, setSession] = useState<AuthSession | null>(null)
   const [selectedItemID, setSelectedItemID] = useState<string>('')
@@ -23,6 +25,9 @@ export default function Home() {
   const [nextID, setNextID] = useState<string>('')
   const [roomID, setRoomID] = useState<string>('')
   const router = useRouter()
+
+  const logSink = consoleLogSink;
+  const logger = new OptionalLoggerImpl(logSink);
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event: string, session: AuthSession | null) => {
@@ -49,29 +54,23 @@ export default function Home() {
     }
 
     (async () => {
-      const r = new Replicache({
-        name: roomID,
-        mutators,
-
-        // TODO: Do we need these?
-        // TODO: figure out backoff?
-        pushDelay: 0,
-        requestOptions: {
-          maxDelayMs: 0,
-          minDelayMs: 0,
-        },
-
-        // We only use pull to get the base cookie.
-        pullInterval: null,
-      });
-
-
-      const workerHost =
+      const workerOrigin =
         process.env.NEXT_PUBLIC_WORKER_HOST ??
-        "wss://reps.trunk.workers.dev"
-      const workerURL = `${workerHost}/connect`
-      console.info(`Connecting to worker at ${workerURL}`)
-      new Client(r, roomID, workerURL)
+        "wss://reps.trunk.workers.dev";
+      logger.info?.(`Connecting to worker at ${workerOrigin}`);
+      const userID = nanoid();
+      const r = new Reflect<M>({
+        socketOrigin: workerOrigin,
+        onOnlineChange: setOnline,
+        userID,
+        roomID,
+        auth: JSON.stringify({
+          userID,
+          roomID,
+        }),
+        logSinks: [logSink],
+        mutators: clientMutators
+      });
 
       const defaultUserInfo = randUserInfo()
 
@@ -128,14 +127,9 @@ export default function Home() {
         defaultSupabaseUserInfo: supabaseUserInfo,
       })
 
-      r.onSync = (syncing: boolean) => {
-        if (!syncing) {
-          r.onSync = null
-        }
-      }
-
-      setRep(r)
+      setReflectClient(r)
       setTrunkID(roomID)
+
     })()
   }, [])
 
@@ -145,13 +139,10 @@ export default function Home() {
     }
   }
 
-  if (!rep) {
+  if (!reflect) {
     return null
   }
 
-  // if (!session) {
-  //   router.push(`/`)
-  // }
 
   function handleSetSelectedItemID(id: string) {
     setSelectedItemID('next')
@@ -162,10 +153,10 @@ export default function Home() {
     router.push('/')
   }
 
-  if (selectedItemID === "flashcards" && session && rep) {
+  if (selectedItemID === "flashcards" && session && reflect) {
     return (
       <FlashCards
-        rep={rep}
+        rep={reflect}
       />
     )
   }
@@ -173,7 +164,7 @@ export default function Home() {
   return (
     session ? (
       <>
-        {trunkID && rep && selectedItemID &&
+        {trunkID && reflect && selectedItemID &&
           <HotKeys
             {...{
               style: { outline: "none", display: "flex", flex: 1 },
@@ -190,7 +181,7 @@ export default function Home() {
             >
               {commandBar &&
                 <CommandBar
-                  rep={rep}
+                  reflect={reflect}
                   handleSetSelectedItemID={handleSetSelectedItemID}
                   handleSetCommandBar={setCommandBar}
                   roomID={roomID}
@@ -198,7 +189,7 @@ export default function Home() {
               }
               {selectedItemID === "i" || '' ?
                 <Workspace
-                  rep={rep}
+                  reflect={reflect}
                   handleSetSelectedItemID={setSelectedItemID}
                   roomID={roomID}
                   handleSetCommandBar={setCommandBar}
@@ -207,7 +198,7 @@ export default function Home() {
                   <div>loading</div>
                   :
                   <ItemPage
-                    rep={rep}
+                    reflect={reflect}
                     itemID={selectedItemID}
                     handleSetSelectedItemID={handleSetSelectedItemID}
                     roomID={roomID}
@@ -220,7 +211,7 @@ export default function Home() {
       </>
     ) : (
       <>
-        { rep && trunkID && selectedItemID &&
+        { reflect && trunkID && selectedItemID &&
           <HotKeys
             {...{
               style: { outline: "none", display: "flex", flex: 1 },
@@ -236,7 +227,7 @@ export default function Home() {
               }}
             >
               <ItemPage
-                rep={rep}
+                reflect={reflect}
                 itemID={selectedItemID}
                 handleSetSelectedItemID={handleSetSelectedItemID}
                 roomID={roomID}

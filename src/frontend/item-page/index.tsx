@@ -3,7 +3,7 @@ import React, {
   useEffect,
   // ChangeEvent
 } from 'react'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import {
   useItemByID,
@@ -38,7 +38,7 @@ import TooltipBottom from '../tooltip/tooltip-bottom'
 type ItemPageProps = {
   itemID: string
   handleSetSelectedItemID: (itemID: string) => void
-  rep: Replicache<M>
+  reflect: Reflect<M>
   roomID: string
   handleSetCommandBar: (state: boolean) => void
 }
@@ -46,7 +46,7 @@ type ItemPageProps = {
 type NavProps = {
   email: string
   handleSetCommandBar: (state: boolean) => void
-  rep: Replicache<M>
+  reflect: Reflect<M>
   roomID: string
   title: string
   handleSetSelectedItemID: (itemID: string) => void
@@ -56,7 +56,7 @@ type MainProps = {
   itemID: string
   title: string
   content: string
-  rep: Replicache<M>
+  reflect: Reflect<M>
   item: any
   handleSetSelectedItemID: (itemID: string) => void
   showHighlights: boolean
@@ -66,10 +66,10 @@ const keyMap = {
   saveItem: ['command+s']
 }
 
-export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar } : ItemPageProps ) {
-  const item = useItemByID(rep, itemID)
+export default function ItemPage({ itemID, handleSetSelectedItemID, reflect, roomID, handleSetCommandBar } : ItemPageProps ) {
+  const item = useItemByID(reflect, itemID)
 
-  const clientEmail = useClientEmail(rep)
+  const clientEmail = useClientEmail(reflect)
 
   const router = useRouter()
 
@@ -95,7 +95,7 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
       <Container
         itemID={itemID}
         handleSetSelectedItemID={handleSetSelectedItemID}
-        rep={rep}
+        reflect={reflect}
         roomID={roomID}
         handleSetCommandBar={handleSetCommandBar}
         item={item}
@@ -105,8 +105,8 @@ export default function ItemPage({ itemID, handleSetSelectedItemID, rep, roomID,
   )
 }
 
-function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetCommandBar, item, clientEmail } : any ) {
-  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
+function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSetCommandBar, item, clientEmail } : any ) {
+  const authorArrows = useAuthorArrowsByItemID(reflect, itemID)
   const [showHighlights, setShowHighlights] = useState<boolean>(true)
 
   async function signInWithGoogle() {
@@ -147,7 +147,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
         <Nav
           email={clientEmail}
           handleSetCommandBar={handleSetCommandBar}
-          rep={rep}
+          reflect={reflect}
           roomID={roomID}
           title={item.title}
           handleSetSelectedItemID={handleSetSelectedItemID}
@@ -158,7 +158,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
               createdBy={item.createdBy}
               arrowsCount={item.arrows.length}
               itemID={itemID}
-              rep={rep}
+              reflect={reflect}
               item={item}
               handleSetSelectedItemID={handleSetSelectedItemID}
               authorArrows={authorArrows}
@@ -174,7 +174,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
             itemID={itemID}
             title={item.title}
             content={item.content}
-            rep={rep}
+            reflect={reflect}
             item={item}
             handleSetSelectedItemID={handleSetSelectedItemID}
             showHighlights={showHighlights}
@@ -185,7 +185,7 @@ function Container({ itemID, handleSetSelectedItemID, rep, roomID, handleSetComm
   )
 }
 
-function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, showHighlights } : MainProps){
+function Main ({ itemID, title, content, reflect, item, handleSetSelectedItemID, showHighlights } : MainProps){
   // function copyShareURLToClipboard(){
   //   navigator.clipboard.writeText(location.href)
   //     .then(() => {
@@ -196,7 +196,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
   //     })
   // }
 
-  const commentArrows = useCommentArrowsByItemID(rep, itemID)
+  const commentArrows = useCommentArrowsByItemID(reflect, itemID)
 
   const handlers = {
     saveItem: (e: any) => {
@@ -217,11 +217,11 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
         {/* <FileUploadContainer
           itemID={itemID}
           item={item}
-          rep={rep}
+          reflect={reflect}
         /> */}
         <div className={styles.parentContainer}>
           <ItemParent
-            rep={rep}
+            reflect={reflect}
             itemID={itemID}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
@@ -231,7 +231,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
             <EditorContainer
               doc={title}
               type={'title'}
-              rep={rep}
+              reflect={reflect}
               itemID={itemID}
               commentArrows={[]}
               showHighlights={false}
@@ -241,7 +241,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
           <div className={styles.authorsContainer}>
             {item.arrows.length > 0 &&
               <AuthorInfo
-                rep={rep}
+                reflect={reflect}
                 itemID={itemID}
                 handleSetSelectedItemID={handleSetSelectedItemID}
               />
@@ -254,7 +254,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
           <EditorContainer
             doc={content}
             type={'content'}
-            rep={rep}
+            reflect={reflect}
             itemID={itemID}
             commentArrows={commentArrows}
             showHighlights={showHighlights}
@@ -263,7 +263,7 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
         }
       </div>
       <ItemArrows
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         arrows={item.arrows}
         item={item}
@@ -275,16 +275,16 @@ function Main ({ itemID, title, content, rep, item, handleSetSelectedItemID, sho
   )
 }
 
-function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPerson}: any) {
+function ItemArrows({ reflect, itemID, arrows, item, handleSetSelectedItemID, isPerson}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = useArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(reflect, arrowIDs)
 
   return (
     arrowIDs && fullArrows &&
     <>
       <div className={styles.mainSubItems}>
         <ItemMainSubItems
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           handleSetSelectedItemID={handleSetSelectedItemID}
           fullArrows={fullArrows}
@@ -293,13 +293,13 @@ function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPers
       </div>
       { isPerson &&
         <PersonFooter
-          rep={rep}
+          reflect={reflect}
           fullArrows={fullArrows}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
       }
       <Footer
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         arrows={arrows}
         fullArrows={fullArrows}
@@ -309,11 +309,11 @@ function ItemArrows({ rep, itemID, arrows, item, handleSetSelectedItemID, isPers
   )
 }
 
-function PersonFooter({rep, fullArrows, handleSetSelectedItemID}: any) {
+function PersonFooter({reflect, fullArrows, handleSetSelectedItemID}: any) {
   return (
     <div className={styles.meta}>
       <ArrowsAuthoredBy
-        rep={rep}
+        reflect={reflect}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
@@ -321,7 +321,7 @@ function PersonFooter({rep, fullArrows, handleSetSelectedItemID}: any) {
   )
 }
 
-function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any) {
+function Footer({reflect, itemID, arrows, fullArrows, handleSetSelectedItemID} : any) {
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
   const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
   return (
@@ -329,14 +329,14 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
       {subItemItemIDs &&
         <>
           <ArrowsFootnote
-            rep={rep}
+            reflect={reflect}
             itemID={itemID}
             arrows={arrows}
             handleSetSelectedItemID={handleSetSelectedItemID}
             subItemItemIDs={subItemItemIDs}
           />
             <ArrowsFront
-            rep={rep}
+            reflect={reflect}
             itemID={itemID}
             fullArrows={fullArrows}
             handleSetSelectedItemID={handleSetSelectedItemID}
@@ -345,19 +345,19 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
         </>
       }
       <ArrowsBack
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
       <ArrowsComment
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         arrows={arrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
       <ArrowsSub
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         fullArrows={fullArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
@@ -366,7 +366,7 @@ function Footer({rep, itemID, arrows, fullArrows, handleSetSelectedItemID} : any
   )
 }
 
-function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelectedItemID} : NavProps) {
+function Nav({ email, handleSetCommandBar, reflect, roomID, title, handleSetSelectedItemID} : NavProps) {
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const [showProfileDropdown, setShowProfileDropdown] = useState<boolean>(false)
@@ -381,7 +381,7 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
   useEffect(() => {
     if (anonItemIDs.length > 0 && email !== 'guest') {
       anonItemIDs.map((itemID: any) => {
-        rep.mutate.updateItemCreatedBy({id: itemID, createdBy: email})
+        reflect.mutate.updateItemCreatedBy({id: itemID, createdBy: email})
       })
       localStorage.setItem('trunk.anonItemIDs', JSON.stringify([]))
     }
@@ -390,7 +390,7 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
   useEffect(() => {
     if (anonArrowIDs.length > 0 && email !== 'guest') {
       anonArrowIDs.map((arrowID: any) => {
-        rep.mutate.updateArrowCreatedBy({id: arrowID, createdBy: email})
+        reflect.mutate.updateArrowCreatedBy({id: arrowID, createdBy: email})
       })
       localStorage.setItem('trunk.anonArrowIDs', JSON.stringify([]))
     }
@@ -486,26 +486,26 @@ function Nav({ email, handleSetCommandBar, rep, roomID, title, handleSetSelected
   )
 }
 
-function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
-  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
+function AuthorInfo({reflect, itemID, handleSetSelectedItemID}: any){
+  const authorArrows = useAuthorArrowsByItemID(reflect, itemID)
 
   return (
     authorArrows && authorArrows.length > 0 ?
       <AuthorArrows
-        rep={rep}
+        reflect={reflect}
         authorArrows={authorArrows}
         handleSetSelectedItemID={handleSetSelectedItemID}
       /> : null
   )
 }
 
-function AuthorArrows({rep, authorArrows, handleSetSelectedItemID} : any) {
+function AuthorArrows({reflect, authorArrows, handleSetSelectedItemID} : any) {
   const authorCount = authorArrows.length
   return (
     authorArrows.map((arrow: any, i: number) =>
       <AuthorItem
         key={`author-${arrow.id}`}
-        rep={rep}
+        reflect={reflect}
         itemID={arrow.frontItemID}
         isLast={i === authorCount - 1 && true}
         handleSetSelectedItemID={handleSetSelectedItemID}
@@ -514,8 +514,8 @@ function AuthorArrows({rep, authorArrows, handleSetSelectedItemID} : any) {
   )
 }
 
-function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
-  const item = useItemByID(rep, itemID)
+function AuthorItem({reflect, itemID, isLast, handleSetSelectedItemID}: any) {
+  const item = useItemByID(reflect, itemID)
   return (
     item &&
     <div
@@ -528,7 +528,7 @@ function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
   )
 }
 
-// function FileUploadContainer({itemID, item, rep} : any) {
+// function FileUploadContainer({itemID, item, reflect} : any) {
 //   // const [URL, setURL] = useState<any>('')
 
 //   function onUpload(e: ChangeEvent<HTMLInputElement>){
@@ -541,7 +541,7 @@ function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
 //       const fileType = file.type.split('/')[1]
 //       const sourceURL = `${itemID}/${draftFileID}.${fileType}`
 
-//       rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+//       reflect.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
 //       //upload file to indexedDB
 //       uploadFileToIDB(file, sourceURL)
 //       //upload file to supabase
@@ -556,7 +556,7 @@ function AuthorItem({rep, itemID, isLast, handleSetSelectedItemID}: any) {
 //     //delete from supabase
 //     trashFileFromSupabase(item.sourceURL)
 //     //remove sourceURL from item
-//     rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
+//     reflect.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
 //   }
 
 //   // function generateIDBSourceFileURL(sourceURL: string){

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import styles from './sidebar.module.css'
 import { idbOK } from '../../lib/idbOK'
@@ -14,7 +14,7 @@ type SidebarProps = {
   createdBy: string
   arrowsCount: number
   itemID: string
-  rep: Replicache<M>
+  reflect: Reflect<M>
   item: any
   handleSetSelectedItemID: (itemID: string) => void
   authorArrows: any
@@ -25,7 +25,7 @@ type SidebarProps = {
   showHighlights: boolean
   handleSetShowHighlights: (state: boolean) => void
 }
-export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, handleSetSelectedItemID, authorArrows, trunkID, publicationDate, updatedAt, createdAt, showHighlights, handleSetShowHighlights} : SidebarProps) {
+export default function Sidebar({ createdBy, arrowsCount, itemID, reflect, item, handleSetSelectedItemID, authorArrows, trunkID, publicationDate, updatedAt, createdAt, showHighlights, handleSetShowHighlights} : SidebarProps) {
   const [showOutline, setShowOutline] = useState<boolean>(true)
   const [showMetadataModal, setShowMetadataModal] = useState<boolean>(false)
 
@@ -94,7 +94,7 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
       {showMetadataModal && authorArrows &&
         <MetadataModal
           itemID={itemID}
-          rep={rep}
+          reflect={reflect}
           handleSetSelectedItemID={handleSetSelectedItemID}
           authorArrows={authorArrows}
           trunkID={trunkID}
@@ -191,7 +191,7 @@ export default function Sidebar({ createdBy, arrowsCount, itemID, rep, item, han
           {showOutline ?
             <div className={styles.outlineContainer}>
               <SidebarOutline
-                rep={rep}
+                reflect={reflect}
                 item={item}
                 itemID={itemID}
               />

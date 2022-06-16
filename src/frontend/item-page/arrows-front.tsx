@@ -7,21 +7,21 @@ import {
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 
 type Props = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   fullArrows: any[]
   handleSetSelectedItemID: (item: string) => void
   subItemItemIDs: any
 }
 
-export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelectedItemID, subItemItemIDs} : Props) {
+export default function ArrowsFront({ reflect, itemID, fullArrows, handleSetSelectedItemID, subItemItemIDs} : Props) {
   const forwardArrows = fullArrows.filter((a: any) => a.kind === 'reference' && a.backItemID === itemID ) || []
   const frontItemIDs = forwardArrows.map((a: any) => a.frontItemID)
   const uniqueFrontItemIDs = [...new Set(frontItemIDs)]
-  const item = useItemByID(rep, itemID)
+  const item = useItemByID(reflect, itemID)
 
   return (
     uniqueFrontItemIDs &&
@@ -35,7 +35,7 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
           <FrontArrowItem
             key={`frontArrow-${itemID}`}
             itemID={itemID}
-            rep={rep}
+            reflect={reflect}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
@@ -43,7 +43,7 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
       {subItemItemIDs && item &&
         <>
         <SubItemLinks
-          rep={rep}
+          reflect={reflect}
           subItemItemIDs={subItemItemIDs}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
@@ -54,14 +54,14 @@ export default function ArrowsFront({ rep, itemID, fullArrows, handleSetSelected
 }
 
 
-function SubItemLinks({rep, subItemItemIDs, handleSetSelectedItemID}: any){
+function SubItemLinks({reflect, subItemItemIDs, handleSetSelectedItemID}: any){
   return(
     subItemItemIDs.map((itemID :any) => {
       return (
         <SubItemLink
           key={`subItemLink-${itemID}`}
           itemID={itemID}
-          rep={rep}
+          reflect={reflect}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
       )
@@ -69,15 +69,15 @@ function SubItemLinks({rep, subItemItemIDs, handleSetSelectedItemID}: any){
   )
 }
 
-function SubItemLink({itemID, rep, handleSetSelectedItemID}: any){
-  const item = useItemByID(rep, itemID)
+function SubItemLink({itemID, reflect, handleSetSelectedItemID}: any){
+  const item = useItemByID(reflect, itemID)
   return(
     item &&
     <div>
       {htmlToText(item.title)}
       <SubItemLinkLinks
         item={item}
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         handleSetSelectedItemID={handleSetSelectedItemID}
       />
@@ -85,23 +85,23 @@ function SubItemLink({itemID, rep, handleSetSelectedItemID}: any){
   )
 }
 
-function SubItemLinkLinks({item, rep, itemID, handleSetSelectedItemID}: any){
+function SubItemLinkLinks({item, reflect, itemID, handleSetSelectedItemID}: any){
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = useArrowsByIDs(rep, arrowIDs) //sub item full arrows
+  const fullArrows = useArrowsByIDs(reflect, arrowIDs) //sub item full arrows
   //put something there
 
   return (
     fullArrows &&
     <SubItemFootnoteFootnotesA
       arrows = {fullArrows}
-      rep={rep}
+      reflect={reflect}
       itemID={itemID}
       handleSetSelectedItemID={handleSetSelectedItemID}
     />
   )
 }
 
-function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID }: any) {
+function SubItemFootnoteFootnotesA({arrows, reflect, itemID, handleSetSelectedItemID }: any) {
   const subItemArrows= arrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
   const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
 
@@ -114,7 +114,7 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID
       return (
         <FrontArrowItem2
           key={`arrow2a-${itemID}`}
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
@@ -123,7 +123,7 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID
     {subItemItemIDs &&
         <>
         <SubItemLinks
-          rep={rep}
+          reflect={reflect}
           subItemItemIDs={subItemItemIDs}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
@@ -134,8 +134,8 @@ function SubItemFootnoteFootnotesA({arrows, rep, itemID, handleSetSelectedItemID
 }
 
 
-function FrontArrowItem2({ rep, itemID, handleSetSelectedItemID }: any){
-  const item = useItemByID(rep, itemID)
+function FrontArrowItem2({ reflect, itemID, handleSetSelectedItemID }: any){
+  const item = useItemByID(reflect, itemID)
   return (
     item &&
     <div
@@ -144,7 +144,7 @@ function FrontArrowItem2({ rep, itemID, handleSetSelectedItemID }: any){
     >
       {item.arrows.length > 0 &&
         <AuthorInfo
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
         />
       }
@@ -158,13 +158,13 @@ function FrontArrowItem2({ rep, itemID, handleSetSelectedItemID }: any){
 
 
 type FrontArrowItemProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   handleSetSelectedItemID: (itemID: string) => void
 }
 
-function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
-  const item = useItemByID(rep, itemID)
+function FrontArrowItem({ reflect, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
+  const item = useItemByID(reflect, itemID)
   return (
     item &&
     <div
@@ -173,7 +173,7 @@ function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItem
     >
       {item.arrows.length > 0 &&
         <AuthorInfo
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
         />
       }
@@ -185,21 +185,21 @@ function FrontArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItem
   )
 }
 
-function AuthorInfo({rep, itemID }: any){
-  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
+function AuthorInfo({reflect, itemID }: any){
+  const authorArrows = useAuthorArrowsByItemID(reflect, itemID)
 
 
   return (
     authorArrows && authorArrows.length > 0 ?
     <AuthorArrows
-      rep={rep}
+      reflect={reflect}
       authorArrows={authorArrows}
       authorCount={authorArrows.length}
     /> : null
   )
 }
 
-function AuthorArrows({rep, authorArrows, authorCount} : any) {
+function AuthorArrows({reflect, authorArrows, authorCount} : any) {
 
   return (
     <>
@@ -210,7 +210,7 @@ function AuthorArrows({rep, authorArrows, authorCount} : any) {
             return (
             <AuthorItem
               key={`author-${arrow.id}`}
-              rep={rep}
+              reflect={reflect}
               itemID={arrow.frontItemID}
               authorCount={authorCount}
               index={index}
@@ -228,8 +228,8 @@ function AuthorArrows({rep, authorArrows, authorCount} : any) {
 }
 
 
-function AuthorItem({rep, itemID, authorCount, index}: any) {
-  const item = useItemByID(rep, itemID)
+function AuthorItem({reflect, itemID, authorCount, index}: any) {
+  const item = useItemByID(reflect, itemID)
   return (
     item &&
     <>

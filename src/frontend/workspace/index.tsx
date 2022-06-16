@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import styles from './index.module.css'
 import { useSortedItems, useClientEmail, useClientUsername, useClientAvatarURL } from '../../datamodel/subscriptions'
@@ -12,7 +12,7 @@ import MainNav from './main-nav'
 import MainItemDraft from './main-item-draft'
 
 type WorkspaceProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
   handleSetCommandBar: (state: boolean) => void
@@ -24,7 +24,7 @@ type NavProps = {
 }
 
 type BodyProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   items: any
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
@@ -35,7 +35,7 @@ type BodyProps = {
 }
 
 type SidebarProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   roomID: string
 }
 
@@ -43,7 +43,7 @@ type MainProps = {
   items: any
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
-  rep: Replicache<M>
+  reflect: Reflect<M>
   clientEmail: string
   clientUsername: string
   clientAvatarURL: string
@@ -51,11 +51,12 @@ type MainProps = {
 }
 
 
-export default function Workspace({ rep, handleSetSelectedItemID, roomID, handleSetCommandBar }: WorkspaceProps) {
-  const items = useSortedItems(rep)
-  const clientEmail = useClientEmail(rep)
-  const clientUsername = useClientUsername(rep)
-  const clientAvatarURL = useClientAvatarURL(rep)
+export default function Workspace({ reflect, handleSetSelectedItemID, roomID, handleSetCommandBar }: WorkspaceProps) {
+  const items = useSortedItems(reflect)
+  const clientEmail = useClientEmail(reflect)
+  const clientUsername = useClientUsername(reflect)
+  const clientAvatarURL = useClientAvatarURL(reflect)
+  console.log('reflect', reflect)
 
   return (
     items &&
@@ -68,7 +69,7 @@ export default function Workspace({ rep, handleSetSelectedItemID, roomID, handle
       }
       {clientEmail && clientUsername && clientAvatarURL &&
         <Body
-          rep={rep}
+          reflect={reflect}
           items={items}
           handleSetSelectedItemID={handleSetSelectedItemID}
           roomID={roomID}
@@ -118,18 +119,18 @@ function Nav({ email, handleSetCommandBar } : NavProps) {
   )
 }
 
-function Body({ rep, items, handleSetSelectedItemID, roomID, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar} : BodyProps) {
+function Body({ reflect, items, handleSetSelectedItemID, roomID, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar} : BodyProps) {
   return(
     <div className={styles.bodyContainer}>
       <Sidebar
-        rep={rep}
+        reflect={reflect}
         roomID={roomID}
       />
       <Main
         items={items}
         handleSetSelectedItemID= {handleSetSelectedItemID}
         roomID={roomID}
-        rep={rep}
+        reflect={reflect}
         clientEmail={clientEmail}
         clientUsername={clientUsername}
         clientAvatarURL={clientAvatarURL}
@@ -140,18 +141,18 @@ function Body({ rep, items, handleSetSelectedItemID, roomID, clientEmail, client
   )
 }
 
-function Sidebar({ rep, roomID } : SidebarProps ){
+function Sidebar({ reflect, roomID } : SidebarProps ){
   return(
     <div className={styles.sidebar}>
       <SidebarTrunkNav
-        rep={rep}
+        reflect={reflect}
         roomID={roomID}
       />
     </div>
   )
 }
 
-function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar } : MainProps){
+function Main({ items, handleSetSelectedItemID, roomID, reflect, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar } : MainProps){
   const itemCount = items.length
   const [showMainItemDraft, setShowMainItemDraft] = useState<boolean>(false)
 
@@ -165,7 +166,7 @@ function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, client
       />
       {showMainItemDraft &&
         <MainItemDraft
-          rep={rep}
+          reflect={reflect}
           clientEmail={clientEmail}
           clientUsername={clientUsername}
           clientAvatarURL={clientAvatarURL}
@@ -173,7 +174,7 @@ function Main({ items, handleSetSelectedItemID, roomID, rep, clientEmail, client
         />
       }
       <MainActivityView
-        rep={rep}
+        reflect={reflect}
         items={items}
         handleSetSelectedItemID={handleSetSelectedItemID}
         roomID={roomID}

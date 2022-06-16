@@ -2,17 +2,17 @@ import React from 'react'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import { useItemByID } from '../../datamodel/subscriptions'
 
 
 type Props = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   fullArrows: any[]
   handleSetSelectedItemID: (item: string) => void
 }
 
-export default function ArrowsAuthoredBy({ rep, fullArrows, handleSetSelectedItemID} : Props) {
+export default function ArrowsAuthoredBy({ reflect, fullArrows, handleSetSelectedItemID} : Props) {
 
   const authorArrows= fullArrows.filter((a: any) => a.kind === 'author' ) || []
   const authorItemIDs = authorArrows.map((a: any) => a.backItemID)
@@ -29,7 +29,7 @@ export default function ArrowsAuthoredBy({ rep, fullArrows, handleSetSelectedIte
           <AuthorArrowItem
             key={`frontArrow-${itemID}`}
             itemID={itemID}
-            rep={rep}
+            reflect={reflect}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
@@ -39,14 +39,14 @@ export default function ArrowsAuthoredBy({ rep, fullArrows, handleSetSelectedIte
 }
 
 type FrontArrowItemProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   handleSetSelectedItemID: (itemID: string) => void
 }
 
 
-function AuthorArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
-  const item = useItemByID(rep, itemID)
+function AuthorArrowItem({ reflect, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
+  const item = useItemByID(reflect, itemID)
   return (
     <div
       className={styles.item}

@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid'
 import { z } from 'zod'
-import type { ReadTransaction, WriteTransaction } from 'replicache'
+import type { ReadTransaction, WriteTransaction } from '@rocicorp/reflect'
 
 export const arrowSchema = z.object({
   type: z.literal(`arrow`),

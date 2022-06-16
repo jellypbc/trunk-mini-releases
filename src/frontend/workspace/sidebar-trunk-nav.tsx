@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import styles from './sidebar-trunk-nav.module.css'
 import { useClientTrunkIDsArray, useClientEmail } from '../../datamodel/subscriptions'
@@ -7,8 +7,8 @@ import { supabase } from '../../lib/supabase-client'
 import { useRouter } from 'next/router'
 
 type SidebarTrunkNavProps = {
- rep: Replicache<M>
- roomID: string
+  reflect: Reflect<M>
+  roomID: string
 }
 
 type TrunkProps = {
@@ -19,13 +19,13 @@ type TrunkProps = {
 
 type AddTrunkProps = {
   trunkIDs: string[]
-  rep: Replicache<M>
+  reflect: Reflect<M>
   clientID: string
 }
 
-export default function SidebarTrunkNav({ rep, roomID } : SidebarTrunkNavProps) {
-  const clientTrunkIDs : string[] = useClientTrunkIDsArray(rep)
-  const clientEmail : any = useClientEmail(rep)
+export default function SidebarTrunkNav({ reflect, roomID } : SidebarTrunkNavProps) {
+  const clientTrunkIDs : string[] = useClientTrunkIDsArray(reflect)
+  const clientEmail : any = useClientEmail(reflect)
 
   const [clientID, setClientID] = useState<string>('')
 
@@ -33,7 +33,7 @@ export default function SidebarTrunkNav({ rep, roomID } : SidebarTrunkNavProps) 
 
   useEffect(() => {
     (async()  => {
-      const clientID = await rep.clientID
+      const clientID = await reflect.clientID
       setClientID(clientID)
     })()
   }, [])
@@ -53,7 +53,7 @@ export default function SidebarTrunkNav({ rep, roomID } : SidebarTrunkNavProps) 
       </div>
       <AddTrunk
         trunkIDs={clientTrunkIDs}
-        rep={rep}
+        reflect={reflect}
         clientID={clientID}
       />
     </div>
@@ -85,7 +85,7 @@ function Trunk({ trunkID, clientEmail, selectedTrunkID } : TrunkProps) {
   )
 }
 
-function AddTrunk({ trunkIDs, rep, clientID } : AddTrunkProps) {
+function AddTrunk({ trunkIDs, reflect, clientID } : AddTrunkProps) {
   const [showAddTrunkForm, setShowAddTrunkForm] = useState<boolean>(false)
   const [draftTrunkID, setDraftTrunkID] = useState<string>('')
 
@@ -104,7 +104,7 @@ function AddTrunk({ trunkIDs, rep, clientID } : AddTrunkProps) {
       setShowAddTrunkForm(false)
       setDraftTrunkID('')
 
-      updates && rep.mutate.setTrunkIDs({ id: clientID, trunkIDs: updates.trunk_ids})
+      updates && reflect.mutate.setTrunkIDs({ id: clientID, trunkIDs: updates.trunk_ids})
 
       let { error } = await supabase.from('profiles').upsert(updates, {
         returning: 'minimal', // Don't return the value after inserting
@@ -153,10 +153,7 @@ function AddTrunk({ trunkIDs, rep, clientID } : AddTrunkProps) {
             </button>
           </div>
         }
-
         </div>
-
-
     </div>
   )
 }

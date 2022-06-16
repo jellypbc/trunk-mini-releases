@@ -2,7 +2,7 @@ import React, { useState} from 'react'
 import styles from './metadata-modal.module.css'
 import { htmlToText } from '../../util/htmlToText'
 import { useRouter } from 'next/router'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import { useItemByID } from '../../datamodel/subscriptions'
 
@@ -11,7 +11,7 @@ import EditorContainer from './editor-container'
 
 type MetadataModalProps = {
   itemID: string
-  rep: Replicache<M>
+  reflect: Reflect<M>
   handleSetSelectedItemID: any
   authorArrows: any
   trunkID: string
@@ -21,20 +21,20 @@ type MetadataModalProps = {
 
 type AuthorProps = {
   itemID: string
-  rep: Replicache<M>
+  reflect: Reflect<M>
   arrow: any
   handleSetSelectedItemID: (itemID: string) => void
 }
 
 type ArchiveItemProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   handleSetSelectedItemID: (itemID: string) => void
   trunkID: string
   item: any
 }
 
-export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, authorArrows, trunkID, handleSetShowMetadataModal, item} : MetadataModalProps) {
+export default function MetadataModal({ itemID, reflect, handleSetSelectedItemID, authorArrows, trunkID, handleSetShowMetadataModal, item} : MetadataModalProps) {
   const [showAddAuthor, setShowAddAuthor] = useState<boolean>(false)
   const [showAddAuthorButton, setShowAddAuthorButton] = useState<boolean>(false)
 
@@ -90,7 +90,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
               <Author
                 key={`authorArrow-${arrow.id}`}
                 itemID={arrow.frontItemID}
-                rep={rep}
+                reflect={reflect}
                 arrow={arrow}
                 handleSetSelectedItemID={handleSetSelectedItemID}
               />
@@ -99,7 +99,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
           </div>
           {showAddAuthor &&
             <AddAuthorArrow
-              rep={rep}
+              reflect={reflect}
               itemID={itemID}
               handleSetShowAddAuthor={setShowAddAuthor}
             />
@@ -111,7 +111,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
             <EditorContainer
               doc={item.webSourceURL}
               type={'webSourceURL'}
-              rep={rep}
+              reflect={reflect}
               itemID={itemID}
               commentArrows={[]}
               showHighlights={false}
@@ -125,7 +125,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
             <EditorContainer
               doc={item.publicationDate}
               type={'publicationDate'}
-              rep={rep}
+              reflect={reflect}
               itemID={itemID}
               commentArrows={[]}
               showHighlights={false}
@@ -135,7 +135,7 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
         </div>
       </div>
       <ArchiveItem
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         handleSetSelectedItemID={handleSetSelectedItemID}
         trunkID={trunkID}
@@ -145,17 +145,17 @@ export default function MetadataModal({ itemID, rep, handleSetSelectedItemID, au
   )
 }
 
-function Author({ itemID, rep, arrow, handleSetSelectedItemID } : AuthorProps) {
-  const item = useItemByID(rep, itemID)
+function Author({ itemID, reflect, arrow, handleSetSelectedItemID } : AuthorProps) {
+  const item = useItemByID(reflect, itemID)
   const [showRemoveAuthor, setShowRemoveAuthor] = useState<boolean>(false)
 
   function removeAuthorArrowFromItem() {
     const frontItemID = arrow.frontItemID
     const backItemID = arrow.backItemID
     const arrowID = arrow.id
-    rep.mutate.updateItemArrowsDeleteArrow({ itemID: frontItemID, arrowID: arrowID})
-    rep.mutate.updateItemArrowsDeleteArrow({ itemID: backItemID, arrowID: arrowID})
-    rep.mutate.deleteArrow(arrowID)
+    reflect.mutate.updateItemArrowsDeleteArrow({ itemID: frontItemID, arrowID: arrowID})
+    reflect.mutate.updateItemArrowsDeleteArrow({ itemID: backItemID, arrowID: arrowID})
+    reflect.mutate.deleteArrow(arrowID)
   }
 
   return (
@@ -183,13 +183,13 @@ function Author({ itemID, rep, arrow, handleSetSelectedItemID } : AuthorProps) {
   )
 }
 
-function ArchiveItem({rep, itemID, handleSetSelectedItemID, trunkID, item} : ArchiveItemProps) {
+function ArchiveItem({reflect, itemID, handleSetSelectedItemID, trunkID, item} : ArchiveItemProps) {
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
   const router = useRouter()
   const modifiedRoomID = trunkID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
 
   function deleteItemAndSetSelectedItemIDToEmpty() {
-    rep.mutate.deleteItem(itemID)
+    reflect.mutate.deleteItem(itemID)
     handleSetSelectedItemID('')
     router.push(`/workspace/${modifiedRoomID}`)
   }

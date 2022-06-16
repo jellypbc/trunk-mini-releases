@@ -6,7 +6,7 @@ import type { EditorView } from 'prosemirror-view'
 import type { Schema } from 'prosemirror-model'
 import { exampleSetup } from './../editor/plugins/index'
 import Editor from './editor'
-import type { Replicache } from 'replicache'
+import type { Replicache } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import EditorArrowCreate from './editor-arrow-create'
 import {
@@ -21,14 +21,14 @@ import { htmlToText } from '../../util/htmlToText'
 type Props = {
   doc: string
   type: string
-  rep: Replicache<M>
+  reflect: Replicache<M>
   itemID: string
   commentArrows: any[]
   showHighlights: boolean
   handleSetSelectedItemID: (itemID: string) => void
 }
 
-function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights, handleSetSelectedItemID } : Props) {
+function EditorContainer({ doc, type, reflect, itemID, commentArrows, showHighlights, handleSetSelectedItemID } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
@@ -39,11 +39,11 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
   const [showArrowFloater, setShowArrowFloater] = useState<boolean>(false)
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
-  const email = useClientEmail(rep)
+  const email = useClientEmail(reflect)
   const [showEmptyCommentError, setShowEmptyCommentError] = useState<boolean>(false)
 
-  const item : any = useItemByID(rep, itemID)
-  const itemIDs = useItemIDs(rep)
+  const item : any = useItemByID(reflect, itemID)
+  const itemIDs = useItemIDs(reflect)
 
   useEffect(() => {
     const anonItemIDs = localStorage.getItem('trunk.anonItemIDs') || `[]`
@@ -57,7 +57,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
       schema,
       parser,
       viewRef && viewRef.current && viewRef.current.view,
-      rep,
+      reflect,
       itemID,
       commentArrows || [],
       handleSetSelectedItemID,
@@ -80,7 +80,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
       schema,
       parser,
       viewRef && viewRef.current && viewRef.current.view,
-      rep,
+      reflect,
       itemID,
       showHighlights && commentArrows || [],
       handleSetSelectedItemID,
@@ -95,7 +95,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
         schema,
         parser,
         viewRef && viewRef.current && viewRef.current.view,
-        rep,
+        reflect,
         itemID,
         showHighlights && commentArrows || [],
         handleSetSelectedItemID,
@@ -113,11 +113,11 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
     }
   }
 
-  const processContentChange = debounce((thing: any) => rep.mutate.updateItemContent(thing))
+  const processContentChange = debounce((thing: any) => reflect.mutate.updateItemContent(thing))
 
-  const processTitleChange = debounce((thing: any) => rep.mutate.updateItemTitle(thing))
-  const processWebSourceURLChange = debounce((thing: any) => rep.mutate.updateItemWebSourceURL(thing))
-  const processPublicationDateChange = debounce((thing: any) => rep.mutate.updateItemPublicationDate(thing))
+  const processTitleChange = debounce((thing: any) => reflect.mutate.updateItemTitle(thing))
+  const processWebSourceURLChange = debounce((thing: any) => reflect.mutate.updateItemWebSourceURL(thing))
+  const processPublicationDateChange = debounce((thing: any) => reflect.mutate.updateItemPublicationDate(thing))
 
   const dispatchTransaction = (tx: Transaction | any) => {
     const view = viewRef.current.view
@@ -227,11 +227,11 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
     itemArrows.push(newA)
 
     // save arrow
-    rep.mutate.createArrow({ id: commentArrow.id, arrow: commentArrow.arrow })
+    reflect.mutate.createArrow({ id: commentArrow.id, arrow: commentArrow.arrow })
     // save commentItem
-    rep.mutate.createItem({ id: commentItem.id, item: commentItem.item })
+    reflect.mutate.createItem({ id: commentItem.id, item: commentItem.item })
     // update arrows on selectedItem
-    rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+    reflect.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
     // set arrows in this component, so that the editor knows to draw the decoration
     // setArrows(itemArrows)
 
@@ -310,14 +310,14 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
 
     //save footnoteArrow
 
-    rep.mutate.createArrow({ id: footnoteArrow.id, arrow: footnoteArrow.arrow })
+    reflect.mutate.createArrow({ id: footnoteArrow.id, arrow: footnoteArrow.arrow })
 
     // save footnoteItem
-    rep.mutate.createItem({ id: footnoteItem.id, item: footnoteItem.item })
+    reflect.mutate.createItem({ id: footnoteItem.id, item: footnoteItem.item })
 
     // update arrows on selectedItem
     console.log('itemArrows', itemArrows)
-    rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+    reflect.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
 
     // setArrows(itemArrows)
     setShowArrowFloater(false)
@@ -371,12 +371,12 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
       itemArrows.push(newA)
 
       // update arrows of the existing referenced item with cleanText
-      rep.mutate.updateItemAddSingleArrow({ id: cleanText, arrow: newA })
+      reflect.mutate.updateItemAddSingleArrow({ id: cleanText, arrow: newA })
 
       // save arrow
-      rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+      reflect.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
       //update arrows on selected item
-      rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+      reflect.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
       // update arrows
 
       // setArrows(itemArrows)
@@ -415,14 +415,14 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
 
       // save arrow
 
-      rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+      reflect.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
 
       // save new item
 
-      rep.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
+      reflect.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
 
       // update arrows on existing item
-      rep.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
+      reflect.mutate.updateItemArrows({ id: itemID, arrows: itemArrows })
 
       // we don't need this anymore because we're subscribing to arrows in the component above this one... and it should autoupdate itself
       // // set local arrows
@@ -454,14 +454,14 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
     // setArrows(itemArrows)
 
     // save arrow!
-    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+    reflect.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
 
 
     // save arrow to the item of id passed in
-    rep.mutate.updateItemAddSingleArrow({ id: id, arrow: newA})
+    reflect.mutate.updateItemAddSingleArrow({ id: id, arrow: newA})
 
     // add arrow to existing item
-    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
+    reflect.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
     setShowArrowFloater(false)
   }
 
@@ -477,7 +477,7 @@ function EditorContainer({ doc, type, rep, itemID, commentArrows, showHighlights
           {showArrowFloater && type === 'content' &&
             <EditorArrowCreate
               serializedSelection={serializedSelection}
-              rep={rep}
+              reflect={reflect}
               handleReferenceAdd={handleReferenceAdd}
               handleCommentAdd={handleCommentAdd}
               handleFootnoteAdd={handleFootnoteAdd}
@@ -503,7 +503,7 @@ const createStateFromProps = (
   schema: Schema,
   parser: any,
   view: any,
-  rep: Replicache<M>,
+  reflect: Replicache<M>,
   itemID: string,
   arrows: any,
   handleSetSelectedItemID: (id: string) => void,
@@ -514,13 +514,13 @@ const createStateFromProps = (
     plugins: exampleSetup({
       schema: schema,
       getView: () => { return (view)},
-      rep: rep,
+      reflect: reflect,
       itemID: itemID,
       arrows: arrows,
       handleSetSelectedItemID: handleSetSelectedItemID,
     }),
     // @ts-ignore
-    rep: rep,
+    reflect: reflect,
     itemID: itemID,
     arrows: arrows,
     handleSetSelectedItemID: handleSetSelectedItemID,

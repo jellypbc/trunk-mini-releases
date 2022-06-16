@@ -5,40 +5,40 @@ import EditorContainer from './editor-container'
 import { useItemByID, useClientEmail, useArrowsByIDs } from '../../datamodel/subscriptions'
 import { randomItem } from '../../datamodel/item'
 import { randomArrow } from '../../datamodel/arrow'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import { dateInWords } from '../../lib/dateInWords'
 
 type EditorArrowDisplayProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   arrow: any
   handleSetSelectedItemID: (itemID: string) => void
 }
 
-export default function EditorArrowDisplay({ rep, arrow, handleSetSelectedItemID }: EditorArrowDisplayProps) {
-  const email = useClientEmail(rep)
+export default function EditorArrowDisplay({ reflect, arrow, handleSetSelectedItemID }: EditorArrowDisplayProps) {
+  const email = useClientEmail(reflect)
 
   // const { id : arrowID } = arrow
 
   // const [showDeleteOptions, setShowDeleteOptions] = useState<boolean>(false)
 
   // function deleteArrowOnly() {
-  //   rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
-  //   rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
-  //   rep.mutate.deleteArrow(arrowID)
+  //   reflect.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
+  //   reflect.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
+  //   reflect.mutate.deleteArrow(arrowID)
   // }
 
   // function deleteArrowAndFrontItem(){
-  //   rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
-  //   rep.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
-  //   rep.mutate.deleteArrow(arrowID)
-  //   rep.mutate.deleteItem(arrow.frontItemID)
+  //   reflect.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.frontItemID, arrowID: arrowID })
+  //   reflect.mutate.updateItemArrowsDeleteArrow({ itemID: arrow.backItemID, arrowID: arrowID })
+  //   reflect.mutate.deleteArrow(arrowID)
+  //   reflect.mutate.deleteItem(arrow.frontItemID)
   // }
 
   if (arrow.kind === 'comment' || arrow.kind === 'footnote') {
     return (
       <CommentDisplay
-        rep={rep}
+        reflect={reflect}
         itemID={arrow.frontItemID}
         arrow={arrow}
         kind={arrow.kind}
@@ -60,7 +60,7 @@ export default function EditorArrowDisplay({ rep, arrow, handleSetSelectedItemID
           </div>
           {email &&
             <FrontItemStuff
-              rep={rep}
+              reflect={reflect}
               itemID={arrow.frontItemID}
               handleSetSelectedItemID={handleSetSelectedItemID}
             />
@@ -75,14 +75,14 @@ export default function EditorArrowDisplay({ rep, arrow, handleSetSelectedItemID
 import EditorDraftingContainer from './editor-drafting-container'
 
 function CommentDisplay({
-  rep,
+  reflect,
   itemID,
   arrow,
   handleSetSelectedItemID,
   // kind,
   // email
 } : any) {
-  const item = useItemByID(rep, itemID)
+  const item = useItemByID(reflect, itemID)
   // const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   // const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
 
@@ -134,17 +134,17 @@ function CommentDisplay({
   //   // apply arrow to new item
   //   // apply arrow to existing item
 
-  //   // save new arro using rep
+  //   // save new arro using reflect
   //   // console.log('new arrow: { id: newArrow.id, arrow: arrow }', { id: newArrow.id, arrow: arrow })
-  //   rep.mutate.createArrow({ id: newArrow.id, arrow: arrow })
+  //   reflect.mutate.createArrow({ id: newArrow.id, arrow: arrow })
 
-  //   // save new item using rep
+  //   // save new item using reflect
   //   // console.log('new item: {id: newItem.id, item: updatedItem}', {id: newItem.id, item: updatedItem})
-  //   rep.mutate.createItem({id: newItem.id, item: updatedItem})
+  //   reflect.mutate.createItem({id: newItem.id, item: updatedItem})
 
-  //   // update existing itme with rep
+  //   // update existing itme with reflect
   //   // console.log('{ id: itemID, arrow: miniArrow }', { id: itemID, arrow: miniArrow })
-  //   rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
+  //   reflect.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
   // }
 
   return (
@@ -161,7 +161,7 @@ function CommentDisplay({
             <EditorContainer
               doc={item.content}
               type={'arrowContent'}
-              rep={rep}
+              reflect={reflect}
               itemID={itemID}
               commentArrows={[]}
               showHighlights={false}
@@ -170,13 +170,13 @@ function CommentDisplay({
             {/* {item.arrows.length === 1 ?
             <ReplyForm
                 itemID={itemID}
-                rep={rep}
+                reflect={reflect}
                 email={email}
             />
             :
               <CommentReply
                 arrows={item.arrows}
-                rep={rep}
+                reflect={reflect}
                 itemID={itemID}
                 email={email}
               />
@@ -196,7 +196,7 @@ function CommentDisplay({
         <EditorContainer
           doc={item.content}
           type={'content'}
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           commentArrows={[]}
           showHighlights={false}
@@ -205,13 +205,13 @@ function CommentDisplay({
       {item.arrows.length === 1 ?
        <ReplyForm
           itemID={itemID}
-          rep={rep}
+          reflect={reflect}
           email={email}
        />
       :
         <CommentReply
           arrows={item.arrows}
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           email={email}
         />
@@ -223,7 +223,7 @@ function CommentDisplay({
         <div className={styles.replyForm}>
           <>
               <EditorDraftingContainer
-                rep={rep}
+                reflect={reflect}
                 content={commentDraft}
                 setValue={setCommentDraft}
                 type={'comment'}
@@ -247,15 +247,15 @@ function CommentDisplay({
   )
 }
 
-function CommentReply({arrows, rep, itemID, email}:any) {
+function CommentReply({arrows, reflect, itemID, email}:any) {
   const arrowIDs = arrows.map((a: any) => a.arrowID)
-  const fullArrows = useArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(reflect, arrowIDs)
   return (
     <>
       {fullArrows &&
       <OtherThing
         fullArrows={fullArrows}
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         email={email}
       />}
@@ -263,7 +263,7 @@ function CommentReply({arrows, rep, itemID, email}:any) {
   )
 }
 
-function OtherThing({fullArrows, rep, itemID, email}:any){
+function OtherThing({fullArrows, reflect, itemID, email}:any){
   const comments = fullArrows.filter((a: any) => a.kind === 'comment'
   && a.backItemID === itemID && a.parentItemID === itemID) || []
 
@@ -274,7 +274,7 @@ function OtherThing({fullArrows, rep, itemID, email}:any){
         <CommentArrows
           key={`comment-arrow-${fullCommentArrow.frontItemID}`}
           itemID={fullCommentArrow.frontItemID}
-          rep={rep}
+          reflect={reflect}
           email={email}
         />
       )
@@ -283,8 +283,8 @@ function OtherThing({fullArrows, rep, itemID, email}:any){
   )
 }
 
-function CommentArrows({itemID, rep, email} : any){
-  const item = useItemByID(rep, itemID)
+function CommentArrows({itemID, reflect, email} : any){
+  const item = useItemByID(reflect, itemID)
 
   return(
     item &&
@@ -295,13 +295,13 @@ function CommentArrows({itemID, rep, email} : any){
       {item.arrows.length < 2 ?
         <ReplyForm
           itemID={itemID}
-          rep={rep}
+          reflect={reflect}
           email={email}
         />
         :
         <CommentReply
           arrows={item.arrows}
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           email={email}
         />
@@ -310,7 +310,7 @@ function CommentArrows({itemID, rep, email} : any){
   )
 }
 
-function ReplyForm({ itemID, rep, email} : any){
+function ReplyForm({ itemID, reflect, email} : any){
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
 
@@ -362,17 +362,17 @@ function ReplyForm({ itemID, rep, email} : any){
     // apply arrow to new item
     // apply arrow to existing item
 
-    // save new arro using rep
+    // save new arro using reflect
     // console.log('new arrow: { id: newArrow.id, arrow: arrow }', { id: newArrow.id, arrow: arrow })
-    rep.mutate.createArrow({ id: newArrow.id, arrow: arrow })
+    reflect.mutate.createArrow({ id: newArrow.id, arrow: arrow })
 
-    // save new item using rep
+    // save new item using reflect
     // console.log('new item: {id: newItem.id, item: updatedItem}', {id: newItem.id, item: updatedItem})
-    rep.mutate.createItem({id: newItem.id, item: updatedItem})
+    reflect.mutate.createItem({id: newItem.id, item: updatedItem})
 
-    // update existing itme with rep
+    // update existing itme with reflect
     // console.log('{ id: itemID, arrow: miniArrow }', { id: itemID, arrow: miniArrow })
-    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
+    reflect.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
   }
   return (
     <>
@@ -381,7 +381,7 @@ function ReplyForm({ itemID, rep, email} : any){
       <div className={styles.replyForm}>
         <>
             <EditorDraftingContainer
-              rep={rep}
+              reflect={reflect}
               content={commentDraft}
               setValue={setCommentDraft}
               type={'comment'}
@@ -400,8 +400,8 @@ function ReplyForm({ itemID, rep, email} : any){
 
   )
 }
-function FrontItemStuff({rep, itemID, handleSetSelectedItemID }:{rep: any, itemID: string, handleSetSelectedItemID: (itemID: string) => void}) {
-  const item = useItemByID(rep, itemID)
+function FrontItemStuff({reflect, itemID, handleSetSelectedItemID }:{reflect: any, itemID: string, handleSetSelectedItemID: (itemID: string) => void}) {
+  const item = useItemByID(reflect, itemID)
 
   return (
     item &&
@@ -410,7 +410,7 @@ function FrontItemStuff({rep, itemID, handleSetSelectedItemID }:{rep: any, itemI
         <EditorContainer
           doc={item.title}
           type={'arrowTitle'}
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           commentArrows={[]}
           showHighlights={false}
@@ -421,7 +421,7 @@ function FrontItemStuff({rep, itemID, handleSetSelectedItemID }:{rep: any, itemI
         <EditorContainer
           doc={item.content}
           type={'arrowContent'}
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           commentArrows={[]}
           showHighlights={false}
