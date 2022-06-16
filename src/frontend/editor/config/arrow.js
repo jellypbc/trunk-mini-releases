@@ -93,17 +93,17 @@ export const arrowPlugin = new Plugin({
   }
 })
 
-export const arrowUI = function(tx, rep, handleSetSelectedItemID) {
+export const arrowUI = function(tx, reflect, handleSetSelectedItemID) {
   return new Plugin({
     props: {
       decorations(state) {
-        return arrowToolTip(state, tx, rep, handleSetSelectedItemID)
+        return arrowToolTip(state, tx, reflect, handleSetSelectedItemID)
       }
     }
   })
 }
 
-function arrowToolTip(state, dispatch, rep, handleSetSelectedItemID) {
+function arrowToolTip(state, dispatch, reflect, handleSetSelectedItemID) {
   let sel = state.selection
   if (!sel.empty) return null
   if (sel.from === 1) return null
@@ -112,7 +112,7 @@ function arrowToolTip(state, dispatch, rep, handleSetSelectedItemID) {
   return DecorationSet.create(state.doc, [
     Decoration.widget(
       sel.from,
-      renderArrows(arrows, dispatch, state, rep, handleSetSelectedItemID),
+      renderArrows(arrows, dispatch, state, reflect, handleSetSelectedItemID),
       {
         ignoreSelection: true
       }
@@ -120,7 +120,7 @@ function arrowToolTip(state, dispatch, rep, handleSetSelectedItemID) {
   ])
 }
 
-function renderArrows(arrows, dispatch, state, rep, handleSetSelectedItemID) {
+function renderArrows(arrows, dispatch, state, reflect, handleSetSelectedItemID) {
   const node = document.createElement('div')
   node.className = 'arrowTooltip'
 
@@ -135,7 +135,7 @@ function renderArrows(arrows, dispatch, state, rep, handleSetSelectedItemID) {
               dispatch={dispatch}
               state={state}
               showActions={{ reply: isLast, delete: true}}
-              rep={rep}
+              reflect={reflect}
               handleSetSelectedItemID={handleSetSelectedItemID}
             />
           </div>
@@ -149,10 +149,10 @@ function renderArrows(arrows, dispatch, state, rep, handleSetSelectedItemID) {
 
 import EditorArrowDisplay from '../../item-page/editor-arrow-display'
 
-function EditorArrowThread({ arrow, dispatch, state, showActions, rep, handleSetSelectedItemID }) {
+function EditorArrowThread({ arrow, dispatch, state, showActions, reflect, handleSetSelectedItemID }) {
   return (
     <EditorArrowDisplay
-      rep={rep}
+      reflect={reflect}
       arrow={arrow}
       handleSetSelectedItemID={handleSetSelectedItemID}
     />

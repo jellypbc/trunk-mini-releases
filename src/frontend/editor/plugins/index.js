@@ -50,7 +50,7 @@ export { buildMenuItems, buildKeymap, buildInputRules }
 //     menuContent:: [[MenuItem]]
 //     Can be used to override the menu content.
 export function exampleSetup(options) {
-  const { getView, rep, handleSetSelectedItemID } = options
+  const { getView, reflect, handleSetSelectedItemID } = options
   let plugins = [
     placeholder(),
     buildInputRules(options.schema),
@@ -61,7 +61,7 @@ export function exampleSetup(options) {
     arrowPlugin,
     arrowUI(
       (tx) => {getView().dispatch(tx)},
-      rep,
+      reflect,
       handleSetSelectedItemID
     )
   ]
