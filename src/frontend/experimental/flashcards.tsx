@@ -2,9 +2,15 @@ import React, { useState } from 'react'
 import { useCommentArrows } from '../../datamodel/subscriptions'
 import { htmlToText } from '../../util/htmlToText'
 import styles from './flashcards.module.css'
+import type { M } from '../../datamodel/mutators'
+import type { Reflect } from '@rocicorp/reflect'
 
-export default function Flashcards({rep} : any) {
-  const commentArrows = useCommentArrows(rep)
+type FlashcardsProps = {
+  reflect: Reflect<M>
+}
+
+export default function Flashcards({reflect} : FlashcardsProps) {
+  const commentArrows = useCommentArrows(reflect)
   const [index, setIndex] = useState<number>(0)
 
   function handleNext(){
