@@ -1,13 +1,8 @@
-// import { Server as BaseServer } from "reps-do";
-// export { worker as default } from "reps-do";
-
-// import { mutators, type M } from "../src/datamodel/mutators";
-
 import {
   consoleLogSink,
   createReflectServer,
-} from "@rocicorp/reflect-server";
-import { serverMutators } from "../src/datamodel/mutators.js";
+} from '@rocicorp/reflect-server';
+import { serverMutators } from '../src/datamodel/mutators';
 
 function getLogSinks() {
   let logSinks = [consoleLogSink];
@@ -40,10 +35,3 @@ const { worker, RoomDO, AuthDO } = createReflectServer({
   getLogLevel: () => "info",
 });
 export { worker as default, RoomDO, AuthDO };
-
-
-// export class Server extends BaseServer<M> {
-//   constructor(state: DurableObjectState) {
-//     super(mutators, state);
-//   }
-// }
