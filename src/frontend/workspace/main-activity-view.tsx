@@ -7,7 +7,7 @@ import {
   useAuthorArrowsByItemID,
   useItemByID
 } from '../../datamodel/subscriptions'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import ItemParent from './item-parent'
 // import { nanoid } from 'nanoid'
@@ -21,23 +21,23 @@ type MainActivityViewProps = {
   items: any[]
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
-  rep: Replicache<M>
+  reflect: Reflect<M>
 }
 
 type ActivityItemProps = {
   item: any
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
 }
 
 type AuthorInfoProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   authorArrows: any[]
 }
 
-export default function MainActivityView({ items, handleSetSelectedItemID, roomID, rep } : MainActivityViewProps ) {
+export default function MainActivityView({ items, handleSetSelectedItemID, roomID, reflect } : MainActivityViewProps ) {
   const [itemsShown, setItemsShown] = useState<number>(10)
 
   function showTenMoreItems(){
@@ -52,7 +52,7 @@ export default function MainActivityView({ items, handleSetSelectedItemID, roomI
           item={item}
           handleSetSelectedItemID={handleSetSelectedItemID}
           roomID={roomID}
-          rep={rep}
+          reflect={reflect}
           itemID={item.id}
         />
       )}
@@ -70,11 +70,11 @@ export default function MainActivityView({ items, handleSetSelectedItemID, roomI
   )
 }
 
-function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : ActivityItemProps ){
+function ActivityItem({ item, handleSetSelectedItemID, roomID, reflect, itemID } : ActivityItemProps ){
   const safeTitle = htmlToText(item.title)
   const safeCreatedAt = dateInWords(item.createdAt) || 'a while ago'
   const router = useRouter()
-  const authorArrows = useAuthorArrowsByItemID(rep, item.id)
+  const authorArrows = useAuthorArrowsByItemID(reflect, item.id)
   const [showLinks, setShowLinks] = useState<boolean>(false)
 
   const modifiedRoomID = roomID.replace(` `, `-`).replace(`@`, `-`).replace(`.com`, ``)
@@ -94,7 +94,7 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
     >
       <div className={styles.parentContainer}>
         <ItemParent
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
@@ -116,14 +116,14 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
       {/* <FileUploadContainer
         itemID={item.id}
         item={item}
-        rep={rep}
+        reflect={reflect}
       /> */}
       <div className={styles.titleContainer}>
         {(safeTitle !== (`Untitled` || ``)) ? safeTitle : `[${htmlToText(item.content).substring(0,30)}...]`}
       </div>
       {authorArrows && authorArrows.length > 0 &&
         <AuthorInfo
-          rep={rep}
+          reflect={reflect}
           authorArrows={authorArrows}
         />
       }
@@ -143,7 +143,7 @@ function ActivityItem({ item, handleSetSelectedItemID, roomID, rep, itemID } : A
   )
 }
 
-function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
+function AuthorInfo({ reflect, authorArrows} : AuthorInfoProps){
   const authorCount = authorArrows.length
 
   return (
@@ -153,7 +153,7 @@ function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
         {authorArrows.slice(0,2).map((arrow: any, i: any) =>
           <AuthorName
             key={`author-${arrow.id}`}
-            rep={rep}
+            reflect={reflect}
             itemID={arrow.frontItemID}
             authorCount={authorCount}
             index={i}
@@ -169,8 +169,8 @@ function AuthorInfo({ rep, authorArrows} : AuthorInfoProps){
   )
 }
 
-function AuthorName({ rep, itemID, authorCount, index}: any){
-  const item = useItemByID(rep, itemID)
+function AuthorName({ reflect, itemID, authorCount, index}: any){
+  const item = useItemByID(reflect, itemID)
 
   return (
     item &&
@@ -201,7 +201,7 @@ function AuthorName({ rep, itemID, authorCount, index}: any){
   )
 }
 
-// function FileUploadContainer({itemID, item, rep} : any) {
+// function FileUploadContainer({itemID, item, reflect} : any) {
 //   const [URL, setURL] = useState<any>('')
 
 //   useEffect(() => {
@@ -219,7 +219,7 @@ function AuthorName({ rep, itemID, authorCount, index}: any){
 //       const fileType = file.type.split('/')[1]
 //       const sourceURL = `${itemID}/${draftFileID}.${fileType}`
 
-//       rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+//       reflect.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
 //       //upload file to indexedDB
 //       uploadFileToIDB(file, sourceURL)
 //       //upload file to supabase
@@ -234,7 +234,7 @@ function AuthorName({ rep, itemID, authorCount, index}: any){
 //     //delete from supabase
 //     trashFileFromSupabase(item.sourceURL)
 //     //remove sourceURL from item
-//     rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
+//     reflect.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
 //   }
 
 //   function generateIDBSourceFileURL(sourceURL: string){

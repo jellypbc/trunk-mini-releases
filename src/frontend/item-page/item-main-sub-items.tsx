@@ -7,8 +7,18 @@ import {
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import EditorContainer from './editor-container'
+import type { Reflect } from '@rocicorp/reflect'
+import type { M } from '../../datamodel/mutators'
 
-export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID, fullArrows, showHighlights} : any) {
+type ItemMainSubItemsProps = {
+  reflect: Reflect<M>
+  itemID: string
+  handleSetSelectedItemID: (itemID: string) => void
+  fullArrows: any[]
+  showHighlights: boolean
+}
+
+export default function ItemMainSubItems({ reflect, itemID, handleSetSelectedItemID, fullArrows, showHighlights} : ItemMainSubItemsProps) {
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
   const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
   return (
@@ -17,7 +27,7 @@ export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID,
         {subItemItemIDs.map((itemID: any) => {
           return (
             <SubItemMain
-              rep={rep}
+              reflect={reflect}
               key={`subItemMain-${itemID}`}
               itemID={itemID}
               handleSetSelectedItemID={handleSetSelectedItemID}
@@ -30,11 +40,11 @@ export default function ItemMainSubItems({ rep, itemID, handleSetSelectedItemID,
 }
 
 
-function SubItemMain({rep, itemID, handleSetSelectedItemID, showHighlights}: any){
-  const item = useItemByID(rep, itemID)
+function SubItemMain({reflect, itemID, handleSetSelectedItemID, showHighlights}: any){
+  const item = useItemByID(reflect, itemID)
   const [showContent, setShowContent] = useState<boolean>(false)
   const [showExpand, setShowExpand] = useState<boolean>(false)
-  const commentArrows = useCommentArrowsByItemID(rep, itemID)
+  const commentArrows = useCommentArrowsByItemID(reflect, itemID)
 
   return (
     <div className={styles.subItemTitleContainer}>
@@ -55,7 +65,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID, showHighlights}: any
             <EditorContainer
               doc={item.content}
               type={'content'}
-              rep={rep}
+              reflect={reflect}
               itemID={itemID}
               commentArrows={commentArrows}
               showHighlights={showHighlights}
@@ -63,7 +73,7 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID, showHighlights}: any
             />
           }
           <ItemMainSubItemsA
-            rep={rep}
+            reflect={reflect}
             itemID={itemID}
             handleSetSelectedItemID={handleSetSelectedItemID}
             item={item}
@@ -75,13 +85,13 @@ function SubItemMain({rep, itemID, handleSetSelectedItemID, showHighlights}: any
   )
 }
 
-function ItemMainSubItemsA({ rep, itemID, handleSetSelectedItemID, item, showHighlights}: any) {
+function ItemMainSubItemsA({ reflect, itemID, handleSetSelectedItemID, item, showHighlights}: any) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = useArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(reflect, arrowIDs)
   return (
     fullArrows &&
     <ItemMainSubItemsB
-      rep={rep}
+      reflect={reflect}
       itemID={itemID}
       handleSetSelectedItemID={handleSetSelectedItemID}
       fullArrows={fullArrows}
@@ -90,7 +100,7 @@ function ItemMainSubItemsA({ rep, itemID, handleSetSelectedItemID, item, showHig
   )
 }
 
-function ItemMainSubItemsB({ rep, itemID, handleSetSelectedItemID, fullArrows, showHighlights} : any) {
+function ItemMainSubItemsB({ reflect, itemID, handleSetSelectedItemID, fullArrows, showHighlights} : any) {
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
   const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
   return (
@@ -99,7 +109,7 @@ function ItemMainSubItemsB({ rep, itemID, handleSetSelectedItemID, fullArrows, s
         {subItemItemIDs.map((itemID: any) => {
           return (
             <SubItemMain
-              rep={rep}
+              reflect={reflect}
               key={`subItemMain-${itemID}`}
               itemID={itemID}
               handleSetSelectedItemID={handleSetSelectedItemID}

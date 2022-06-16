@@ -2,20 +2,10 @@ import type { WriteTransaction } from '@rocicorp/reflect';
 import {
   initClientState,
   setCursor,
-  overShape,
-  selectShape,
   setUsername,
   setAvatarURL,
   setTrunkIDs,
 } from './client-state';
-import {
-  putShape,
-  deleteShape,
-  moveShape,
-  resizeShape,
-  rotateShape,
-  initShapes,
-} from './shape';
 import {
   putItem,
   deleteItem,
@@ -38,16 +28,8 @@ import {
 export type M = typeof serverMutators;
 
 export const serverMutators = {
-  createShape: putShape,
-  deleteShape,
-  moveShape,
-  resizeShape,
-  rotateShape,
   initClientState,
   setCursor,
-  overShape,
-  selectShape,
-  initShapes,
   createItem: putItem,
   deleteItem,
   updateItemTitle,
@@ -69,7 +51,6 @@ export const serverMutators = {
 };
 
 export const clientMutators: M = {
-  ...serverMutators,
-  initShapes: async () => {},
+  ...serverMutators
 };
 

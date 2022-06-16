@@ -1,5 +1,5 @@
 import { DOMParser, DOMSerializer } from 'prosemirror-model'
-import type { Replicache, MutatorDefs } from 'replicache'
+import type { Reflect, MutatorDefs } from '@rocicorp/reflect'
 import type { EditorState } from 'prosemirror-state'
 // import { Schema } from 'prosemirror-model'
 import { sendableSteps } from "./collab"
@@ -39,7 +39,7 @@ export const createSerializer = (schema: any) => {
   }
 }
 
-export async function getClient(rep: Replicache<MutatorDefs>) {
+export async function getClient(rep: Reflect<MutatorDefs>) {
   return await Promise.resolve(rep.clientID)
 }
 

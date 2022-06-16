@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import type { Schema } from 'prosemirror-model'
 import { schema } from './../editor/config/schema'
@@ -10,12 +10,12 @@ import { exampleSetup } from './../editor/plugins/index'
 import Editor from './editor'
 
 type Props = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   content: any,
   setValue: (value: string) => void
   type: string
 }
-function EditorDraftingContainer({ rep, content : doc, setValue, type } : Props) {
+function EditorDraftingContainer({ reflect, content : doc, setValue, type } : Props) {
   const parser = createParser(schema)
   const serializer = createSerializer(schema)
   const viewRef = useRef<any>()
@@ -28,7 +28,7 @@ function EditorDraftingContainer({ rep, content : doc, setValue, type } : Props)
       schema,
       parser,
       viewRef && viewRef.current && viewRef.current.view,
-      rep
+      reflect
     )
     setState(state)
     setView(viewRef && viewRef.current && viewRef.current.view)
@@ -41,7 +41,7 @@ function EditorDraftingContainer({ rep, content : doc, setValue, type } : Props)
         schema,
         parser,
         viewRef && viewRef.current && viewRef.current.view,
-        rep
+        reflect
       )
       setState(state)
       setView(viewRef && viewRef.current && viewRef.current.view)
@@ -78,7 +78,7 @@ const createStateFromProps = (
   schema: Schema,
   parser: (doc: string) => any,
   view: EditorView,
-  rep: Replicache<M>
+  reflect: Reflect<M>
 ) : EditorState<typeof schema> => {
   return EditorState.create({
     doc: parser(doc),
@@ -86,7 +86,7 @@ const createStateFromProps = (
     plugins: exampleSetup({
       schema: schema,
       getView: () => { return (view)},
-      rep: rep,
+      reflect: reflect,
     }),
   })
 }

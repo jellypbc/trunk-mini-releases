@@ -6,7 +6,7 @@ import type { EditorView } from 'prosemirror-view'
 import type { Schema } from 'prosemirror-model'
 import { exampleSetup } from './../editor/plugins/index'
 import Editor from './editor'
-import type { Replicache } from '@rocicorp/reflect'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import EditorArrowCreate from './editor-arrow-create'
 import {
@@ -21,7 +21,7 @@ import { htmlToText } from '../../util/htmlToText'
 type Props = {
   doc: string
   type: string
-  reflect: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   commentArrows: any[]
   showHighlights: boolean
@@ -39,7 +39,7 @@ function EditorContainer({ doc, type, reflect, itemID, commentArrows, showHighli
   const [showArrowFloater, setShowArrowFloater] = useState<boolean>(false)
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
-  const email = useClientEmail(reflect)
+  const email : string = useClientEmail(reflect)
   const [showEmptyCommentError, setShowEmptyCommentError] = useState<boolean>(false)
 
   const item : any = useItemByID(reflect, itemID)
@@ -503,7 +503,7 @@ const createStateFromProps = (
   schema: Schema,
   parser: any,
   view: any,
-  reflect: Replicache<M>,
+  reflect: Reflect<M>,
   itemID: string,
   arrows: any,
   handleSetSelectedItemID: (id: string) => void,

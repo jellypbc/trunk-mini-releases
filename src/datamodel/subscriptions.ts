@@ -2,7 +2,6 @@ import type { Reflect } from '@rocicorp/reflect'
 
 import { useSubscribe } from 'replicache-react'
 import { getClientState, clientStatePrefix } from './client-state'
-import { getShape, shapePrefix } from './shape'
 import { getItem, itemPrefix } from './item'
 import { getArrow, arrowPrefix } from './arrow'
 import type { M } from './mutators'
@@ -284,63 +283,19 @@ export function useArrowsByIDs(reflect: Reflect<M>, arrowIDs: any[]) {
   return arrows
 }
 
-
-// Shape
-export function useShapeIDs(reflect: Reflect<M>) {
-  return useSubscribe(
-    reflect,
-    async (tx) => {
-      const shapes = await tx.scan({ prefix: shapePrefix }).keys().toArray()
-      return shapes.map((k: string) => k.substring(shapePrefix.length))
-    },
-    []
-  )
-}
-
-export function useShapeByID(reflect: Reflect<M>, id: string) {
-  return useSubscribe(
-    reflect,
-    async (tx) => {
-      return await getShape(tx, id);
-    },
-    null
-  )
-}
-
-export function useOverShapeID(reflect: Reflect<M>) {
-  return useSubscribe(
-    reflect,
-    async (tx) => {
-      return (await getClientState(tx, await reflect.clientID)).overID;
-    },
-    ""
-  )
-}
-
-export function useSelectedShapeID(reflect: Reflect<M>) {
-  return useSubscribe(
-    reflect,
-    async (tx) => {
-      return (await getClientState(tx, await reflect.clientID)).selectedID;
-    },
-    ""
-  )
-}
-
 export function useCollaboratorIDs(reflect: Reflect<M>) {
   return useSubscribe(
     reflect,
     async (tx) => {
-      const clientIDs = await tx
+      const clientIDs = (await tx
         .scan({ prefix: clientStatePrefix })
         .keys()
-        .toArray();
+        .toArray()) as string[];
       const myClientID = await reflect.clientID;
       return clientIDs
-        .filter((k: string) => !k.endsWith(myClientID))
-        .map((k: string) => k.substring(clientStatePrefix.length));
+        .filter((k) => !k.endsWith(myClientID))
+        .map((k) => k.substring(clientStatePrefix.length));
     },
     []
-  )
+  );
 }
-

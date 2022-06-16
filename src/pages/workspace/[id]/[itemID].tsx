@@ -17,7 +17,7 @@ import { consoleLogSink, OptionalLoggerImpl } from '@rocicorp/logger';
 
 export default function Home() {
   const [reflect, setReflectClient] = useState<Reflect<M> | null>(null);
-  const [online, setOnline] = useState(false);
+  const [, setOnline] = useState(false);
   const [trunkID, setTrunkID] = useState<string>('')
   const [session, setSession] = useState<AuthSession | null>(null)
   const [selectedItemID, setSelectedItemID] = useState<string>('')
