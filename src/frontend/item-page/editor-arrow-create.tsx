@@ -5,14 +5,14 @@ import { useSortedItems, useClientEmail } from '../../datamodel/subscriptions'
 import EditorDraftingContainer from './editor-drafting-container'
 import Fuse from 'fuse.js'
 
-export default function EditorArrowCreate({ serializedSelection, rep, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd, showEmptyCommentError, handleSetShowEmptyCommentError }:any) {
+export default function EditorArrowCreate({ serializedSelection, reflect, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd, showEmptyCommentError, handleSetShowEmptyCommentError }:any) {
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
-  const clientEmail = useClientEmail(rep)
+  const clientEmail = useClientEmail(reflect)
 
-  const allItems = useSortedItems(rep)
+  const allItems = useSortedItems(reflect)
 
   useEffect(() => {
 
@@ -123,7 +123,7 @@ export default function EditorArrowCreate({ serializedSelection, rep, handleRefe
           <div className={styles.replyForm}>
             <div className={styles.draftingContainer}>
               <EditorDraftingContainer
-                rep={rep}
+                reflect={reflect}
                 content={commentDraft}
                 setValue={setCommentDraft}
                 type={'arrowDraft'}

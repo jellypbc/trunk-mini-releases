@@ -1,4 +1,4 @@
-import type { ReadTransaction, WriteTransaction } from 'replicache'
+import type { ReadTransaction, WriteTransaction } from '@rocicorp/reflect'
 import { randInt } from '../util/rand'
 
 const colors = [
@@ -49,7 +49,7 @@ export const supabaseUserInfoSchema = z.object({
 
 
 // TODO: It would be good to merge this with the first-class concept of `client`
-// that Replicache itself manages if possible.
+// that Reflect itself manages if possible.
 export const clientStateSchema = z.object({
   cursor: z.object({
     x: z.number(),

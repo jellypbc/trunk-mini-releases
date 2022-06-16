@@ -1,21 +1,11 @@
-import type { WriteTransaction } from "replicache";
+import type { WriteTransaction } from '@rocicorp/reflect';
 import {
   initClientState,
   setCursor,
-  overShape,
-  selectShape,
   setUsername,
   setAvatarURL,
   setTrunkIDs,
-} from "./client-state";
-import {
-  putShape,
-  deleteShape,
-  moveShape,
-  resizeShape,
-  rotateShape,
-  initShapes,
-} from "./shape";
+} from './client-state';
 import {
   putItem,
   deleteItem,
@@ -35,19 +25,11 @@ import {
   updateArrowCreatedBy,
 } from './arrow'
 
-export type M = typeof mutators;
+export type M = typeof serverMutators;
 
-export const mutators = {
-  createShape: putShape,
-  deleteShape,
-  moveShape,
-  resizeShape,
-  rotateShape,
+export const serverMutators = {
   initClientState,
   setCursor,
-  overShape,
-  selectShape,
-  initShapes,
   createItem: putItem,
   deleteItem,
   updateItemTitle,
@@ -67,3 +49,8 @@ export const mutators = {
   updateItemPublicationDate,
   nop: async (_: WriteTransaction) => {},
 };
+
+export const clientMutators: M = {
+  ...serverMutators
+};
+

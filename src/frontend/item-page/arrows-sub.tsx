@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import EditorDraftingContainer from './editor-drafting-container'
 import { useSortedItems, useItemByID, useClientEmail } from '../../datamodel/subscriptions'
 import Fuse from 'fuse.js'
@@ -10,15 +10,15 @@ import { randomArrow } from '../../datamodel/arrow'
 import { randomItem } from '../../datamodel/item'
 
 type Props = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   fullArrows: any[]
   handleSetSelectedItemID: (item: string) => void
 }
 
-export default function ArrowsSub({ rep, itemID, fullArrows, handleSetSelectedItemID} : Props) {
-  const email = useClientEmail(rep)
-  const allItems = useSortedItems(rep)
+export default function ArrowsSub({ reflect, itemID, fullArrows, handleSetSelectedItemID} : Props) {
+  const email = useClientEmail(reflect)
+  const allItems = useSortedItems(reflect)
 
   const [showAddSubItem, setShowAddSubItem] = useState<boolean>(false)
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
@@ -37,7 +37,7 @@ export default function ArrowsSub({ rep, itemID, fullArrows, handleSetSelectedIt
       </div>
       {showAddSubItem && allItems && email &&
         <AddSubItemContainer
-          rep={rep}
+          reflect={reflect}
           allItems={allItems}
           itemID={itemID}
           handleSetShowAddSubItem={setShowAddSubItem}
@@ -49,7 +49,7 @@ export default function ArrowsSub({ rep, itemID, fullArrows, handleSetSelectedIt
           <SubItemArrowItem
             key={`subItemArrow-${itemID}`}
             itemID={itemID}
-            rep={rep}
+            reflect={reflect}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
@@ -59,14 +59,14 @@ export default function ArrowsSub({ rep, itemID, fullArrows, handleSetSelectedIt
 }
 
 type FrontArrowItemProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   handleSetSelectedItemID: (itemID: string) => void
 }
 
 
-function SubItemArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
-  const item = useItemByID(rep, itemID)
+function SubItemArrowItem({ reflect, itemID, handleSetSelectedItemID }: FrontArrowItemProps){
+  const item = useItemByID(reflect, itemID)
   return (
     <div
       className={styles.item}
@@ -78,7 +78,7 @@ function SubItemArrowItem({ rep, itemID, handleSetSelectedItemID }: FrontArrowIt
 }
 
 
-function AddSubItemContainer({ rep, allItems, itemID, handleSetShowAddSubItem, email} : any) {
+function AddSubItemContainer({ reflect, allItems, itemID, handleSetShowAddSubItem, email} : any) {
   const [subItemDraft, setSubItemDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
@@ -180,14 +180,14 @@ function AddSubItemContainer({ rep, allItems, itemID, handleSetShowAddSubItem, e
     }
 
     // save arrow!
-    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+    reflect.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
 
 
     // save arrow to the item of id passed in
-    rep.mutate.updateItemAddSingleArrow({ id: id, arrow: newA})
+    reflect.mutate.updateItemAddSingleArrow({ id: id, arrow: newA})
 
     // add arrow to existing item
-    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
+    reflect.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
     setSubItemDraft('<p></p>')
     handleSetShowAddSubItem(false)
   }
@@ -226,13 +226,13 @@ function AddSubItemContainer({ rep, allItems, itemID, handleSetShowAddSubItem, e
     referenceItem.item.arrows = JSON.stringify(arrows)
 
     // save author arrow
-    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+    reflect.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
 
     // save new item, with author arrow
-    rep.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
+    reflect.mutate.createItem({ id: referenceItem.id, item: referenceItem.item })
 
     // add author arrow to existing item
-    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
+    reflect.mutate.updateItemAddSingleArrow({ id: itemID, arrow: newA })
 
     setSubItemDraft('<p></p>')
     handleSetShowAddSubItem(false)
@@ -242,7 +242,7 @@ function AddSubItemContainer({ rep, allItems, itemID, handleSetShowAddSubItem, e
     <div className={styles.addArrow}>
       <div className={styles.authorInput}>
         <EditorDraftingContainer
-          rep={rep}
+          reflect={reflect}
           content={subItemDraft}
           setValue={setSubItemDraft}
           type={''}

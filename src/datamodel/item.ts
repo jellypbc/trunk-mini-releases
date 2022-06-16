@@ -1,4 +1,4 @@
-import type { ReadTransaction, WriteTransaction } from 'replicache'
+import type { ReadTransaction, WriteTransaction } from '@rocicorp/reflect'
 import { nanoid } from 'nanoid'
 import { z } from 'zod'
 

@@ -6,16 +6,16 @@ import {
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 
 type Props = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   fullArrows: any[]
   handleSetSelectedItemID: (item: string) => void
 }
 
-export default function ArrowsBack({ rep, itemID, fullArrows, handleSetSelectedItemID } : Props ) {
+export default function ArrowsBack({ reflect, itemID, fullArrows, handleSetSelectedItemID } : Props ) {
   const backArrows = fullArrows.filter((a: any) => a.kind === 'reference' && a.backItemID !== itemID) || []
   const backItemIDs = backArrows.map((a: any) => a.backItemID)
   const uniqueBackItemIDs = [...new Set(backItemIDs)]
@@ -33,7 +33,7 @@ export default function ArrowsBack({ rep, itemID, fullArrows, handleSetSelectedI
           <BackArrowItem
             key={`frontArrow-${itemID}`}
             itemID={itemID}
-            rep={rep}
+            reflect={reflect}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
@@ -43,13 +43,13 @@ export default function ArrowsBack({ rep, itemID, fullArrows, handleSetSelectedI
 }
 
 type BackArrowItemProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   handleSetSelectedItemID: (itemID: string) => void
 }
 
-function BackArrowItem({ rep, itemID, handleSetSelectedItemID }: BackArrowItemProps){
-  const item = useItemByID(rep, itemID)
+function BackArrowItem({ reflect, itemID, handleSetSelectedItemID }: BackArrowItemProps){
+  const item = useItemByID(reflect, itemID)
   return (
     item &&
     <div
@@ -58,7 +58,7 @@ function BackArrowItem({ rep, itemID, handleSetSelectedItemID }: BackArrowItemPr
     >
       {item.arrows.length > 0 &&
         <AuthorInfo
-          rep={rep}
+          reflect={reflect}
           itemID={itemID}
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
@@ -70,13 +70,13 @@ function BackArrowItem({ rep, itemID, handleSetSelectedItemID }: BackArrowItemPr
 }
 
 
-function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
-  const authorArrows = useAuthorArrowsByItemID(rep, itemID)
+function AuthorInfo({reflect, itemID, handleSetSelectedItemID}: any){
+  const authorArrows = useAuthorArrowsByItemID(reflect, itemID)
 
   return (
     authorArrows && authorArrows.length > 0 ?
       <AuthorItem
-        rep={rep}
+        reflect={reflect}
         itemID= {authorArrows[0].frontItemID}
         handleSeSelectedItemID={handleSetSelectedItemID}
         authorCount={authorArrows.length}
@@ -84,8 +84,8 @@ function AuthorInfo({rep, itemID, handleSetSelectedItemID}: any){
   )
 }
 
-function AuthorItem({rep, itemID, handleSetSelectedItemID, authorCount}: any) {
-  const item = useItemByID(rep, itemID)
+function AuthorItem({reflect, itemID, handleSetSelectedItemID, authorCount}: any) {
+  const item = useItemByID(reflect, itemID)
   const additionalAuthors = authorCount - 1
   return (
     item &&

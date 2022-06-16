@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import styles from './index.module.css'
 import Fuse from 'fuse.js'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import { useSortedItems } from '../../datamodel/subscriptions'
 import { htmlToText } from '../../util/htmlToText'
 import { useRouter } from 'next/router'
 
 type Props = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   handleSetSelectedItemID: (itemID: string) => void
   handleSetCommandBar: (state: boolean) => void
   roomID: string
 }
 
-export default function CommandBar({ rep, handleSetSelectedItemID, handleSetCommandBar, roomID } : Props) {
+export default function CommandBar({ reflect, handleSetSelectedItemID, handleSetCommandBar, roomID } : Props) {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
-  const list = useSortedItems(rep)
+  const list = useSortedItems(reflect)
   const options = {
     // isCaseSensitive: false,
     // includeScore: false,

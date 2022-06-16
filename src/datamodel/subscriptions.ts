@@ -1,16 +1,15 @@
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 
 import { useSubscribe } from 'replicache-react'
 import { getClientState, clientStatePrefix } from './client-state'
-import { getShape, shapePrefix } from './shape'
 import { getItem, itemPrefix } from './item'
 import { getArrow, arrowPrefix } from './arrow'
 import type { M } from './mutators'
 
 // Item
-export function useItemIDs(rep: Replicache<M>) {
+export function useItemIDs(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
       const items = (await tx
         .scan({ prefix: itemPrefix })
@@ -22,9 +21,9 @@ export function useItemIDs(rep: Replicache<M>) {
   )
 }
 
-export function useItemByID(rep: Replicache<M>, id: string) {
+export function useItemByID(reflect: Reflect<M>, id: string) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
       const item = await getItem(tx, id)
       if (item) {
@@ -37,9 +36,9 @@ export function useItemByID(rep: Replicache<M>, id: string) {
   )
 }
 
-export function useItemArrowIDsByID(rep: Replicache<M>, id: string) {
+export function useItemArrowIDsByID(reflect: Reflect<M>, id: string) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
       const item = await getItem(tx, id)
       const arrows = item && JSON.parse(item.arrows) as unknown as any
@@ -50,8 +49,8 @@ export function useItemArrowIDsByID(rep: Replicache<M>, id: string) {
   )
 }
 
-export function useSortedItems(rep: Replicache<M>) {
-  const items = useItems(rep)
+export function useSortedItems(reflect: Reflect<M>) {
+  const items = useItems(reflect)
   let parsedItems: any[] = []
   items.map(([k, v]: [string, any]) => {
     const changes = {
@@ -66,9 +65,9 @@ export function useSortedItems(rep: Replicache<M>) {
   return sortedItems
 }
 
-export function useItems(rep: Replicache<M>) {
+export function useItems(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async(tx) => {
       const items = await tx.scan({ prefix: itemPrefix }).entries().toArray();
       return items
@@ -77,9 +76,9 @@ export function useItems(rep: Replicache<M>) {
   )
 }
 
-export function useItemCount(rep: Replicache<M>) {
+export function useItemCount(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async(tx) => {
       const items = await tx.scan({ prefix: itemPrefix }).keys().toArray()
       return items.length.toString()
@@ -89,61 +88,61 @@ export function useItemCount(rep: Replicache<M>) {
 }
 
 // User Info
-export function useUserInfo(rep: Replicache<M>) {
+export function useUserInfo(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).userInfo
+      return (await getClientState(tx, await reflect.clientID)).userInfo
     },
     null
   )
 }
 
-export function useSupabaseUserInfo(rep: Replicache<M>) {
+export function useSupabaseUserInfo(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo
+      return (await getClientState(tx, await reflect.clientID)).supabaseUserInfo
     },
     null
   )
 }
 
-export function useClientEmail(rep: Replicache<M>) {
+export function useClientEmail(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.email
+      return (await getClientState(tx, await reflect.clientID)).supabaseUserInfo.email
     },
     ""
   )
 }
 
-export function useClientUsername(rep: Replicache<M>) {
+export function useClientUsername(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.username
+      return (await getClientState(tx, await reflect.clientID)).supabaseUserInfo.username
     },
     null
   )
 }
 
-export function useClientTrunkIDs(rep: Replicache<M>) {
+export function useClientTrunkIDs(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.trunkIDs
+      return (await getClientState(tx, await reflect.clientID)).supabaseUserInfo.trunkIDs
     },
     null
   )
 }
 
-export function useClientTrunkIDsArray(rep: Replicache<M>) {
+export function useClientTrunkIDsArray(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
-      const trunkIDs = (await getClientState(tx, await rep.clientID)).supabaseUserInfo.trunkIDs
+      const trunkIDs = (await getClientState(tx, await reflect.clientID)).supabaseUserInfo.trunkIDs
       const trunkIDsArray = JSON.parse(trunkIDs)
       return trunkIDsArray
     },
@@ -151,22 +150,22 @@ export function useClientTrunkIDsArray(rep: Replicache<M>) {
   )
 }
 
-export function useClientAvatarURL(rep: Replicache<M>) {
+export function useClientAvatarURL(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).supabaseUserInfo.avatarURL
+      return (await getClientState(tx, await reflect.clientID)).supabaseUserInfo.avatarURL
     },
     null
   )
 }
 
 export function useClientInfo(
-  rep: Replicache<M>,
+  reflect: Reflect<M>,
   clientID: string
 ) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
       return await getClientState(tx, clientID);
     },
@@ -175,9 +174,9 @@ export function useClientInfo(
 }
 
 // Arrow
-export function useArrowIDs(rep: Replicache<M>) {
+export function useArrowIDs(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
       const arrows = (await tx
         .scan({ prefix: arrowPrefix })
@@ -189,9 +188,9 @@ export function useArrowIDs(rep: Replicache<M>) {
   )
 }
 
-export function useArrowByID(rep: Replicache<M>, id: string) {
+export function useArrowByID(reflect: Reflect<M>, id: string) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
       const arrow = await getArrow(tx, id)
       if (arrow) {
@@ -203,9 +202,9 @@ export function useArrowByID(rep: Replicache<M>, id: string) {
   )
 }
 
-export function useArrows(rep: Replicache<M>) {
+export function useArrows(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async(tx) => {
       const arrows = await tx.scan({ prefix: arrowPrefix }).entries().toArray();
       return arrows
@@ -214,9 +213,9 @@ export function useArrows(rep: Replicache<M>) {
   )
 }
 
-export function useCommentArrows(rep: Replicache<M>) {
+export function useCommentArrows(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async(tx) => {
       const arrows = await tx.scan({ prefix: arrowPrefix}).entries().toArray()
       const filtered = arrows.filter((arrow: any) => arrow[1].kind === "comment")
@@ -237,10 +236,10 @@ export function useCommentArrows(rep: Replicache<M>) {
   )
 }
 
-export function useCommentArrowsByItemID(rep: Replicache<M>, itemID: string) {
+export function useCommentArrowsByItemID(reflect: Reflect<M>, itemID: string) {
   // this needs to be refactored bc allArrows can be a huge array
-  const allArrows = useArrows(rep)
-  const arrowIDs = useItemArrowIDsByID(rep, itemID) as unknown as any
+  const allArrows = useArrows(reflect)
+  const arrowIDs = useItemArrowIDsByID(reflect, itemID) as unknown as any
   let commentArrows : any[] = []
   arrowIDs && arrowIDs.map((arrowID: string) => {
     allArrows.find(([k, v]: [string, any]) => {
@@ -253,10 +252,10 @@ export function useCommentArrowsByItemID(rep: Replicache<M>, itemID: string) {
   return commentArrows
 }
 
-export function useAuthorArrowsByItemID(rep: Replicache<M>, itemID: string) {
+export function useAuthorArrowsByItemID(reflect: Reflect<M>, itemID: string) {
   // this needs to be refactored bc allArrows can be a huge array
-  const allArrows = useArrows(rep)
-  const arrowIDs = useItemArrowIDsByID(rep, itemID) as unknown as any
+  const allArrows = useArrows(reflect)
+  const arrowIDs = useItemArrowIDsByID(reflect, itemID) as unknown as any
   let authorArrows : any[] = []
   arrowIDs && arrowIDs.map((arrowID: string) => {
     allArrows.find(([k, v]: [string, any]) => {
@@ -269,9 +268,9 @@ export function useAuthorArrowsByItemID(rep: Replicache<M>, itemID: string) {
   return authorArrows
 }
 
-export function useArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
+export function useArrowsByIDs(reflect: Reflect<M>, arrowIDs: any[]) {
   // this needs to be refactored bc allArrows can be a huge array
-  const allArrows = useArrows(rep)
+  const allArrows = useArrows(reflect)
   let arrows : any[] = []
   arrowIDs && arrowIDs.map((arrowID: any) => {
     allArrows.find(([k, v]: [string, any]) => {
@@ -284,63 +283,19 @@ export function useArrowsByIDs(rep: Replicache<M>, arrowIDs: any[]) {
   return arrows
 }
 
-
-// Shape
-export function useShapeIDs(rep: Replicache<M>) {
+export function useCollaboratorIDs(reflect: Reflect<M>) {
   return useSubscribe(
-    rep,
+    reflect,
     async (tx) => {
-      const shapes = await tx.scan({ prefix: shapePrefix }).keys().toArray()
-      return shapes.map((k) => k.substring(shapePrefix.length))
-    },
-    []
-  )
-}
-
-export function useShapeByID(rep: Replicache<M>, id: string) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      return await getShape(tx, id);
-    },
-    null
-  )
-}
-
-export function useOverShapeID(rep: Replicache<M>) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).overID;
-    },
-    ""
-  )
-}
-
-export function useSelectedShapeID(rep: Replicache<M>) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      return (await getClientState(tx, await rep.clientID)).selectedID;
-    },
-    ""
-  )
-}
-
-export function useCollaboratorIDs(rep: Replicache<M>) {
-  return useSubscribe(
-    rep,
-    async (tx) => {
-      const clientIDs = await tx
+      const clientIDs = (await tx
         .scan({ prefix: clientStatePrefix })
         .keys()
-        .toArray();
-      const myClientID = await rep.clientID;
+        .toArray()) as string[];
+      const myClientID = await reflect.clientID;
       return clientIDs
         .filter((k) => !k.endsWith(myClientID))
-        .map((k) => k.substr(clientStatePrefix.length));
+        .map((k) => k.substring(clientStatePrefix.length));
     },
     []
-  )
+  );
 }
-

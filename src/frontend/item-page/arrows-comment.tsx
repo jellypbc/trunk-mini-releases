@@ -8,8 +8,8 @@ import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import EditorDraftingContainer from './editor-drafting-container'
 
-export default function ArrowsComment({ rep, itemID, arrows, handleSetSelectedItemID } : any) {
-  const email = useClientEmail(rep)
+export default function ArrowsComment({ reflect, itemID, arrows, handleSetSelectedItemID } : any) {
+  const email = useClientEmail(reflect)
   const comments = arrows.filter((a: any) => a.kind === 'comment'
   && a.backItemID === itemID) || []
   const commentArrowIDs = comments.map((a: any) => a.arrowID)
@@ -19,7 +19,7 @@ export default function ArrowsComment({ rep, itemID, arrows, handleSetSelectedIt
     <div className={styles.section}>
       <CommentItemContainer
         arrowIDs={uniqueCommentArrows}
-        rep={rep}
+        reflect={reflect}
         itemID={itemID}
         handleSetSelectedItemID={handleSetSelectedItemID}
         email={email}
@@ -31,8 +31,8 @@ export default function ArrowsComment({ rep, itemID, arrows, handleSetSelectedIt
 import { randomItem } from '../../datamodel/item'
 import { randomArrow } from '../../datamodel/arrow'
 
-function CommentItemContainer({ arrowIDs, rep, itemID, handleSetSelectedItemID, email } : any){
-  const arrows = useArrowsByIDs(rep, arrowIDs)
+function CommentItemContainer({ arrowIDs, reflect, itemID, handleSetSelectedItemID, email } : any){
+  const arrows = useArrowsByIDs(reflect, arrowIDs)
   const [showCommentEditor, setShowCommentEditor] = useState<boolean>(false)
 
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
@@ -86,15 +86,15 @@ function CommentItemContainer({ arrowIDs, rep, itemID, handleSetSelectedItemID, 
     // apply arrow to new item
     // apply arrow to existing item
 
-    // save new arro using rep
-    rep.mutate.createArrow({ id: newArrow.id, arrow: arrow })
+    // save new arro using reflect
+    reflect.mutate.createArrow({ id: newArrow.id, arrow: arrow })
 
-    // save new item using rep
+    // save new item using reflect
 
-    rep.mutate.createItem({id: newItem.id, item: updatedItem})
+    reflect.mutate.createItem({id: newItem.id, item: updatedItem})
 
-    // update existing itme with rep
-    rep.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
+    // update existing itme with reflect
+    reflect.mutate.updateItemAddSingleArrow({ id: itemID, arrow: miniArrow })
   }
   return (
     <>
@@ -107,7 +107,7 @@ function CommentItemContainer({ arrowIDs, rep, itemID, handleSetSelectedItemID, 
           <Arrow
             key={`commment-${a.id}`}
             arrow={a}
-            rep={rep}
+            reflect={reflect}
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         )
@@ -127,7 +127,7 @@ function CommentItemContainer({ arrowIDs, rep, itemID, handleSetSelectedItemID, 
             :
             <>
               <EditorDraftingContainer
-                rep={rep}
+                reflect={reflect}
                 content={commentDraft}
                 setValue={setCommentDraft}
                 type={'comment'}
@@ -143,8 +143,8 @@ function CommentItemContainer({ arrowIDs, rep, itemID, handleSetSelectedItemID, 
 }
 
 
-function Arrow({rep, arrow, handleSetSelectedItemID}: any){
-  const item = useItemByID(rep, arrow.frontItemID)
+function Arrow({reflect, arrow, handleSetSelectedItemID}: any){
+  const item = useItemByID(reflect, arrow.frontItemID)
   return (
     <div
       className={styles.commentItem}

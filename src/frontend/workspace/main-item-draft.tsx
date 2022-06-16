@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styles from './main-item-draft.module.css'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import { randomItem } from '../../datamodel/item'
 import { HotKeys } from 'react-hotkeys'
@@ -13,7 +13,7 @@ import ItemFileUploadButton from './item-file-upload-button'
 import { DEFAULT_SOURCE_FILES_BUCKET, DEFAULT_IDB_KEY } from '../../lib/constants'
 
 type MainItemDraftProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   clientEmail: string
   clientUsername: string
   clientAvatarURL: string
@@ -25,7 +25,7 @@ const keyMap = {
   hideItemDraft: ['command+c', 'ctrl+c']
 }
 
-export default function MainItemDraft({ rep, clientEmail, clientUsername, clientAvatarURL, handleSetShowMainItemDraft }: MainItemDraftProps) {
+export default function MainItemDraft({ reflect, clientEmail, clientUsername, clientAvatarURL, handleSetShowMainItemDraft }: MainItemDraftProps) {
   console.log('clientUsername', clientUsername, 'clientAvatarURL', clientAvatarURL)
   const [titleDraft, setTitleDraft] = useState<string>('<p></p>')
   const [contentDraft, setContentDraft] = useState<string>('<p></p>')
@@ -44,7 +44,7 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
 
     const itemItem = {...item, ...changes}
 
-    rep.mutate.createItem({id: itemDraft.id, item: itemItem})
+    reflect.mutate.createItem({id: itemDraft.id, item: itemItem})
 
   }
 
@@ -96,7 +96,7 @@ export default function MainItemDraft({ rep, clientEmail, clientUsername, client
       const fileType = file.type.split('/')[1]
       const sourceURL = `${itemDraft.id}/${draftFileID}.${fileType}`
 
-      // rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+      // reflect.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
       setItemDraft({id: itemDraft.id, item: {...itemDraft.item, sourceURL: sourceURL}})
       //upload file to indexedDB
       uploadFileToIDB(file, sourceURL)
@@ -128,7 +128,7 @@ return (
         <div className={styles.itemDraft}>
           <div className={styles.itemDraftTitle}>
             <EditorDraftingContainer
-              rep={rep}
+              reflect={reflect}
               content={titleDraft}
               setValue={setTitleDraft}
               type={'title'}
@@ -136,7 +136,7 @@ return (
           </div>
           <div className={styles.itemDraftContent}>
             <EditorDraftingContainer
-              rep={rep}
+              reflect={reflect}
               content={contentDraft}
               setValue={setContentDraft}
               type={'content'}
@@ -194,7 +194,7 @@ function FileUploadContainer({itemID, item, handleSetItemDraft, URL, handleSetUR
       const fileType = file.type.split('/')[1]
       const sourceURL = `${itemID}/${draftFileID}.${fileType}`
 
-      // rep.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
+      // reflect.mutate.updateItemSourceURL({id: itemID, sourceURL: sourceURL})
       handleSetItemDraft({id: itemID, item: {...item, sourceURL: sourceURL}})
       //upload file to indexedDB
       uploadFileToIDB(file, sourceURL)
@@ -210,7 +210,7 @@ function FileUploadContainer({itemID, item, handleSetItemDraft, URL, handleSetUR
     //delete from supabase
     trashFileFromSupabase(item.sourceURL)
     //remove sourceURL from item
-    // rep.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
+    // reflect.mutate.updateItemSourceURL({id: itemID, sourceURL: ''})
     handleSetItemDraft({id: itemID, item: {...item, sourceURL: ''}})
   }
 

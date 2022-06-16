@@ -3,20 +3,20 @@ import {
   useArrowsByIDs,
   useItemByID
 } from '../../datamodel/subscriptions'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
 import { htmlToText } from '../../util/htmlToText'
 import styles from './sidebar-outline.module.css'
 
 type SidebarOutlineProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   item: any
   itemID: string
 }
 
-export default function SidebarOutline({ rep, item, itemID } : SidebarOutlineProps) {
+export default function SidebarOutline({ reflect, item, itemID } : SidebarOutlineProps) {
   const arrowIDs = item.arrows.map((a: any) => a.arrowID)
-  const fullArrows = useArrowsByIDs(rep, arrowIDs)
+  const fullArrows = useArrowsByIDs(reflect, arrowIDs)
 
   const subItemArrows= fullArrows.filter((a: any) => a.kind === 'sub' && a.backItemID === itemID ) || []
   const subItemItemIDs = subItemArrows.map((a: any) => a.frontItemID)
@@ -30,7 +30,7 @@ export default function SidebarOutline({ rep, item, itemID } : SidebarOutlinePro
           <SubItemArrowItem
             key={`sidebarOutline-${itemID}`}
             itemID={itemID}
-            rep={rep}
+            reflect={reflect}
           />
         )
       })}
@@ -39,13 +39,13 @@ export default function SidebarOutline({ rep, item, itemID } : SidebarOutlinePro
 }
 
 type FrontArrowItemProps = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
 }
 
 
-function SubItemArrowItem({ rep, itemID }: FrontArrowItemProps){
-  const item = useItemByID(rep, itemID)
+function SubItemArrowItem({ reflect, itemID }: FrontArrowItemProps){
+  const item = useItemByID(reflect, itemID)
   return (
     item &&
     <div

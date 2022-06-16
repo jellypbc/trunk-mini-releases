@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { htmlToText } from 'src/util/htmlToText'
 import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
-import type { Replicache } from 'replicache'
+import type { Reflect } from '@rocicorp/reflect'
 import EditorDraftingContainer from './editor-drafting-container'
 import { useSortedItems, useClientEmail } from '../../datamodel/subscriptions'
 import Fuse from 'fuse.js'
@@ -10,20 +10,20 @@ import { randomArrow } from '../../datamodel/arrow'
 import { randomItem } from '../../datamodel/item'
 
 type Props = {
-  rep: Replicache<M>
+  reflect: Reflect<M>
   itemID: string
   handleSetShowAddAuthor: (state: boolean) => void
 }
 
-export default function AddAuthorArrow({ rep, itemID, handleSetShowAddAuthor} : Props) {
-  const email = useClientEmail(rep)
-  const allItems = useSortedItems(rep)
+export default function AddAuthorArrow({ reflect, itemID, handleSetShowAddAuthor} : Props) {
+  const email = useClientEmail(reflect)
+  const allItems = useSortedItems(reflect)
 
   return (
     <>
       {allItems && email &&(
         <AddAuthorThing
-          rep={rep}
+          reflect={reflect}
           allItems={allItems}
           itemID={itemID}
           handleSetShowAddAuthor={handleSetShowAddAuthor}
@@ -34,7 +34,7 @@ export default function AddAuthorArrow({ rep, itemID, handleSetShowAddAuthor} : 
   )
 }
 
-function AddAuthorThing({ rep, allItems, itemID, handleSetShowAddAuthor, email} : any) {
+function AddAuthorThing({ reflect, allItems, itemID, handleSetShowAddAuthor, email} : any) {
   const [authorDraft, setAuthorDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
 
@@ -105,9 +105,9 @@ function AddAuthorThing({ rep, allItems, itemID, handleSetShowAddAuthor, email} 
     const frontItemID = authorItemID
     const backItemID = itemID
 
-    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
-    rep.mutate.updateItemAddSingleArrow({ id: frontItemID, arrow: newItemArrow})
-    rep.mutate.updateItemAddSingleArrow({ id: backItemID, arrow: newItemArrow })
+    reflect.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+    reflect.mutate.updateItemAddSingleArrow({ id: frontItemID, arrow: newItemArrow})
+    reflect.mutate.updateItemAddSingleArrow({ id: backItemID, arrow: newItemArrow })
     setAuthorDraft('<p></p>')
     handleSetShowAddAuthor(false)
   }
@@ -142,9 +142,9 @@ function AddAuthorThing({ rep, allItems, itemID, handleSetShowAddAuthor, email} 
 
     const frontItemID = referenceItem.id
     const backItemID = itemID
-    rep.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
-    rep.mutate.createItem({ id: frontItemID, item: referenceItem.item })
-    rep.mutate.updateItemAddSingleArrow({ id: backItemID, arrow: newItemArrow })
+    reflect.mutate.createArrow({ id: referenceArrow.id, arrow: referenceArrow.arrow })
+    reflect.mutate.createItem({ id: frontItemID, item: referenceItem.item })
+    reflect.mutate.updateItemAddSingleArrow({ id: backItemID, arrow: newItemArrow })
 
     setAuthorDraft('<p></p>')
     handleSetShowAddAuthor(false)
@@ -154,7 +154,7 @@ function AddAuthorThing({ rep, allItems, itemID, handleSetShowAddAuthor, email} 
     <div className={styles.addArrow}>
       <div className={styles.authorInput}>
         <EditorDraftingContainer
-          rep={rep}
+          reflect={reflect}
           content={authorDraft}
           setValue={setAuthorDraft}
           type={''}

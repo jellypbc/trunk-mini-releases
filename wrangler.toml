@@ -6,17 +6,26 @@ workers_dev = true
 # route = ""
 # zone_id = ""
 
-compatibility_date = "2021-11-15"
+compatibility_date = "2022-02-10"
 compatibility_flags = []
 
 [durable_objects]
 bindings = [
-  { name = "server", class_name = "Server" }
+  { name = "roomDO", class_name = "RoomDO" },
+  { name = "authDO", class_name = "AuthDO" }
 ]
 
 [[migrations]]
 tag = "v1"
 new_classes = ["Server"]
+
+[[migrations]]
+tag = "v2"
+renamed_classes = [{from = "Server", to = "RoomDO" }]
+new_classes = ["AuthDO"]
+
+[triggers]
+crons = [ "*/5 * * * *" ] # ever 5 mins for AuthDO connection revalidation
 
 [build]
 command = "npm run build-worker"
@@ -28,3 +37,31 @@ main = "./index.mjs"
 
 [miniflare]
 durable_objects_persist = true
+
+#[secrets]
+#DATADOG_API_KEY
+#REFLECT_AUTH_API_KEY
+
+
+# compatibility_date = "2021-11-15"
+# compatibility_flags = []
+
+# [durable_objects]
+# bindings = [
+#   { name = "server", class_name = "Server" }
+# ]
+
+# [[migrations]]
+# tag = "v1"
+# new_classes = ["Server"]
+
+# [build]
+# command = "npm run build-worker"
+
+# [build.upload]
+# format = "modules"
+# dir = "dist"
+# main = "./index.mjs"
+
+# [miniflare]
+# durable_objects_persist = true
