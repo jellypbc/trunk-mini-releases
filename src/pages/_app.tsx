@@ -2,7 +2,6 @@ import React, { ComponentClass } from 'react';
 import '../styles/globals.scss'
 import Head from 'next/head'
 import { WorkspaceProvider } from '../frontend/workspace-provider'
-
 import AppNav from '../frontend/nav/app-nav'
 
 interface Props {
@@ -12,7 +11,7 @@ interface Props {
 
 export default function App({ Component } : Props) {
   return (
-    <div>
+    <div className="">
       <Head>
         <meta
           name='viewport'

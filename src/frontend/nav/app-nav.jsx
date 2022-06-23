@@ -8,7 +8,18 @@ export default function AppNav() {
   return (
     <>
       { isTauri &&
-        <div data-tauri-drag-region id="nav"></div>
+        <div
+          data-tauri-drag-region
+          id="nav"
+          className="sticky
+            top-0
+            z-50
+            h-44
+            bg-white-100
+            dark:bg-slate-800
+          "
+        >
+        </div>
       }
     </>
   )

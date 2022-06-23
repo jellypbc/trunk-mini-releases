@@ -72,7 +72,8 @@ class MyDocument extends Document {
           */}
 
         </Head>
-        <body>
+
+        <body className="">
           <Main />
           <NextScript />
         </body>
@@ -82,3 +83,12 @@ class MyDocument extends Document {
 }
 
 export default MyDocument;
+
+
+          // scrollbar
+          // scrollbar-thumb-blue-700
+          // scrollbar-track-blue-300
+          // overflow-y-scroll
+          // hover:scrollbar-thumb-green-700
+          // dark:scrollbar-thumb-blue-100
+          // dark:scrollbar-track-gray-700

@@ -11,6 +11,9 @@ import MainActivityView from './main-activity-view'
 import MainNav from './main-nav'
 import MainItemDraft from './main-item-draft'
 
+import Link from 'next/link'
+
+
 type WorkspaceProps = {
   reflect: Reflect<M>
   handleSetSelectedItemID: (itemID: string) => void
@@ -95,11 +98,23 @@ function Nav({ email, handleSetCommandBar } : NavProps) {
       router.push('/')
   }
 
-
   return(
-    <div className={styles.navContainer}>
+    <div
+      // className={styles.navContainer}
+      className="
+        fixed
+        top-4
+        z-40
+        mt-2
+        flex
+        justify-between
+        align-center
+        px-3
+        bg-white-100
+      "
+    >
       <div className={styles.left}>
-        <div className={styles.logo}>Trunk</div>
+        {/*<div className={styles.logo}>Trunk</div>*/}
         <div
           className={styles.searchBar}
           onClick={() => handleSetCommandBar(true)}>
@@ -121,11 +136,67 @@ function Nav({ email, handleSetCommandBar } : NavProps) {
 
 function Body({ reflect, items, handleSetSelectedItemID, roomID, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar} : BodyProps) {
   return(
-    <div className={styles.bodyContainer}>
-      <Sidebar
+    <div
+      // className={styles.bodyContainer}
+      className="
+        flex
+        relative
+        z-40
+      "
+    >
+      <div
+        className="
+          w-44
+          fixed
+          left-0
+          top-10
+          h-screen
+          mt-2
+          p-10
+        "
+      >
+
+        {/*<Link href={'/test'}>test</Link>*/}
+        <SidebarTrunkNav
+          reflect={reflect}
+          roomID={roomID}
+        />
+
+      </div>
+
+      <div
+        className="
+          flex-1
+          ml-44
+          z-30
+        "
+      >
+        <div
+          className="
+            p-4
+          "
+        >
+
+            <Main
+              items={items}
+              handleSetSelectedItemID= {handleSetSelectedItemID}
+              roomID={roomID}
+              reflect={reflect}
+              clientEmail={clientEmail}
+              clientUsername={clientUsername}
+              clientAvatarURL={clientAvatarURL}
+              handleSetCommandBar={handleSetCommandBar}
+            />
+
+        </div>
+      </div>
+
+      {/*<Sidebar
         reflect={reflect}
         roomID={roomID}
-      />
+      />*/}
+
+      {/*
       <Main
         items={items}
         handleSetSelectedItemID= {handleSetSelectedItemID}
@@ -136,7 +207,7 @@ function Body({ reflect, items, handleSetSelectedItemID, roomID, clientEmail, cl
         clientAvatarURL={clientAvatarURL}
         handleSetCommandBar={handleSetCommandBar}
       />
-      <VariableGutter/>
+      */}
     </div>
   )
 }
@@ -179,13 +250,6 @@ function Main({ items, handleSetSelectedItemID, roomID, reflect, clientEmail, cl
         handleSetSelectedItemID={handleSetSelectedItemID}
         roomID={roomID}
       />
-    </div>
-  )
-}
-
-function VariableGutter(){
-  return(
-    <div className={styles.variableGutter}>
     </div>
   )
 }
