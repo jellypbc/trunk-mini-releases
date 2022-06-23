@@ -1,6 +1,5 @@
 import React, {
   useState,
-  useEffect,
   // ChangeEvent
 } from 'react'
 import type { Reflect } from '@rocicorp/reflect'

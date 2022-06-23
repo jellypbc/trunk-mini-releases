@@ -26,43 +26,26 @@
 
 .sidebar {
   grid-area: sidebar;
-  background-color: honeydew;
-  border: 1px solid hsl(0, 0%, 85%);
+  /* background-color: honeydew;
+  border: 1px solid hsl(0, 0%, 85%); */
   padding: 1rem;
 }
 
 .main {
-  background-color: ivory;
-  border: 1px solid hsl(0, 0%, 85%);
+  /* background-color: ivory;
+  border: 1px solid hsl(0, 0%, 85%); */
   grid-area: main;
   padding: 1rem;
 }
 
 .gutter {
   grid-area: gutter;
-  background-color: mistyrose;
-  border: 1px solid hsl(0, 0%, 85%);
+  /* background-color: mistyrose;
+  border: 1px solid hsl(0, 0%, 85%); */
   padding: 1rem;
 }
 
 
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: 100vw;
-    grid-template-rows: 40px auto;
-    grid-template-areas:
-      "nav"
-      "main";
-  }
-
-  .sidebar {
-    display: none;
-  }
-
-  .gutter {
-    display: none;
-  }
-}
 
 
 
@@ -375,5 +358,31 @@ a.link:hover {
 
 .parentArrow {
   color: #027B00;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 100vw;
+    grid-template-rows: 40px auto;
+    grid-template-areas:
+      "nav"
+      "main";
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .gutter {
+    display: none;
+  }
+
+  .hi {
+    padding: 1rem;
+  }
+
+  .banner {
+    padding: .5rem;
+  }
 }
 

@@ -7,6 +7,13 @@
   line-height: 1.6em;
 }
 
+@media (max-width: 600px) {
+  .container * {
+    max-width: 90vw;
+    font-size: .8rem;
+  }
+}
+
 .titleContainer * {
   border: none;
   resize: none;
