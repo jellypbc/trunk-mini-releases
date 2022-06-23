@@ -1,0 +1,133 @@
+.container {
+}
+
+.grid {
+  padding-top: 1rem;
+  margin: 0 auto;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 715px 250px;
+  grid-template-rows: auto;
+  gap: 15px;
+  grid-template-areas:
+    "left-container right-container";
+  position: absolute;
+  background-color: white;
+}
+
+.left {
+  grid-area: left-container;
+  padding: 1rem;
+  font-size: .8rem;
+  color: hsl(0, 0%, 50%);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.left div {
+  margin-right: 1rem;
+}
+
+.right {
+  grid-area: right-container;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.trunkID {
+  grid-area: trunkID;
+  border: 1px solid hsl(0, 0%, 90%);
+  padding: .2rem .4rem;
+  border-radius: .2rem;
+}
+
+.caret {
+  grid-area: caret;
+}
+
+.title {
+  grid-area: title;
+}
+
+.search {
+  grid-area: search;
+}
+
+.searchBar {
+  padding: .5rem 1rem;
+  background-color: hsl(0, 0%, 96%);
+  color: hsl(0, 0%, 60%);
+  border-radius: .5rem;
+  font-size: .8rem;
+}
+
+.dropdown {
+  grid-area: dropdown;
+}
+
+.options {
+  padding: .5rem 1rem;
+  color: hsl(0, 0%, 30%);
+}
+
+.rightAlignedDropdownMenu{
+  position: absolute;
+  border: 2px solid hsl(0, 0%, 86%);
+  border-radius: .5rem;
+  min-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 150px;
+  background-color: white;
+}
+
+.profileDropdownLeft {
+  display: flex;
+  flex-direction: column;
+  font-size: .8rem;
+  width: 100%;
+}
+
+.profileDropdownLeft div {
+  padding: .5rem 1rem;
+}
+
+.profileDropdownLeft div:hover {
+  background-color: hsl(0, 0%, 96%);
+}
+
+.option {
+  padding: .75rem 1.25rem;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    padding-top: 0;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+      "left-container right-container";
+  }
+
+  .trunkID {
+    display: none;
+  }
+
+  .caret {
+    display: none;
+  }
+
+  .search {
+    display: none;
+  }
+
+  .gutter {
+    display: none;
+  }
+}
+
