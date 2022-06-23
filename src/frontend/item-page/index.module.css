@@ -1,15 +1,71 @@
-.outsideContainer {
-  margin: 0 auto;
-  width: 100vw;
+.container {
+  min-width: 100vw;
+  background-color: whitesmoke;
+  min-height: 100vh;
+  padding-top: 1rem;
 }
 
-.container {
-  max-width: 980px;
+.grid {
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  max-height: 100vh;
+  max-width: 980px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 150px 550px 250px;
+  grid-template-rows: 100px auto;
+  gap: 15px;
+
+  grid-template-areas:
+    "nav nav nav"
+    "sidebar main gutter";
 }
+
+.nav {
+  background-color: papayawhip;
+  grid-area: nav;
+  border: 1px solid hsl(0, 0%, 85%);
+  padding: 1rem;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background-color: honeydew;
+  border: 1px solid hsl(0, 0%, 85%);
+  padding: 1rem;
+}
+
+.main {
+  background-color: ivory;
+  border: 1px solid hsl(0, 0%, 85%);
+  grid-area: main;
+  padding: 1rem;
+}
+
+.gutter {
+  grid-area: gutter;
+  background-color: mistyrose;
+  border: 1px solid hsl(0, 0%, 85%);
+  padding: 1rem;
+}
+
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 100vw;
+    grid-template-rows: 100px auto;
+    grid-template-areas:
+      "nav"
+      "main";
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .gutter {
+    display: none;
+  }
+}
+
 
 .navContainer {
   max-height: 100vh;
@@ -34,13 +90,6 @@
 .actionBanner {
   width: 100%;
   padding: 0;
-}
-
-.bodyContainer {
-  width: 730px;
-  display: flex;
-  padding: 2rem 0;
-  flex: 1;
 }
 
 .mainContainer {

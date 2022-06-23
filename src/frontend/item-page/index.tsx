@@ -129,31 +129,33 @@ function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSet
 
 
   return (
-    <div className={styles.outsideContainer}>
-      <div className={styles.container}>
+    <div className={styles.container}>
+      <div className={styles.grid}>
         <div className={styles.hi}>
-        {clientEmail === "guest" &&
-          <div
-            className={styles.banner}
-            onClick={(e) => {
-              e.preventDefault()
-              signInWithGoogle()
-            }}
-          >
-            You look familiar. Have we met? <span className={styles.bannerLogin}>Log in</span> to save your contributions. You look like someone named... <span className={styles.bannerAnon}>Anonymous Aardvark</span>. We'll call you that.
-          </div>
-        }
+          {clientEmail === "guest" &&
+            <div
+              className={styles.banner}
+              onClick={(e) => {
+                e.preventDefault()
+                signInWithGoogle()
+              }}
+            >
+              You look familiar. Have we met? <span className={styles.bannerLogin}>Log in</span> to save your contributions. You look like someone named... <span className={styles.bannerAnon}>Anonymous Aardvark</span>. We'll call you that.
+            </div>
+          }
         </div>
-        <Nav
-          email={clientEmail}
-          handleSetCommandBar={handleSetCommandBar}
-          reflect={reflect}
-          roomID={roomID}
-          title={item.title}
-          handleSetSelectedItemID={handleSetSelectedItemID}
-        />
-        <div className={styles.bodyContainer}>
-          {authorArrows &&
+        <div className={styles.nav}>
+          <Nav
+            email={clientEmail}
+            handleSetCommandBar={handleSetCommandBar}
+            reflect={reflect}
+            roomID={roomID}
+            title={item.title}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+          />
+        </div>
+        {authorArrows &&
+          <div className={styles.sidebar}>
             <Sidebar
               createdBy={item.createdBy}
               arrowsCount={item.arrows.length}
@@ -169,7 +171,9 @@ function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSet
               showHighlights={showHighlights}
               handleSetShowHighlights={setShowHighlights}
             />
-          }
+          </div>
+        }
+        <div className={styles.main}>
           <Main
             itemID={itemID}
             title={item.title}
@@ -179,6 +183,9 @@ function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSet
             handleSetSelectedItemID={handleSetSelectedItemID}
             showHighlights={showHighlights}
           />
+        </div>
+        <div className={styles.gutter}>
+
         </div>
       </div>
     </div>
