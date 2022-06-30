@@ -63,7 +63,7 @@ function BackArrowItem({ reflect, itemID, handleSetSelectedItemID }: BackArrowIt
           handleSetSelectedItemID={handleSetSelectedItemID}
         />
       }
-      <span>{item.publicationDate}</span>
+      <span>{htmlToText(item.publicationDate)}</span>
       <span className={styles.arrowTitle}>{htmlToText(item.title) || 'nothing here'}</span>
     </div>
   )
