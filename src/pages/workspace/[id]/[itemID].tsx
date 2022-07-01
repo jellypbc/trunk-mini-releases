@@ -162,23 +162,11 @@ export default function Home() {
   }
 
   return (
-    session ? (
-      <>
-        {trunkID && reflect && selectedItemID &&
-          <HotKeys
-            {...{
-              style: { outline: "none", display: "flex", flex: 1 },
-              keyMap,
-              handlers,
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                height: "100%",
-              }}
-            >
+    <div className="w-screen">
+      {session ? (
+        trunkID && reflect && selectedItemID &&
+          <HotKeys {...{keyMap, handlers}}>
+            <div>
               {commandBar &&
                 <CommandBar
                   reflect={reflect}
@@ -207,37 +195,20 @@ export default function Home() {
               }
             </div>
           </HotKeys>
-        }
-      </>
-    ) : (
-      <>
-        { reflect && trunkID && selectedItemID &&
-          <HotKeys
-            {...{
-              style: { outline: "none", display: "flex", flex: 1 },
-              keyMap,
-              handlers,
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <ItemPage
-                reflect={reflect}
-                itemID={selectedItemID}
-                handleSetSelectedItemID={handleSetSelectedItemID}
-                roomID={roomID}
-                handleSetCommandBar={setCommandBar}
-              />
-            </div>
-          </HotKeys>
-        }
-      </>
-    )
+      ) : (
+      reflect && trunkID && selectedItemID &&
+        <HotKeys {...{keyMap, handlers}}>
+          <ItemPage
+            reflect={reflect}
+            itemID={selectedItemID}
+            handleSetSelectedItemID={handleSetSelectedItemID}
+            roomID={roomID}
+            handleSetCommandBar={setCommandBar}
+          />
+        </HotKeys>
+      )
+    }
+    </div>
   )
 }
 

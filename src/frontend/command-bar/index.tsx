@@ -55,20 +55,39 @@ export default function CommandBar({ reflect, handleSetSelectedItemID, handleSet
   }
 
   return (
-    <div className={styles.container}>
+    <div
+      className="z-40 bg-gray-100
+        fixed w-96 max-h-full
+        right-0 left-0 top-[8%] my-3 mx-auto
+        rounded-md py-2 px-3
+        flex flex-col
+        shadow-xl border border-slate-600"
+    >
       <div
-        className={styles.closeModal}
+        className="font-bold text-right cursor-pointer
+          hover:text-black"
         onClick={() => handleSetCommandBar(false)}
-      >&times;</div>
-      <div className={styles.header}>Looking for something?</div>
+      >
+        &times;
+      </div>
+      <div
+        className="p-3 text-center"
+      >
+        Looking for something?
+      </div>
+
       {list &&
         <>
           <input
-            className={styles.input}
+            className="outline-0 py-2 px-3 rounded-md"
             onChange={e => handleSearch(e)}
             placeholder="Search"
           />
-          <div className={styles.searchResults}>
+
+          <div
+            className="cursor-pointer my-2
+              max-h-[40vh] min-h-40 overflow-auto"
+          >
             {searchResults.map(result => {
               return (
                 <SearchResult
@@ -83,6 +102,7 @@ export default function CommandBar({ reflect, handleSetSelectedItemID, handleSet
           </div>
         </>
       }
+
     </div>
   )
 }
@@ -107,7 +127,10 @@ function SearchResult({ result, handleSetSelectedItemID, handleSetCommandBar, ro
 
   return(
     <div
-      className={styles.searchResult}
+      className="rounded-sm px-1 my-0.5
+        text-gray-600
+        transition duration-150 hover:duration-150
+        ease-in-out hover:bg-gray-200 hover:text-gray-900"
       onClick={handleRouteToItem}
     >
       {result.title && htmlToText(result.title)}

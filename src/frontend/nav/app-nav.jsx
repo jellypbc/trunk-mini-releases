@@ -6,22 +6,19 @@ export default function AppNav() {
   const { isTauri } = useWorkspace()
 
   return (
-    <>
-      { isTauri &&
-        <div
-          data-tauri-drag-region
-          id="nav"
-          className="sticky
-            top-0
-            z-50
-            h-44
-            bg-white-100
-            dark:bg-slate-800
-          "
-        >
-        </div>
-      }
-    </>
+    isTauri &&
+      <div
+        data-tauri-drag-region
+        id="nav"
+        className="fixed
+          top-0
+          z-40
+          h-40
+          w-screen
+          bg-white
+          dark:bg-blue
+        "
+      ></div>
   )
 }
 

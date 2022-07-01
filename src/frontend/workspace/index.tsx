@@ -6,23 +6,17 @@ import { useSortedItems, useClientEmail, useClientUsername, useClientAvatarURL }
 import { useRouter } from 'next/router'
 import { supabase } from '../../lib/supabase-client'
 
+import { useWorkspace } from '../workspace-provider'
+
 import SidebarTrunkNav from './sidebar-trunk-nav'
 import MainActivityView from './main-activity-view'
 import MainNav from './main-nav'
 import MainItemDraft from './main-item-draft'
 
-import Link from 'next/link'
-
-
 type WorkspaceProps = {
   reflect: Reflect<M>
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
-  handleSetCommandBar: (state: boolean) => void
-}
-
-type NavProps = {
-  email: string
   handleSetCommandBar: (state: boolean) => void
 }
 
@@ -37,57 +31,14 @@ type BodyProps = {
   handleSetCommandBar: (state: boolean) => void
 }
 
-type SidebarProps = {
-  reflect: Reflect<M>
-  roomID: string
-}
-
-type MainProps = {
-  items: any
-  handleSetSelectedItemID: (itemID: string) => void
-  roomID: string
-  reflect: Reflect<M>
-  clientEmail: string
-  clientUsername: string
-  clientAvatarURL: string
-  handleSetCommandBar: (state: boolean) => void
-}
-
-
 export default function Workspace({ reflect, handleSetSelectedItemID, roomID, handleSetCommandBar }: WorkspaceProps) {
   const items = useSortedItems(reflect)
   const clientEmail = useClientEmail(reflect)
   const clientUsername = useClientUsername(reflect)
   const clientAvatarURL = useClientAvatarURL(reflect)
-  console.log('reflect', reflect)
 
-  return (
-    items &&
-    <div className={styles.container}>
-      {clientEmail &&
-        <Nav
-          email={clientEmail}
-          handleSetCommandBar={handleSetCommandBar}
-        />
-      }
-      {clientEmail && clientUsername && clientAvatarURL &&
-        <Body
-          reflect={reflect}
-          items={items}
-          handleSetSelectedItemID={handleSetSelectedItemID}
-          roomID={roomID}
-          clientEmail={clientEmail}
-          clientUsername={clientUsername}
-          clientAvatarURL={clientAvatarURL}
-          handleSetCommandBar={handleSetCommandBar}
-        />
-      }
-    </div>
-  )
-}
+  const [showMainItemDraft, setShowMainItemDraft] = useState<boolean>(false)
 
-
-function Nav({ email, handleSetCommandBar } : NavProps) {
   const router = useRouter()
 
   async function logOut() {
@@ -98,158 +49,77 @@ function Nav({ email, handleSetCommandBar } : NavProps) {
       router.push('/')
   }
 
-  return(
-    <div
-      // className={styles.navContainer}
-      className="
-        fixed
-        top-4
-        z-40
-        mt-2
-        flex
-        justify-between
-        align-center
-        px-3
-        bg-white-100
-      "
-    >
-      <div className={styles.left}>
-        {/*<div className={styles.logo}>Trunk</div>*/}
-        <div
-          className={styles.searchBar}
-          onClick={() => handleSetCommandBar(true)}>
-          Search or type ⌘ + K
-        </div>
-
-      </div>
-      <div className={styles.right}>
-        <div
-          className={styles.logOut}
-          onClick={() => logOut()}
-        >
-          {email } ≡
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Body({ reflect, items, handleSetSelectedItemID, roomID, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar} : BodyProps) {
-  return(
-    <div
-      // className={styles.bodyContainer}
-      className="
-        flex
-        relative
-        z-40
-      "
-    >
-      <div
-        className="
-          w-44
-          fixed
-          left-0
-          top-10
-          h-screen
-          mt-2
-          p-10
-        "
-      >
-
-        {/*<Link href={'/test'}>test</Link>*/}
-        <SidebarTrunkNav
-          reflect={reflect}
-          roomID={roomID}
-        />
-
-      </div>
-
-      <div
-        className="
-          flex-1
-          ml-44
-          z-30
-        "
-      >
-        <div
-          className="
-            p-4
-          "
-        >
-
-            <Main
-              items={items}
-              handleSetSelectedItemID= {handleSetSelectedItemID}
-              roomID={roomID}
-              reflect={reflect}
-              clientEmail={clientEmail}
-              clientUsername={clientUsername}
-              clientAvatarURL={clientAvatarURL}
-              handleSetCommandBar={handleSetCommandBar}
-            />
-
-        </div>
-      </div>
-
-      {/*<Sidebar
-        reflect={reflect}
-        roomID={roomID}
-      />*/}
-
-      {/*
-      <Main
-        items={items}
-        handleSetSelectedItemID= {handleSetSelectedItemID}
-        roomID={roomID}
-        reflect={reflect}
-        clientEmail={clientEmail}
-        clientUsername={clientUsername}
-        clientAvatarURL={clientAvatarURL}
-        handleSetCommandBar={handleSetCommandBar}
-      />
-      */}
-    </div>
-  )
-}
-
-function Sidebar({ reflect, roomID } : SidebarProps ){
-  return(
-    <div className={styles.sidebar}>
-      <SidebarTrunkNav
-        reflect={reflect}
-        roomID={roomID}
-      />
-    </div>
-  )
-}
-
-function Main({ items, handleSetSelectedItemID, roomID, reflect, clientEmail, clientUsername, clientAvatarURL, handleSetCommandBar } : MainProps){
-  const itemCount = items.length
-  const [showMainItemDraft, setShowMainItemDraft] = useState<boolean>(false)
+  // gross
+  const { isTauri } = useWorkspace()
+  const classN = isTauri ?
+    "nav top-6 items-center h-14 sticky w-screen px-2 py-0 z-30 flex justify-between flex-row space-x-4 space-x-reverse bg-white" :
+    "nav top-0 items-center h-14 sticky w-screen px-2 py-0 z-30 flex justify-between flex-row space-x-4 space-x-reverse bg-white"
 
   return (
-    <div className={styles.main}>
-      <MainNav
-        itemCount={itemCount}
-        handleSetShowMainItemDraft={setShowMainItemDraft}
-        handleSetCommandBar={handleSetCommandBar}
-        showMainItemDraft={showMainItemDraft}
-      />
-      {showMainItemDraft &&
-        <MainItemDraft
-          reflect={reflect}
-          clientEmail={clientEmail}
-          clientUsername={clientUsername}
-          clientAvatarURL={clientAvatarURL}
-          handleSetShowMainItemDraft={setShowMainItemDraft}
-        />
+    items &&
+    // navcontainer
+    <div className="relative z-30  justify-between items-center">
+      {clientEmail &&
+
+        <nav className={classN}>
+
+          {/*left*/}
+          <div className="">
+            <div className="bg-gray-100 py-2 px-2.5 text-sm rounded-md text-gray-400 hover:cursor-pointer"
+              onClick={() => handleSetCommandBar(true)}>
+              Search or type ⌘ + K
+            </div>
+          </div>
+
+          {/*right*/}
+          <div className="align-right">
+            <div className="text-sm text-gray-400 hover:cursor-pointer"
+              onClick={() => logOut()}
+            >
+              {clientEmail} ≡
+            </div>
+          </div>
+
+        </nav>
       }
-      <MainActivityView
-        reflect={reflect}
-        items={items}
-        handleSetSelectedItemID={handleSetSelectedItemID}
-        roomID={roomID}
-      />
+
+      {clientEmail && clientUsername && clientAvatarURL &&
+        <div className="flex z-20">
+          <div className="w-44 fixed left-0 top-10 h-screen mt-2 p-10 ">
+            <SidebarTrunkNav
+              reflect={reflect}
+              roomID={roomID}
+            />
+          </div>
+          <div className="flex-1 ml-44 z-20 relative ">
+            <div className="p-4">
+              <div>
+                <MainNav
+                  itemCount={items.length}
+                  handleSetShowMainItemDraft={setShowMainItemDraft}
+                  handleSetCommandBar={handleSetCommandBar}
+                  showMainItemDraft={showMainItemDraft}
+                />
+                {showMainItemDraft &&
+                  <MainItemDraft
+                    reflect={reflect}
+                    clientEmail={clientEmail}
+                    clientUsername={clientUsername}
+                    clientAvatarURL={clientAvatarURL}
+                    handleSetShowMainItemDraft={setShowMainItemDraft}
+                  />
+                }
+                <MainActivityView
+                  reflect={reflect}
+                  items={items}
+                  handleSetSelectedItemID={handleSetSelectedItemID}
+                  roomID={roomID}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   )
 }

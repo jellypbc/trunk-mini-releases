@@ -11,7 +11,7 @@ interface Props {
 
 export default function App({ Component } : Props) {
   return (
-    <div className="">
+    <div className="relative">
       <Head>
         <meta
           name='viewport'
