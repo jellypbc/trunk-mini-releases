@@ -39,6 +39,7 @@ export default function UserLogIn() {
         <meta name="description" content="Collaborative literature review tool" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <div
         className={styles.nav}
         onClick={(e) => {

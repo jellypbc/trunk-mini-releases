@@ -37,9 +37,7 @@ export default function Page() {
   }
 
   return (
-    <div>
-      <UserLogIn/>
-    </div>
+    <UserLogIn/>
   )
 }
 

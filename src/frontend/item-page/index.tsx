@@ -31,7 +31,7 @@ import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../../lib/constants'
 import ItemParent from './item-parent'
 import Sidebar from './sidebar'
 import ItemMainSubItems from './item-main-sub-items'
-import Nav from './nav'
+import ItemPageNav from './item-page-nav'
 
 
 type ItemPageProps = {
@@ -137,7 +137,7 @@ function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSet
           }
         </div>
         <div className={styles.nav}>
-          <Nav
+          <ItemPageNav
             email={clientEmail}
             handleSetCommandBar={handleSetCommandBar}
             reflect={reflect}

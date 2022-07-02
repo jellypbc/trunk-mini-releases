@@ -16,7 +16,7 @@ type NavProps = {
   handleSetSelectedItemID: (itemID: string) => void
 }
 
-export default function Nav({ email, handleSetCommandBar, reflect, roomID, title, handleSetSelectedItemID} : NavProps) {
+export default function ItemPageNav({ email, handleSetCommandBar, reflect, roomID, title, handleSetSelectedItemID} : NavProps) {
   const [anonItemIDs, setAnonItemIDs] = useState<string[]>([])
   const [anonArrowIDs, setAnonArrowIDs] = useState<string[]>([])
   const [showProfileDropdown, setShowProfileDropdown] = useState<boolean>(false)

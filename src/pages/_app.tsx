@@ -2,17 +2,15 @@ import React, { ComponentClass } from 'react';
 import '../styles/globals.scss'
 import Head from 'next/head'
 import { WorkspaceProvider } from '../frontend/workspace-provider'
-
 import AppNav from '../frontend/nav/app-nav'
 
 interface Props {
   Component: ComponentClass
 }
 
-
 export default function App({ Component } : Props) {
   return (
-    <div>
+    <div className="relative">
       <Head>
         <meta
           name='viewport'
@@ -20,7 +18,7 @@ export default function App({ Component } : Props) {
         />
       </Head>
       <WorkspaceProvider>
-        <AppNav/>
+        <AppNav />
         <Component />
       </WorkspaceProvider>
     </div>

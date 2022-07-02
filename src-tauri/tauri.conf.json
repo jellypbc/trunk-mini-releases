@@ -62,8 +62,8 @@
     "windows": [
       {
         "title": "Trunk",
-        "minWidth": 580,
-        "minHeight": 500,
+        "minWidth": 640,
+        "minHeight": 640,
         "resizable": true,
         "fullscreen": false,
         "decorations": true,
