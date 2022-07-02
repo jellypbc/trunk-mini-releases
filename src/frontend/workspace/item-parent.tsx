@@ -1,7 +1,6 @@
 import React from 'react'
 import { useItemByID, useArrowByID } from '../../datamodel/subscriptions'
 import { htmlToText } from 'src/util/htmlToText'
-import styles from './index.module.css'
 import type { M } from '../../datamodel/mutators'
 import type { Reflect } from '@rocicorp/reflect'
 
@@ -52,10 +51,11 @@ function Arrow({reflect, arrow, handleSetSelectedItemID}: any){
   const item = useItemByID(reflect, arrow.backItemID)
   return (
     <div
-      className={styles.parentTitle}
+      className="text-sm cursor-pointer"
       onClick={() => handleSetSelectedItemID(arrow.backItemID)}
     >
-       <span className={styles.parentArrow}>↱ </span>{item && htmlToText(item.title) || 'nothing here'}
+       <span className="text-[#027B00]"> ↱ </span>
+       {item && htmlToText(item.title) || 'nothing here'}
     </div>
   )
 }

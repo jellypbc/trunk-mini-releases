@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import styles from './index.module.css'
 import Fuse from 'fuse.js'
 import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'

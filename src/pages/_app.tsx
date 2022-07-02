@@ -8,7 +8,6 @@ interface Props {
   Component: ComponentClass
 }
 
-
 export default function App({ Component } : Props) {
   return (
     <div className="relative">
@@ -19,7 +18,7 @@ export default function App({ Component } : Props) {
         />
       </Head>
       <WorkspaceProvider>
-        <AppNav/>
+        <AppNav />
         <Component />
       </WorkspaceProvider>
     </div>

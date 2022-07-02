@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import type { Reflect } from '@rocicorp/reflect'
 import type { M } from '../../datamodel/mutators'
-import styles from './index.module.css'
 import { useSortedItems, useClientEmail, useClientUsername, useClientAvatarURL } from '../../datamodel/subscriptions'
 import { useRouter } from 'next/router'
 import { supabase } from '../../lib/supabase-client'
@@ -17,17 +16,6 @@ type WorkspaceProps = {
   reflect: Reflect<M>
   handleSetSelectedItemID: (itemID: string) => void
   roomID: string
-  handleSetCommandBar: (state: boolean) => void
-}
-
-type BodyProps = {
-  reflect: Reflect<M>
-  items: any
-  handleSetSelectedItemID: (itemID: string) => void
-  roomID: string
-  clientEmail: string
-  clientUsername: string
-  clientAvatarURL: string
   handleSetCommandBar: (state: boolean) => void
 }
 
