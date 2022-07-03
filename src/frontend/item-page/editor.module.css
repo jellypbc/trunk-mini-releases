@@ -77,7 +77,31 @@
 }
 
 .container p {
-  /* background-color: green; */
   margin-bottom: 1em;
   margin-top: 1em;
+}
+
+.container ul {
+  list-style: initial;
+  margin: initial;
+  padding: 0 0 0 40px;
+}
+
+.container ol {
+  list-style: decimal;
+  margin: initial;
+  padding: 0 0 0 40px;
+}
+
+.container li {
+  display: list-item;
+}
+
+.container pre {
+  background-color: hsl(0, 0%, 92%);
+  padding: 1rem;
+}
+
+.container pre code {
+  font-size: .8rem;
 }
