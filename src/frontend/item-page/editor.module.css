@@ -75,3 +75,9 @@
   padding: .5rem;
   background-color: hsl(0, 0%, 92%);
 }
+
+.container p {
+  /* background-color: green; */
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
