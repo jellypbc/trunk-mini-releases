@@ -6,7 +6,7 @@ import {
 import type { AuthSession } from '@supabase/supabase-js'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
-import { HotKeys } from 'react-hotkeys'
+import { GlobalHotKeys } from 'react-hotkeys'
 import Workspace from '../../../frontend/workspace/index'
 import ItemPage from '../../../frontend/item-page/index'
 import CommandBar from '../../../frontend/command-bar/index'
@@ -134,8 +134,11 @@ export default function Home() {
   }, [])
 
   const handlers = {
-    changeCommandBar: () => {
-      setCommandBar(!commandBar)
+    openCommandBar: () => {
+      setCommandBar(true)
+    },
+    closeCommandBar: () => {
+      setCommandBar(false)
     }
   }
 
@@ -165,7 +168,7 @@ export default function Home() {
     <div className="w-screen">
       {session ? (
         trunkID && reflect && selectedItemID &&
-          <HotKeys {...{keyMap, handlers}}>
+          <GlobalHotKeys {...{keyMap, handlers}}>
             <div>
               {commandBar &&
                 <CommandBar
@@ -194,10 +197,10 @@ export default function Home() {
                   />
               }
             </div>
-          </HotKeys>
+          </GlobalHotKeys>
       ) : (
       reflect && trunkID && selectedItemID &&
-        <HotKeys {...{keyMap, handlers}}>
+        <GlobalHotKeys {...{keyMap, handlers}}>
           <ItemPage
             reflect={reflect}
             itemID={selectedItemID}
@@ -205,7 +208,7 @@ export default function Home() {
             roomID={roomID}
             handleSetCommandBar={setCommandBar}
           />
-        </HotKeys>
+        </GlobalHotKeys>
       )
     }
     </div>
@@ -213,5 +216,6 @@ export default function Home() {
 }
 
 const keyMap = {
-  changeCommandBar: ['command+k', 'ctrl+k']
+  openCommandBar: ['command+k', 'ctrl+k'],
+  closeCommandBar: ['esc'],
 }
