@@ -23,12 +23,12 @@ body {
 body::-webkit-scrollbar {
   width: 5px;
   height: 8px;
-  background-color: #aaa; /* or add it to the track */
+  // background-color: #aaa; /* or add it to the track */
 }
 
 @media (prefers-color-scheme: dark) {
   body::-webkit-scrollbar {
-    background-color: red; /* or add it to the track */
+    // background-color: red; /* or add it to the track */
   }
 }
 
