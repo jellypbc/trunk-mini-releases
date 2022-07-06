@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Reflect } from '@rocicorp/reflect'
 import { M, clientMutators } from '../../../datamodel/mutators'
-import {
-  randUserInfo } from '../../../datamodel/client-state'
+import { randUserInfo } from '../../../datamodel/client-state'
 import type { AuthSession } from '@supabase/supabase-js'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../../../lib/constants'
 import { supabase } from 'src/lib/supabase-client'
@@ -172,6 +171,7 @@ export default function Home() {
                   reflect={reflect}
                   handleSetSelectedItemID={handleSetSelectedItemID}
                   handleSetCommandBar={setCommandBar}
+                  commandBar={commandBar}
                   roomID={roomID}
                 />
               }

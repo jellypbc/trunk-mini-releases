@@ -10,7 +10,7 @@ export default function AppNav() {
         <div
           data-tauri-drag-region
           id="nav"
-          className="fixed top-0 z-40 h-40 w-screen bg-white dark:bg-blue"
+          className="fixed top-0 z-40 h-7 w-screen bg-white dark:bg-blue"
         >
         </div>
       }

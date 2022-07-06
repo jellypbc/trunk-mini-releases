@@ -1,0 +1,11 @@
+// clear floats by adding to parent element
+//.element {
+//   @include clearfix;
+// }
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}

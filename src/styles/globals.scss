@@ -5,6 +5,10 @@
 @import-normalize;
 @import 'navs.scss';
 @import 'buttons.scss';
+@import 'editor.scss';
+@import 'alerts.scss';
+@import 'misc.scss';
+@import 'mixins.scss';
 
 html,
 body {
@@ -18,32 +22,9 @@ body {
   cursor: default;
 }
 
-
-// custom dark mode slider
-body::-webkit-scrollbar {
-  width: 5px;
-  height: 8px;
-  background-color: #aaa; /* or add it to the track */
-}
-
-@media (prefers-color-scheme: dark) {
-  body::-webkit-scrollbar {
-    background-color: red; /* or add it to the track */
-  }
-}
-
-
-#nav {
-  height: 30px;
-}
-
 a {
   color: inherit;
   text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
 }
 
 @media (max-width: 600px) {
@@ -53,6 +34,10 @@ a {
   }
 }
 
+h1 {
+  font-size: 32px;
+}
+
 blockquote {
   display: block;
   margin-block-start: 1em;
@@ -60,33 +45,4 @@ blockquote {
   margin-inline-start: 40px;
   margin-inline-end: 40px;
   padding-right: 3rem;
-}
-
-.ProseMirror img {
-  max-width: 550px;
-}
-
-.ProseMirror a {
-  color: 	hsl(211, 100%, 35%);
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.ProseMirror a:hover {
-  text-decoration: none;
-}
-
-.ProseMirror .empty-node::before {
-  float: left;
-  color: #aaa;
-  pointer-events: none;
-  height: 0;
-}
-
-.ProseMirror p.empty-node:first-child::before {
-  content: "What's on your mind...";
-}
-
-.arrowTooltip {
-  display: inline-block;
 }
