@@ -22,8 +22,6 @@ body {
   cursor: default;
 }
 
-<<<<<<< HEAD
-=======
 
 // custom dark mode slider
 body::-webkit-scrollbar {
@@ -33,9 +31,9 @@ body::-webkit-scrollbar {
 }
 
 @media (prefers-color-scheme: dark) {
-  body::-webkit-scrollbar {
-    // background-color: red; /* or add it to the track */
-  }
+  // body::-webkit-scrollbar {
+  //   background-color: red; /* or add it to the track */
+  // }
 }
 
 #nav {
