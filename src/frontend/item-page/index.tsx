@@ -119,12 +119,11 @@ function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSet
     }
   }
 
-
   return (
-    <div className={styles.container}>
-      <div className={styles.grid}>
-        <div className={styles.hi}>
-          {clientEmail === "guest" &&
+    <div className="h-screen w-screen pt-4 overflow-auto">
+      <div className="my-0 mx-auto max-w-screen-lg h-full grid grid-rows-[auto_auto] gap-4">
+        {clientEmail === "guest" &&
+          <div className={styles.hi}>
             <div
               className={styles.banner}
               onClick={(e) => {
@@ -134,9 +133,9 @@ function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSet
             >
               You look familiar. Have we met? <span className={styles.bannerLogin}>Log in</span> to save your contributions. You look like someone named... <span className={styles.bannerAnon}>Anonymous Aardvark</span>. We'll call you that.
             </div>
-          }
-        </div>
-        <div className={styles.nav}>
+          </div>
+        }
+        <div className="">
           <ItemPageNav
             email={clientEmail}
             handleSetCommandBar={handleSetCommandBar}
@@ -146,38 +145,39 @@ function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSet
             handleSetSelectedItemID={handleSetSelectedItemID}
           />
         </div>
-        {authorArrows &&
-          <div className={styles.sidebar}>
-            <Sidebar
-              createdBy={item.createdBy}
-              arrowsCount={item.arrows.length}
+        <div className="grid md:grid-cols-[150px_550px_auto] gap-4">
+          {authorArrows &&
+            <div className="p-4 hidden md:table-cell max-h-fit">
+              <Sidebar
+                createdBy={item.createdBy}
+                arrowsCount={item.arrows.length}
+                itemID={itemID}
+                reflect={reflect}
+                item={item}
+                handleSetSelectedItemID={handleSetSelectedItemID}
+                authorArrows={authorArrows}
+                trunkID={roomID}
+                publicationDate={item.publicationDate}
+                updatedAt={item.updatedAt}
+                createdAt={item.createdAt}
+                showHighlights={showHighlights}
+                handleSetShowHighlights={setShowHighlights}
+              />
+            </div>
+          }
+          <div className=" p-4">
+            <Main
               itemID={itemID}
+              title={item.title}
+              content={item.content}
               reflect={reflect}
               item={item}
               handleSetSelectedItemID={handleSetSelectedItemID}
-              authorArrows={authorArrows}
-              trunkID={roomID}
-              publicationDate={item.publicationDate}
-              updatedAt={item.updatedAt}
-              createdAt={item.createdAt}
               showHighlights={showHighlights}
-              handleSetShowHighlights={setShowHighlights}
             />
           </div>
-        }
-        <div className={styles.main}>
-          <Main
-            itemID={itemID}
-            title={item.title}
-            content={item.content}
-            reflect={reflect}
-            item={item}
-            handleSetSelectedItemID={handleSetSelectedItemID}
-            showHighlights={showHighlights}
-          />
-        </div>
-        <div className={styles.gutter}>
-
+          <div className="p-4 hidden md:table-cell">
+          </div>
         </div>
       </div>
     </div>
