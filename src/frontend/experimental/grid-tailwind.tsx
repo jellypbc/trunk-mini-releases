@@ -7,14 +7,14 @@ export default function GridTailwind() {
         <div className="bg-orange-50 p-4">
           Nav
         </div>
-        <div className="bg-slate-200 grid grid-cols-[150px_550px_auto]  gap-4">
-          <div className="bg-green-50 p-4">
+        <div className="bg-slate-200 grid md:grid-cols-[150px_550px_auto] gap-4 ">
+          <div className="bg-green-50 p-4 hidden md:table-cell">
             Sidebar
           </div>
           <div className="bg-yellow-50 p-4">
             Main
           </div>
-          <div className="bg-red-50 p-4">
+          <div className="bg-red-50 p-4 hidden md:table-cell">
             Gutter
           </div>
         </div>
