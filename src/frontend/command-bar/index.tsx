@@ -11,12 +11,14 @@ type Props = {
   handleSetSelectedItemID: (itemID: string) => void
   handleSetCommandBar: (state: boolean) => void
   roomID: string
+  commandBar: boolean
 }
 
-export default function CommandBar({ reflect, handleSetSelectedItemID, handleSetCommandBar, roomID } : Props) {
+export default function CommandBar({ reflect, handleSetSelectedItemID, handleSetCommandBar, roomID, commandBar } : Props) {
+  console.log('commandBar', commandBar)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<any[]>([])
-  const inputRef = useRef(null)
+  const inputRef = useRef<any>(null)
 
   const list = useSortedItems(reflect)
   const options = {
@@ -43,7 +45,7 @@ export default function CommandBar({ reflect, handleSetSelectedItemID, handleSet
   }
 
   useEffect(() => {
-    inputRef.current.focus()
+    inputRef && inputRef.current && inputRef.current.focus()
   },[])
 
   const fuse = new Fuse(list, options)

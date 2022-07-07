@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import SignedInNav from '../frontend/nav/signed-in-nav'
+// import SignedInNav from '../frontend/nav/signed-in-nav'
 
 import { Reflect } from '@rocicorp/reflect'
 import { M, clientMutators } from '../datamodel/mutators'
 import { randUserInfo } from '../datamodel/client-state'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '../lib/constants'
-import { useClientEmail, useClientUsername, useClientAvatarURL } from '../datamodel/subscriptions'
+// import { useClientEmail, useClientUsername, useClientAvatarURL } from '../datamodel/subscriptions'
 import { nanoid } from 'nanoid'
 import { supabase } from 'src/lib/supabase-client'
 
@@ -22,11 +22,11 @@ export default function Settings() {
   const logSink = consoleLogSink;
   const logger = new OptionalLoggerImpl(logSink);
 
-  const [commandBar, setCommandBar] = useState<boolean>(false)
+  // const [commandBar, setCommandBar] = useState<boolean>(false)
 
-  const clientEmail = useClientEmail(reflect)
-  const clientUsername = useClientUsername(reflect)
-  const clientAvatarURL = useClientAvatarURL(reflect)
+  // const clientEmail = useClientEmail(reflect)
+  // const clientUsername = useClientUsername(reflect)
+  // const clientAvatarURL = useClientAvatarURL(reflect)
 
 
   // useEffect(() => {
@@ -145,12 +145,12 @@ export default function Settings() {
 
               <div className="py-6">
                 <h4>Username</h4>
-                <p>{clientUsername}</p>
+                {/* <p>{clientUsername}</p> */}
 
                 <br/>
 
                 <h4>Avatar</h4>
-                <p>{clientAvatarURL}</p>
+                {/* <p>{clientAvatarURL}</p> */}
               </div>
 
 
