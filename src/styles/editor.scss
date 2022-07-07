@@ -1,0 +1,28 @@
+.ProseMirror img {
+  max-width: 550px;
+}
+
+.ProseMirror a {
+  color:  hsl(211, 100%, 35%);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  text-decoration: none;
+}
+
+.ProseMirror .empty-node::before {
+  float: left;
+  color: #aaa;
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror p.empty-node:first-child::before {
+  content: "What's on your mind...";
+}
+
+.arrowTooltip {
+  display: inline-block;
+}
