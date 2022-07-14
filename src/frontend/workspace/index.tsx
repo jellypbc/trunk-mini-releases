@@ -26,51 +26,53 @@ export default function Workspace({ reflect, handleSetSelectedItemID, roomID, ha
 
   return (
     items &&
-    // navcontainer
-    <div className="relative z-30 justify-between items-center">
-
-      {clientEmail &&
-        <SignedInNav
-          clientEmail={clientEmail}
-          handleSetCommandBar={handleSetCommandBar}
-        />
-      }
-
+    <div className="px-4 h-screen w-screen overflow-auto">
+      {/* nav container */}
+      <div className="my-0 mx-auto grid grid-rows-[auto_auto] gap-8">
+        <div className="absolute">
+          {clientEmail &&
+            <SignedInNav
+              clientEmail={clientEmail}
+              handleSetCommandBar={handleSetCommandBar}
+            />
+          }
+        </div>
+      </div>
       {clientEmail && clientUsername && clientAvatarURL &&
-        <div className="flex z-20">
-          <div className="w-44 fixed left-0 top-10 h-screen mt-2 p-10 ">
-            <SidebarTrunkNav
+        // body container
+        <div className="pt-8 grid md:grid-cols-[150px_auto_250px] gap-4">
+          <div className="hidden md:table-cell max-h-fit">
+            <div className="absolute">
+              <SidebarTrunkNav
+                reflect={reflect}
+                roomID={roomID}
+              />
+            </div>
+          </div>
+          <div className="py-2 px-4">
+            <MainNav
+              itemCount={items.length}
+              handleSetShowMainItemDraft={setShowMainItemDraft}
+              handleSetCommandBar={handleSetCommandBar}
+              showMainItemDraft={showMainItemDraft}
+            />
+            {showMainItemDraft &&
+              <MainItemDraft
+                reflect={reflect}
+                clientEmail={clientEmail}
+                clientUsername={clientUsername}
+                clientAvatarURL={clientAvatarURL}
+                handleSetShowMainItemDraft={setShowMainItemDraft}
+              />
+            }
+            <MainActivityView
               reflect={reflect}
+              items={items}
+              handleSetSelectedItemID={handleSetSelectedItemID}
               roomID={roomID}
             />
           </div>
-          <div className="flex-1 ml-44 z-20 relative ">
-            <div className="p-4">
-              <div>
-                <MainNav
-                  itemCount={items.length}
-                  handleSetShowMainItemDraft={setShowMainItemDraft}
-                  handleSetCommandBar={handleSetCommandBar}
-                  showMainItemDraft={showMainItemDraft}
-                />
-                {showMainItemDraft &&
-                  <MainItemDraft
-                    reflect={reflect}
-                    clientEmail={clientEmail}
-                    clientUsername={clientUsername}
-                    clientAvatarURL={clientAvatarURL}
-                    handleSetShowMainItemDraft={setShowMainItemDraft}
-                  />
-                }
-                <MainActivityView
-                  reflect={reflect}
-                  items={items}
-                  handleSetSelectedItemID={handleSetSelectedItemID}
-                  roomID={roomID}
-                />
-              </div>
-            </div>
-          </div>
+          <div className="p-4 hidden md:table-cell"></div>
         </div>
       }
     </div>
