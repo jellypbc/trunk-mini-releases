@@ -165,7 +165,7 @@ function Container({ itemID, handleSetSelectedItemID, reflect, roomID, handleSet
               />
             </div>
           }
-          <div className=" p-4">
+          <div className="p-4">
             <Main
               itemID={itemID}
               title={item.title}

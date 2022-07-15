@@ -4,8 +4,31 @@ import { htmlToText } from '../../util/htmlToText'
 import { useSortedItems, useClientEmail } from '../../datamodel/subscriptions'
 import EditorDraftingContainer from './editor-drafting-container'
 import Fuse from 'fuse.js'
+import type { Reflect } from '@rocicorp/reflect'
+import type { M } from '../../datamodel/mutators'
 
-export default function EditorArrowCreate({ serializedSelection, reflect, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd, showEmptyCommentError, handleSetShowEmptyCommentError }:any) {
+type EditorArrowCreateProps = {
+  serializedSelection: any
+  reflect: Reflect<M>
+  handleReferenceAdd: (reference: any) => void
+  handleCommentAdd: (comment: any) => void
+  handleFootnoteAdd: (footnote: any) => void
+  handleArrowAdd: (arrow: any) => void
+  showEmptyCommentError: boolean
+  handleSetShowEmptyCommentError: (showEmptyCommentError: boolean) => void
+}
+
+type ErrorMessageProps = {
+  showEmptyCommentError: boolean
+  handleSetShowEmptyCommentError: (state: boolean) => void
+}
+
+type SearchResultProps = {
+  result: any
+  handleArrowAdd: (arrow: any) => void
+}
+
+export default function EditorArrowCreate({ serializedSelection, reflect, handleReferenceAdd, handleCommentAdd, handleFootnoteAdd, handleArrowAdd, showEmptyCommentError, handleSetShowEmptyCommentError }: EditorArrowCreateProps) {
   const [showReplyForm, setShowReplyForm] = useState<boolean>(false)
   const [commentDraft, setCommentDraft] = useState<string>('<p></p>')
   const [searchResults, setSearchResults] = useState<any[]>([])
@@ -75,92 +98,189 @@ export default function EditorArrowCreate({ serializedSelection, reflect, handle
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.sidebar}></div>
-      <div className={styles.main}></div>
-      <div className={styles.gutter}>
-        {showEmptyCommentError &&
-          <>
-            <div
-              className={styles.error}
-              onClick={() => handleSetShowEmptyCommentError(false)}
-            >
-              <div className={styles.message}>Say something before submitting...</div>
-            </div>
-          </>
-        }
-        <div className={styles.arrowCreatorLabel}>Create a linked block</div>
-        <div className={styles.arrowActions}>
-          <span
-            className={styles.left}
-            onClick={() => handleCommentAdd(commentDraft)}
-          >Comment</span>
-          <span
-            className={styles.middle}
-            onClick={() => handleReferenceAdd(commentDraft)}
-          >Reference</span>
-          <span
-            className={styles.right}
-            onClick={() => handleFootnoteAdd(commentDraft)}
-          >Footnote</span>
-        </div>
-        <div
-          className={styles.selectedText}
-        >
-          {htmlToText(serializedSelection)}
-        </div>
-        {!showReplyForm &&
-          <>
-            <div
-              className={styles.draftingContainerFake}
-              onClick={() => dosomething()}
-            >
-              Say something or search...
-            </div>
-          </>
-        }
-        {showReplyForm && allItems &&
-          <div className={styles.replyForm}>
-            <div className={styles.draftingContainer}>
-              <EditorDraftingContainer
-                reflect={reflect}
-                content={commentDraft}
-                setValue={setCommentDraft}
-                type={'arrowDraft'}
-              />
-            </div>
-            {clientEmail === 'guest' ?
-            <div className={styles.buttonsContainer}>
-              <button
-              className={'btn btn-secondary'}
-              onClick={() => handleCommentAdd(commentDraft)}
-            >Comment</button>
-            </div>
-          :
-          <>
-            <div className={styles.searchResults}>
-              {searchResults && searchResults.map((result: any) => {
-                return (
-                  <SearchResult
-                    key={`srl-${result.item.id}`}
-                    result={result.item}
-                    handleArrowAdd={handleArrowAdd}
-                  />
-                )
-              })}
-            </div>
-          </>
-        }
-
+    <div className="max-w-screen-lg inset-x-0 mx-auto absolute pointer-events-none">
+      <div className="my-0 mx-auto max-w-screen-lg h-full grid grid-rows-[auto_auto] gap-4">
+        <div className="grid md:grid-cols-[150px_550px_250px] gap-4">
+          <div className="p-4 hidden md:table-cell max-h-fit">
           </div>
-        }
-      </div>
-
+          <div className="p-4">
+          </div>
+          <div className="p-4 hidden md:table-cell pointer-events-auto">
+            <ErrorMessage
+                showEmptyCommentError={showEmptyCommentError}
+                handleSetShowEmptyCommentError={handleSetShowEmptyCommentError}
+              />
+              <div className={styles.arrowCreatorLabel}>Create a linked block</div>
+              <div className={styles.arrowActions}>
+                <span
+                  className={styles.left}
+                  onClick={() => handleCommentAdd(commentDraft)}
+                >Comment</span>
+                <span
+                  className={styles.middle}
+                  onClick={() => handleReferenceAdd(commentDraft)}
+                >Reference</span>
+                <span
+                  className={styles.right}
+                  onClick={() => handleFootnoteAdd(commentDraft)}
+                >Footnote</span>
+              </div>
+              <div
+                className={styles.selectedText}
+              >
+                {htmlToText(serializedSelection)}
+              </div>
+              {!showReplyForm &&
+                <>
+                  <div
+                    className={styles.draftingContainerFake}
+                    onClick={() => dosomething()}
+                  >
+                    Say something or search...
+                  </div>
+                </>
+              }
+              {showReplyForm && allItems &&
+                <div className={styles.replyForm}>
+                  <div className={styles.draftingContainer}>
+                    <EditorDraftingContainer
+                      reflect={reflect}
+                      content={commentDraft}
+                      setValue={setCommentDraft}
+                      type={'arrowDraft'}
+                    />
+                  </div>
+                  {clientEmail === 'guest' ?
+                  <div className={styles.buttonsContainer}>
+                    <button
+                    className={'btn btn-secondary'}
+                    onClick={() => handleCommentAdd(commentDraft)}
+                  >Comment</button>
+                  </div>
+                :
+                <>
+                  <div className={styles.searchResults}>
+                    {searchResults && searchResults.map((result: any) => {
+                      return (
+                        <SearchResult
+                          key={`srl-${result.item.id}`}
+                          result={result.item}
+                          handleArrowAdd={handleArrowAdd}
+                        />
+                      )
+                    })}
+                  </div>
+                </>
+              }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
     </div>
+
+
+    // <div className="p-4 bg-blue-50 absolute max-w-screen-lg inset-x-0 mx-auto">
+    //   <div className="bg-amber-500 float-right max-w-xs">
+    //
+
+    //   </div>
+    // </div>
+    // <div className="max-w-screen-lg mx-auto overflow-auto absolute inset-x-0 flex bg-amber-400">
+    //     {/* <div className="grid md:grid-cols-[150px_550px_auto] gap-4">
+    //       <div className="px-4 hidden md:table-cell max-h-fit min-width-150"></div>
+    //       <div className="px-4"></div> */}
+    //       <div className="ml-4 p-4 right-0 max-w-xs relative float-right hidden md:table-cell ">
+    //         <ErrorMessage
+    //           showEmptyCommentError={showEmptyCommentError}
+    //           handleSetShowEmptyCommentError={handleSetShowEmptyCommentError}
+    //         />
+    //         <div className={styles.arrowCreatorLabel}>Create a linked block</div>
+    //         <div className={styles.arrowActions}>
+    //           <span
+    //             className={styles.left}
+    //             onClick={() => handleCommentAdd(commentDraft)}
+    //           >Comment</span>
+    //           <span
+    //             className={styles.middle}
+    //             onClick={() => handleReferenceAdd(commentDraft)}
+    //           >Reference</span>
+    //           <span
+    //             className={styles.right}
+    //             onClick={() => handleFootnoteAdd(commentDraft)}
+    //           >Footnote</span>
+    //         </div>
+    //         <div
+    //           className={styles.selectedText}
+    //         >
+    //           {htmlToText(serializedSelection)}
+    //         </div>
+    //         {!showReplyForm &&
+    //           <>
+    //             <div
+    //               className={styles.draftingContainerFake}
+    //               onClick={() => dosomething()}
+    //             >
+    //               Say something or search...
+    //             </div>
+    //           </>
+    //         }
+    //         {showReplyForm && allItems &&
+    //           <div className={styles.replyForm}>
+    //             <div className={styles.draftingContainer}>
+    //               <EditorDraftingContainer
+    //                 reflect={reflect}
+    //                 content={commentDraft}
+    //                 setValue={setCommentDraft}
+    //                 type={'arrowDraft'}
+    //               />
+    //             </div>
+    //             {clientEmail === 'guest' ?
+    //             <div className={styles.buttonsContainer}>
+    //               <button
+    //               className={'btn btn-secondary'}
+    //               onClick={() => handleCommentAdd(commentDraft)}
+    //             >Comment</button>
+    //             </div>
+    //           :
+    //           <>
+    //             <div className={styles.searchResults}>
+    //               {searchResults && searchResults.map((result: any) => {
+    //                 return (
+    //                   <SearchResult
+    //                     key={`srl-${result.item.id}`}
+    //                     result={result.item}
+    //                     handleArrowAdd={handleArrowAdd}
+    //                   />
+    //                 )
+    //               })}
+    //             </div>
+    //           </>
+    //         }
+    //           </div>
+    //         }
+    //       </div>
+    //     {/* </div> */}
+    // </div>
   )
 }
 
-function SearchResult({ result, handleArrowAdd } : any) {
+function ErrorMessage({showEmptyCommentError, handleSetShowEmptyCommentError} : ErrorMessageProps) {
+  return (
+    <>
+      {showEmptyCommentError &&
+        <div
+          className={styles.error}
+          onClick={() => handleSetShowEmptyCommentError(false)}
+        >
+          <div className={styles.message}>Say something before submitting...</div>
+        </div>
+      }
+    </>
+  )
+}
+
+function SearchResult({ result, handleArrowAdd } : SearchResultProps) {
   return(
     <div
       className={styles.searchResult}

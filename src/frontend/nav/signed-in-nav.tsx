@@ -18,7 +18,7 @@ export default function SignedInNav({clientEmail, handleSetCommandBar}: NavProps
     <nav className={classNames(
         isTauri ? "top-6" : "top-0",
         "nav items-center h-14 sticky w-screen flex justify-between flex-row",
-        "px-2 py-0 z-30 space-x-4 space-x-reverse bg-white"
+        "py-0 z-30 space-x-4 space-x-reverse bg-white",
       )}
     >
 

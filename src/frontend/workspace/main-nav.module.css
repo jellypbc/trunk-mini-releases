@@ -1,7 +1,7 @@
 .container {
   display: flex;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding-bottom: 1rem;
   font-size: .8rem;
   color: hsl(0, 0%, 60%);
 }

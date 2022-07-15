@@ -121,39 +121,39 @@ function AddTrunk({ trunkIDs, reflect, clientID } : AddTrunkProps) {
 
   return (
     <div className={styles.addTrunkContainer}>
-        <div className={styles.addTrunkInputContainer}>
-          {showAddTrunkForm ?
-            <div>
-              <input
-                className={styles.addTrunkInput}
-                placeholder={`trunkID`}
-                value={draftTrunkID}
-                onChange={(e) => setDraftTrunkID(e.target.value)}
-              />
-              <div className={styles.buttonContainer}>
-              <button
-                className={`btn btn-2`}
-                onClick={() => setShowAddTrunkForm(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className={`btn btn-1`}
-                onClick={() => updateProfile()}
-              >Save</button>
-              </div>
-            </div>
-          :
-          <div className={styles.buttonContainer}>
+      <div className={styles.addTrunkInputContainer}>
+        {showAddTrunkForm ?
+          <div>
+            <input
+              className={styles.addTrunkInput}
+              placeholder={`trunkID`}
+              value={draftTrunkID}
+              onChange={(e) => setDraftTrunkID(e.target.value)}
+            />
+            <div className={styles.buttonContainer}>
+            <button
+              className={`btn btn-2`}
+              onClick={() => setShowAddTrunkForm(false)}
+            >
+              Cancel
+            </button>
             <button
               className={`btn btn-1`}
-              onClick={() => setShowAddTrunkForm(true)}
-            >
-              Add trunk
-            </button>
+              onClick={() => updateProfile()}
+            >Save</button>
+            </div>
           </div>
-        }
+        :
+        <div className={styles.buttonContainer}>
+          <button
+            className={`btn btn-1`}
+            onClick={() => setShowAddTrunkForm(true)}
+          >
+            Add trunk
+          </button>
         </div>
+      }
+      </div>
     </div>
   )
 }
