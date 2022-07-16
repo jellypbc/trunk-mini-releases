@@ -1,6 +1,6 @@
 {
   "name": "trunk-mini",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "repository": "https://github.com/jellypbc/trunk-mini.git",
   "author": "Denny Luan <dennyluan@gmail.com>",
   "license": "MIT",
@@ -12,12 +12,14 @@
   "scripts": {
     "dev": "next dev",
     "dev-worker": "miniflare --live-reload --debug",
-    "build": "rm -rf dist && next build && npm run build-worker",
-    "build-worker": "esbuild --bundle --format=esm --outfile=dist/index.mjs --tsconfig=worker/tsconfig.json worker/index.ts ",
     "format": "prettier --write './**/*.{js,jsx,json,ts,tsx,html,css,md}'",
     "check-types": "tsc -p tsconfig.json --noEmit && tsc -p worker/tsconfig.json --noEmit",
     "tauri": "tauri",
-    "make": "rm -rf dist && next build && next export -o ./dist && npm run build-worker && yarn run tauri build --debug"
+    "build": "rm -rf dist && next build",
+    "export": "next export -o ./dist",
+    "build-worker": "esbuild --bundle --format=esm --outfile=dist/index.mjs --tsconfig=worker/tsconfig.json worker/index.ts ",
+    "tauri-build": "source .env.local && yarn run tauri build --debug",
+    "make": "source .env.local && yarn run build && yarn run export && yarn run build-worker && TAURI_PRIVATE_KEY=$TAURI_PRIVATE_KEY TAURI_KEY_PASSWORD=$TAURI_KEY_PASSWORD yarn run tauri-build"
   },
   "dependencies": {
     "@cloudflare/workers-types": "^3.3.1",
@@ -66,7 +68,7 @@
     "@types/prosemirror-state": "^1.2.8",
     "@types/react": "^17.0.39",
     "autoprefixer": "^10.4.7",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.1",
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.3"
   }

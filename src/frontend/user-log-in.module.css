@@ -13,12 +13,6 @@
   padding-top: 1rem;
 }
 
-.nav {
-  text-align: right;
-  cursor: pointer;
-  padding: 0 2rem;
-}
-
 .main {
   padding: 5rem 0;
   flex: 1;
