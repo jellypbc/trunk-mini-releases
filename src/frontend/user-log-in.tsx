@@ -1,13 +1,13 @@
 import React from 'react'
 import styles from './user-log-in.module.css'
 import Head from 'next/head'
-import Link from 'next/link'
+// import Link from 'next/link'
 import { supabase } from '../lib/supabase-client'
 import { LOCAL_STORAGE_REDIRECT_URL_KEY } from '../lib/constants'
 import { useWorkspace } from './workspace-provider'
 
 import version from '../util/version'
-const url = `https://github.com/jellypbc/trunk-mini-releases/releases/download/${version}/MiniTrunk_${version}_x64.dmg`
+const downloadUrl = `https://github.com/jellypbc/trunk-mini-releases/releases/download/${version}/Trunk_${version}_x64.dmg`
 
 export default function UserLogIn() {
 
@@ -41,7 +41,7 @@ export default function UserLogIn() {
       </Head>
 
       <div
-        className={styles.nav}
+        className="text-right cursor-pointer px-5 mt-2"
         onClick={(e) => {
           e.preventDefault()
           signInWithGoogle()
@@ -54,17 +54,19 @@ export default function UserLogIn() {
       <main className={styles.main}>
         <h1 className={styles.title}>
           <div>Trunk</div>
+
+          <p className='text-xs text-center text-gray-400'>{version}</p>
         </h1>
         <div className={styles.description}>
           An app to help you organize your research, where your data lives with you.
         </div>
         <div className={'button-group'}>
           { !isTauri &&
-            <Link href={url}>
+            <a href={downloadUrl} target="_blank">
               <button className={'button button-home'} >
                 Get Trunk for macOS
               </button>
-            </Link>
+            </a>
           }
           <button
             className={'button button-home'}
